@@ -5,7 +5,7 @@
 --   4-5  int_role_text      (label reads total, net assets, an affiliation heading, or the cash bucket) -> aggregate
 --   6    int_role_subtotal  (label starts other rows' labels and its fair value, and cost, equal their sum) -> aggregate
 --   7    int_role_scope     (a JV or entity member or label from the rule table) -> position, scope = that entity
---   8    the context's only member is on the cash and cash equivalents axis -> position, is_cash
+--   8    a cash context (cash and cash equivalents axis, no identifier, others only on rule 8 seed axes) -> position, is_cash
 --   9    anything left -> position
 -- Cross-check (spec 6.2): a position should carry at least one term fact (principal, shares, rate, spread, PIK rate,
 -- maturity; a nil fact counts, see int_context_feature). Where it disagrees with rules 4 to 6 the role is unresolved:
@@ -85,7 +85,7 @@ select
         when role_rule = 7 and scope_count > 1 then 'two scopes: ' || scopes
         when role_rule = 7 and not has_term_fact and not is_cash_row then 'scope ' || scope || ' by ' || scope_how || ', but no term fact'
         when role_rule = 7 then 'scope ' || scope || ' by ' || scope_how
-        when role_rule = 8 then 'fair value on the cash and cash equivalents axis alone'
+        when role_rule = 8 then 'fair value on the cash and cash equivalents axis'
         when not has_term_fact and not is_cash_row then 'no rule removes it, but no term fact'
         when cash_rule_id is not null then 'position; cash identifier from the rule table'
         when cash_pattern_id is not null then 'position; label names a money-market fund (' || cash_pattern_id || ')'

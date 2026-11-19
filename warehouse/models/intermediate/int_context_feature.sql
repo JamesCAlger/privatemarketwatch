@@ -9,6 +9,8 @@
 --   spread     : InvestmentBasisSpreadVariableRate               us-gaap or us-gaap-sup
 --   PIK rate   : InvestmentInterestRatePaidInKind                us-gaap or us-gaap-sup
 --   maturity   : InvestmentMaturityDate                          us-gaap or us-gaap-sup
+--   ownership  : InvestmentOwnedBalancePercentOfShares            us-gaap or us-gaap-sup (fix round 2). Today the five funds
+--                file it only in a filer namespace (Ares), which this does not read; see the task 2 report.
 -- The term facts also accept the FASB supplement namespace (http://fasb.org/us-gaap-sup/2022q3): nine filings
 -- with period ends 2022-09-30 to 2023-03-31 tag spread, PIK rate and floor there and nowhere else.
 -- Investment identifier: a member on an axis whose local name is InvestmentIdentifierAxis (any prefix).
@@ -42,6 +44,7 @@ with filing as (
         'InvestmentOwnedAtFairValue', 'InvestmentOwnedAtCost', 'InvestmentOwnedBalancePrincipalAmount'
         , 'InvestmentOwnedBalanceShares', 'InvestmentInterestRate', 'InvestmentInterestRatePaidInCash'
         , 'InvestmentBasisSpreadVariableRate', 'InvestmentInterestRatePaidInKind', 'InvestmentMaturityDate'
+        , 'InvestmentOwnedBalancePercentOfShares'
     )
 )
 
@@ -62,6 +65,7 @@ with filing as (
         , bool_or(concept_local = 'InvestmentBasisSpreadVariableRate' and is_fasb) as has_spread
         , bool_or(concept_local = 'InvestmentInterestRatePaidInKind' and is_fasb) as has_pik_rate
         , bool_or(concept_local = 'InvestmentMaturityDate' and is_fasb) as has_maturity
+        , bool_or(concept_local = 'InvestmentOwnedBalancePercentOfShares' and is_fasb) as has_ownership_percent
     from facts
     group by 1, 2
 )
@@ -91,7 +95,9 @@ select
     , coalesce(ff.has_spread, false) as has_spread
     , coalesce(ff.has_pik_rate, false) as has_pik_rate
     , coalesce(ff.has_maturity, false) as has_maturity
-    , coalesce(ff.has_principal or ff.has_shares or ff.has_rate or ff.has_spread or ff.has_pik_rate or ff.has_maturity, false) as has_term_fact
+    , coalesce(ff.has_ownership_percent, false) as has_ownership_percent
+    , coalesce(ff.has_principal or ff.has_shares or ff.has_rate or ff.has_spread or ff.has_pik_rate or ff.has_maturity
+        or ff.has_ownership_percent, false) as has_term_fact
 from {{ ref('stg_filed_context') }} c
 join filing f on f.accession = c.accession
 left join members m on m.accession = c.accession and m.context_id = c.context_id

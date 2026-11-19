@@ -2,9 +2,11 @@
 -- five funds: superseded, not_schedule, comparative, or null when the context goes on to the later rules.
 --
 --   0  the filing is not the one selected for its quarter (int_filing_selected), including a refused quarter -> superseded
---   1  no investment identifier member -> not_schedule. Exception: a context whose only member is on the cash and cash
---      equivalents axis goes on, so that rule 8 can reach it (the spec lists rule 8 after rule 1; read literally, rule 8
---      could never fire). No such context exists in the five funds today.
+--   1  no investment identifier member -> not_schedule. Exception: a cash context goes on, so that rule 8 can reach it
+--      (the spec lists rule 8 after rule 1; read literally, rule 8 could never fire). A cash context has a member on
+--      the cash and cash equivalents axis, no investment identifier member, and every other member on an axis listed
+--      for rule 8 in seeds/role_pattern.csv (the issuer affiliation axis; fix round 2: Apollo files its money-market
+--      funds on the cash axis plus the affiliation axis).
 --   2  the instant is not the filing's period end (an earlier instant, or a duration context) -> comparative
 --   3  no fair value -> not_schedule. Fair-value facts that carry two different numbers -> unresolved.
 with filing as (
@@ -18,13 +20,29 @@ with filing as (
     join {{ ref('int_filing_selected') }} s on s.cik = c.cik and s.report_date = c.report_date
 )
 
-, cash_axis as (
-    -- Contexts whose single member sits on the cash and cash equivalents axis (any prefix).
-    select accession, context_id
-    from {{ ref('stg_filed_context_member') }}
-    group by 1, 2
-    having count(*) = 1 and bool_and(axis like '%:CashAndCashEquivalentsAxis')
+, member as (
+    select
+        m.accession
+        , m.context_id
+        , m.axis like '%:CashAndCashEquivalentsAxis' as is_cash_axis
+        , m.axis like '%:InvestmentIdentifierAxis' as is_identifier_axis
+        , exists (
+            select 1 from {{ ref('role_pattern') }} p
+            where p.rule_number = 8 and p.applies_to = 'axis'
+              and regexp_matches(lower(regexp_replace(m.axis, '^.*:', '')), p.pattern)
+          ) as is_cash_companion_axis
+    from {{ ref('stg_filed_context_member') }} m
 )
+
+, cash_axis as (
+    select accession, context_id
+    from member
+    group by 1, 2
+    having bool_or(is_cash_axis)
+       and not bool_or(is_identifier_axis)
+       and bool_and(is_cash_axis or is_cash_companion_axis)
+)
+
 
 select
     cf.accession

@@ -335,6 +335,40 @@ unit_tests:
         - {accession: A, context_id: k2, scope_count: 1, scope: SubTwoMember, scope_rule_id: r7_subsidiary_axis, scope_how: global_axis}
         - {accession: A, context_id: k3, scope_count: 0, scope: null, scope_rule_id: null, scope_how: null}
 
+  - name: int_role_structure_cash_axis_with_affiliation
+    description: >
+      Fix round 2. Cash axis plus the issuer affiliation axis (listed for rule 8 in the seed) is a cash context and
+      goes on past rule 1; cash axis plus any other axis is not, and rule 1 makes it not_schedule; cash axis alone
+      goes on.
+    model: int_role_structure
+    given:
+      - input: ref('int_filing_candidate')
+        rows:
+          - {accession: A, cik: "1", report_date: 2026-03-31}
+      - input: ref('int_filing_selected')
+        rows:
+          - {cik: "1", report_date: 2026-03-31, accession: A, refusal_reason: null}
+      - input: ref('stg_filed_context_member')
+        rows:
+          - {accession: A, context_id: x1, axis: "us-gaap:CashAndCashEquivalentsAxis", member: "x:MoneyFundMember"}
+          - {accession: A, context_id: x1, axis: "us-gaap:InvestmentIssuerAffiliationAxis", member: "us-gaap:InvestmentUnaffiliatedIssuerMember"}
+          - {accession: A, context_id: x2, axis: "us-gaap:CashAndCashEquivalentsAxis", member: "x:MoneyFundMember"}
+          - {accession: A, context_id: x2, axis: "srt:RangeAxis", member: "srt:MaximumMember"}
+          - {accession: A, context_id: x3, axis: "us-gaap:CashAndCashEquivalentsAxis", member: "x:MoneyFundMember"}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: x1, has_identifier_member: false, is_filing_period_end: true, period_type: instant, fair_value_fact_count: 1, fair_value: 5}
+          - {accession: A, context_id: x2, has_identifier_member: false, is_filing_period_end: true, period_type: instant, fair_value_fact_count: 1, fair_value: 5}
+          - {accession: A, context_id: x3, has_identifier_member: false, is_filing_period_end: true, period_type: instant, fair_value_fact_count: 1, fair_value: 5}
+      - input: ref('role_pattern')
+        rows:
+          - {pattern_id: r8_affiliation_axis, rule_number: 8, applies_to: axis, pattern: "^investmentissueraffiliationaxis$", role: position, priority: 10}
+    expect:
+      rows:
+        - {context_id: x1, is_cash_axis: true, role: null, role_rule: null}
+        - {context_id: x2, is_cash_axis: false, role: not_schedule, role_rule: 1}
+        - {context_id: x3, is_cash_axis: true, role: null, role_rule: null}
+
   - name: int_source_row_rule_order_and_cross_check
     description: >
       Hand-made rows. First match decides; an aggregate by rules 4 to 6 that carries a term fact, or a position
