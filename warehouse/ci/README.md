@@ -53,7 +53,7 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
 
 ## The fixture
 
-All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`. About 45 KB.
+All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`. 13 files, 37 KB.
 
 | File | What |
 |---|---|
