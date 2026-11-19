@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: int_context_feature
+    description: >
+      One row per filed context (accession, context_id) with its structure and the facts it carries. No judgement:
+      later models decide roles from these columns. Key uniqueness is tested in tests/int_context_feature_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+      - name: has_identifier_member
+        data_tests:
+          - not_null
+      - name: is_filing_period_end
+        data_tests:
+          - not_null
+      - name: has_term_fact
+        data_tests:
+          - not_null
+
+  - name: int_filing_candidate
+    description: One row per parsed filing of a fund in scope, with the counts filing selection reads.
+    columns:
+      - name: accession
+        data_tests:
+          - unique
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
+      - name: document_type
+        data_tests:
+          - not_null
+      - name: position_fact_count
+        data_tests:
+          - not_null
+      - name: numeric_fact_count
+        data_tests:
+          - not_null
+
+  - name: int_filing_selected
+    description: >
+      One row per fund and report date: the filing that speaks for the quarter, or a refusal with its reason.
+      Grain is tested in tests/int_filing_selected_key_unique.sql.
+    columns:
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
+      - name: candidate_count
+        data_tests:
+          - not_null
+      - name: accession
+        data_tests:
+          - unique
+      - name: selection_rule
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['latest_full_amendment', 'original_after_cover_only_amendment', 'latest_full_candidate']
+      - name: refusal_reason
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - mixed_form_family
+                  - not_periodic_report
+                  - candidate_period_end_mismatch
+                  - two_originals_same_quarter
+                  - no_candidate_with_position_facts
+                  - partial_amendment_needs_review
+                  - partial_original_needs_review
+                  - two_full_amendments_order_unknown

@@ -27,6 +27,10 @@ vars:
   filed_dir: "data/filed"
   # Folder of the readings tables written by load_readings.ps1. Relative to warehouse/.
   readings_dir: "data/readings"
+  # Filing selection (int_filing_selected): a candidate filing is full when it has at least this percent of the
+  # position facts of the fullest candidate for the same fund and date. A placeholder from the pilot: every
+  # amendment seen so far was empty or at least 98 pct full (spec intermediate_spine.md 6.1).
+  filing_fullness_min: 90
   # Baseline ceilings. Each baseline test warns while its count is above zero and FAILS the build if
   # the count rises above the ceiling. A count may fall freely. Raising a ceiling is a deliberate edit.
   baseline_max:
@@ -46,12 +50,18 @@ vars:
     filed_fair_value_differs_corrected: 2
     filed_fair_value_null: 0
     filed_position_fact_no_row: 896
+    int_filing_refused: 2
+    int_filing_accession_differs: 0
+    int_filing_production_only: 0
+    int_filing_new_only: 3
 
 models:
   warehouse:
     staging:
       +materialized: view
     marts:
+      +materialized: table
+    intermediate:
       +materialized: table
 
 seeds:
