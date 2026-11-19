@@ -20,6 +20,7 @@ Grain: one position, one fund, one report date. Key: `row_id`.
 | `entity_id` | holdings.`entity_id` | 100% | `position` | To `dim_entity`. Carried on the fact for convenience. |
 | `accounting_scope_id` | holdings.`accounting_scope_id` | 100% | `schedule` | Fund's own schedule or a named JV's. |
 | `is_published` | derived: `accounting_record_class` is not `underlying_schedule` | 100% | `schedule` | The published basis (owner ruling 2026-09-30). |
+| `is_cash` | derived: `asset_category` is `CASH` | 100% | same | A cash or cash-equivalent line. Published and counted; tagged so totals can be taken with or without it. Apollo only (18 rows). |
 | `fair_value` | holdings.`fair_value` | 100% | `observation` | USD. |
 | `cost_reported` | holdings.`cost_reported` | 97.1% | `observation` | Cost as filed. |
 | `cost` | holdings.`cost` | 97.1% | `observation` | Cost including the approved proxy where none is filed. |
@@ -91,7 +92,13 @@ fund-quarters that have financials but no positions.
 | `total_assets` | `fund_financials`.`total_assets` | 77 of 80 | `fund_period` | From companyfacts. Empty for three fund-quarters without positions (2022-09-30). |
 | `investments_at_fair_value_filed` | `fund_financials`.`investments_at_fair_value` | 77 of 80 | `schedule`.filed total, from the selected filing's own tagged facts | From companyfacts. Covers the fund's own schedule only; JV schedules have no filed total. Empty where no filed total exists (three 2022-09-30 fund-quarters). |
 | `published_fair_value` | derived: sum of `fact_observation`.`fair_value` where `is_published` | 100% | same | |
-| `difference_to_filed` | derived | 100% | same | The reconciliation result. |
+| `cash_fair_value` | derived: sum of published `fair_value` where `is_cash` | 100% | same | |
+| `published_fair_value_ex_cash` | derived | 100% | same | |
+| `cash_equivalents_filed` | `fund_financials`.`cash_equivalents_at_fair_value` | as filed | same | |
+| `difference_to_filed` | derived | 100% | same | Published, cash rows included, minus the filed investments line. |
+| `difference_to_filed_ex_cash` | derived | 100% | same | The same without the cash rows. |
+| `filed_total_excludes_cash` | derived | 100% | same | True when the total with cash misses the filed line, the total without it ties, and the cash rows equal the filed cash equivalents within 0.5 pct of the investments line (evidence half of the owner ruling of 2026-11-04, check A04). Wrapper declarations are not read. |
+| `difference_to_filed_on_basis` | derived | 100% | same | The reconciliation result: ex cash where `filed_total_excludes_cash`, else with cash. |
 
 The three companyfacts columns have no known defect for the five funds. Fill was verified; correctness was not,
 beyond one direct check (Ares 2026-03-31: companyfacts equals the total row printed in the filing, 29,499.3M).

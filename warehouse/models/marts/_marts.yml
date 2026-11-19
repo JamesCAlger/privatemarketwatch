@@ -129,6 +129,9 @@ models:
       - name: is_published
         data_tests:
           - not_null
+      - name: is_cash
+        data_tests:
+          - not_null
       - name: fair_value
         data_tests:
           - not_null
@@ -181,5 +184,11 @@ models:
               config:
                 where: "has_positions"
       - name: published_fair_value
+        data_tests:
+          - not_null
+      - name: cash_fair_value
+        data_tests:
+          - not_null
+      - name: filed_total_excludes_cash
         data_tests:
           - not_null

@@ -4,6 +4,7 @@ select
     entity_name                                          as fund_name_raw,
     try_cast(total_assets as double)                     as total_assets,
     try_cast(net_assets as double)                       as net_assets,
-    try_cast(investments_at_fair_value as double)        as investments_at_fair_value
+    try_cast(investments_at_fair_value as double)        as investments_at_fair_value,
+    try_cast(cash_equivalents_at_fair_value as double)   as cash_equivalents_at_fair_value
 from {{ source('pipeline', 'fund_financials') }}
 where lpad(cik, 10, '0') in (select cik from {{ ref('stg_v05_scope') }})

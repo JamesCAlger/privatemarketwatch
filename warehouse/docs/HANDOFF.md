@@ -30,8 +30,8 @@ Passing tests show the layers are consistent and repeatable. They do not show th
 
 ## Owner decisions waiting
 
-1. Commit `warehouse/` and the two changelog entries (stage exact paths; the changelog file also has other agents' entries).
-2. Cash in the step 1 test `published_equals_filed`. The owner's ruling of 2026-11-04 (check A04 in `pipeline/oracle_checks.py`) leaves cash rows out of the comparison to the filed investments line in stated cases. The test does not apply it. Offered: add `cash_fair_value` and an ex-cash difference to `fact_fund_period`. Only Apollo is affected (18 rows).
+1. DONE 2026-11-19: `warehouse/` committed (8be2e525).
+2. DONE 2026-11-19: cash rows tagged (`is_cash`), reconciliation on the filed basis; `published_equals_filed` 11 to 0. Build now PASS=166 WARN=10 ERROR=0.
 3. Whether to start the middle layer, and its design.
 4. Whether the findings ledger moves onto dbt. Discussed, no decision.
 

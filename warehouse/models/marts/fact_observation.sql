@@ -8,6 +8,9 @@ select
     h.entity_id,
     h.accounting_scope_id,
     h.accounting_record_class <> 'underlying_schedule' as is_published,
+    -- A cash or cash-equivalent line on the schedule (money-market fund, treasury bill held as cash).
+    -- Kept and published; tagged so a total can be taken with or without it.
+    coalesce(upper(h.asset_category) = 'CASH', false)  as is_cash,
     -- value
     h.fair_value,
     h.cost_reported,
