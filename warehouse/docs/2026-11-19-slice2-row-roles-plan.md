@@ -233,3 +233,70 @@ cause, and the work is committed.
 
 **Done when:** the local proof of the CI commands is in the report, the build ends `ERROR=0`, and
 the work is committed.
+
+---
+
+### Task 5: Fund rules in the wrapper, and the Apollo subtotal rule
+
+Added 2026-11-19 after owner decisions D9 to D13 (`intermediate_spine.md`, section 2). Run BEFORE
+Task 4.
+
+**Files:**
+- Modify: the wrappers of the funds that have a rule to move, under
+  `data/overrides/bdc_xbrl_wrappers/` (an exception to the Global Constraints, authorised by the
+  owner: "i want all fund-specific rules to be stored in one place")
+- Modify: `warehouse/readings_loader/wrappers.py`, `warehouse/readings_loader/__init__.py`, tests in
+  `warehouse/pytests/test_readings_wrappers.py`
+- Modify: `warehouse/seeds/reading_action.csv`, `warehouse/models/staging/readings/`
+- Modify: `warehouse/models/intermediate/` models that read `filer_concept`
+- Delete: `warehouse/seeds/filer_concept.csv` and its entry and tests in `_seeds.yml`
+- Modify: `warehouse/dbt_project.yml` (ceilings), `warehouse/docs/baseline_roles_2026-11-19.md`
+
+**Interfaces:**
+- Consumes: `seeds/filer_concept.csv` (40 rows: Ares ownership percent as a term fact; Blue Owl
+  commitment fair value as fair value and as a term fact; Apollo cash fair value), the loader of
+  slice 1, the role models of Task 2, `cmp_row_set` of Task 3.
+- Produces: a new top-level section `reading_rules` in a wrapper: a list of objects, each with
+  `target`, `action`, `parameter`, optional selectors (`concept_namespace`, `concept_local`,
+  `accession`, `axis`, `member`, `label`, `feature`), optional `valid_from`, `valid_to`, and
+  `evidence`. The loader turns each into a `reading_rule` row with `origin = 'wrapper:reading_rules'`
+  and `validity_basis` `stated` where a date is given. The role models read fund rules only from
+  `stg_reading_rule`.
+
+**Requirements:**
+- One place: after this task no fund-specific value is in a seed, in SQL or in Python. The global
+  seed `role_pattern.csv` holds only rules that apply to every fund.
+- The wrapper edit is additive: one new top-level key, nothing else in the file changes (key order,
+  indentation and encoding of the rest are preserved; check with a diff that shows only the added
+  block). Before editing, show that production's readers accept an extra top-level key: read
+  `pipeline/bdc_xbrl_wrapper.py` and `pipeline/source_encodings.py`, then load each edited wrapper
+  through both in a named script and run the wrapper-related tests under `tests/` by file (find
+  them by name; do not run the full suite). If production rejects the key or any test fails, stop
+  and report; do not change production code.
+- Production already has wrapper keys of this kind (`source_encodings.fair_value_concepts`,
+  `unfunded_rows`). Read how production uses them. If an existing key means the same thing, say so
+  in the report; do not write into `source_encodings` in this task, because production acts on it.
+- Namespaces: the seed has one row per dated namespace. In the wrapper, write the rule once with a
+  namespace pattern for that filer's own domain (for example the domain without the date) if that
+  is exact enough to match only that filer's taxonomy; keep ruling 12 (never match on local name
+  alone). Test that the rule matches exactly the facts the 40 seed rows matched, no more.
+- New actions go in `seeds/reading_action.csv`: one for "this concept is the fair value where the
+  standard concept is absent", one for "this concept counts as a term fact". A rule naming an
+  action not in the seed must still fail the build.
+- Reproduce before and after: role counts by fund and rule, `filer_concept_id` replaced by the
+  rule's `rule_id` on each row, and every `cmp_row_set` count identical to before the move. Any
+  difference is a defect to explain, not to absorb.
+- The Apollo subtotal rule (owner decision D12): a rollup whose fair value equals the sum of the
+  rows below it is a subtotal for Apollo even where cost does not tie. Write it as an Apollo rule
+  in its wrapper's `reading_rules` (action for "subtotal on fair value alone"), not as a change to
+  the general rule 6. Then TEST THAT IT DOES NOT AFFECT REAL ROWS, as the owner asked: list every
+  row whose role changes; none may be a row production publishes; none may carry a rate, spread,
+  PIK rate or maturity (the rule 6 guard still applies); and Apollo's published total per quarter
+  must tie to the filed total as before. Report the count removed, the unresolved count before and
+  after, and any row that changes and should not.
+- Update the baseline document's sections on rules in force and on the owner review list.
+
+**Done when:** the seed is gone, the wrappers hold the fund rules, the loader and dbt tests pass,
+the comparison counts are unchanged by the move, the Apollo rule's effect is listed row by row, the
+build ends `ERROR=0`, and the work is committed. Wrapper files are committed in the same commit as
+the loader change, staged by path.

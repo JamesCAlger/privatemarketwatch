@@ -28,6 +28,17 @@ funds, using rules that are data, so that:
 | D7 | Cash rows are positions, published, tagged `is_cash`. |
 | D8 | Existing wrapper declarations are loaded, not re-derived. Row-level entries in wrappers are loaded as corrections. |
 
+Added 2026-11-19, during slice 2:
+
+| # | Decision |
+|---|---|
+| D9 | Position and borrower ids come from today's holdings, by accession and context. |
+| D10 | All fund-specific rules are stored in one place: the fund's wrapper. No fund-specific logic in the general pipeline. Rules that apply to every fund live in a general table (`seeds/role_pattern.csv`). |
+| D11 | Blue Owl's unfunded-commitment lines are published as positions, for now, to match production. Whether an unfunded commitment should be a position at all is a question for after reproduction. |
+| D12 | An Apollo rollup is a subtotal when its fair value equals the rows below it, even if cost does not. It is an Apollo rule, tested to affect no real row. |
+| D13 | Cash is kept and published. BCRED money-market funds that production drops are an intended difference. A fund-quarter production has no rows for is left out of the comparison and counted separately. |
+| D14 | The 13 step 2 rulings in `filed_layer.md` section 7 are confirmed. |
+
 Earlier decisions that still apply: BDCs only, five funds first, per-fund build as the unit, Parquet
 and DuckDB, old pipeline keeps running (2026-11-18).
 
