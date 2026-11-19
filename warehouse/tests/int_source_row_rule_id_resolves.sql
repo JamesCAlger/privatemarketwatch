@@ -1,4 +1,5 @@
 -- Every rule_id and cash_rule_id given names a row of seeds/role_pattern.csv or of the rule table (stg_reading_rule).
+-- Anti joins, not NOT IN: a null on the right side of NOT IN would make the test pass without checking.
 with given as (
     select accession, context_id, rule_id as id, 'rule_id' as col from {{ ref('int_source_row') }} where rule_id is not null
     union all
@@ -6,5 +7,5 @@ with given as (
 )
 select g.*
 from given g
-where g.id not in (select pattern_id from {{ ref('role_pattern') }})
-  and g.id not in (select rule_id from {{ ref('stg_reading_rule') }})
+anti join {{ ref('role_pattern') }} p on p.pattern_id = g.id
+anti join {{ ref('stg_reading_rule') }} r on r.rule_id = g.id

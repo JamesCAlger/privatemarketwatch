@@ -20,10 +20,12 @@ seeds:
           - not_null
   - name: role_pattern
     description: >
-      Global text patterns for row roles (spec intermediate_spine.md 6.2, rules 4 and 5). Each pattern is a
-      regular expression matched against each '|'-separated segment of an investment identifier label, lowercased,
-      trimmed and with white space collapsed. No fund name or label appears here. role 'position' marks an
-      exception that stops the cash-bucket pattern.
+      The global part of the rule table for row roles (spec intermediate_spine.md 6.2): rules 4 and 5 (text) and the
+      structural rule 7 axes. applies_to 'label_segment': a regular expression matched against each '|'-separated
+      segment of an investment identifier label, lowercased, trimmed and with white space collapsed; role 'position'
+      marks an exception that stops the cash-bucket pattern. applies_to 'axis': a regular expression matched against
+      the lowercased local name of a context member's axis; the member names the scope. priority 10 ranks below every
+      filer rule (20, 30). No fund name or label appears here.
     columns:
       - name: pattern_id
         data_tests:
@@ -34,8 +36,17 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: [4, 5]
+                values: [4, 5, 7]
                 quote: false
+      - name: applies_to
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['label_segment', 'axis']
+      - name: priority
+        data_tests:
+          - not_null
       - name: pattern
         data_tests:
           - not_null

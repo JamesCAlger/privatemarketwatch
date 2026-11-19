@@ -11,8 +11,18 @@
 --   whole segment (pilot _ancestor_keys). A child's parent is its LONGEST such prefix (its direct parent).
 -- Only a context that rule 6 could remove can be a parent: non-zero fair value and no rate, spread, PIK rate or
 --   maturity fact (the guard). A row with those terms is a position and cannot be the subtotal of anything, so it does
---   not hide its own descendants from the subtotal above it. This differs from the pilot, where such a row still
---   took the descendants as its children (its "hierarchy blocking" limit).
+--   not hide its own descendants from the subtotal above it.
+-- Difference from the pilot (fix round 1). In the pilot every kept row is a node of the prefix tree, so a guarded row X
+--   whose label starts other rows' labels takes those rows as its children, and the subtotal G above X sums X only.
+--   Here X's descendants attach to G, so G sums X and X's descendants. Two cases:
+--   (a) X's descendants are siblings, not parts, of X (Ares 'X, First lien loan' over 'X, First lien loan 2'): G
+--       passes here and fails in the pilot (the pilot's "hierarchy blocking" limit);
+--   (b) X is a true subtotal that carries a rate or maturity: G double-counts X's descendants and fails here, where
+--       the pilot would pass it.
+--   Measured 2026-11-19 on all parsed filings (warehouse/scripts/slice2/q_guarded.sql, the pilot's tree with this
+--   model's test): 23 guarded intermediates (Ares 21, Apollo 2), all of kind (a) (loans over 'loan 2' lines). Subtotal
+--   here and not under the pilot's tree: 22 (Ares 21, Apollo 1). Subtotal under the pilot's tree and not here (case
+--   b): 0. If case (b) ever appears it shows as a G that is unresolved or a position, not as a silent removal.
 -- Test: the parent's fair value equals the sum of its direct children's fair values, and, when the parent has a cost
 --   fact, its cost equals the sum of their costs. Tolerance per measure: half a unit of the parent fact's decimals times
 --   (children + 1), at least 1 (pilot _tol). A null is never read as zero: a parent whose cost facts give no single

@@ -24,7 +24,7 @@
 , _matched as (
     select s.accession, s.context_id, p.rule_number, p.role, p.pattern_id
     from _segment s
-    join {{ ref('role_pattern') }} p on regexp_matches(s.segment, p.pattern)
+    join {{ ref('role_pattern') }} p on p.applies_to = 'label_segment' and regexp_matches(s.segment, p.pattern)
 )
 
 , _by_rule as (

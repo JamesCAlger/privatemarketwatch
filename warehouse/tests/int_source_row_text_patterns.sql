@@ -1,7 +1,8 @@
 -- Rules 4 and 5 on hand-made labels, read with the real patterns in seeds/role_pattern.csv (macro role_text_rules).
 -- Returns every label whose text rule or cash flag is not the expected one. The labels are invented, not filed.
 -- False positives covered: a real position whose label contains 'total' or 'cash' inside a word or later in a segment,
--- an affiliation qualifier that is not a heading, and a money-market fund inside the cash bucket wording.
+-- an affiliation qualifier that is not a heading, a money-market fund inside the cash bucket wording, and a company
+-- name containing money market (not a fund: no cash flag, and it does not stop the cash bucket).
 with open_context as (
     select * from (values
         -- rule 4
@@ -18,6 +19,8 @@ with open_context as (
         -- rule 5 exception: a money-market fund is cash, not the bucket
         , ('t10', 'Cash and Cash Equivalents | Example Treasury Money Market Fund', null, true)
         , ('t11', 'Example Government Money Market Fund - Institutional Shares', null, true)
+        , ('t12', 'Example Money Market Treasury Portfolio - Class I | Some JV LP', null, true)
+        , ('t13', 'Some JV LP, Example Money Market Fund', null, true)
         -- false positives: must stay open for the later rules (no text rule, not cash)
         , ('f01', 'TotalCare Holdings, LLC | First lien senior secured loan', null, false)
         , ('f02', 'Acme Total Solutions Inc. | Non-Affiliated Issuer', null, false)
@@ -28,6 +31,9 @@ with open_context as (
         , ('f07', 'Petty Cash Lending LLC, Term loan', null, false)
         , ('f08', 'Gamma Net Assets Holdings LLC', null, false)
         , ('f09', 'Delta Totals Inc.', null, false)
+        -- a company whose name contains money market is not a money-market fund (fix round 1)
+        , ('f10', 'Acme Money Market Software LLC | First lien', null, false)
+        , ('f11', 'Cash and Cash Equivalents | Acme Money Market Software LLC', 5, false)
     ) v(context_id, identifier_label, expected_rule, expected_cash)
 )
 

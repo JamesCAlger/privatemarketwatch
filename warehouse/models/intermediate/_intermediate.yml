@@ -114,14 +114,14 @@ models:
                 field: pattern_id
 
   - name: int_role_scope
-    description: Rule 7 scope (fund, or a JV or entity) and the filer cash identifiers, for the contexts rules 0 to 3 left open.
+    description: >
+      Rule 7 scope (fund, or a JV or entity) and the filer cash identifiers, for the contexts rules 0 to 3 left open.
+      scope_rule_id names a filer rule (stg_reading_rule) or a global seed row (role_pattern); that it resolves is
+      tested on int_source_row (tests/int_source_row_rule_id_resolves.sql).
     columns:
-      - name: scope_rule_id
+      - name: scope_count
         data_tests:
-          - relationships:
-              arguments:
-                to: ref('stg_reading_rule')
-                field: rule_id
+          - not_null
 
   - name: int_role_subtotal
     description: Rule 6 (subtotal by label prefix and sums) for every open context that has direct children.
@@ -222,6 +222,77 @@ unit_tests:
         - {accession: A, context_id: c2, child_count: 2, is_subtotal: true, near_miss_reason: null}
         - {accession: A, context_id: c5, child_count: 1, is_subtotal: true, near_miss_reason: null}
         - {accession: A, context_id: c11, child_count: 1, is_subtotal: false, near_miss_reason: fair_value_differs}
+
+  - name: int_role_subtotal_subtotal_of_subtotals
+    description: >
+      Fix round 1. A subtotal of subtotals with cost at both levels: an industry over two issuers over their loans.
+      Both levels pass (one pass over direct children), and the loans are not subtotals.
+    model: int_role_subtotal
+    given:
+      - input: ref('int_role_text')
+        rows:
+          - {accession: A, context_id: g1, text_rule: null}
+          - {accession: A, context_id: g2, text_rule: null}
+          - {accession: A, context_id: g3, text_rule: null}
+          - {accession: A, context_id: g4, text_rule: null}
+          - {accession: A, context_id: g5, text_rule: null}
+          - {accession: A, context_id: g6, text_rule: null}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: g1, identifier_label: "Top", fair_value: 30, cost: 28, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: g2, identifier_label: "Top A", fair_value: 10, cost: 9, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: g3, identifier_label: "Top A Loan One", fair_value: 4, cost: 4, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: g4, identifier_label: "Top A Loan Two", fair_value: 6, cost: 5, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: g5, identifier_label: "Top B", fair_value: 20, cost: 19, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: g6, identifier_label: "Top B Term", fair_value: 20, cost: 19, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: true}
+      - input: ref('int_role_scope')
+        rows:
+          - {accession: Z, context_id: z, scopes: null}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: Z, context_id: z, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
+    expect:
+      rows:
+        - {accession: A, context_id: g1, child_count: 2, is_subtotal: true, near_miss_reason: null}
+        - {accession: A, context_id: g2, child_count: 2, is_subtotal: true, near_miss_reason: null}
+        - {accession: A, context_id: g5, child_count: 1, is_subtotal: true, near_miss_reason: null}
+
+  - name: int_role_scope_filer_rule_wins_over_global_axis
+    description: >
+      Fix round 1. A context hit by a filer set_scope rule and by the global subsidiary-axis seed row takes the filer
+      rule's scope (higher priority), not two scopes. A context hit by the global row alone takes the member's name
+      and the seed row's id.
+    model: int_role_scope
+    given:
+      - input: ref('int_role_structure')
+        rows:
+          - {accession: A, context_id: k1, cik: "1", report_date: 2026-03-31, role: null}
+          - {accession: A, context_id: k2, cik: "1", report_date: 2026-03-31, role: null}
+          - {accession: A, context_id: k3, cik: "1", report_date: 2026-03-31, role: null}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: k1, identifier_label: "Acme Corp", has_identifier_member: true}
+          - {accession: A, context_id: k2, identifier_label: "Beta Corp", has_identifier_member: true}
+          - {accession: A, context_id: k3, identifier_label: "Gamma Corp", has_identifier_member: true}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: f1, cik: "1", valid_from: null, valid_to: null, action: set_scope, sel_axis: legalentityaxis, sel_member: JvOneMember, sel_label: null, parameter: "JV One", priority: 30}
+      - input: ref('stg_filed_context_member')
+        rows:
+          - {accession: A, context_id: k1, axis: "x:InvestmentIdentifierAxis", member: "Acme Corp"}
+          - {accession: A, context_id: k1, axis: "dei:LegalEntityAxis", member: "x:JvOneMember"}
+          - {accession: A, context_id: k1, axis: "us-gaap:InvestmentCompanyNonconsolidatedSubsidiaryAxis", member: "x:OtherSubMember"}
+          - {accession: A, context_id: k2, axis: "x:InvestmentIdentifierAxis", member: "Beta Corp"}
+          - {accession: A, context_id: k2, axis: "us-gaap:InvestmentCompanyNonconsolidatedSubsidiaryAxis", member: "x:SubTwoMember"}
+          - {accession: A, context_id: k3, axis: "x:InvestmentIdentifierAxis", member: "Gamma Corp"}
+      - input: ref('role_pattern')
+        rows:
+          - {pattern_id: r7_subsidiary_axis, rule_number: 7, applies_to: axis, pattern: "^investmentcompanynonconsolidatedsubsidiaryaxis$", role: position, priority: 10}
+    expect:
+      rows:
+        - {accession: A, context_id: k1, scope_count: 1, scope: "JV One", scope_rule_id: f1, scope_how: set_scope}
+        - {accession: A, context_id: k2, scope_count: 1, scope: SubTwoMember, scope_rule_id: r7_subsidiary_axis, scope_how: global_axis}
+        - {accession: A, context_id: k3, scope_count: 0, scope: null, scope_rule_id: null, scope_how: null}
 
   - name: int_source_row_rule_order_and_cross_check
     description: >

@@ -10,10 +10,12 @@
 --   detached_schedule               the context sits after the first jump in context numbers of at least
 --                                   var detached_min_context_gap (port of tag_detached_schedules)
 --   set_is_cash                     the whole label equals sel_label
--- One global structural rule, not a filer rule: a member on an axis whose local name is
--- InvestmentCompanyNonconsolidatedSubsidiaryAxis or ScheduleOfEquityMethodInvestmentEquityMethodInvesteeNameAxis names
--- the entity whose schedule the row belongs to (the us-gaap meaning of those axes; production's accounting_scope.py
--- reads the same two axes). Labels are compared lowercased with white space collapsed.
+-- Global rules (seeds/role_pattern.csv, rows with rule_number 7 and applies_to 'axis'): a member on an axis whose
+-- lowercased local name matches the pattern names the entity whose schedule the row belongs to (the us-gaap
+-- subsidiary and equity-method investee axes; production's accounting_scope.py reads the same two). Labels are
+-- compared lowercased with white space collapsed.
+-- Precedence: only the matches at the highest priority on a context count (filer rules 20 or 30 above the global
+-- seed rows at 10). Two different scopes at that priority make the row unresolved in int_source_row.
 with open_context as (
     select s.accession, s.context_id, s.cik, s.report_date, cf.identifier_label
         , regexp_replace(lower(trim(coalesce(cf.identifier_label, ''))), '\s+', ' ', 'g') as label_norm
@@ -137,10 +139,10 @@ with open_context as (
 )
 
 , by_axis as (
-    select m.accession, m.context_id, null::varchar as rule_id, m.member_local as scope, 10 as priority
+    select m.accession, m.context_id, p.pattern_id as rule_id, m.member_local as scope, p.priority
     from member m
     join open_context o on o.accession = m.accession and o.context_id = m.context_id
-    where m.axis_local in ('investmentcompanynonconsolidatedsubsidiaryaxis', 'scheduleofequitymethodinvestmentequitymethodinvesteenameaxis')
+    join {{ ref('role_pattern') }} p on p.rule_number = 7 and p.applies_to = 'axis' and regexp_matches(m.axis_local, p.pattern)
 )
 
 , scope_match as (
@@ -148,7 +150,14 @@ with open_context as (
     union all select *, 'set_scope_by_label_suffix' from by_label_suffix
     union all select *, 'set_scope_by_identifier_suffix' from by_identifier_suffix
     union all select *, 'detached_schedule' from by_detached
-    union all select *, 'global_subsidiary_axis' from by_axis
+    union all select *, 'global_axis' from by_axis
+)
+
+-- Only the matches at the highest priority on the context decide: a filer rule wins over a global seed row.
+, top_match as (
+    select *
+    from scope_match
+    qualify priority = max(priority) over (partition by accession, context_id)
 )
 
 , scope_decided as (
@@ -158,9 +167,9 @@ with open_context as (
         , count(distinct scope) as scope_count
         , min(scope) as scope
         , string_agg(distinct scope, '; ' order by scope) as scopes
-        , arg_max(rule_id, priority) as rule_id
-        , arg_max(how, priority) as how
-    from scope_match
+        , min(rule_id) as rule_id
+        , min(how) as how
+    from top_match
     group by 1, 2
 )
 
