@@ -102,12 +102,13 @@ CI job has never run on GitHub.
 From the repository root, in PowerShell.
 
 - `.\warehouse\parse.ps1` then `.\warehouse\load_readings.ps1` then `.\warehouse\dbt.ps1 build`. Last
-  result `PASS=312 WARN=20 ERROR=0 TOTAL=332`. The 20 warnings are baseline tests above zero and within
-  their ceilings.
-- `.\warehouse\.venv\Scripts\python.exe -m pytest -c warehouse\pytest.ini warehouse\pytests -q`: 140.
+  result (final fix wave) `PASS=319 WARN=19 ERROR=0 TOTAL=338`. The 19 warnings are baseline tests above
+  zero and within their ceilings. A wrapper copy edited after the last load fails the build until
+  `load_readings.ps1` is run again.
+- `.\warehouse\.venv\Scripts\python.exe -m pytest -c warehouse\pytest.ini warehouse\pytests -q`: 141.
 - `.\warehouse\.venv\Scripts\python.exe warehouse\ci\run_fixture_build.py --work <empty folder>`: the CI
-  fixture build (`ci/README.md`). Last result: build `PASS=173 WARN=0 ERROR=0 TOTAL=173`, unit-test step
-  `PASS=13 TOTAL=13`.
+  fixture build (`ci/README.md`). Last result: build `PASS=176 WARN=0 ERROR=0 TOTAL=176`, unit-test and
+  wrapper drift step `PASS=15 TOTAL=15`.
 
 ### Counts (all parsed filings of the five funds, 288,935 contexts)
 
@@ -141,7 +142,13 @@ new_wrong, owner_review, old_wrong 0. Each has its own ceiling.
 
 Left out of the comparison (production has no rows, D13): Ares, Blue Owl and Apollo at 2026-09-30
 (pinned in `cmp_excluded_quarters_pinned`). Filing selection: 74 of 79 fund-quarters select the same
-accession as production; differs 0.
+accession as production; differs 0. The other 5: the three 2026-09-30 filings above, which production
+has no rows for, and two quarters refused with `no_candidate_with_position_facts` (BCRED 2022-06-30,
+HPS 2022-12-31), where production has no rows either (`scripts/slice2/q_ff_f9_selection.sql`).
+
+Final fix wave: no role, cash flag or comparison row moved (F2, F5, F7). The cash convention's detail
+now names its source: `cash_published_d7_seed_pattern` 31 / 28, `cash_published_d7_fund_rule` 0 / 2.
+Wrapper drift is checked at build time in SQL for both the production wrappers and the copies (F1).
 
 ### Owner decisions still open
 
@@ -181,15 +188,17 @@ From the slice 2 ledger and the baseline document. Superseded or owner-confirmed
   refusal reasons, only two_originals_same_quarter is exercised by a fixture (the CI fixture).
 - Row roles: aggregates inside a JV schedule get scope `fund`; a nil-only fair value context is
   unresolved rather than not_schedule (0 cases); a real company whose label starts with "Total" is
-  unresolved; the money-market pattern misses plural "Funds", "Money-Market" and two words between; 39
+  unresolved; the money-market pattern misses two words between "money market" and "fund" (plurals
+  and the hyphen were added in the final fix wave); 39
   Blue Owl "Total ... Commitments" lines are unresolved rather than aggregate (not published either way).
 - Unit-test gaps: int_source_row lacks cases for rule 6 with a term fact, rule 5 aggregates and rules 1 to
   3; rules 5 and 6 aggregates and a cash row with a matching fund rule; the two-rule test bites only on
-  BCRED and Ares pairs; cause rules are covered only by the catch-all unit test.
+  BCRED and Ares pairs. Cause rules: the catch-all unit test and, since the final fix wave,
+  `cmp_row_set_early_causes`.
 - Rule table: the loader accepts regular expressions RE2 refuses (atomic groups, possessive
   quantifiers); the overlap test compares namespace patterns by string equality and covers three
   actions; the cost-gap query hard-codes 10 pct.
-- Comparison: wrapper dispatch sections were not read; fair value is shown for one-sided rows only.
+- Comparison: wrapper dispatch sections were not read.
 
 ### Next: slice 3, amounts
 

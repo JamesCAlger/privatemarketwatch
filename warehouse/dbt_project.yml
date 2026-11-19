@@ -27,6 +27,10 @@ vars:
   filed_dir: "data/filed"
   # Folder of the readings tables written by load_readings.ps1. Relative to warehouse/.
   readings_dir: "data/readings"
+  # Wrapper drift (stg_wrapper_drift, final fix wave F1): the new pipeline's wrapper copies (with _source.json) and
+  # production's wrappers, hashed at build time. Relative to warehouse/.
+  wrappers_dir: "wrappers"
+  production_wrappers_dir: "../data/overrides/bdc_xbrl_wrappers"
   # Filing selection (int_filing_selected): a candidate filing is full when it has at least this percent of the
   # position facts of the fullest candidate for the same fund and date. A placeholder from the pilot: every
   # amendment seen so far was empty or at least 98 pct full (spec intermediate_spine.md 6.1).
@@ -92,15 +96,23 @@ vars:
     # Owner decision 2026-11-19: production wrappers changed since the new pipeline's copy (warehouse/wrappers) was
     # taken. A change there must be carried into the copy by hand, then warehouse/wrappers/_source.json updated.
     production_wrapper_changed: 0
+    # Final fix wave F1: a wrapper copy changed since the readings loader read it (the loaded rules are stale).
+    wrapper_copy_changed_since_load: 0
     # Slice 2 Task 6 (D15): rows a fund rule position_without_term_fact made positions that production has no row for
     # on the same basis. The rules were written to release none; any such row fails the build.
     fund_rule_release_not_in_production: 0
     # Task 6 fix round 1: positions at rule 7 or 9 whose only term fact comes from a fund concept rule, with no
-    # production row on the same basis in the compared quarters (macro concept_release_unmatched). Measured 1: Blue Owl
-    # 0001812554-26-000027 c-1013 (LSI Financing, the cmp not_yet_explained row; term fact from its fees-concept rule).
-    concept_rule_release_not_in_production: 1
+    # production row on the same basis in the compared quarters (macro concept_release_unmatched). Final fix wave F3:
+    # the one measured row is pinned by key (concept_rule_release_pinned below), so the ceiling is 0.
+    concept_rule_release_not_in_production: 0
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
+  # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as
+  # accession|context_id (final fix wave F3). Blue Owl LSI Financing: the cmp not_yet_explained row (detail
+  # relabel_loaded); its term fact comes from the fund's fees-concept rule; why production omits it is not known. A key
+  # that no longer matches a release fails tests/concept_rule_release_pin_live.sql.
+  concept_rule_release_pinned:
+    - "0001812554-26-000027|c-1013"
   cmp_excluded_quarters_pinned:
     - "0001287750|2026-09-30|0001628280-26-067383"
     - "0001812554|2026-09-30|0001812554-26-000060"

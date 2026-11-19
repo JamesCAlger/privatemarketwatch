@@ -72,19 +72,27 @@ with prod as (
 )
 
 , rate_facts as (
+    -- matched on namespace and local name (us-gaap or the FASB supplement, as int_context_feature reads term facts)
     select distinct f.accession, f.context_id
     from {{ ref('stg_filed_fact') }} f
     semi join one_sided o on o.accession = f.accession and o.context_id = f.context_id
     where f.concept_local in ('InvestmentInterestRate', 'InvestmentBasisSpreadVariableRate', 'InvestmentInterestRatePaidInKind')
+      and (f.concept_namespace like 'http://fasb.org/us-gaap/%' or f.concept_namespace like 'http://fasb.org/us-gaap-sup/%')
 )
 
-, term_correction as (
-    -- a loaded context-keyed correction that supplies the fair value or a term field (not applied in this slice)
-    select distinct accession, context_id
+, value_correction as (
+    -- a loaded context-keyed correction that supplies the fair value, or a term field (not applied in this slice). The
+    -- term fields are the ones the cross-check reads (principal, shares, rate, spread, PIK rate, maturity).
+    select
+        accession
+        , context_id
+        , bool_or(field = 'fair_value') as supplies_fair_value
+        , bool_or(field in ('principal_amount', 'shares_held', 'interest_rate', 'basis_spread', 'pik_rate', 'maturity_date'))
+            as supplies_term
     from {{ ref('stg_correction') }}
     where kind = 'value'
       and context_id is not null
-      and field in ('fair_value', 'principal_amount', 'shares_held', 'interest_rate', 'basis_spread', 'pik_rate', 'maturity_date')
+    group by 1, 2
 )
 
 , relabel_correction as (
@@ -103,11 +111,16 @@ with prod as (
         o.*
         , r.role
         , r.reason
+        , r.role_rule
         , coalesce(r.is_cash, false) as is_cash
+        , r.cash_rule_id
+        , r.cash_pattern_id
         , cf.identifier_label
         , cf.fair_value_fact_count
+        , cf.has_term_fact
         , rf.accession is not null as has_rate_fact
-        , tc.accession is not null as has_term_correction
+        , coalesce(vc.supplies_fair_value, false) as has_fair_value_correction
+        , coalesce(vc.supplies_term, false) as has_term_correction
         , rc.accession is not null as has_relabel_correction
         , coalesce(o.corrected_fields like '%_row:added%', false) as production_row_added
         , nl.cik is not null as filer_has_rate_only_declaration
@@ -115,7 +128,7 @@ with prod as (
     left join {{ ref('int_source_row') }} r on r.accession = o.accession and r.context_id = o.context_id
     left join {{ ref('int_context_feature') }} cf on cf.accession = o.accession and cf.context_id = o.context_id
     left join rate_facts rf on rf.accession = o.accession and rf.context_id = o.context_id
-    left join term_correction tc on tc.accession = o.accession and tc.context_id = o.context_id
+    left join value_correction vc on vc.accession = o.accession and vc.context_id = o.context_id
     left join relabel_correction rc on rc.accession = o.accession and rc.context_id = o.context_id
     left join filer_not_loaded nl on nl.cik = o.cik and nl.wrapper_key = 'rate_only_contexts'
 )
@@ -138,6 +151,12 @@ with prod as (
 
 , early as (
     -- rules that do not need the fund total
+    -- needs_correction fires only where the correction's field is what this side lacks (final fix wave F2): a fair-value
+    -- correction on a row rule 3 left out for no fair-value fact, or a term-field correction on a row held unresolved
+    -- for want of a term fact (rule 7 or 9). A correction on any other field, or on a row decided another way, falls
+    -- through. The cash convention (D7) fires only for a cash row flagged by a named source, which the detail names: a
+    -- fund cash rule (cash_rule_id) or a seed cash pattern (cash_pattern_id). A cash row flagged another way (rule 8,
+    -- the filed cash axis) falls through.
     select
         *
         , case
@@ -145,10 +164,16 @@ with prod as (
                 then 'needs_store_not_loaded|production_row_added'
             when has_rate_only_twin and filer_has_rate_only_declaration
                 then 'needs_store_not_loaded|rate_only_context_pair'
-            when side = 'production_only' and has_term_correction
+            when side = 'production_only' and has_fair_value_correction
+                 and role = 'not_schedule' and role_rule = 3 and fair_value_fact_count = 0
                 then 'needs_correction|correction_supplies_value_or_term'
-            when side = 'new_only' and is_cash
-                then 'convention|cash_published_d7'
+            when side = 'production_only' and has_term_correction
+                 and role = 'unresolved' and role_rule in (7, 9) and not has_term_fact
+                then 'needs_correction|correction_supplies_value_or_term'
+            when side = 'new_only' and is_cash and cash_rule_id is not null
+                then 'convention|cash_published_d7_fund_rule'
+            when side = 'new_only' and is_cash and cash_pattern_id is not null
+                then 'convention|cash_published_d7_seed_pattern'
           end as early_cause
     from paired
 )

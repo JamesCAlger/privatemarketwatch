@@ -68,6 +68,8 @@ def write(out_dir, tables, inputs):
     """Write the tables under out_dir, replacing what is there. Returns the manifest.
 
     `tables` maps table name to a list of row dicts; `inputs` maps a relative path to its SHA-256.
+    tables["wrapper_copy_sha256"] (fund -> SHA-256 of the wrapper copy read) is not a table: it goes into the
+    manifest under the same key, path-free, for dbt's build-time check (stg_wrapper_drift).
     Everything is written to a temporary folder first, so a failure leaves the old output in place.
     """
     out_dir = Path(out_dir)
@@ -80,6 +82,8 @@ def write(out_dir, tables, inputs):
                    for name, rows in prepared.items()},
         # Funds whose production wrapper changed since the new pipeline's copy was taken (table wrapper_drift).
         "production_wrappers_changed": sorted(r["cik"] for r in tables.get("wrapper_drift", []) if r["changed"]),
+        # SHA-256 of each wrapper copy the loader parsed, by fund (final fix wave F1).
+        "wrapper_copy_sha256": dict(sorted((tables.get("wrapper_copy_sha256") or {}).items())),
     }
     tmp = Path(tempfile.mkdtemp(prefix=".readings_tmp_", dir=str(out_dir.parent)))
     try:

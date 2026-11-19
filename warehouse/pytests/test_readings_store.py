@@ -71,6 +71,20 @@ def test_load_and_write_round_trip(tmp_path):
     assert json.loads((tmp_path / "out" / "_manifest.json").read_text(encoding="utf-8")) == manifest
 
 
+def test_manifest_records_the_hash_of_each_wrapper_copy_read(tmp_path):
+    # Final fix wave F1: dbt compares this hash with the copy's bytes at build time (stg_wrapper_drift), so a copy
+    # edited after the load fails the build until the readings are loaded again.
+    wrappers, stores = _inputs(tmp_path)
+    manifest = store.write(tmp_path / "out", *cli.load(["0000000001"], wrappers, stores))
+    expected = store.file_sha256(wrappers / "0000000001.json")
+    assert manifest["wrapper_copy_sha256"] == {"0000000001": expected}
+    on_disk = json.loads((tmp_path / "out" / "_manifest.json").read_text(encoding="utf-8"))
+    assert on_disk["wrapper_copy_sha256"] == {"0000000001": expected}
+    con = duckdb.connect()
+    got = con.execute(f"select sha256(content) from read_blob('{(wrappers / '0000000001.json').as_posix()}')").fetchone()
+    assert got == (expected,)
+
+
 def test_two_runs_give_the_same_manifest_and_replace_the_output(tmp_path):
     wrappers, stores = _inputs(tmp_path)
     first = store.write(tmp_path / "out", *cli.load(["0000000001"], wrappers, stores))

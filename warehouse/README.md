@@ -66,9 +66,11 @@ old-style `source_encodings` declarations, and the new-style top-level `reading_
 `target`, `action`, `parameter`, selectors `concept_namespace` (a glob on the filer's own domain) with
 `concept_local`, `accession`, `axis`, `member`, `label`, `feature`, optional `valid_from` / `valid_to`, and
 `evidence`). Production keeps reading its own wrappers until cutover. A change made to a production wrapper is
-not seen here and must be carried into the copy by hand: the loader compares each production wrapper with its
-recorded hash (table `wrapper_drift`), and `baseline_production_wrapper_changed` (ceiling 0) fails the build until
-the copy is brought up to date and `_source.json` updated.
+not seen here and must be carried into the copy by hand. dbt hashes the wrapper files at build time
+(`stg_wrapper_drift`, paths from the vars `wrappers_dir` and `production_wrappers_dir`):
+`baseline_production_wrapper_changed` (ceiling 0) fails the build until the copy is brought up to date and
+`_source.json` updated, and `baseline_wrapper_copy_changed_since_load` (ceiling 0) fails it when a copy was
+edited after the last load (run `load_readings.ps1` again).
 
     .\warehouse\load_readings.ps1    # rewrites the folder; same inputs give the same manifest
     .\warehouse\dbt.ps1 build

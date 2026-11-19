@@ -71,6 +71,7 @@ with base as (
 
 , released as (
     -- a row the cross-check would hold for want of a term fact, and exactly one fund rule declares a position
+    -- Cash rows are left out: the cross-check exempts them (D7, cash carries no loan or share terms), so they are never held for want of a term fact and need no release.
     select
         *
         , role_rule in (7, 9) and not (role_rule = 7 and scope_count > 1) and not has_term_fact and not is_cash_row
@@ -132,6 +133,10 @@ select
         else has_term_fact or is_cash_row
       end as cross_check_agrees
     , cash_rule_id
+    -- The seed pattern (seeds/role_pattern.csv, a rule 5 exception) that flagged the row as cash: its label names a
+    -- money-market fund. A cash row names its source: cash_rule_id (a fund rule), cash_pattern_id, or role_rule 8
+    -- (the filed cash and cash equivalents axis); tested by cash_row_names_its_source.
+    , case when is_cash_row then cash_pattern_id end as cash_pattern_id
     -- The fund concept rule a role was decided through: the fair value that let the row past
     -- rule 3, else the only term fact the cross-check read (on a row that reached rules 4 to 9).
     , case
@@ -156,6 +161,7 @@ select
     , role = 'position' and scope = 'fund' as is_published
     , cross_check_agrees
     , cash_rule_id
+    , cash_pattern_id
     , concept_rule_id
     , position_rule_id
 from decided

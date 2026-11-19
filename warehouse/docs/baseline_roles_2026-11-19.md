@@ -13,7 +13,16 @@ Agreement with production shows the two agree. It does not show either is right.
 below leans on the filed total, the evidence is a measured tie of sums. A tie is a proxy: it says
 nothing about rows with zero value, about which row carries which value, or about offsetting errors.
 
-Build line: see the Task 3 report, Fix round 1.
+Build line: see the Task 3 report, Fix round 1. After the final fix wave: `PASS=319 WARN=19 ERROR=0
+TOTAL=338` (report: `final-fix-report.md` in the slice 2 plan folder).
+
+Final fix wave: the cause rules for needs_correction and the cash convention were narrowed (F2), the
+rate facts in the pair rule are matched on namespace and local name (F5), and the money-market
+pattern takes plurals and the hyphen (F7). Measured against a snapshot taken just before: no role,
+rule, cash flag or published flag changed on any context, and no comparison row changed side or
+cause (`scripts/slice2/q_ff_moved.sql`). Only the cash detail was renamed to name its source. No filed
+label of the five funds uses a plural or hyphenated money-market spelling
+(`scripts/slice2/q_ff_f7_labels.sql`), so F7 moved nothing.
 
 ## How the sides are joined
 
@@ -91,7 +100,7 @@ ceiling (`baseline_cmp_<basis>_<cause>`).
 | owner_review | 0 (45 before Task 6) | 0 (34 before Task 6) | held_unresolved_d5 |
 | needs_correction | 52 | 0 | correction_supplies_value_or_term |
 | needs_store_not_loaded | 12 | 0 | production_row_added 8, rate_only_context_pair 4 |
-| convention | 31 | 30 | cash_published_d7 |
+| convention | 31 | 30 | cash_published_d7_seed_pattern 31 / 28, cash_published_d7_fund_rule 0 / 2 |
 | not_yet_explained | 2 | 0 | none 1, relabel_loaded 1 (a relabel is on file; not a cause) |
 | old_wrong | 0 | 0 | no rule |
 
@@ -125,9 +134,13 @@ by row in the owner-review section.
 
 **needs_correction (52).** Corrections are not applied in this slice.
 - correction_supplies_value_or_term (52): production only and a loaded context-keyed value
-  correction names the context with fair value or a term field. Apollo 44: `wrapper:untagged_values`
-  fair value 0, printed as a dash, no fact. Apollo 6 and Ares 2: untagged principal and cost. Opened
-  4, 4 and 2 printed rows: the number is printed and not tagged.
+  correction supplies what this layer lacks (final fix wave F2): a fair-value correction on a row rule
+  3 left out for no fair-value fact, or a term-field correction (principal, shares, rate, spread, PIK
+  rate, maturity) on a row held unresolved for want of a term fact. A correction on any other field
+  falls through to the later rules. Apollo 44: `wrapper:untagged_values` fair value 0, printed as a
+  dash, no fact (rule 3). Apollo 6 and Ares 2: untagged principal and cost (unresolved, no term fact).
+  Opened 4, 4 and 2 printed rows: the number is printed and not tagged. F2 moved none of the 52
+  (`scripts/slice2/q_ff_f2_corr.sql`).
 
 **needs_store_not_loaded (12).**
 - production_row_added (8): production's `corrected_fields` has `_row:added`. Ares 2025-03-31 and
@@ -150,7 +163,11 @@ owner_review 2.3m), 2025-06-30 33.2m (row_added), 2025-09-30 4.7m (new_wrong), 2
 are exactly the other groups: 2022-09-30 138.3m (`needs_correction`), 2025-03-31 94.3m and
 2025-06-30 33.2m (row_added); every other quarter ties (`scripts/slice2/q_tie.sql`).
 
-**convention, cash_published_d7 (31 published, 30 JV).** New only and the row is cash (`is_cash`).
+**convention, cash_published_d7_<source> (31 published, 30 JV).** New only and the row is cash
+(`is_cash`), flagged by a named source, which the detail names (final fix wave F2): `fund_rule` (a
+fund cash rule, `cash_rule_id`; 2 BCRED JV rows) or `seed_pattern` (a seed cash pattern,
+`cash_pattern_id`; the other 59). A cash row flagged another way (rule 8, the filed cash axis) falls
+through to the later rules; none is one-sided today (`scripts/slice2/q_ff_f2_cash.sql`).
 BCRED money-market and liquidity funds (State Street, Fidelity, Dreyfus, BlackRock, Morgan Stanley).
 All 61 labels read. Decision D7, and owner decision 2026-11-19: keep cash; accepted as an intended
 difference. Measured on production's side: it drops these BCRED rows (`pipeline/bdc_xbrl_wrapper.py`
@@ -231,10 +248,14 @@ the new pipeline reads its own copy of each v0.5 fund's wrapper, taken byte for 
 production file's SHA-256 and git blob id). Production keeps and reads its own wrappers until
 cutover; neither they nor the production wrapper schema were changed. From now on the new
 pipeline's fund rules are edited in `warehouse/wrappers/`. A change made to a production wrapper is
-not seen by the new pipeline and must be carried into the copy by hand until cutover: the loader
-compares each production wrapper with its recorded hash (table `wrapper_drift`, manifest key
-`production_wrappers_changed`), and `baseline_production_wrapper_changed` (ceiling 0) fails the
-build when one has changed.
+not seen by the new pipeline and must be carried into the copy by hand until cutover. Since the final
+fix wave (F1) the files are hashed at build time, in SQL (`stg_wrapper_drift`, DuckDB `read_blob` and
+`sha256`, which equal the loader's SHA-256 of the same bytes): `baseline_production_wrapper_changed`
+(ceiling 0) fails the build when a production wrapper differs from its hash in `_source.json`, and
+`baseline_wrapper_copy_changed_since_load` (ceiling 0) fails it when a wrapper copy differs from the
+hash the loader recorded when it read the copy (manifest key `wrapper_copy_sha256`, loader version
+4), so a build without a reload cannot pass on stale rules. Paths come from the vars `wrappers_dir`
+and `production_wrappers_dir`. The loader still writes its own table `wrapper_drift`.
 
 The old-style declarations (`source_encodings`, `identifier_format`) load as before. New-style rules
 sit in the copy's top-level `reading_rules` list (origin `wrapper:reading_rules`, class
@@ -290,7 +311,10 @@ has no row for (397 it leaves out, 65 in the excluded quarters):
 | Total | | | 133 | 133 | 0 |
 
 - `tests/baseline_fund_rule_release_not_in_production.sql` (ceiling 0) fails the build on any row a
-  label rule releases that production has no row for on the same basis, excluded quarters included.
+  label rule releases that production has no row for on the same basis, in the compared quarters.
+  Until the final fix wave it also counted the excluded quarters; it now treats them as the concept
+  guard does (F4; section "Releases not checked" below). That changed no count: no label rule
+  releases a row in an excluded quarter.
 - No other role changed on any context. The two concept rules also set `has_term_fact` on contexts
   that rules 1 to 3 had already decided (Blue Owl 853, HPS 31: comparative or not_schedule); their
   roles did not change. The label rules also match 2,180 contexts that already carry a term fact
@@ -303,7 +327,10 @@ has no row for (397 it leaves out, 65 in the excluded quarters):
   concept 272 (258 compared, all in production; 14 in the excluded quarter), Blue Owl fees concept
   2,270 (1,955 compared and in production, 314 in the excluded quarter, 1 not in production), Blue
   Owl us-gaap commitment concept 1 (in production), HPS commitment concept 32 (in production, JV
-  schedule). The one row production lacks is c-1013 (LSI Financing, `not_yet_explained`); ceiling 1.
+  schedule). The one row production lacks is c-1013 (LSI Financing, `not_yet_explained`). Final fix
+  wave F3: it is pinned by key in the var `concept_rule_release_pinned`
+  (`0001812554-26-000027|c-1013`), left out by the guard, and the ceiling is back to 0. A pinned key
+  that no longer matches a release fails `tests/concept_rule_release_pin_live.sql`.
 - The Blue Owl label rule names one position in full: no feature of the row separates it from the
   issuer-level lines of the same fund that production leaves out. Controller ruling (fix round 1): it
   stays a rule but is bounded to the one quarter it is needed, `valid_from` = `valid_to` = 2023-03-31
@@ -365,6 +392,24 @@ lines' fair value means, is the same after-reproduction question as Blue Owl's c
 | 2024-12-31 | Media Material+ | 7.951 | 6.375 | 5.642 | 5.642 | 1 |
 | 2025-03-31 | Chemicals Heubach | 9.816 | 0.385 | 0.243 | 0.243 | 1 |
 | 2025-03-31 | Media Material+ Material Holdings, LLC | 8.109 | 6.533 | 4.051 | 4.051 | 1 |
+
+## Releases not checked: quarters production lacks
+
+Both release guards (`baseline_fund_rule_release_not_in_production`,
+`baseline_concept_rule_release_not_in_production`) compare only the quarters production has. A
+release in a fund-quarter listed in `cmp_excluded_quarter` is not compared: there is nothing to
+compare with (final fix wave F4). Counted here (`scripts/slice2/q_ff_f4_excluded_releases.sql`):
+
+| Guard | Fund | Date | Releases not checked |
+|---|---|---|---:|
+| fund rule (label, position_without_term_fact) | Ares | 2026-09-30 | 0 |
+| fund rule | Blue Owl | 2026-09-30 | 0 |
+| fund rule | Apollo | 2026-09-30 | 0 |
+| concept rule (term fact) | Ares | 2026-09-30 | 14 |
+| concept rule | Blue Owl | 2026-09-30 | 314 |
+| concept rule | Apollo | 2026-09-30 | 0 |
+
+They are checked when production is built with those filings.
 
 ## For the owner's review (decision D5)
 
@@ -513,4 +558,6 @@ filings production has not loaded, and two cover-only filings refused (BCRED 202
 - The 1,413 label-keyed corrections (no context id) are not used by the cause rules.
 - `bdc_aggregate_row_overrides.json` (Ares entries are exclusions; none touches a one-sided row) and
   `bdc_xbrl_html_section_bridges/` (one HPS proposed file) were read, not matched entry by entry.
+- The wrapper `dispatch` sections were not read.
+- The releases in the excluded quarters (section "Releases not checked" above).
 - Funds outside the five.

@@ -11,7 +11,9 @@ import hashlib
 # 2: rule rows gain sel_concept_namespace and sel_concept_local (new-style fund rules, `reading_rules`). Every
 # rule_id changes with the column list, since the id hashes every column.
 # 3: rule rows gain sel_label_pattern (fund rule position_without_term_fact, slice 2 Task 6). Every rule_id changes again.
-LOADER_VERSION = "3"
+# 4: the manifest gains wrapper_copy_sha256 (fund -> SHA-256 of the copy read), checked by dbt at build time (final
+# fix wave F1). Tables and rule ids are unchanged.
+LOADER_VERSION = "4"
 
 RULE_COLUMNS = [
     "rule_id", "cik", "valid_from", "valid_to", "validity_basis", "sel_accession", "sel_axis",

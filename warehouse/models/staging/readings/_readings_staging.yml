@@ -55,13 +55,18 @@ models:
     description: Row counts the loader recorded, for the count test.
   - name: stg_wrapper_drift
     description: >
-      One row per fund in scope: the SHA-256 of the production wrapper (data/overrides/bdc_xbrl_wrappers) when the
-      new pipeline's copy (warehouse/wrappers) was taken, its SHA-256 now, and whether it changed. A change on the
-      production side must be carried into the copy by hand until cutover (tests/baseline_production_wrapper_changed.sql).
+      One row per fund in scope, with the wrapper files hashed when the view is read (build or test time). (a) The
+      production wrapper (var production_wrappers_dir) against its SHA-256 when the new pipeline's copy was taken
+      (wrappers/_source.json): changed. A change on the production side must be carried into the copy by hand until
+      cutover (tests/baseline_production_wrapper_changed.sql). (b) The wrapper copy (var wrappers_dir) against the
+      SHA-256 the readings loader recorded in its manifest: copy_changed, the loaded rules are stale
+      (tests/baseline_wrapper_copy_changed_since_load.sql).
     columns:
       - name: cik
         data_tests: [unique, not_null]
       - name: copied_sha256
         data_tests: [not_null]
       - name: changed
+        data_tests: [not_null]
+      - name: copy_changed
         data_tests: [not_null]

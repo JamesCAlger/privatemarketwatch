@@ -6,7 +6,8 @@ with counted as (
     union all
     select 'not_loaded', count(*) from {{ ref('stg_reading_not_loaded') }}
     union all
-    select 'wrapper_drift', count(*) from {{ ref('stg_wrapper_drift') }}
+    -- the loader's own table; stg_wrapper_drift hashes the files at build time and no longer reads it
+    select 'wrapper_drift', count(*) from {{ source('readings', 'wrapper_drift') }}
     union all
     select 'rule_label_example', count(*) from {{ ref('stg_rule_label_example') }}
 )

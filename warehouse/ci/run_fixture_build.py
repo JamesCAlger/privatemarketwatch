@@ -46,8 +46,10 @@ BUILD_SELECT = [
 BUILD_EXCLUDE = ["path:tests/baseline_*.sql"]
 # 3. dbt test: every unit test (dbt build runs a unit test only when its model is built, so those of the two cmp
 #    models need this step; the int_* ones run again, which costs seconds) and the one baseline whose ceiling is a
-#    rule, not a measurement: production_wrapper_changed (0), here on the fixture's wrapper copy and its stand-in.
-TEST_SELECT = ["test_type:unit", "path:tests/baseline_production_wrapper_changed.sql"]
+#    rule, not a measurement: production_wrapper_changed (0), here on the fixture's wrapper copy and its stand-in, and
+#    wrapper_copy_changed_since_load (0), the fixture's copy against the hash the loader recorded in step (b).
+TEST_SELECT = ["test_type:unit", "path:tests/baseline_production_wrapper_changed.sql",
+               "path:tests/baseline_wrapper_copy_changed_since_load.sql"]
 
 
 def _inside(path, folder):
@@ -129,6 +131,9 @@ def main(argv=None):
         "readings_dir": (work / "readings").as_posix(),
         "thresholds_file": scope.as_posix(),
         "output_dir": output.as_posix(),
+        # the wrapper drift view hashes these files at build time (stg_wrapper_drift)
+        "wrappers_dir": (FIXTURE / "wrappers").as_posix(),
+        "production_wrappers_dir": (FIXTURE / "production_wrappers").as_posix(),
         # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get)
         "ci_fixture": True,
     })

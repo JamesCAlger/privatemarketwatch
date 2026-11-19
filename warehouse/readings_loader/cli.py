@@ -3,9 +3,12 @@
 The wrappers read are the new pipeline's own copies (warehouse/wrappers/<cik>.json, owner decision 2026-11-19).
 Production keeps its wrappers in data/overrides/bdc_xbrl_wrappers until cutover; the loader compares each one with
 the hash recorded when the copy was taken (warehouse/wrappers/_source.json) and writes the result to the table
-wrapper_drift and the manifest, so an edit on the production side is seen and carried over by hand.
+wrapper_drift and the manifest, so an edit on the production side is seen and carried over by hand. The manifest also
+records the hash of each copy read (wrapper_copy_sha256). dbt hashes both sets of files again at build time
+(stg_wrapper_drift), so a build without a reload still fails on an edit made after this load (final fix wave F1).
 """
 import argparse
+import hashlib
 import json
 from collections import Counter
 from pathlib import Path
@@ -49,20 +52,27 @@ def wrapper_drift(ciks, wrappers_dir, production_dir):
 def load(ciks, wrappers_dir, row_store_paths, production_dir=None):
     """(tables, inputs) for the given funds. Raises LoadError if a wrapper is missing or unreadable.
 
-    With production_dir, also the wrapper_drift table (production wrapper changed since the copy was taken)."""
-    tables = {"reading_rule": [], "correction": [], "not_loaded": [], "wrapper_drift": [], "rule_label_example": []}
+    With production_dir, also the wrapper_drift table (production wrapper changed since the copy was taken).
+    tables["wrapper_copy_sha256"] maps each fund to the SHA-256 of the copy bytes that were parsed; it goes into the
+    manifest only (store.write), where dbt compares it with the copy at build time (stg_wrapper_drift)."""
+    tables = {"reading_rule": [], "correction": [], "not_loaded": [], "wrapper_drift": [], "rule_label_example": [],
+              "wrapper_copy_sha256": {}}
     inputs = {}
     for cik in sorted(ciks):
         path = Path(wrappers_dir) / f"{cik}.json"
         if not path.exists():
             raise LoadError(f"no wrapper for {cik} at {path.as_posix()}")
-        wrapper = json.loads(path.read_text(encoding="utf-8-sig"))
+        raw = path.read_bytes()
+        wrapper = json.loads(raw.decode("utf-8-sig"))
         rules, corrections, not_loaded = wrappers.flatten(cik, wrapper)
         tables["reading_rule"] += rules
         tables["correction"] += corrections
         tables["not_loaded"] += not_loaded
         tables["rule_label_example"] += wrappers.label_examples(cik, wrapper)
-        inputs[path.as_posix()] = store.file_sha256(path)
+        # the hash of the bytes parsed above, so the record cannot describe a later edit
+        digest = hashlib.sha256(raw).hexdigest()
+        inputs[path.as_posix()] = digest
+        tables["wrapper_copy_sha256"][cik] = digest
     if production_dir is not None:
         drift, drift_inputs = wrapper_drift(ciks, wrappers_dir, production_dir)
         tables["wrapper_drift"] = drift
