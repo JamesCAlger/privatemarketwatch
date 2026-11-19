@@ -50,16 +50,18 @@ def load(ciks, wrappers_dir, row_store_paths, production_dir=None):
     """(tables, inputs) for the given funds. Raises LoadError if a wrapper is missing or unreadable.
 
     With production_dir, also the wrapper_drift table (production wrapper changed since the copy was taken)."""
-    tables = {"reading_rule": [], "correction": [], "not_loaded": [], "wrapper_drift": []}
+    tables = {"reading_rule": [], "correction": [], "not_loaded": [], "wrapper_drift": [], "rule_label_example": []}
     inputs = {}
     for cik in sorted(ciks):
         path = Path(wrappers_dir) / f"{cik}.json"
         if not path.exists():
             raise LoadError(f"no wrapper for {cik} at {path.as_posix()}")
-        rules, corrections, not_loaded = wrappers.flatten(cik, json.loads(path.read_text(encoding="utf-8-sig")))
+        wrapper = json.loads(path.read_text(encoding="utf-8-sig"))
+        rules, corrections, not_loaded = wrappers.flatten(cik, wrapper)
         tables["reading_rule"] += rules
         tables["correction"] += corrections
         tables["not_loaded"] += not_loaded
+        tables["rule_label_example"] += wrappers.label_examples(cik, wrapper)
         inputs[path.as_posix()] = store.file_sha256(path)
     if production_dir is not None:
         drift, drift_inputs = wrapper_drift(ciks, wrappers_dir, production_dir)

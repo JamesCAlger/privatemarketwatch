@@ -130,6 +130,19 @@ models:
         data_tests:
           - not_null
 
+  - name: int_role_fund_position
+    description: >
+      Open contexts a fund rule position_without_term_fact matches (label pattern on the first label segment, optional
+      feature), with the rule and the number of rules that match. int_source_row reads it only for a row that would be
+      unresolved for want of a term fact (D15, slice 2 Task 6).
+    columns:
+      - name: position_rule_id
+        data_tests:
+          - not_null
+      - name: match_count
+        data_tests:
+          - not_null
+
   - name: int_source_row
     description: >
       One row per context of every parsed filing of the five funds with its role, the numbered rule that decided it
@@ -716,6 +729,9 @@ unit_tests:
           - {accession: A, context_id: s8, scope_count: 1, scope: "JV One", scopes: "JV One", scope_rule_id: r1, scope_how: set_scope, cash_rule_id: null}
           - {accession: A, context_id: s9, scope_count: 2, scope: null, scopes: "JV One; JV Two", scope_rule_id: r1, scope_how: set_scope, cash_rule_id: null}
           - {accession: A, context_id: s11, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: r9}
+      - input: ref('int_role_fund_position')
+        rows:
+          - {accession: Z, context_id: z, position_rule_id: none, match_count: 1}
     expect:
       rows:
         - {context_id: s1, role: superseded, role_rule: 0, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: null}
@@ -729,3 +745,107 @@ unit_tests:
         - {context_id: s9, role: unresolved, role_rule: 7, rule_id: r1, scope: "JV One; JV Two", is_cash: false, is_published: false, cross_check_agrees: null}
         - {context_id: s10, role: position, role_rule: 8, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true}
         - {context_id: s11, role: position, role_rule: 9, rule_id: r9, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true}
+
+  - name: int_source_row_fund_position_rule
+    description: >
+      Slice 2 Task 6 (D15). A rule 9 row with no term fact that one fund rule position_without_term_fact matches is a
+      position naming the rule, cross-check still false (t1); with no match, as for a fund without a rule, it stays
+      unresolved (t2); two matching rules leave it unresolved (t3); a JV-scope row is a position, not published (t4).
+      The rule never overrides an aggregate (t5), never sets an id on a row that has a term fact (t6), and never
+      resolves two scopes (t7).
+    model: int_source_row
+    given:
+      - input: ref('int_role_structure')
+        rows:
+          - {accession: A, context_id: t1, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: t2, cik: "2", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: t3, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: t4, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: t5, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: t6, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: t7, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: t1, has_term_fact: false}
+          - {accession: A, context_id: t2, has_term_fact: false}
+          - {accession: A, context_id: t3, has_term_fact: false}
+          - {accession: A, context_id: t4, has_term_fact: false}
+          - {accession: A, context_id: t5, has_term_fact: false}
+          - {accession: A, context_id: t6, has_term_fact: true}
+          - {accession: A, context_id: t7, has_term_fact: false}
+      - input: ref('int_role_text')
+        rows:
+          - {accession: A, context_id: t5, text_rule: 4, pattern_id: r4_total, cash_pattern_id: null}
+      - input: ref('int_role_subtotal')
+        rows:
+          - {accession: Z, context_id: z, is_subtotal: false, child_count: 0}
+      - input: ref('int_role_scope')
+        rows:
+          - {accession: A, context_id: t1, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: null}
+          - {accession: A, context_id: t2, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: null}
+          - {accession: A, context_id: t3, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: null}
+          - {accession: A, context_id: t4, scope_count: 1, scope: "JV One", scopes: "JV One", scope_rule_id: s1, scope_how: set_scope, cash_rule_id: null}
+          - {accession: A, context_id: t6, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: null}
+          - {accession: A, context_id: t7, scope_count: 2, scope: null, scopes: "JV One; JV Two", scope_rule_id: s1, scope_how: set_scope, cash_rule_id: null}
+      - input: ref('int_role_fund_position')
+        rows:
+          - {accession: A, context_id: t1, position_rule_id: p1, match_count: 1}
+          - {accession: A, context_id: t3, position_rule_id: p1, match_count: 2}
+          - {accession: A, context_id: t4, position_rule_id: p1, match_count: 1}
+          - {accession: A, context_id: t5, position_rule_id: p1, match_count: 1}
+          - {accession: A, context_id: t6, position_rule_id: p1, match_count: 1}
+          - {accession: A, context_id: t7, position_rule_id: p1, match_count: 1}
+    expect:
+      rows:
+        - {context_id: t1, role: position, role_rule: 9, is_published: true, cross_check_agrees: false, position_rule_id: p1, reason: "no term fact; position by fund rule position_without_term_fact"}
+        - {context_id: t2, role: unresolved, role_rule: 9, is_published: false, cross_check_agrees: false, position_rule_id: null, reason: "no rule removes it, but no term fact"}
+        - {context_id: t3, role: unresolved, role_rule: 9, is_published: false, cross_check_agrees: false, position_rule_id: null, reason: "no term fact, and 2 fund rules position_without_term_fact match"}
+        - {context_id: t4, role: position, role_rule: 7, is_published: false, cross_check_agrees: false, position_rule_id: p1, reason: "scope JV One by set_scope; no term fact, position by fund rule position_without_term_fact"}
+        - {context_id: t5, role: aggregate, role_rule: 4, is_published: false, cross_check_agrees: true, position_rule_id: null, reason: "label pattern r4_total"}
+        - {context_id: t6, role: position, role_rule: 9, is_published: true, cross_check_agrees: true, position_rule_id: null, reason: "position"}
+        - {context_id: t7, role: unresolved, role_rule: 7, is_published: false, cross_check_agrees: null, position_rule_id: null, reason: "two scopes: JV One; JV Two"}
+
+  - name: int_role_fund_position_selectors
+    description: >
+      Slice 2 Task 6. Fund 1 has a label-pattern rule with feature fair_value_zero (fz) and a dated rule (dt); fund 3
+      has two rules matching one label. The pattern is matched in full on the first label segment, lowercased and
+      with white space collapsed: k1 matches fz; k2 fails the feature; k3 is fund 2, which has no rule (unaffected);
+      k4 fails the full match (trailing text); k5 matches dt despite case, a double space and a pipe suffix; k6 is
+      before the start of dt; k7 fails the full match (leading text); k8 was decided by rules 0 to 3 (not open); k9
+      matches both fund 3 rules.
+    model: int_role_fund_position
+    given:
+      - input: ref('int_role_structure')
+        rows:
+          - {accession: A, context_id: k1, cik: "1", report_date: 2024-03-31, role: null}
+          - {accession: A, context_id: k2, cik: "1", report_date: 2024-03-31, role: null}
+          - {accession: A, context_id: k3, cik: "2", report_date: 2024-03-31, role: null}
+          - {accession: A, context_id: k4, cik: "1", report_date: 2024-03-31, role: null}
+          - {accession: A, context_id: k5, cik: "1", report_date: 2024-03-31, role: null}
+          - {accession: A, context_id: k6, cik: "1", report_date: 2022-12-31, role: null}
+          - {accession: A, context_id: k7, cik: "1", report_date: 2024-03-31, role: null}
+          - {accession: A, context_id: k8, cik: "1", report_date: 2024-03-31, role: comparative}
+          - {accession: A, context_id: k9, cik: "3", report_date: 2024-03-31, role: null}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: k1, identifier_label: "Acme, First lien revolving loan", fair_value: 0}
+          - {accession: A, context_id: k2, identifier_label: "Acme, First lien revolving loan", fair_value: 5}
+          - {accession: A, context_id: k3, identifier_label: "Acme, First lien revolving loan", fair_value: 0}
+          - {accession: A, context_id: k4, identifier_label: "Acme, First lien revolving loan 2", fair_value: 0}
+          - {accession: A, context_id: k5, identifier_label: "ACME  JV LP - LP Interest | Affiliated Issuer", fair_value: 9}
+          - {accession: A, context_id: k6, identifier_label: "Acme JV", fair_value: 9}
+          - {accession: A, context_id: k7, identifier_label: "Total Acme JV", fair_value: 9}
+          - {accession: A, context_id: k8, identifier_label: "Acme JV", fair_value: 9}
+          - {accession: A, context_id: k9, identifier_label: "Beta Fund", fair_value: 9}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: fz, cik: "1", action: position_without_term_fact, sel_label_pattern: ".+, first lien revolving loan", sel_feature: fair_value_zero, valid_from: null, valid_to: null}
+          - {rule_id: dt, cik: "1", action: position_without_term_fact, sel_label_pattern: "acme jv( lp - lp interest)?", sel_feature: null, valid_from: 2023-01-01, valid_to: null}
+          - {rule_id: b1, cik: "3", action: position_without_term_fact, sel_label_pattern: "beta.*", sel_feature: null, valid_from: null, valid_to: null}
+          - {rule_id: b2, cik: "3", action: position_without_term_fact, sel_label_pattern: ".*fund", sel_feature: null, valid_from: null, valid_to: null}
+          - {rule_id: other, cik: "2", action: set_scope, sel_label_pattern: null, sel_feature: null, valid_from: null, valid_to: null}
+    expect:
+      rows:
+        - {accession: A, context_id: k1, position_rule_id: fz, match_count: 1}
+        - {accession: A, context_id: k5, position_rule_id: dt, match_count: 1}
+        - {accession: A, context_id: k9, position_rule_id: b1, match_count: 2}

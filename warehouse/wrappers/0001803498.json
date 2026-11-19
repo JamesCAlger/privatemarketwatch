@@ -311,5 +311,44 @@
     "untagged_values": [
       "0001803498-25-000021 c-1227 principal_amount 1875000"
     ]
-  }
+  },
+  "reading_rules": [
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": "bcred (emerald|verdelite) jv( lp - lp interest)?|specialty lending company llc - llc interest",
+      "label_examples_match": [
+        "BCRED Emerald JV",
+        "BCRED Verdelite JV",
+        "BCRED Emerald JV LP - LP Interest",
+        "BCRED Verdelite JV LP - LP Interest",
+        "Specialty Lending Company LLC - LLC Interest"
+      ],
+      "label_examples_no_match": [
+        "Emerald JV LP",
+        "WHCG Purchaser III, Inc, Emerald JV LP",
+        "Total BCRED Emerald JV",
+        "BCRED Emerald JV LP - LP Interest 2",
+        "Specialty Lending Company LLC"
+      ],
+      "evidence": "The fund's own interest in its joint ventures (BCRED Emerald JV LP, BCRED Verdelite JV LP; the same entities the legal_entity_members and reporting_entity_suffixes declarations name as JV schedules) and in Specialty Lending Company LLC to 2023-06-30. The printed line has cost, fair value and percent of net assets, no instrument column, rate or units; e.g. 0001803498-26-000031 c-1420 'BCRED Emerald JV LP - LP Interest | (6)(16) | 1/19/2022 | 1,836,000 | 1,539,677 | 3.41'. 33 contexts, 2022-09-30 to 2026-06-30. Production publishes all 33, and the fund's published total misses the filed total investments by their value without them. Owner decision D15, 2026-11-19. Slice 2 Task 6."
+    },
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": ".+ - (class a common units|series a preferred units)|pigments lp int",
+      "label_examples_match": [
+        "GSO DL Co-Invest EIS LP (EIS Acquisition Holdings, LP) - Class A Common Units",
+        "GSO DL CoInvest CI LP (CustomInk, LLC) - Series A Preferred Units",
+        "Pigments LP Int"
+      ],
+      "label_examples_no_match": [
+        "WHCG Purchaser III, Inc.",
+        "BCRED Emerald JV LP - LP Interest",
+        "Class A Common Units",
+        "Pigments LP"
+      ],
+      "evidence": "Co-invest and LP equity lines with no units tagged (cost, fair value and percent of net assets only). 11 contexts, 2022-09-30 to 2023-06-30: GSO DL Co-Invest EIS LP and GSO DL CoInvest CI LP units in each quarter (two of them, 2022-09-30, in the Emerald JV schedule), and Pigments LP Int (0001803498-23-000017 c-878, fair value 0). E.g. c-876 'GSO DL Co-Invest EIS LP (EIS Acquisition Holdings, LP) - Class A Common Units | 558 | 2,779 | 0.01': no units printed. Production publishes all 11 (9 published, 2 in the JV schedule). Owner decision D15, 2026-11-19. Slice 2 Task 6."
+    }
+  ]
 }

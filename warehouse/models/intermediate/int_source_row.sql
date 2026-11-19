@@ -14,6 +14,10 @@
 -- concept_rule_id names the fund rule (stg_reading_rule, concept_is_fair_value or concept_is_term_fact) a role was
 -- decided through. rule_id on a rule 6 row names the fund rule subtotal_on_fair_value where the row is a subtotal only
 -- through it (its fair value ties and its cost does not).
+-- Fund rule position_without_term_fact (int_role_fund_position, D15): a row at rule 7 or 9 with no term fact that one
+-- such rule of its fund matches is a position, not unresolved; position_rule_id names the rule. It changes nothing
+-- else: rules 0 to 6, cash rows and two scopes are decided as before, and cross_check_agrees stays false on the row
+-- (the cross-check still disagrees; the fund rule overrides it). Two rules matching one row leave it unresolved.
 -- is_published is false for a JV's own schedule rows (scope other than 'fund'), matching production's published basis.
 with base as (
     select
@@ -40,11 +44,14 @@ with base as (
         , sc.scope_rule_id
         , sc.scope_how
         , sc.cash_rule_id
+        , fp.position_rule_id
+        , coalesce(fp.match_count, 0) as position_rule_count
     from {{ ref('int_role_structure') }} s
     join {{ ref('int_context_feature') }} cf on cf.accession = s.accession and cf.context_id = s.context_id
     left join {{ ref('int_role_text') }} t on t.accession = s.accession and t.context_id = s.context_id
     left join {{ ref('int_role_subtotal') }} st on st.accession = s.accession and st.context_id = s.context_id
     left join {{ ref('int_role_scope') }} sc on sc.accession = s.accession and sc.context_id = s.context_id
+    left join {{ ref('int_role_fund_position') }} fp on fp.accession = s.accession and fp.context_id = s.context_id
 )
 
 , ruled as (
@@ -62,6 +69,17 @@ with base as (
     from base
 )
 
+, released as (
+    -- a row the cross-check would hold for want of a term fact, and exactly one fund rule declares a position
+    select
+        *
+        , role_rule in (7, 9) and not (role_rule = 7 and scope_count > 1) and not has_term_fact and not is_cash_row
+            as lacks_term_fact
+        , role_rule in (7, 9) and not (role_rule = 7 and scope_count > 1) and not has_term_fact and not is_cash_row
+            and position_rule_count = 1 as is_released
+    from ruled
+)
+
 , decided as (
 select
     accession
@@ -73,7 +91,7 @@ select
         when role_rule in (4, 5, 6) and has_term_fact then 'unresolved'
         when role_rule in (4, 5, 6) then 'aggregate'
         when role_rule = 7 and scope_count > 1 then 'unresolved'
-        when role_rule in (7, 9) and not has_term_fact and not is_cash_row then 'unresolved'
+        when lacks_term_fact and not is_released then 'unresolved'
         else 'position'
       end as role
     , role_rule
@@ -92,10 +110,15 @@ select
             then 'fair value equals the sum of ' || child_count || ' rows below it; cost does not (fund rule subtotal_on_fair_value)'
         when role_rule = 6 then 'fair value (and cost) equal the sum of ' || child_count || ' rows below it'
         when role_rule = 7 and scope_count > 1 then 'two scopes: ' || scopes
-        when role_rule = 7 and not has_term_fact and not is_cash_row then 'scope ' || scope || ' by ' || scope_how || ', but no term fact'
+        when lacks_term_fact and position_rule_count > 1
+            then 'no term fact, and ' || position_rule_count || ' fund rules position_without_term_fact match'
+        when role_rule = 7 and is_released
+            then 'scope ' || scope || ' by ' || scope_how || '; no term fact, position by fund rule position_without_term_fact'
+        when role_rule = 7 and lacks_term_fact then 'scope ' || scope || ' by ' || scope_how || ', but no term fact'
         when role_rule = 7 then 'scope ' || scope || ' by ' || scope_how
         when role_rule = 8 then 'fair value on the cash and cash equivalents axis'
-        when not has_term_fact and not is_cash_row then 'no rule removes it, but no term fact'
+        when is_released then 'no term fact; position by fund rule position_without_term_fact'
+        when lacks_term_fact then 'no rule removes it, but no term fact'
         when cash_rule_id is not null then 'position; cash identifier from the rule table'
         when cash_pattern_id is not null then 'position; label names a money-market fund (' || cash_pattern_id || ')'
         else 'position'
@@ -115,7 +138,8 @@ select
         when role_rule >= 4 and fair_value_source <> 'standard' then fair_value_source
         when role_rule >= 4 and term_fact_source <> 'standard' then term_fact_source
       end as concept_rule_id
-from ruled
+    , case when is_released then position_rule_id end as position_rule_id
+from released
 )
 
 select
@@ -133,4 +157,5 @@ select
     , cross_check_agrees
     , cash_rule_id
     , concept_rule_id
+    , position_rule_id
 from decided

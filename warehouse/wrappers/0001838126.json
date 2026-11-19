@@ -358,5 +358,30 @@
       "max_pct": 0.1,
       "max_fv_pct": 0.1
     }
-  }
+  },
+  "reading_rules": [
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": "ultra iii, llc( - llc interest)?",
+      "label_examples_match": [
+        "ULTRA III, LLC",
+        "ULTRA III, LLC - LLC Interest",
+        "ULTRA III, LLC - LLC Interest | Affiliated Issuer"
+      ],
+      "label_examples_no_match": [
+        "Total ULTRA III, LLC",
+        "ULTRA III, LLC 1",
+        "ULTRA III"
+      ],
+      "evidence": "The fund's own interest in its joint venture ULTRA III, LLC (the detached joint venture schedule): cost and fair value tagged, no term. 11 contexts, 2023-12-31 to 2026-06-30, e.g. 0001628280-26-033248 c-952 'ULTRA III, LLC (5)(20)(22) - LLC Interest | $ 421,029 | $ 426,214'. Production publishes all 11, and the fund's published total misses the filed total investments by exactly their value without them. Owner decision D15, 2026-11-19. Slice 2 Task 6."
+    },
+    {
+      "target": "term_fact",
+      "action": "concept_is_term_fact",
+      "concept_namespace": "http://fasb.org/us-gaap/*",
+      "concept_local": "QualifiedAffordableHousingProjectInvestmentsCommitment",
+      "evidence": "HPS tags the commitment amount of an unfunded commitment line in its joint venture schedule with this us-gaap concept (its name notwithstanding); fair value is the only other fact, often negative. Counts as the line's term fact for this filer only. 32 contexts, 2024-06-30 to 2026-06-30, all in the joint venture schedule, e.g. 0001628280-26-033248 c-3683 'Rsource Holdings, LLC | 1st Lien Senior Secured Delayed Draw Loan | 50,000 | (1,462)'. Production publishes all 32 in the JV schedule. Measured in slice 2 Task 6: no other context of this fund at rules 4 to 9 lacks a term fact and carries the concept. Owner decision D15, 2026-11-19 (zero-value and commitment lines kept to match production; whether they belong is decided after reproduction, with D11)."
+    }
+  ]
 }

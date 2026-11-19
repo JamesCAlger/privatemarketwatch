@@ -5,8 +5,9 @@ The set of position rows this layer produces, compared with production's. Plan:
 Models: `cmp_row_set`, `cmp_excluded_quarter`. Production: `stg_holdings`, build of record b1116a.
 State: after Task 2 fix rounds 2, 3 and 3b (commits 1e9b9121, a09bee83), Task 3 fix round 1, the
 owner's decisions of 2026-11-19, and Task 5 (fund rules moved into the new pipeline's wrapper
-copies; one Blue Owl relabel added; the Apollo subtotal rule). Task 5's report has the before and
-after measurements.
+copies; one Blue Owl relabel added; the Apollo subtotal rule), and Task 6 (fund rules for positions
+with no term fact, D15: the 133 rows production publishes and this layer held are now positions).
+Task 5's and Task 6's reports have the before and after measurements.
 
 Agreement with production shows the two agree. It does not show either is right. Where a cause
 below leans on the filed total, the evidence is a measured tie of sums. A tie is a proxy: it says
@@ -48,12 +49,17 @@ layer's.
 
 | Fund | Both | Both, prod FV | Both, new FV | New only | New only, new FV | Prod only | Prod only, prod FV | Prod only, new FV |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Ares | 19,723 | 402.92 | 402.92 | 2 | 0.12 | 56 | 0.42 | 0.30 |
-| BCRED | 15,457 | 960.52 | 960.52 | 32 | 3.78 | 42 | 29.78 | 29.78 |
-| Blue Owl | 9,717 | 350.39 | 350.39 | 1 | 0 | 2 | 0.001 | 0.001 |
+| Ares | 19,767 | 402.96 | 402.96 | 2 | 0.12 | 12 | 0.39 | 0.27 |
+| BCRED | 15,499 | 990.30 | 990.30 | 32 | 3.78 | 0 | 0 | 0 |
+| Blue Owl | 9,719 | 350.39 | 350.39 | 1 | 0 | 0 | 0 | 0 |
 | Apollo | 7,248 | 205.70 | 205.70 | 0 | 0 | 50 | 0.18 | 0.18 |
-| HPS | 8,431 | 214.98 | 214.98 | 0 | 0 | 11 | 3.36 | 3.36 |
-| Total | 60,576 | 2,134.51 | 2,134.51 | 35 | 3.91 | 161 | 33.75 | 33.63 |
+| HPS | 8,442 | 218.35 | 218.35 | 0 | 0 | 0 | 0 | 0 |
+| Total | 60,675 | 2,167.69 | 2,167.69 | 35 | 3.91 | 62 | 0.57 | 0.45 |
+
+Before Task 6: both 60,576 (Ares 19,723, BCRED 15,457, Blue Owl 9,717, Apollo 7,248, HPS 8,431);
+production only 161 (Ares 56, BCRED 42, Blue Owl 2, Apollo 50, HPS 11; 33.75bn production FV).
+The 99 published rows that moved to "both" are the fund-rule releases of Task 6 below
+(`scripts/slice2/q_t6_compare_cmp.sql`).
 
 - "Prod only, new FV" is this layer's fair value for the same context, where it has one. It is lower
   for Ares because 2 production rows sit on contexts with no fair value of their own (the Expereo pair).
@@ -65,9 +71,12 @@ layer's.
 
 | Fund | Both | Both FV ($bn) | New only | New only, new FV ($bn) | Prod only | Prod only, prod FV ($bn) |
 |---|---:|---:|---:|---:|---:|---:|
-| BCRED (Emerald, Verdelite) | 9,171 | 101.19 | 30 | 0.32 | 2 | 0.006 |
+| BCRED (Emerald, Verdelite) | 9,173 | 101.19 | 30 | 0.32 | 0 | 0 |
 | Blue Owl (ORCIC Senior Loan Fund) | 1,416 | 8.31 | 0 | 0 | 0 | 0 |
-| HPS (detached JV schedule) | 119 | 11.72 | 0 | 0 | 32 | -0.003 |
+| HPS (detached JV schedule) | 151 | 11.71 | 0 | 0 | 0 | 0 |
+
+Before Task 6: BCRED both 9,171 and production only 2 (0.006bn); HPS both 119 and production only 32
+(-0.003bn). The 34 moved to "both" through Task 6's fund rules.
 
 Both sides put all 1,416 Blue Owl `ORCICSeniorLoanFundMember` rows in a JV schedule.
 
@@ -78,8 +87,8 @@ ceiling (`baseline_cmp_<basis>_<cause>`).
 
 | Cause | Published | Unpublished | Detail |
 |---|---:|---:|---|
-| new_wrong | 54 | 0 | held_unresolved_ties_filed_total |
-| owner_review | 45 | 34 | held_unresolved_d5 |
+| new_wrong | 0 (54 before Task 6) | 0 | held_unresolved_ties_filed_total |
+| owner_review | 0 (45 before Task 6) | 0 (34 before Task 6) | held_unresolved_d5 |
 | needs_correction | 52 | 0 | correction_supplies_value_or_term |
 | needs_store_not_loaded | 12 | 0 | production_row_added 8, rate_only_context_pair 4 |
 | convention | 31 | 30 | cash_published_d7 |
@@ -91,7 +100,11 @@ ceilings are 0.
 
 ### What each rule tests and what was measured
 
-**new_wrong, held_unresolved_ties_filed_total (54).** Production only; this layer holds the row
+The two subsections below describe the rows as they stood before Task 6. All 54 and all 79 are now
+positions through fund rules (section "Fund rules now in force"); both causes count 0 and their
+rules stay in `cmp_row_set` for any new held row.
+
+**new_wrong, held_unresolved_ties_filed_total (54 before Task 6, now 0).** Production only; this layer holds the row
 `unresolved`; fair value not 0; and in that fund and date this layer's published total without cash
 misses the filed total investments, while adding the fund-quarter's group of such rows closes the
 gap. Both within 500,000 (`reconcile_tolerance`). Measured per quarter:
@@ -106,7 +119,7 @@ gap. Both within 500,000 (`reconcile_tolerance`). Measured per quarter:
 In every such quarter production's own total ties to the filed total (within 6,000). All 54 rows
 were opened (see the owner-review section).
 
-**owner_review, held_unresolved_d5 (45 published, 34 JV).** Production only; this layer holds the
+**owner_review, held_unresolved_d5 (45 published, 34 JV before Task 6; now 0).** Production only; this layer holds the
 row `unresolved` under D5; not tied by the rule above; no rule change proposed here. Classified row
 by row in the owner-review section.
 
@@ -130,11 +143,12 @@ by row in the owner-review section.
   adopt_adjacent` (`pipeline/source_encodings.py`). The function's docstring says the value context
   is kept; production's rows carry the rate context id. Not followed up.
 
-Ares's gaps to the filed total equal these groups: 2022-09-30 166.8m (2 `needs_correction` rows
-138.3m + 32 `owner_review` rows 28.5m; the tie rule does not count the correction rows, so those 32
-stay `owner_review`), 2025-03-31 96.6m (row_added 94.3m + owner_review 2.3m), 2025-06-30 33.2m
-(row_added), 2025-09-30 4.7m (new_wrong). 2024-06-30 is short by exactly 500,000 (one owner_review
-row), inside the tolerance. In the other 11 quarters this layer ties.
+Ares's gaps to the filed total before Task 6 equalled these groups: 2022-09-30 166.8m (2
+`needs_correction` rows 138.3m + 32 `owner_review` rows 28.5m), 2025-03-31 96.6m (row_added 94.3m +
+owner_review 2.3m), 2025-06-30 33.2m (row_added), 2025-09-30 4.7m (new_wrong), 2024-06-30 500,000
+(one owner_review row). Since Task 6 the owner_review and new_wrong rows are positions and the gaps
+are exactly the other groups: 2022-09-30 138.3m (`needs_correction`), 2025-03-31 94.3m and
+2025-06-30 33.2m (row_added); every other quarter ties (`scripts/slice2/q_tie.sql`).
 
 **convention, cash_published_d7 (31 published, 30 JV).** New only and the row is cash (`is_cash`).
 BCRED money-market and liquidity funds (State Street, Fidelity, Dreyfus, BlackRock, Morgan Stanley).
@@ -233,6 +247,63 @@ sit in the copy's top-level `reading_rules` list (origin `wrapper:reading_rules`
 | Blue Owl | concept_is_fair_value | InvestmentOwnedFairValueNetOfUnamortizedFees, `http://owlrockcoreincomecorp.com/*` | fair value where no us-gaap fair value | Owner confirmed (D11) |
 | Blue Owl | concept_is_term_fact | the same concept and glob | term fact | Owner confirmed (D11) |
 | Apollo | subtotal_on_fair_value | none | rule 6 on fair value alone | Owner decision D12 |
+| Ares | position_without_term_fact | label `.+, first lien senior secured revolving loan`, feature fair_value_zero | undrawn revolver is a position | Owner decision D15 (Task 6) |
+| Ares | position_without_term_fact | label `.+, (membership interest\|member interest\|equity interests\|limited partnership interests?\|class a (preferred )?units\|warrant to purchase .+)` | equity line with no units tagged is a position | D15 |
+| BCRED | position_without_term_fact | label `bcred (emerald\|verdelite) jv( lp - lp interest)?\|specialty lending company llc - llc interest` | the fund's own JV and fund interests are positions | D15 |
+| BCRED | position_without_term_fact | label `.+ - (class a common units\|series a preferred units)\|pigments lp int` | co-invest and LP units with none tagged are positions | D15 |
+| Blue Owl | position_without_term_fact | label `insight cp \(blocker\) holdings, l\.p\. \(dba civicplus, llc\)` | one blocker LP interest is a position | D15 |
+| Blue Owl | concept_is_term_fact | InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount, `http://fasb.org/us-gaap/*` | commitment amount is the term fact | D15 with D11 |
+| HPS | position_without_term_fact | label `ultra iii, llc( - llc interest)?` | the fund's own JV interest is a position | D15 |
+| HPS | concept_is_term_fact | QualifiedAffordableHousingProjectInvestmentsCommitment, `http://fasb.org/us-gaap/*` | commitment amount in the JV schedule is the term fact | D15 with D11 |
+
+**Task 6: positions with no term fact (D15).** A general capability, driven only by rule rows: the
+action `position_without_term_fact` (`seeds/reading_action.csv`) with a `label_pattern` (matched in
+full, case ignored, on the first `|`-segment of the label, lowercased with white space collapsed;
+macro `label_first_segment`) and an optional `feature` from a closed list (`fair_value_zero`).
+Model `int_role_fund_position` finds the matches; `int_source_row` uses one only for a row at rule
+7 or 9 with no term fact and not cash, which becomes a position naming the rule
+(`position_rule_id`; `cross_check_agrees` stays false). It never overrides rules 0 to 6, a cash row
+or two scopes; two matching rules leave the row unresolved and fail
+`tests/fund_rule_position_one_match.sql`. A fund without such a rule is unaffected (unit test
+`int_source_row_fund_position_rule`, case t2). Each label pattern carries its own fixtures in the
+wrapper (`label_examples_match`, `label_examples_no_match`; loader table `rule_label_example`);
+`tests/fund_rule_label_examples.sql` fails if a pattern disagrees with one, or if a rule has no
+must-not-match example. The two commitment classes use the existing concept action, with a us-gaap
+namespace glob, for that filer only. Loader version 3 (new column `sel_label_pattern`): every
+rule_id changed again.
+
+Guard, per rule (`scripts/slice2/q_t6_compare.sql`, `q_t6_rule_matches.sql`): rows released / of
+which production publishes on the same basis / of which production has no row. Measured on every
+context of every parsed filing, the false-positive set being the 462 unresolved contexts production
+has no row for (397 it leaves out, 65 in the excluded quarters):
+
+| Fund | Class | Rule | Released | Production has, same basis | Production has not |
+|---|---|---|---:|---:|---:|
+| Ares | undrawn_revolver_zero_value | label + fair_value_zero | 34 | 34 | 0 |
+| Ares | equity_or_fund_interest_no_units_tagged | label | 10 | 10 | 0 |
+| BCRED | own_jv_or_fund_interest | label | 33 | 33 | 0 |
+| BCRED | equity_or_fund_interest_no_units_tagged | label | 11 | 11 (9 published, 2 JV schedule) | 0 |
+| Blue Owl | equity_or_fund_interest_no_units_tagged | label | 1 | 1 | 0 |
+| Blue Owl | unfunded_commitment_line | concept term fact | 1 | 1 | 0 |
+| HPS | own_jv_or_fund_interest | label | 11 | 11 | 0 |
+| HPS | unfunded_commitment_line | concept term fact | 32 | 32 (JV schedule) | 0 |
+| Total | | | 133 | 133 | 0 |
+
+- `tests/baseline_fund_rule_release_not_in_production.sql` (ceiling 0) fails the build on any row a
+  label rule releases that production has no row for on the same basis, excluded quarters included.
+- No other role changed on any context. The two concept rules also set `has_term_fact` on contexts
+  that rules 1 to 3 had already decided (Blue Owl 853, HPS 31: comparative or not_schedule); their
+  roles did not change. The label rules also match 2,180 contexts that already carry a term fact
+  and are positions; nothing changes on them.
+- The Blue Owl label rule names one position in full: no feature of the row separates it from the
+  issuer-level lines of the same fund that production leaves out. It is as narrow as a correction.
+
+**Zero-value rows.** The Ares undrawn revolvers (34, fair value 0), six Ares and one BCRED equity
+lines at fair value 0, and the HPS and Blue Owl commitment lines (fair value 0 or the small negative
+or positive value of an undrawn line, in a JV schedule for HPS) are not tested by any tie to a filed
+total: a tie of sums cannot see a zero row, and the HPS JV schedule has no filed total here. They
+rest only on "production publishes them". Whether such lines belong in the position set is the same
+after-reproduction question as Blue Owl's commitment lines (D11).
 
 - One rule per fund and reading, with a namespace glob for the filer's own domain (no wildcard in
   the host; ruling 12: never the local name alone). It matches exactly the facts the 48 seed rows
@@ -268,26 +339,34 @@ sit in the copy's top-level `reading_rules` list (origin `wrapper:reading_rules`
 
 ## For the owner's review (decision D5)
 
-### The rows production publishes and this layer holds (133)
+### The rows production publishes and this layer held (133; all released in Task 6)
 
 Every row was opened: its printed line and every fact on its context (`stg_filed_document_row`,
 `stg_filed_fact_placement`, `stg_filed_fact`). Full list:
 `warehouse/docs/owner_review_rows_2026-11-19.csv` (cik, report_date, accession, context_id, label,
-fair_value, class; plus basis and cause). These are the `new_wrong` (54) and `owner_review` (79)
-rows. No role was changed.
+fair_value, class, basis and cause as classified before Task 6; since Task 6 also
+`release_rule_id`, `release_action` and `role_now`; `scripts/slice2/q_t6_owner_review_csv.sql`).
+These were the `new_wrong` (54) and `owner_review` (79) rows. Owner decision D15: each class gets a
+fund rule in that fund's wrapper copy. Since Task 6 every one of the 133 is a position, released by
+the rule named in the CSV (none left as `owner_review`; none empty in `release_rule_id`). The class
+descriptions below are the evidence the rules were written from.
 
-| Class | Fund | Rows | Cause | Production |
-|---|---|---:|---|---|
-| own_jv_or_fund_interest | BCRED | 33 | new_wrong | publishes |
-| own_jv_or_fund_interest | HPS | 11 | new_wrong | publishes |
-| equity_or_fund_interest_no_units_tagged | Ares | 10 | 1 new_wrong, 9 owner_review | publishes |
-| equity_or_fund_interest_no_units_tagged | BCRED | 11 | 8 new_wrong, 1 owner_review (Pigments LP, FV 0), 2 owner_review (JV) | publishes (9), JV schedule (2) |
-| equity_or_fund_interest_no_units_tagged | Blue Owl | 1 | new_wrong | publishes |
-| undrawn_revolver_zero_value | Ares | 34 | owner_review | publishes |
-| unfunded_commitment_line | Blue Owl | 1 | owner_review | publishes |
-| unfunded_commitment_line | HPS | 32 | owner_review (JV) | JV schedule |
-| position_with_terms_on_another_context | | 0 | | none seen |
-| other | | 0 | | none seen |
+| Class | Fund | Rows | Cause before Task 6 | Production | Released by (Task 6) |
+|---|---|---:|---|---|---|
+| own_jv_or_fund_interest | BCRED | 33 | new_wrong | publishes | label rule, 33 |
+| own_jv_or_fund_interest | HPS | 11 | new_wrong | publishes | label rule, 11 |
+| equity_or_fund_interest_no_units_tagged | Ares | 10 | 1 new_wrong, 9 owner_review | publishes | label rule, 10 |
+| equity_or_fund_interest_no_units_tagged | BCRED | 11 | 8 new_wrong, 1 owner_review (Pigments LP, FV 0), 2 owner_review (JV) | publishes (9), JV schedule (2) | label rule, 11 |
+| equity_or_fund_interest_no_units_tagged | Blue Owl | 1 | new_wrong | publishes | label rule naming the position, 1 |
+| undrawn_revolver_zero_value | Ares | 34 | owner_review | publishes | label rule + fair_value_zero, 34 |
+| unfunded_commitment_line | Blue Owl | 1 | owner_review | publishes | concept term fact, 1 |
+| unfunded_commitment_line | HPS | 32 | owner_review (JV) | JV schedule | concept term fact, 32 |
+| position_with_terms_on_another_context | | 0 | | none seen | |
+| other | | 0 | | none seen | |
+
+The "Smallest rule" lines below are what was proposed before Task 6. The equity class was released
+by a label rule (the instrument the label names), not by reading units from print: no units are read
+in this slice.
 
 **own_jv_or_fund_interest (44).** The fund's own interest in a joint venture or a fund it holds. The
 printed line has cost, fair value and percent of net assets, and no instrument column, rate or units.
@@ -349,24 +428,30 @@ us-gaap commitment concept with a us-gaap fair value of 0.
   amount counts as the line's term fact (HPS: its concept; Blue Owl: the us-gaap commitment concept,
   for this filer only, since 143 Ares aggregates carry it).
 
-### All unresolved rows (603; 743 before the Apollo rule) by fund and why
+### All unresolved rows (470; 603 before Task 6, 743 before the Apollo rule) by fund and why
 
-Not published. FV in $m, all quarters.
+Not published. FV in $m, all quarters (`scripts/slice2/q_t5_unresolved_table.sql`). Unresolved by
+fund before and after Task 6: Ares 234 -> 190, BCRED 46 -> 2, Blue Owl 118 -> 116, Apollo 162 -> 162,
+HPS 43 -> 0.
 
 | Fund | Why | Production publishes | Production leaves out | Production lacks the filing | JV schedule in production |
 |---|---|---|---|---|---|
-| Ares | no term fact, FV 0 | 40 | 125 | 9 | |
-| Ares | no term fact, FV not 0 | 6 (174.3) | 23 (470.1) | 31 (5,306.7) | |
-| BCRED | no term fact, FV 0 | 1 | | | |
-| BCRED | no term fact, FV not 0 | 41 (29,778.2) | 1 (35.6) | | |
-| BCRED | JV schedule, no term fact | | 1 (2.2) | | 2 (6.4) |
-| Blue Owl | no term fact, FV 0 | 1 | | | |
-| Blue Owl | no term fact, FV not 0 | 1 (1.0) | 54 (9,252.0) | 18 (3,337.7) | |
+| Ares | no term fact, FV 0 | 0 (40 before Task 6) | 125 | 9 | |
+| Ares | no term fact, FV not 0 | 2 (138.3; 6 before Task 6) | 23 (470.1) | 31 (5,306.7) | |
+| BCRED | no term fact, FV 0 | 0 (1 before Task 6) | | | |
+| BCRED | no term fact, FV not 0 | 0 (41 before Task 6) | 1 (35.6) | | |
+| BCRED | JV schedule, no term fact | | 1 (2.2) | | 0 (2 before Task 6) |
+| Blue Owl | no term fact, FV 0 | 0 (1 before Task 6) | | | |
+| Blue Owl | no term fact, FV not 0 | 0 (1 before Task 6) | 54 (9,252.0) | 18 (3,337.7) | |
 | Blue Owl | "Total ... Commitments" line: total pattern (rule 4) and a term fact disagree | | 32 (-203.4) | 7 (-33.0) | |
 | Blue Owl | two filer fair values disagree on one context (rule 3) | | 5 | | |
 | Apollo | no term fact, FV not 0 | 6 (180.7) | 156 (190,028.1); 296 (198,220.0) before the Apollo rule | | |
-| HPS | no term fact, FV not 0 | 11 (3,363.1) | | | |
-| HPS | JV schedule, no term fact | | | | 32 (-3.1) |
+| HPS | no term fact, FV not 0 | 0 (11 before Task 6) | | | |
+| HPS | JV schedule, no term fact | | | | 0 (32 before Task 6) |
+
+The 2 Ares and 6 Apollo rows production publishes that stay unresolved are all `needs_correction`
+(an untagged value or term in a loaded correction; corrections are not applied in this slice). No
+fund rule was written for them.
 
 - The 39 Blue Owl "Total Portfolio Company Commitments" and "Total ... debt/equity commitments" lines
   carry the filer's fees concept (InvestmentOwnedFairValueNetOfUnamortizedFees, its fair value net of
@@ -377,8 +462,6 @@ Not published. FV in $m, all quarters.
   and 20 whose cost is not comparable (1.61bn), all left out by production. Since Task 5 all 140 are
   aggregates through Apollo's fund rule subtotal_on_fair_value (D12). Still unresolved: 68 Apollo
   rollups whose fair value differs.
-- The 6 Ares and 6 Apollo rows production publishes include 2 and 6 with a loaded correction
-  (`needs_correction`).
 - "Production lacks the filing" rows are in the excluded 2026-09-30 quarter.
 
 ## Filing selection (Task 1)
@@ -393,7 +476,10 @@ filings production has not loaded, and two cover-only filings refused (BCRED 202
 - Why production drops Box Co-Invest c-1259 and LSI Financing c-1013.
 - Whether unfunded-commitment lines (Blue Owl, HPS JV) should be positions at all (after
   reproduction).
-- Zero-value rows of any group against anything but production.
+- Zero-value rows of any group against anything but production; in particular the 34 Ares undrawn
+  revolvers, the 7 zero-value equity lines and the 33 commitment lines released in Task 6.
+- Whether the Task 6 label rules still fit a later filing: they are tested on the parsed filings
+  through 2026-09-30 only (the false-positive guard reruns on every build).
 - Ares's 125 zero-value unresolved rows that production leaves out.
 - The 1,413 label-keyed corrections (no context id) are not used by the cause rules.
 - `bdc_aggregate_row_overrides.json` (Ares entries are exclusions; none touches a one-sided row) and

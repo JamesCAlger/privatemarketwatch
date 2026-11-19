@@ -19,3 +19,6 @@ sources:
       - name: wrapper_drift
         meta:
           external_location: "read_parquet('{{ var('readings_dir') }}/wrapper_drift.parquet')"
+      - name: rule_label_example
+        meta:
+          external_location: "read_parquet('{{ var('readings_dir') }}/rule_label_example.parquet')"

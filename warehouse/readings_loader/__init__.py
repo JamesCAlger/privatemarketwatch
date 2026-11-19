@@ -10,11 +10,13 @@ import hashlib
 
 # 2: rule rows gain sel_concept_namespace and sel_concept_local (new-style fund rules, `reading_rules`). Every
 # rule_id changes with the column list, since the id hashes every column.
-LOADER_VERSION = "2"
+# 3: rule rows gain sel_label_pattern (fund rule position_without_term_fact, slice 2 Task 6). Every rule_id changes again.
+LOADER_VERSION = "3"
 
 RULE_COLUMNS = [
     "rule_id", "cik", "valid_from", "valid_to", "validity_basis", "sel_accession", "sel_axis",
-    "sel_member", "sel_label", "sel_feature", "sel_concept_namespace", "sel_concept_local", "target", "action",
+    "sel_member", "sel_label", "sel_label_pattern", "sel_feature", "sel_concept_namespace", "sel_concept_local",
+    "target", "action",
     "parameter", "evidence", "origin", "rule_class", "priority",
 ]
 CORRECTION_COLUMNS = [
@@ -22,6 +24,8 @@ CORRECTION_COLUMNS = [
     "value", "value_unit", "expected_value", "kind", "store", "reason", "evidence", "author", "date_added",
 ]
 NOT_LOADED_COLUMNS = ["cik", "wrapper_key", "entry", "reason"]
+# A fund rule's own label fixtures (reading_rules label_examples_match / label_examples_no_match; slice 2 Task 6).
+LABEL_EXAMPLE_COLUMNS = ["rule_id", "cik", "label", "expected_match"]
 # Production wrapper against the copy the new pipeline reads: SHA-256 when copied, now, and whether it changed.
 WRAPPER_DRIFT_COLUMNS = ["cik", "copied_sha256", "current_sha256", "changed"]
 

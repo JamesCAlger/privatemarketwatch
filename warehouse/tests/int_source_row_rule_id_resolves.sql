@@ -17,3 +17,10 @@ from {{ ref('int_source_row') }} s
 anti join {{ ref('stg_reading_rule') }} r
     on r.rule_id = s.concept_rule_id and r.cik = s.cik and r.action in ('concept_is_fair_value', 'concept_is_term_fact')
 where s.concept_rule_id is not null
+union all
+-- every position_rule_id names a position_without_term_fact rule of the same filer (slice 2 Task 6)
+select s.accession, s.context_id, s.position_rule_id, 'position_rule_id'
+from {{ ref('int_source_row') }} s
+anti join {{ ref('stg_reading_rule') }} r
+    on r.rule_id = s.position_rule_id and r.cik = s.cik and r.action = 'position_without_term_fact'
+where s.position_rule_id is not null

@@ -36,11 +36,16 @@ _PROCEDURES = {"rate_only_contexts", "gics_industry_carry_back"}
 # (warehouse/wrappers/<cik>.json). Each entry is an object; entry key -> rule column.
 _RULE_SELECTORS = {
     "concept_namespace": "sel_concept_namespace", "concept_local": "sel_concept_local", "accession": "sel_accession",
-    "axis": "sel_axis", "member": "sel_member", "label": "sel_label", "feature": "sel_feature",
+    "axis": "sel_axis", "member": "sel_member", "label": "sel_label", "label_pattern": "sel_label_pattern",
+    "feature": "sel_feature",
 }
 _RULE_KEYS = {"target", "action", "parameter", "valid_from", "valid_to", "evidence"} | set(_RULE_SELECTORS)
-# A namespace selector names the filer's own domain: a literal scheme and host, then a path in which '*' (glob) may
-# stand for the dated part. Never a wildcard in the host, so a rule cannot reach another filer's taxonomy.
+# Labels a rule's label_pattern must match (true) and must not match (false): the rule's own fixtures, kept beside it
+# in the wrapper (slice 2 Task 6). They are not part of the rule, so not of its id.
+_EXAMPLE_KEYS = {"label_examples_match": True, "label_examples_no_match": False}
+# A namespace selector names one taxonomy: a literal scheme and host (the filer's own domain, or the standard
+# taxonomy's), then a path in which '*' (glob) may stand for the dated part. Never a wildcard in the host, so a rule
+# cannot reach another filer's taxonomy. The rule itself applies only to its own filer's filings.
 _NAMESPACE_SELECTOR = re.compile(r"https?://[A-Za-z0-9.-]+\.[A-Za-z]{2,}/[A-Za-z0-9._/*-]*")
 _CONCEPT_LOCAL = re.compile(r"[A-Za-z][A-Za-z0-9]*")
 
@@ -82,19 +87,52 @@ def _accession(cik, key, entry):
     return text
 
 
+# A label pattern is a regular expression matched in full by DuckDB (RE2) against the first '|'-segment of a context's
+# identifier label, lowercased, white space collapsed, case ignored. RE2 has no look-around and no back-references;
+# a pattern using them would only fail inside the build, so they are refused here.
+_RE2_UNSUPPORTED = re.compile(r"\(\?[=!<]|\\[1-9]")
+
+
+def _label_pattern(cik, key, pattern):
+    if not pattern:
+        raise LoadError(f"{cik} {key}: label_pattern is empty")
+    if _RE2_UNSUPPORTED.search(pattern):
+        raise LoadError(f"{cik} {key}: label_pattern uses look-around or a back-reference (not in RE2): {pattern!r}")
+    try:
+        re.compile(pattern)
+    except re.error as exc:
+        raise LoadError(f"{cik} {key}: label_pattern is not a regular expression: {pattern!r} ({exc})") from None
+
+
+def _examples(cik, key, entry, field):
+    """The labels listed under an example key: a non-empty list of non-empty texts, or nothing."""
+    if field not in entry:
+        return []
+    values = entry[field]
+    if not isinstance(values, list) or not values or any(not isinstance(v, str) or not v.strip() for v in values):
+        raise LoadError(f"{cik} {key}: {field} must be a non-empty list of labels in {entry!r}")
+    if "label_pattern" not in entry:
+        raise LoadError(f"{cik} {key}: {field} needs a label_pattern in {entry!r}")
+    return [v.strip() for v in values]
+
+
 def _reading_rules(cik, entries):
-    """Rule rows (origin wrapper:reading_rules) for a wrapper's `reading_rules` list. Raises LoadError on anything
-    unknown. Which actions exist is not checked here: dbt tests every action against seeds/reading_action.csv."""
+    """(rule rows, example rows) for a wrapper's `reading_rules` list (rules: origin wrapper:reading_rules). Raises
+    LoadError on anything unknown. Which actions exist is not checked here: dbt tests every action against
+    seeds/reading_action.csv. Example rows are the labels a rule's label_pattern must and must not match, as the
+    wrapper lists them; dbt tests them against the pattern (tests/fund_rule_label_examples.sql)."""
     key = "reading_rules"
     if not isinstance(entries, list) or not entries:
         raise LoadError(f"{cik} {key}: expected a non-empty list, got {entries!r}")
-    rules = []
+    rules, examples = [], []
     for entry in entries:
         if not isinstance(entry, dict):
             raise _bad(cik, key, entry)
-        unknown = sorted(set(entry) - _RULE_KEYS)
+        unknown = sorted(set(entry) - _RULE_KEYS - set(_EXAMPLE_KEYS))
         if unknown:
             raise LoadError(f"{cik} {key}: unknown field(s) {', '.join(unknown)} in {entry!r}")
+        listed = {field: _examples(cik, key, entry, field) for field in _EXAMPLE_KEYS}
+        entry = {k: v for k, v in entry.items() if k not in _EXAMPLE_KEYS}
         if any(not isinstance(v, str) for v in entry.values()):
             raise _bad(cik, key, entry)
         e = {k: v.strip() for k, v in entry.items()}
@@ -111,6 +149,8 @@ def _reading_rules(cik, entries):
             raise LoadError(f"{cik} {key}: concept_local is one local name, no prefix: {local!r}")
         if e.get("accession") and not _ACCESSION.fullmatch(e["accession"]):
             raise _bad(cik, key, entry)
+        if "label_pattern" in e:
+            _label_pattern(cik, key, e["label_pattern"])
         for d in ("valid_from", "valid_to"):
             if e.get(d) and not re.fullmatch(_DATE, e[d]):
                 raise LoadError(f"{cik} {key}: {d} must read YYYY-MM-DD in {entry!r}")
@@ -119,14 +159,24 @@ def _reading_rules(cik, entries):
                     priority=SELECTED if cols else FILER, evidence=e["evidence"],
                     valid_from=e.get("valid_from", ""), valid_to=e.get("valid_to", ""), **cols)
         rules.append(row)
-    return rules
+        for field, expected in _EXAMPLE_KEYS.items():
+            for label in listed[field]:
+                examples.append({"rule_id": row["rule_id"], "cik": cik, "label": label, "expected_match": expected})
+    return rules, examples
+
+
+def label_examples(cik, wrapper):
+    """Example rows (rule_id, cik, label, expected_match) of a wrapper's `reading_rules`. Raises LoadError as flatten."""
+    if "reading_rules" not in wrapper:
+        return []
+    return _reading_rules(cik, wrapper["reading_rules"])[1]
 
 
 def flatten(cik, wrapper):
     """(rules, corrections, not_loaded) for one wrapper. Raises LoadError on anything unknown."""
     rules, corrections, not_loaded = [], [], []
     if "reading_rules" in wrapper:
-        rules += _reading_rules(cik, wrapper["reading_rules"])
+        rules += _reading_rules(cik, wrapper["reading_rules"])[0]
     encodings = wrapper.get("source_encodings") or {}
     if not isinstance(encodings, dict):
         raise LoadError(f"{cik}: source_encodings is not an object")

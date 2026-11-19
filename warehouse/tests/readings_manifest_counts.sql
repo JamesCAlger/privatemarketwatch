@@ -7,6 +7,8 @@ with counted as (
     select 'not_loaded', count(*) from {{ ref('stg_reading_not_loaded') }}
     union all
     select 'wrapper_drift', count(*) from {{ ref('stg_wrapper_drift') }}
+    union all
+    select 'rule_label_example', count(*) from {{ ref('stg_rule_label_example') }}
 )
 select m.table_name, m.manifest_rows, c.table_rows
 from {{ ref('stg_readings_manifest') }} as m

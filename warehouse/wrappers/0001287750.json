@@ -449,6 +449,45 @@
       "concept_namespace": "http://www.arescapitalcorp.com/*",
       "concept_local": "InvestmentOwnedBalancePercentOfShares",
       "evidence": "Ares's own concept for the percent of the issuer's shares or units held, tagged on partnership member and LLC interest lines in place of a share count. Filed in the dated namespaces http://www.arescapitalcorp.com/20220930 to /20260930, 17 filings (first 0001287750-22-000052: 34 facts on 34 contexts, each with an investment identifier member and the us-gaap fair value). Counts as the line's term fact. Controller ruling 2026-11-19; moved here from warehouse seed filer_concept.csv (rows ares_pct_shares_*), slice 2 Task 5."
+    },
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": ".+, first lien senior secured revolving loan",
+      "feature": "fair_value_zero",
+      "label_examples_match": [
+        "Harvey Tool Company, LLC, First lien senior secured revolving loan",
+        "Mavis Tire Express Services Topco Corp., Metis Holdco, Inc. and Metis Topco, LP, First lien senior secured revolving loan"
+      ],
+      "label_examples_no_match": [
+        "Harvey Tool Company, LLC",
+        "Viant Medical Holdings, Inc., second lien senior secured loan",
+        "Cehntric Brands LLC and Centric Brands GP LLC, First lien senior secured loan",
+        "First lien senior secured revolving loan"
+      ],
+      "evidence": "Undrawn revolvers: a first lien revolving loan line with fair value 0 and cost 0, the principal printed as a dash and no term tagged. 34 contexts: 29 in 0001287750-22-000052 (2022-09-30), 3 in 0001287750-23-000021, 2 in 0001287750-23-000036 (e.g. c-1206 'Mavis Tire Express Services Topco Corp., Metis Holdco, Inc. and Metis Topco, LP (15) | ... | First lien senior secured revolving loan | 05/2021 | 05/2026 | - | -'). Production publishes all 34. Owner decision D15, 2026-11-19 (to match production; whether a zero-value line belongs is decided after reproduction, with D11). A zero-value row is not tested by any tie to the filed total. Slice 2 Task 6."
+    },
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": ".+, (membership interest|member interest|equity interests|limited partnership interests?|class a (preferred )?units|warrant to purchase .+)",
+      "label_examples_match": [
+        "GHX Ultimate Parent Corporation, Commerce Parent, Inc. and Commerce Topco, LLC, Class A units",
+        "The Ultimus Group Midco, LLC, The Ultimus Group, LLC, and The Ultimus Group Aggregator, LP, Class A preferred units",
+        "Merit Financial Group, LLC and CWC Fund I Co-Invest (MFA) LP, Limited partnership interests",
+        "Piper Jaffray Merchant Banking Fund I, L.P., Limited partnership interest",
+        "Startec Equity, LLC, Member interest",
+        "Poplicus Incorporated, Warrant to purchase up to 2,402,991 shares of Series C preferred stock"
+      ],
+      "label_examples_no_match": [
+        "Startec Equity, LLC",
+        "PCG-Ares Sidecar Investment, L.P.",
+        "Joyce Lane Capital LLC and Joyce Lane Financing SPV LLC (fka Ciena Capital LLC)",
+        "Firebird Music Holdings, LLC and Firebird Music Rights I LP",
+        "Viant Medical Holdings, Inc., second lien senior secured loan",
+        "Class A units"
+      ],
+      "evidence": "Equity, LP and warrant lines whose units are printed (or not printed) but not tagged: only cost and fair value are tagged. 10 contexts, 2022-09-30 to 2025-09-30, e.g. 0001287750-22-000052 'GHX Ultimate Parent Corporation, Commerce Parent, Inc. and Commerce Topco, LLC, Class A units' printed 'Class A units | 6/2017 | 14,853,569 | 15.7 | 28.5'. Production publishes all 10. Selected on the instrument named after the last comma; the issuer-only lines of the same companies, which production leaves out, name no instrument. Owner decision D15, 2026-11-19. Slice 2 Task 6."
     }
   ]
 }

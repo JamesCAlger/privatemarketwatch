@@ -574,6 +574,27 @@
       "concept_namespace": "http://owlrockcoreincomecorp.com/*",
       "concept_local": "InvestmentOwnedFairValueNetOfUnamortizedFees",
       "evidence": "The same concept also stands as the term fact of an unfunded commitment line: it is the only fact the filer tags there. This switches off the term-fact cross-check for those lines; tests/baseline_concept_rule_value_and_term.sql holds them to a zero ceiling on positive or total-like published rows. Owner decision 2026-11-19 (D11); moved here from warehouse seed filer_concept.csv (rows bo_commit_term_*), slice 2 Task 5."
+    },
+    {
+      "target": "term_fact",
+      "action": "concept_is_term_fact",
+      "concept_namespace": "http://fasb.org/us-gaap/*",
+      "concept_local": "InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount",
+      "evidence": "The us-gaap commitment amount on an unfunded commitment line that carries the us-gaap fair value (0) instead of the filer's fees concept: 0001812554-25-000009 c-1230 'ACR Group Borrower, LLC | First lien senior secured delayed draw term loan | 5/2025 | $ 733 | $ 100 | $ -'. Counts as the line's term fact for this filer only (Ares tags the same concept on aggregates). Measured in slice 2 Task 6: of this fund's contexts at rules 4 to 9 that carry the concept, only c-1230 lacked a term fact; the 'Total ... Commitments' lines already carry one (the fees concept) and stay unresolved. Production publishes c-1230. Owner decision D15, 2026-11-19, with D11."
+    },
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": "insight cp \\(blocker\\) holdings, l\\.p\\. \\(dba civicplus, llc\\)",
+      "label_examples_match": [
+        "Insight CP (Blocker) Holdings, L.P. (dba CivicPlus, LLC)"
+      ],
+      "label_examples_no_match": [
+        "Insight CP (Blocker) Holdings, L.P.",
+        "Pluralsight, LLC",
+        "Fifth Season Investments LLC (fka Chapford SMA Partnership, L.P.)"
+      ],
+      "evidence": "An LP interest in a blocker with no units tagged: 0001812554-23-000014 (2023-03-31), cost and fair value 987,000 and percent of net assets only. Production publishes it, and the fund's published total misses the filed total investments by exactly its value without it. Named in full: no feature of the row separates it from the issuer-level lines of this fund that production leaves out (Pluralsight, LLC; Fifth Season Investments LLC; the fund's own JV interests), so the rule is as narrow as one position. Owner decision D15, 2026-11-19. Slice 2 Task 6."
     }
   ]
 }

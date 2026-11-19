@@ -202,3 +202,72 @@ def test_two_reading_rules_on_one_concept_have_distinct_ids():
 def test_malformed_reading_rule_stops_the_load(rules):
     with pytest.raises(LoadError):
         flatten(CIK, {"reading_rules": rules})
+
+
+# Fund rule position_without_term_fact (slice 2, Task 6): a label pattern and an optional feature.
+
+_POSITION_RULE = {"target": "role", "action": "position_without_term_fact",
+                  "label_pattern": ".+, first lien senior secured revolving loan", "feature": "fair_value_zero",
+                  "evidence": "0000000001-22-000001: 29 undrawn revolvers printed with a dash"}
+
+
+def test_label_pattern_rule_becomes_a_fund_rule_row():
+    r = _one(flatten(CIK, {"reading_rules": [_POSITION_RULE]})[0])
+    assert (r["target"], r["action"], r["rule_class"], r["priority"]) == ("role", "position_without_term_fact", "fund_rule", 30)
+    assert r["sel_label_pattern"] == ".+, first lien senior secured revolving loan"
+    assert r["sel_feature"] == "fair_value_zero"
+    assert r["sel_label"] == "" and r["sel_concept_local"] == ""
+
+
+def test_label_pattern_is_part_of_the_rule_id():
+    a = _one(flatten(CIK, {"reading_rules": [_POSITION_RULE]})[0])
+    b = _one(flatten(CIK, {"reading_rules": [dict(_POSITION_RULE, label_pattern=".+, revolving loan")]})[0])
+    assert a["rule_id"] != b["rule_id"]
+
+
+@pytest.mark.parametrize("pattern", [
+    "",                       # empty
+    " ",                      # blank
+    "(unclosed",              # not a regular expression
+    "(?=look)ahead",          # look-around: RE2 has none
+    "(?<!x)behind",
+    r"(a)\1",                 # back-reference
+])
+def test_bad_label_pattern_stops_the_load(pattern):
+    with pytest.raises(LoadError):
+        flatten(CIK, {"reading_rules": [dict(_POSITION_RULE, label_pattern=pattern)]})
+
+
+def test_label_pattern_key_is_not_a_label_key():
+    with pytest.raises(LoadError, match="unknown field"):
+        flatten(CIK, {"reading_rules": [dict(_POSITION_RULE, label_regex=".+")]})
+
+
+def test_label_examples_are_rows_beside_the_rule_and_not_part_of_its_id():
+    from readings_loader.wrappers import label_examples
+    plain = dict(_POSITION_RULE)
+    listed = dict(_POSITION_RULE, label_examples_match=["Acme, First lien senior secured revolving loan"],
+                  label_examples_no_match=["Acme", " Acme, second lien loan "])
+    rule = _one(flatten(CIK, {"reading_rules": [listed]})[0])
+    assert rule["rule_id"] == _one(flatten(CIK, {"reading_rules": [plain]})[0])["rule_id"]
+    got = sorted((e["label"], e["expected_match"], e["rule_id"] == rule["rule_id"], e["cik"])
+                 for e in label_examples(CIK, {"reading_rules": [listed]}))
+    assert got == [("Acme", False, True, CIK), ("Acme, First lien senior secured revolving loan", True, True, CIK),
+                   ("Acme, second lien loan", False, True, CIK)]
+    assert label_examples(CIK, {"source_encodings": {}}) == []
+
+
+@pytest.mark.parametrize("extra", [
+    {"label_examples_match": []},                     # empty list
+    {"label_examples_match": "Acme"},                 # not a list
+    {"label_examples_no_match": ["Acme", ""]},        # an empty label
+    {"label_examples_no_match": [3]},
+])
+def test_bad_label_examples_stop_the_load(extra):
+    with pytest.raises(LoadError):
+        flatten(CIK, {"reading_rules": [dict(_POSITION_RULE, **extra)]})
+
+
+def test_label_examples_need_a_label_pattern():
+    with pytest.raises(LoadError, match="needs a label_pattern"):
+        flatten(CIK, {"reading_rules": [dict(_CONCEPT_RULE, label_examples_no_match=["Acme"])]})

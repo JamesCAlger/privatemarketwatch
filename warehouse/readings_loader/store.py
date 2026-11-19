@@ -8,17 +8,18 @@ from pathlib import Path
 
 import duckdb
 
-from . import (CORRECTION_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS, RULE_COLUMNS, WRAPPER_DRIFT_COLUMNS,
-               LoadError)
+from . import (CORRECTION_COLUMNS, LABEL_EXAMPLE_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS, RULE_COLUMNS,
+               WRAPPER_DRIFT_COLUMNS, LoadError)
 
 TABLES = {
     "reading_rule": (RULE_COLUMNS, ["rule_id"]),
     "correction": (CORRECTION_COLUMNS, ["correction_id"]),
     "not_loaded": (NOT_LOADED_COLUMNS, ["cik", "wrapper_key", "entry"]),
     "wrapper_drift": (WRAPPER_DRIFT_COLUMNS, ["cik"]),
+    "rule_label_example": (LABEL_EXAMPLE_COLUMNS, ["rule_id", "label"]),
 }
 _INTEGER = {"priority"}
-_BOOLEAN = {"changed"}
+_BOOLEAN = {"changed", "expected_match"}
 
 
 def file_sha256(path):

@@ -60,16 +60,18 @@ vars:
     int_filing_production_only: 0
     int_filing_new_only: 3
     # 603 (slice 2 Task 5): 743 less 140 Apollo rollups made subtotals by its fund rule subtotal_on_fair_value (D12).
-    int_source_row_unresolved: 603
+    # 470 (slice 2 Task 6): 603 less the 133 rows production publishes, released by fund rules (D15).
+    int_source_row_unresolved: 470
     # cmp_row_set one-sided rows, one ceiling per basis and cause (tests/generic/baseline_cmp_cause.sql), measured
     # 2026-11-19 after task 3 fix round 1 (docs/baseline_roles_2026-11-19.md). The two bases are never summed.
     # old_wrong: no rule and no row today; the ceiling keeps it at 0 until a rule is added.
     cmp_published_old_wrong: 0
-    cmp_published_new_wrong: 54
+    # new_wrong and owner_review: 0 since Task 6 (the 54 and the 45 + 34 were the 133 rows released by fund rules, D15).
+    cmp_published_new_wrong: 0
     cmp_published_convention: 31
     cmp_published_needs_store_not_loaded: 12
     cmp_published_needs_correction: 52
-    cmp_published_owner_review: 45
+    cmp_published_owner_review: 0
     # 2: BCRED Box Co-Invest (0001803498-25-000062 c-1259) and Blue Owl LSI Financing (0001812554-26-000027 c-1013;
     # detail relabel_loaded since Task 5: a relabel is on file in the wrapper copy, why production omits the row is not known).
     cmp_published_not_yet_explained: 2
@@ -78,7 +80,7 @@ vars:
     cmp_unpublished_convention: 30
     cmp_unpublished_needs_store_not_loaded: 0
     cmp_unpublished_needs_correction: 0
-    cmp_unpublished_owner_review: 34
+    cmp_unpublished_owner_review: 0
     cmp_unpublished_not_yet_explained: 0
     cmp_row_set_no_context: 0
     # Fund-quarters left out of the comparison (production has no rows): the three Q3-2026 filings (Ares, Blue Owl,
@@ -90,6 +92,9 @@ vars:
     # Owner decision 2026-11-19: production wrappers changed since the new pipeline's copy (warehouse/wrappers) was
     # taken. A change there must be carried into the copy by hand, then warehouse/wrappers/_source.json updated.
     production_wrapper_changed: 0
+    # Slice 2 Task 6 (D15): rows a fund rule position_without_term_fact made positions that production has no row for
+    # on the same basis. The rules were written to release none; any such row fails the build.
+    fund_rule_release_not_in_production: 0
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   cmp_excluded_quarters_pinned:

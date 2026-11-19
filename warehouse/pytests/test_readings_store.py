@@ -62,7 +62,7 @@ def test_load_and_write_round_trip(tmp_path):
     tables, inputs = cli.load(["0000000001"], wrappers, stores)
     manifest = store.write(tmp_path / "out", tables, inputs)
     assert {k: v["rows"] for k, v in manifest["tables"].items()} == {"reading_rule": 1, "correction": 2, "not_loaded": 1,
-                                                                    "wrapper_drift": 0}
+                                                                    "wrapper_drift": 0, "rule_label_example": 0}
     con = duckdb.connect()
     got = con.execute(f"select action, priority from read_parquet('{(tmp_path / 'out' / 'reading_rule.parquet').as_posix()}')").fetchall()
     assert got == [("rate_is_all_in", 20)]
@@ -77,7 +77,8 @@ def test_two_runs_give_the_same_manifest_and_replace_the_output(tmp_path):
     second = store.write(tmp_path / "out", *cli.load(["0000000001"], wrappers, stores))
     assert first == second
     assert sorted(p.name for p in (tmp_path / "out").iterdir()) == [
-        "_manifest.json", "correction.parquet", "not_loaded.parquet", "reading_rule.parquet", "wrapper_drift.parquet"]
+        "_manifest.json", "correction.parquet", "not_loaded.parquet", "reading_rule.parquet", "rule_label_example.parquet",
+        "wrapper_drift.parquet"]
     assert [p.name for p in tmp_path.iterdir() if p.name.startswith(".readings_tmp_")] == []
 
 
@@ -170,3 +171,31 @@ def test_wrapper_reading_rules_load_end_to_end(tmp_path):
 def _one_row(rows):
     assert len(rows) == 1
     return rows[0]
+
+
+def test_label_examples_load_end_to_end(tmp_path):
+    wrappers, stores = _inputs(tmp_path)
+    (wrappers / "0000000001.json").write_text(json.dumps({"source_encodings": {}, "reading_rules": [
+        {"target": "role", "action": "position_without_term_fact", "label_pattern": "acme fund lp - lp interest",
+         "label_examples_match": ["Acme Fund LP - LP Interest"],
+         "label_examples_no_match": ["Acme Fund LP", "Total Acme Fund LP - LP Interest"], "evidence": "x"}]}),
+        encoding="utf-8")
+    tables, inputs = cli.load(["0000000001"], wrappers, stores)
+    manifest = store.write(tmp_path / "out", tables, inputs)
+    assert manifest["tables"]["rule_label_example"]["rows"] == 3
+    con = duckdb.connect()
+    out = (tmp_path / "out").as_posix()
+    got = con.execute(f"select e.label, e.expected_match, e.rule_id = r.rule_id from read_parquet('{out}/rule_label_example.parquet') e"
+                      f" cross join read_parquet('{out}/reading_rule.parquet') r order by 1").fetchall()
+    assert got == [("Acme Fund LP", False, True), ("Acme Fund LP - LP Interest", True, True),
+                   ("Total Acme Fund LP - LP Interest", False, True)]
+
+
+def test_one_label_listed_as_match_and_no_match_stops_the_write(tmp_path):
+    wrappers, stores = _inputs(tmp_path)
+    (wrappers / "0000000001.json").write_text(json.dumps({"source_encodings": {}, "reading_rules": [
+        {"target": "role", "action": "position_without_term_fact", "label_pattern": "acme",
+         "label_examples_match": ["Acme"], "label_examples_no_match": ["Acme"], "evidence": "x"}]}), encoding="utf-8")
+    tables, inputs = cli.load(["0000000001"], wrappers, stores)
+    with pytest.raises(LoadError, match="duplicate key"):
+        store.write(tmp_path / "out", tables, inputs)
