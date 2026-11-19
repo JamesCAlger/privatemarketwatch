@@ -59,7 +59,8 @@ vars:
     int_filing_accession_differs: 0
     int_filing_production_only: 0
     int_filing_new_only: 3
-    int_source_row_unresolved: 743
+    # 603 (slice 2 Task 5): 743 less 140 Apollo rollups made subtotals by its fund rule subtotal_on_fair_value (D12).
+    int_source_row_unresolved: 603
     # cmp_row_set one-sided rows, one ceiling per basis and cause (tests/generic/baseline_cmp_cause.sql), measured
     # 2026-11-19 after task 3 fix round 1 (docs/baseline_roles_2026-11-19.md). The two bases are never summed.
     # old_wrong: no rule and no row today; the ceiling keeps it at 0 until a rule is added.
@@ -67,10 +68,12 @@ vars:
     cmp_published_new_wrong: 54
     cmp_published_convention: 31
     cmp_published_needs_store_not_loaded: 12
-    cmp_published_needs_correction: 52
+    # 53: +1, Blue Owl c-1013, moved from not_yet_explained by the relabel entry added to the
+    # wrapper copy in slice 2 Task 5 (cause detail relabel_loaded).
+    cmp_published_needs_correction: 53
     cmp_published_owner_review: 45
-    # 2: BCRED Box Co-Invest (0001803498-25-000062 c-1259) and Blue Owl LSI Financing (0001812554-26-000027 c-1013).
-    cmp_published_not_yet_explained: 2
+    # 1: BCRED Box Co-Invest (0001803498-25-000062 c-1259). Blue Owl c-1013 left in Task 5 (relabel loaded).
+    cmp_published_not_yet_explained: 1
     cmp_unpublished_old_wrong: 0
     cmp_unpublished_new_wrong: 0
     cmp_unpublished_convention: 30
@@ -82,6 +85,18 @@ vars:
     # Fund-quarters left out of the comparison (production has no rows): the three Q3-2026 filings (Ares, Blue Owl,
     # Apollo). Falls to 0 when production is built with them.
     cmp_excluded_quarter: 3
+    # Review finding I2 (slice 2 Task 5): published positions whose fair value and term fact both come from fund
+    # concept rules (Blue Owl commitment lines) with a positive fair value or a total-like label.
+    concept_rule_value_and_term: 0
+    # Owner decision 2026-11-19: production wrappers changed since the new pipeline's copy (warehouse/wrappers) was
+    # taken. A change there must be carried into the copy by hand, then warehouse/wrappers/_source.json updated.
+    production_wrapper_changed: 0
+  # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
+  # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
+  cmp_excluded_quarters_pinned:
+    - "0001287750|2026-09-30|0001628280-26-067383"
+    - "0001812554|2026-09-30|0001812554-26-000060"
+    - "0001837532|2026-09-30|0001193125-26-449955"
 
 models:
   warehouse:

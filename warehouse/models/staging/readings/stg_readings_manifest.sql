@@ -1,5 +1,5 @@
 -- The row count the loader recorded for each table, from _manifest.json.
-{% set tables = ['reading_rule', 'correction', 'not_loaded'] %}
+{% set tables = ['reading_rule', 'correction', 'not_loaded', 'wrapper_drift'] %}
 {% for t in tables %}
 select
     loader_version

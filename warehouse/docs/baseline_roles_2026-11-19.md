@@ -3,8 +3,10 @@
 The set of position rows this layer produces, compared with production's. Plan:
 `2026-11-19-slice2-row-roles-plan.md`. Spec: `intermediate_spine.md` sections 6.2 and 8 (D1).
 Models: `cmp_row_set`, `cmp_excluded_quarter`. Production: `stg_holdings`, build of record b1116a.
-State: after Task 2 fix rounds 2, 3 and 3b (commits 1e9b9121, a09bee83), Task 3 fix round 1, and
-the owner's decisions of 2026-11-19.
+State: after Task 2 fix rounds 2, 3 and 3b (commits 1e9b9121, a09bee83), Task 3 fix round 1, the
+owner's decisions of 2026-11-19, and Task 5 (fund rules moved into the new pipeline's wrapper
+copies; one Blue Owl relabel added; the Apollo subtotal rule). Task 5's report has the before and
+after measurements.
 
 Agreement with production shows the two agree. It does not show either is right. Where a cause
 below leans on the filed total, the evidence is a measured tie of sums. A tie is a proxy: it says
@@ -26,7 +28,9 @@ Build line: see the Task 3 report, Fix round 1.
 ## Quarters left out of the comparison
 
 Owner decision 2026-11-19: a fund-quarter that production has no rows for is left out. Listed in
-`cmp_excluded_quarter`, ceiling 3 fund-quarters (`baseline_cmp_excluded_quarter`).
+`cmp_excluded_quarter`, ceiling 3 fund-quarters (`baseline_cmp_excluded_quarter`). The set itself is
+pinned (Task 5): `tests/cmp_excluded_quarter_set.sql` fails on any quarter not in
+`cmp_excluded_quarters_pinned` (`dbt_project.yml`), so a swap cannot pass the count.
 
 | Fund | Date | Accession | Published rows | JV rows |
 |---|---|---|---:|---:|
@@ -76,10 +80,10 @@ ceiling (`baseline_cmp_<basis>_<cause>`).
 |---|---:|---:|---|
 | new_wrong | 54 | 0 | held_unresolved_ties_filed_total |
 | owner_review | 45 | 34 | held_unresolved_d5 |
-| needs_correction | 52 | 0 | correction_supplies_value_or_term |
+| needs_correction | 53 | 0 | correction_supplies_value_or_term 52, relabel_loaded 1 |
 | needs_store_not_loaded | 12 | 0 | production_row_added 8, rate_only_context_pair 4 |
 | convention | 31 | 30 | cash_published_d7 |
-| not_yet_explained | 2 | 0 | none |
+| not_yet_explained | 1 | 0 | none |
 | old_wrong | 0 | 0 | no rule |
 
 `old_wrong` has no rule: no group measured here shows production reading a filing wrongly. Its
@@ -106,10 +110,14 @@ were opened (see the owner-review section).
 row `unresolved` under D5; not tied by the rule above; no rule change proposed here. Classified row
 by row in the owner-review section.
 
-**needs_correction (52).** Production only and a loaded context-keyed value correction names the
-context with fair value or a term field. Apollo 44: `wrapper:untagged_values` fair value 0, printed
-as a dash, no fact. Apollo 6 and Ares 2: untagged principal and cost. Opened 4, 4 and 2 printed rows:
-the number is printed and not tagged. Corrections are not applied in this slice.
+**needs_correction (53).** Corrections are not applied in this slice.
+- correction_supplies_value_or_term (52): production only and a loaded context-keyed value
+  correction names the context with fair value or a term field. Apollo 44: `wrapper:untagged_values`
+  fair value 0, printed as a dash, no fact. Apollo 6 and Ares 2: untagged principal and cost. Opened
+  4, 4 and 2 printed rows: the number is printed and not tagged.
+- relabel_loaded (1, Task 5): a one-sided row named by a loaded `relabelled_contexts` entry. Blue Owl
+  c-1013, below. The entry was added to the new pipeline's copy of the Blue Owl wrapper. It explains
+  the wrong label. It does not explain why production leaves the row out; that was not checked.
 
 **needs_store_not_loaded (12).**
 - production_row_added (8): production's `corrected_fields` has `_row:added`. Ares 2025-03-31 and
@@ -138,10 +146,12 @@ difference. Measured on production's side: it drops these BCRED rows (`pipeline/
 treats money-market names as non-private-market rows) and publishes Apollo's money-market rows (8,
 asset category CASH, on both sides here). Neither side is called right by this.
 
-**not_yet_explained (2).**
+**not_yet_explained (1).**
 - BCRED 2025-06-30 c-1259, "Box Co-Invest Blocker, LLC - (BP Alpha Holdings, LP) - Class C Preferred
   Units", fair value 0, cost 390,000. Production has the line in every other quarter from 2023-09-30.
   Production code not read for it.
+
+**Blue Owl c-1013 (needs_correction, relabel_loaded, since Task 5; was not_yet_explained).**
 - Blue Owl 2026-03-31, 0001812554-26-000027 c-1013, "LSI Financing LLC, Common Equity", fair value 0
   (filer commitment concept), commitment 171,438,000. Checked:
   1. Corrections: no `stg_correction` row names c-1013 or LSI in that filing. The 201
@@ -157,9 +167,16 @@ asset category CASH, on both sides here). Neither side is called right by this.
      affiliation dedupe; none plainly removes it. Production's wrapper classifier marks "common
      equity" as an equity leaf, so the wrapper does not drop it.
   5. Not done: run production's staging on that filing (needs pandas; not in `warehouse/.venv`).
-  Both layers carry the wrong company name if they publish it. A `relabelled_contexts` entry for
-  c-1013 (member "LSI Financing LLC, Common Equity", printed "OWL-HP FINANCE LLC | Specialty finance
-  equity investment") is the likely fix; that is a store edit, not done here.
+  Both layers carry the wrong company name if they publish it.
+  6. Task 5 (owner: "implement the blue owl amendment"): one entry added to `relabelled_contexts` in
+     the new pipeline's copy `warehouse/wrappers/0001812554.json`, in the form of the 201 already
+     there: `0001812554-26-000027 c-1013 :: LSI Financing LLC, Common Equity :: OWL-HP FINANCE LLC |
+     Specialty finance equity investment`. Checked first: the member as filed
+     (`stg_filed_context_member`), the three facts (fees-concept fair value 0, commitment 171,438,000,
+     contractually required 44,062,000), printed row 1452 as above, sibling c-1012 on row 1451 ("LSI
+     Financing LLC | Specialty finance equity investment", the label form used), and that no stored
+     correction named c-1013. Production's wrapper is unchanged, so production still has 201.
+     Not applied in this slice; the row's cause is now `needs_correction|relabel_loaded`.
 
 ## Blue Owl commitment lines
 
@@ -191,22 +208,49 @@ decision 2026-11-19: they are positions for now, to match production.
   `needs_correction` rows and, at 2026-03-31, the sign-flipped pair.
 - Apollo's cash rows are published here on D7 and the owner's 2026-11-19 decision, not on a tie.
 
-## Filer-concept rules now in force
+## Fund rules now in force
 
-From `seeds/filer_concept.csv` (Task 2 fix rounds 3 and 3b). Each row names a filer, an exact
-namespace and a concept. A filer fair value is read only where the context has no us-gaap
-fair-value fact.
+**One place: `warehouse/wrappers/<cik>.json`.** Owner decision 2026-11-19 ("copy the wrappers"):
+the new pipeline reads its own copy of each v0.5 fund's wrapper, taken byte for byte from
+`data/overrides/bdc_xbrl_wrappers/` (commit 951b2226; `warehouse/wrappers/_source.json` records each
+production file's SHA-256 and git blob id). Production keeps and reads its own wrappers until
+cutover; neither they nor the production wrapper schema were changed. From now on the new
+pipeline's fund rules are edited in `warehouse/wrappers/`. A change made to a production wrapper is
+not seen by the new pipeline and must be carried into the copy by hand until cutover: the loader
+compares each production wrapper with its recorded hash (table `wrapper_drift`, manifest key
+`production_wrappers_changed`), and `baseline_production_wrapper_changed` (ceiling 0) fails the
+build when one has changed.
 
-| Rule ids | Fund | Concept (filer namespace) | Read as | Rows | Status |
-|---|---|---|---|---:|---|
-| ares_pct_shares_* | Ares | InvestmentOwnedBalancePercentOfShares | term fact | 17 | Controller ruling 2026-11-19; awaits owner |
-| apollo_fv_cash_eq_* | Apollo | InvestmentOwnedAtFairValueAfterCashEquivalents | fair value | 15 | Controller ruling 2026-11-19; awaits owner |
-| bo_fv_net_fees_* | Blue Owl | InvestmentOwnedFairValueNetOfUnamortizedFees | fair value | 8 | Owner confirmed 2026-11-19 (commitment lines are positions for now) |
-| bo_commit_term_* | Blue Owl | InvestmentOwnedFairValueNetOfUnamortizedFees | term fact | 8 | Owner confirmed 2026-11-19 (same) |
+The old-style declarations (`source_encodings`, `identifier_format`) load as before. New-style rules
+sit in the copy's top-level `reading_rules` list (origin `wrapper:reading_rules`, class
+`fund_rule`). The seed `seeds/filer_concept.csv` (48 rows, one per dated namespace) is deleted.
 
-Owner decision 2026-11-19: every fund-specific rule is stored in one place, the fund's wrapper.
-These concept rules sit in `seeds/filer_concept.csv` today and are to move into the wrappers in the
-next task. Where they live is a controller ruling until then.
+| Fund | Action | Concept and namespace glob | Read as | Status |
+|---|---|---|---|---|
+| Ares | concept_is_term_fact | InvestmentOwnedBalancePercentOfShares, `http://www.arescapitalcorp.com/*` | term fact | Controller ruling 2026-11-19 |
+| Apollo | concept_is_fair_value | InvestmentOwnedAtFairValueAfterCashEquivalents, `http://gwms.apollo.com/*` | fair value where no us-gaap fair value | Controller ruling 2026-11-19 |
+| Blue Owl | concept_is_fair_value | InvestmentOwnedFairValueNetOfUnamortizedFees, `http://owlrockcoreincomecorp.com/*` | fair value where no us-gaap fair value | Owner confirmed (D11) |
+| Blue Owl | concept_is_term_fact | the same concept and glob | term fact | Owner confirmed (D11) |
+| Apollo | subtotal_on_fair_value | none | rule 6 on fair value alone | Owner decision D12 |
+
+- One rule per fund and reading, with a namespace glob for the filer's own domain (no wildcard in
+  the host; ruling 12: never the local name alone). It matches exactly the facts the 48 seed rows
+  matched: 4,963 fair-value and 5,376 term facts, none on one side only
+  (`scripts/slice2/q_t5_rule_vs_seed_facts.sql`). A new dated namespace is read without an edit;
+  `tests/concept_rule_namespace_gaps.sql` fails if a fund with a concept rule files the same local
+  name in a namespace the rule does not match, or if a rule matches nothing.
+- Blue Owl's two rules on one concept switch off the term-fact cross-check for its commitment lines.
+  `baseline_concept_rule_value_and_term` (ceiling 0) fails on a published line whose value and term
+  fact both come from concept rules and that has a positive fair value or a total-like label (rule
+  4 patterns). Measured: 0.
+- The move changed no role, rule, reason, scope or flag on any of 288,935 contexts, and no
+  comparison count; every rule id changed (loader version 2 adds two selector columns) and maps one
+  to one (`scripts/slice2/q_t5_compare.sql`, `q_t5_compare_cmp.sql`).
+- The Apollo subtotal rule changed 140 contexts, all `unresolved` to `aggregate` by rule 6: 120
+  whose cost differs (`scripts/slice2/q_apollo_cost_differs_rollups.sql`, 6.59bn) and 20 whose
+  cost cannot be compared (1.61bn). None has a row in production's holdings, none carries a rate,
+  spread, PIK rate, maturity, principal or shares, and Apollo's published total per quarter is the
+  same before and after (`scripts/slice2/q_t5_apollo_rule_effect.sql`, `q_t5_apollo_rule_summary.sql`).
 
 ## For the owner's review (decision D5)
 
@@ -291,7 +335,7 @@ us-gaap commitment concept with a us-gaap fair value of 0.
   amount counts as the line's term fact (HPS: its concept; Blue Owl: the us-gaap commitment concept,
   for this filer only, since 143 Ares aggregates carry it).
 
-### All unresolved rows (743) by fund and why
+### All unresolved rows (603; 743 before the Apollo rule) by fund and why
 
 Not published. FV in $m, all quarters.
 
@@ -306,16 +350,19 @@ Not published. FV in $m, all quarters.
 | Blue Owl | no term fact, FV not 0 | 1 (1.0) | 54 (9,252.0) | 18 (3,337.7) | |
 | Blue Owl | "Total ... Commitments" line: total pattern (rule 4) and a term fact disagree | | 32 (-203.4) | 7 (-33.0) | |
 | Blue Owl | two filer fair values disagree on one context (rule 3) | | 5 | | |
-| Apollo | no term fact, FV not 0 | 6 (180.7) | 296 (198,220.0) | | |
+| Apollo | no term fact, FV not 0 | 6 (180.7) | 156 (190,028.1); 296 (198,220.0) before the Apollo rule | | |
 | HPS | no term fact, FV not 0 | 11 (3,363.1) | | | |
 | HPS | JV schedule, no term fact | | | | 32 (-3.1) |
 
 - The 39 Blue Owl "Total Portfolio Company Commitments" and "Total ... debt/equity commitments" lines
-  carry the commitment concept, a term fact for this filer, so the cross-check disagrees with rule 4.
-  They are totals; production leaves them out.
-- Apollo issuer rollups whose fair value ties to their children and cost does not: 120 contexts
-  (6.59bn), all among the 296 production leaves out. To be handled in the next task as an Apollo rule.
-  Also left out: 20 Apollo rollups whose cost is not comparable and 68 whose fair value differs.
+  carry the filer's fees concept (InvestmentOwnedFairValueNetOfUnamortizedFees, its fair value net of
+  unamortized fees), which the Blue Owl term-fact rule counts as a term fact, so the cross-check
+  disagrees with rule 4. (Corrected in Task 5: earlier text said "the commitment concept".) They are
+  totals; production leaves them out.
+- Apollo issuer rollups whose fair value ties to their children: 120 whose cost does not (6.59bn)
+  and 20 whose cost is not comparable (1.61bn), all left out by production. Since Task 5 all 140 are
+  aggregates through Apollo's fund rule subtotal_on_fair_value (D12). Still unresolved: 68 Apollo
+  rollups whose fair value differs.
 - The 6 Ares and 6 Apollo rows production publishes include 2 and 6 with a loaded correction
   (`needs_correction`).
 - "Production lacks the filing" rows are in the excluded 2026-09-30 quarter.

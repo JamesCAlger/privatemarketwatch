@@ -243,7 +243,8 @@ unit_tests:
       (100m) does not close the gap (300m) -> owner_review. A held row with fair value 0 is never tested by the tie ->
       owner_review. A production-only row that is not_schedule with no correction is NOT owner_review ->
       not_yet_explained. New-only cash row in a filing production has -> convention; a new-only row that is not cash
-      -> not_yet_explained (not convention); a new-only cash row in a quarter production has no rows for is left out
+      -> not_yet_explained (not convention); a new-only row named by a loaded relabel correction -> needs_correction
+      (slice 2 Task 5); a new-only cash row in a quarter production has no rows for is left out
       of the comparison (no row, owner 2026-11-19). A JV-schedule held row -> owner_review (no filed total).
     model: cmp_row_set
     given:
@@ -265,6 +266,7 @@ unit_tests:
           - {accession: A1, context_id: j1, cik: "1", report_date: 2026-01-31, role: unresolved, role_rule: 7, reason: "scope JV by set_scope, but no term fact", is_cash: false, is_published: false}
           - {accession: A1, context_id: c1, cik: "1", report_date: 2026-01-31, role: position, role_rule: 9, reason: "position; money market", is_cash: true, is_published: true}
           - {accession: A1, context_id: n1, cik: "1", report_date: 2026-01-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true}
+          - {accession: A1, context_id: r1, cik: "1", report_date: 2026-01-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true}
           - {accession: A2, context_id: p2, cik: "1", report_date: 2026-02-28, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true}
           - {accession: A2, context_id: h2, cik: "1", report_date: 2026-02-28, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false}
           - {accession: A3, context_id: c3, cik: "1", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; money market", is_cash: true, is_published: true}
@@ -277,6 +279,7 @@ unit_tests:
           - {accession: A1, context_id: j1, identifier_label: "Eps | Loan, JV", fair_value: 7, fair_value_fact_count: 1}
           - {accession: A1, context_id: c1, identifier_label: "Some Money Market Fund", fair_value: 50, fair_value_fact_count: 1}
           - {accession: A1, context_id: n1, identifier_label: "Zeta | Loan", fair_value: 0, fair_value_fact_count: 1}
+          - {accession: A1, context_id: r1, identifier_label: "Wrong Co, Common Equity", fair_value: 0, fair_value_fact_count: 1}
           - {accession: A2, context_id: p2, identifier_label: "Alpha | Loan", fair_value: 800000000, fair_value_fact_count: 1}
           - {accession: A2, context_id: h2, identifier_label: "Beta | LP interest", fair_value: 100000000, fair_value_fact_count: 1}
           - {accession: A3, context_id: c3, identifier_label: "Some Money Market Fund", fair_value: 60, fair_value_fact_count: 1}
@@ -290,6 +293,7 @@ unit_tests:
       - input: ref('stg_correction')
         rows:
           - {accession: A9, context_id: q9, kind: value, field: fair_value}
+          - {accession: A1, context_id: r1, kind: relabel, field: identifier}
       - input: ref('stg_reading_not_loaded')
         rows:
           - {cik: "9", wrapper_key: rate_only_contexts}
@@ -302,6 +306,7 @@ unit_tests:
         - {basis: unpublished, context_id: j1, side: production_only, cause: owner_review}
         - {basis: published, context_id: c1, side: new_only, cause: convention}
         - {basis: published, context_id: n1, side: new_only, cause: not_yet_explained}
+        - {basis: published, context_id: r1, side: new_only, cause: needs_correction}
         - {basis: published, context_id: p2, side: both, cause: null}
         - {basis: published, context_id: h2, side: production_only, cause: owner_review}
 
@@ -372,6 +377,9 @@ unit_tests:
       - input: ref('int_role_scope')
         rows:
           - {accession: A, context_id: c13, scopes: "JV One"}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: none, cik: "9", action: set_scope, valid_from: null, valid_to: null}
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A, context_id: c11, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
@@ -407,6 +415,9 @@ unit_tests:
       - input: ref('int_role_scope')
         rows:
           - {accession: Z, context_id: z, scopes: null}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: none, cik: "9", action: set_scope, valid_from: null, valid_to: null}
       - input: ref('stg_filed_fact')
         rows:
           - {accession: Z, context_id: z, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
@@ -415,6 +426,62 @@ unit_tests:
         - {accession: A, context_id: g1, child_count: 2, is_subtotal: true, near_miss_reason: null}
         - {accession: A, context_id: g2, child_count: 2, is_subtotal: true, near_miss_reason: null}
         - {accession: A, context_id: g5, child_count: 1, is_subtotal: true, near_miss_reason: null}
+
+  - name: int_role_subtotal_fair_value_only_fund_rule
+    description: >
+      Slice 2 Task 5, owner decision D12. Fund 7 has the fund rule subtotal_on_fair_value from 2026-01-01. A parent
+      whose fair value ties and whose cost differs (p1) or cannot be compared (p4) is a subtotal through the rule, which
+      it names; a parent whose fair value does not tie (p2) is not; a guarded parent (p3, a maturity) is never a parent.
+      The same shapes for fund 8 (no rule, q1) and for fund 7 before the rule's start (r1) stay near misses.
+    model: int_role_subtotal
+    given:
+      - input: ref('int_role_text')
+        rows:
+          - {accession: A, context_id: p1, text_rule: null}
+          - {accession: A, context_id: p1a, text_rule: null}
+          - {accession: A, context_id: p1b, text_rule: null}
+          - {accession: A, context_id: p2, text_rule: null}
+          - {accession: A, context_id: p2a, text_rule: null}
+          - {accession: A, context_id: p3, text_rule: null}
+          - {accession: A, context_id: p3a, text_rule: null}
+          - {accession: A, context_id: p4, text_rule: null}
+          - {accession: A, context_id: p4a, text_rule: null}
+          - {accession: B, context_id: q1, text_rule: null}
+          - {accession: B, context_id: q1a, text_rule: null}
+          - {accession: C, context_id: r1, text_rule: null}
+          - {accession: C, context_id: r1a, text_rule: null}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: p1, cik: "7", instant_date: 2026-03-31, identifier_label: "Iss", fair_value: 100, cost: 90, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p1a, cik: "7", instant_date: 2026-03-31, identifier_label: "Iss Loan", fair_value: 100, cost: 95, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p1b, cik: "7", instant_date: 2026-03-31, identifier_label: "Iss Loan 2", fair_value: 0, cost: 0, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p2, cik: "7", instant_date: 2026-03-31, identifier_label: "Bad", fair_value: 50, cost: 50, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p2a, cik: "7", instant_date: 2026-03-31, identifier_label: "Bad Loan", fair_value: 45, cost: 50, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p3, cik: "7", instant_date: 2026-03-31, identifier_label: "Guard", fair_value: 30, cost: 20, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: true}
+          - {accession: A, context_id: p3a, cik: "7", instant_date: 2026-03-31, identifier_label: "Guard Loan", fair_value: 30, cost: 30, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p4, cik: "7", instant_date: 2026-03-31, identifier_label: "Nocost", fair_value: 20, cost: null, cost_fact_count: 2, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p4a, cik: "7", instant_date: 2026-03-31, identifier_label: "Nocost Loan", fair_value: 20, cost: 20, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: B, context_id: q1, cik: "8", instant_date: 2026-03-31, identifier_label: "Iss", fair_value: 100, cost: 90, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: B, context_id: q1a, cik: "8", instant_date: 2026-03-31, identifier_label: "Iss Loan", fair_value: 100, cost: 95, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: C, context_id: r1, cik: "7", instant_date: 2025-12-31, identifier_label: "Iss", fair_value: 100, cost: 90, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: C, context_id: r1a, cik: "7", instant_date: 2025-12-31, identifier_label: "Iss Loan", fair_value: 100, cost: 95, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('int_role_scope')
+        rows:
+          - {accession: Z, context_id: z, scopes: null}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: fv7, cik: "7", action: subtotal_on_fair_value, valid_from: 2026-01-01, valid_to: null}
+          - {rule_id: other8, cik: "8", action: set_scope, valid_from: null, valid_to: null}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: Z, context_id: z, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
+    expect:
+      rows:
+        - {accession: A, context_id: p1, is_subtotal: true, subtotal_rule_id: fv7, near_miss_reason: cost_differs}
+        - {accession: A, context_id: p2, is_subtotal: false, subtotal_rule_id: null, near_miss_reason: fair_value_differs}
+        - {accession: A, context_id: p4, is_subtotal: true, subtotal_rule_id: fv7, near_miss_reason: cost_not_comparable}
+        - {accession: B, context_id: q1, is_subtotal: false, subtotal_rule_id: null, near_miss_reason: cost_differs}
+        - {accession: C, context_id: r1, is_subtotal: false, subtotal_rule_id: null, near_miss_reason: cost_differs}
 
   - name: int_role_scope_filer_rule_wins_over_global_axis
     description: >
@@ -489,31 +556,47 @@ unit_tests:
 
   - name: int_context_feature_filer_concepts
     description: >
-      Fix round 3. A context with only the filer-concept fair value takes it (source = the seed id) for the filer the
-      seed row names, so rule 3 lets it through; the same namespace and concept in another filer's filing is not read
-      (no fair value, fair_value_fact_count 0: rule 3 not_schedule). With both concepts present the us-gaap value is
-      kept and the overlap is flagged. Two filer-concept facts that disagree give null. A filer term-fact row counts
-      toward has_term_fact and sets has_ownership_percent.
+      Fund concept rules (stg_reading_rule, slice 2 Task 5; was the filer_concept seed). A context with only the
+      filer-concept fair value takes it (source = the rule id) for the filer the rule names, so rule 3 lets it
+      through; the same namespace and concept in another filer's filing is not read. With both concepts present the
+      us-gaap value is kept and the overlap is flagged. Two filer-concept facts that disagree give null. A filer
+      term-fact rule counts toward has_term_fact and sets has_ownership_percent. Review cases: a nil us-gaap fair
+      value beside a filer value keeps the us-gaap side (no number, source standard); two disagreeing us-gaap values
+      beside a filer value give null (source standard); the same fund's concept in a namespace outside the rule's
+      domain is not read, while another dated namespace inside it is (I1); one concept mapped to both fair value and
+      term fact gives the value and the term fact, each naming its rule (I2).
     model: int_context_feature
     given:
       - input: ref('stg_filed_filing')
         rows:
           - {accession: A, cik: "1", document_period_end_date: 2026-03-31}
           - {accession: B, cik: "2", document_period_end_date: 2026-03-31}
+          - {accession: C, cik: "1", document_period_end_date: 2025-12-31}
+          - {accession: D, cik: "3", document_period_end_date: 2026-03-31}
       - input: ref('stg_filed_context')
         rows:
           - {accession: A, context_id: a1, instant_date: 2026-03-31, period_type: instant, member_count: 1}
           - {accession: A, context_id: a2, instant_date: 2026-03-31, period_type: instant, member_count: 1}
           - {accession: A, context_id: a3, instant_date: 2026-03-31, period_type: instant, member_count: 1}
           - {accession: A, context_id: a4, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: A, context_id: a5, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: A, context_id: a6, instant_date: 2026-03-31, period_type: instant, member_count: 1}
           - {accession: B, context_id: b1, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: C, context_id: c1, instant_date: 2025-12-31, period_type: instant, member_count: 1}
+          - {accession: C, context_id: c2, instant_date: 2025-12-31, period_type: instant, member_count: 1}
+          - {accession: D, context_id: d1, instant_date: 2026-03-31, period_type: instant, member_count: 1}
       - input: ref('stg_filed_context_member')
         rows:
           - {accession: A, context_id: a1, axis: "x:InvestmentIdentifierAxis", member: "Line One", member_index: 0}
           - {accession: A, context_id: a2, axis: "x:InvestmentIdentifierAxis", member: "Line Two", member_index: 0}
           - {accession: A, context_id: a3, axis: "x:InvestmentIdentifierAxis", member: "Line Three", member_index: 0}
           - {accession: A, context_id: a4, axis: "x:InvestmentIdentifierAxis", member: "Line Four", member_index: 0}
+          - {accession: A, context_id: a5, axis: "x:InvestmentIdentifierAxis", member: "Line Five", member_index: 0}
+          - {accession: A, context_id: a6, axis: "x:InvestmentIdentifierAxis", member: "Line Six", member_index: 0}
           - {accession: B, context_id: b1, axis: "y:InvestmentIdentifierAxis", member: "Other Line", member_index: 0}
+          - {accession: C, context_id: c1, axis: "x:InvestmentIdentifierAxis", member: "Line Seven", member_index: 0}
+          - {accession: C, context_id: c2, axis: "x:InvestmentIdentifierAxis", member: "Line Eight", member_index: 0}
+          - {accession: D, context_id: d1, axis: "z:InvestmentIdentifierAxis", member: "Commitment Line", member_index: 0}
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A, context_id: a1, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 7}
@@ -523,18 +606,34 @@ unit_tests:
           - {accession: A, context_id: a3, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 2}
           - {accession: A, context_id: a4, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, value_numeric: 5}
           - {accession: A, context_id: a4, concept_namespace: "http://filer.example/2026", concept_local: InvestmentOwnedBalancePercentOfShares, value_numeric: 0.5}
+          - {accession: A, context_id: a5, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, value_numeric: null}
+          - {accession: A, context_id: a5, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 8}
+          - {accession: A, context_id: a6, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, value_numeric: 10}
+          - {accession: A, context_id: a6, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, value_numeric: 11}
+          - {accession: A, context_id: a6, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 8}
           - {accession: B, context_id: b1, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 7}
-      - input: ref('filer_concept')
+          - {accession: C, context_id: c1, concept_namespace: "http://elsewhere.example/2025", concept_local: FilerFairValue, value_numeric: 3}
+          - {accession: C, context_id: c2, concept_namespace: "http://filer.example/20251231", concept_local: FilerFairValue, value_numeric: 6}
+          - {accession: D, context_id: d1, concept_namespace: "http://three.example/2026", concept_local: BothConcept, value_numeric: -4}
+      - input: ref('stg_reading_rule')
         rows:
-          - {filer_concept_id: fc_fv, cik: "1", concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, maps_to: fair_value}
-          - {filer_concept_id: fc_pct, cik: "1", concept_namespace: "http://filer.example/2026", concept_local: InvestmentOwnedBalancePercentOfShares, maps_to: term_fact}
+          - {rule_id: fc_fv, cik: "1", action: concept_is_fair_value, sel_concept_namespace: "http://filer.example/*", sel_concept_local: FilerFairValue, sel_accession: null, valid_from: null, valid_to: null}
+          - {rule_id: fc_pct, cik: "1", action: concept_is_term_fact, sel_concept_namespace: "http://filer.example/*", sel_concept_local: InvestmentOwnedBalancePercentOfShares, sel_accession: null, valid_from: null, valid_to: null}
+          - {rule_id: t3_fv, cik: "3", action: concept_is_fair_value, sel_concept_namespace: "http://three.example/*", sel_concept_local: BothConcept, sel_accession: null, valid_from: null, valid_to: null}
+          - {rule_id: t3_term, cik: "3", action: concept_is_term_fact, sel_concept_namespace: "http://three.example/*", sel_concept_local: BothConcept, sel_accession: null, valid_from: null, valid_to: null}
+          - {rule_id: other, cik: "1", action: set_scope, sel_concept_namespace: null, sel_concept_local: null, sel_accession: null, valid_from: null, valid_to: null}
     expect:
       rows:
         - {context_id: a1, fair_value: 7, fair_value_source: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
         - {context_id: a2, fair_value: 10, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
         - {context_id: a3, fair_value: null, fair_value_source: fc_fv, fair_value_fact_count: 2, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
         - {context_id: a4, fair_value: 5, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: fc_pct}
+        - {context_id: a5, fair_value: null, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
+        - {context_id: a6, fair_value: null, fair_value_source: standard, fair_value_fact_count: 2, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
         - {context_id: b1, fair_value: null, fair_value_source: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
+        - {context_id: c1, fair_value: null, fair_value_source: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
+        - {context_id: c2, fair_value: 6, fair_value_source: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
+        - {context_id: d1, fair_value: -4, fair_value_source: t3_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: t3_term}
 
   - name: int_role_structure_filer_fair_value_passes_rule_3
     description: >

@@ -10,15 +10,16 @@
 --   PIK rate   : InvestmentInterestRatePaidInKind                us-gaap or us-gaap-sup
 --   maturity   : InvestmentMaturityDate                          us-gaap or us-gaap-sup
 --   ownership  : InvestmentOwnedBalancePercentOfShares            us-gaap or us-gaap-sup (fix round 2); a filer namespace
---                only through a filer_concept seed row (fix round 3).
+--                only through a fund rule (below).
 -- The term facts also accept the FASB supplement namespace (http://fasb.org/us-gaap-sup/2022q3): nine filings
 -- with period ends 2022-09-30 to 2023-03-31 tag spread, PIK rate and floor there and nowhere else.
 -- Investment identifier: a member on an axis whose local name is InvestmentIdentifierAxis (any prefix).
--- Filer concepts (seeds/filer_concept.csv, fix round 3): a concept a filer files in its own namespace, matched on the
--- filer's cik plus the exact namespace and local name. maps_to fair_value: the fair value of a context that has no
--- us-gaap fair-value fact (fair_value_source names the seed row). maps_to term_fact: counts toward has_term_fact
--- (term_fact_source names the seed row when no standard term fact is present). The seed's values are joined, never
--- written here.
+-- Filer concepts: a concept a filer files in its own namespace, read through a fund rule in the rule table
+-- (stg_reading_rule, from the wrapper's reading_rules; slice 2 Task 5). Matched on the filer's cik, the namespace
+-- glob of the rule (the filer's own domain, any dated path) and the exact local name, inside the rule's dates.
+-- concept_is_fair_value: the fair value of a context that has no us-gaap fair-value fact (fair_value_source names the
+-- rule). concept_is_term_fact: counts toward has_term_fact (term_fact_source names the rule when no standard term
+-- fact is present). No fund value is written here.
 with filing as (
     select accession, cik, document_period_end_date
     from {{ ref('stg_filed_filing') }}
@@ -75,19 +76,38 @@ with filing as (
     group by 1, 2
 )
 
+, concept_rule as (
+    select
+        rule_id
+        , cik
+        , valid_from
+        , valid_to
+        , sel_accession
+        , sel_concept_namespace
+        , sel_concept_local
+        , case action when 'concept_is_fair_value' then 'fair_value' when 'concept_is_term_fact' then 'term_fact' end
+            as maps_to
+    from {{ ref('stg_reading_rule') }}
+    where action in ('concept_is_fair_value', 'concept_is_term_fact')
+)
+
 , filer_facts as (
     select
         f.accession
         , f.context_id
-        , cast(s.filer_concept_id as varchar) as filer_concept_id
-        , cast(s.maps_to as varchar) as maps_to
-        , cast(s.concept_local as varchar) as concept_local
+        , r.rule_id
+        , r.maps_to
+        , f.concept_local
         , f.value_numeric
     from {{ ref('stg_filed_fact') }} f
     join filing fi on fi.accession = f.accession
-    join {{ ref('filer_concept') }} s
-        on cast(s.cik as varchar) = fi.cik and cast(s.concept_namespace as varchar) = f.concept_namespace
-        and cast(s.concept_local as varchar) = f.concept_local
+    join concept_rule r
+        on r.cik = fi.cik
+        and f.concept_namespace glob r.sel_concept_namespace
+        and r.sel_concept_local = f.concept_local
+        and (r.sel_accession is null or r.sel_accession = f.accession)
+        and (r.valid_from is null or r.valid_from <= fi.document_period_end_date)
+        and (r.valid_to is null or r.valid_to >= fi.document_period_end_date)
 )
 
 , filer_features as (
@@ -97,10 +117,10 @@ with filing as (
         , count(*) filter (where maps_to = 'fair_value') as filer_fair_value_fact_count
         , count(distinct value_numeric) filter (where maps_to = 'fair_value') as filer_fair_value_distinct
         , min(value_numeric) filter (where maps_to = 'fair_value') as filer_fair_value_any
-        , min(filer_concept_id) filter (where maps_to = 'fair_value') as fair_value_filer_concept_id
+        , min(rule_id) filter (where maps_to = 'fair_value') as fair_value_rule_id
         , bool_or(maps_to = 'term_fact') as has_filer_term_fact
         , bool_or(maps_to = 'term_fact' and concept_local = 'InvestmentOwnedBalancePercentOfShares') as has_filer_ownership_percent
-        , min(filer_concept_id) filter (where maps_to = 'term_fact') as term_fact_filer_concept_id
+        , min(rule_id) filter (where maps_to = 'term_fact') as term_fact_rule_id
     from filer_facts
     group by 1, 2
 )
@@ -136,7 +156,7 @@ select
       end as fair_value
     , case
         when coalesce(ff.fair_value_fact_count, 0) > 0 then 'standard'
-        when coalesce(fl.filer_fair_value_fact_count, 0) > 0 then fl.fair_value_filer_concept_id
+        when coalesce(fl.filer_fair_value_fact_count, 0) > 0 then fl.fair_value_rule_id
       end as fair_value_source
     , coalesce(ff.fair_value_fact_count, 0) > 0 and coalesce(fl.filer_fair_value_fact_count, 0) > 0
         as fair_value_filer_concept_also_present
@@ -159,7 +179,7 @@ select
         as has_term_fact
     , case
         when coalesce(st.has_standard_term_fact, false) then 'standard'
-        when coalesce(fl.has_filer_term_fact, false) then fl.term_fact_filer_concept_id
+        when coalesce(fl.has_filer_term_fact, false) then fl.term_fact_rule_id
       end as term_fact_source
 from {{ ref('stg_filed_context') }} c
 join filing f on f.accession = c.accession

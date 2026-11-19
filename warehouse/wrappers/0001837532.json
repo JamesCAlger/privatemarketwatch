@@ -307,5 +307,19 @@
     "unclassified_rate": {
       "max_pct": 0.1
     }
-  }
+  },
+  "reading_rules": [
+    {
+      "target": "fair_value",
+      "action": "concept_is_fair_value",
+      "concept_namespace": "http://gwms.apollo.com/*",
+      "concept_local": "InvestmentOwnedAtFairValueAfterCashEquivalents",
+      "evidence": "Apollo's own concept for the fair value of its cash equivalents (money-market funds) on the cash axis, tagged instead of InvestmentOwnedAtFairValue. Filed in the dated namespaces http://gwms.apollo.com/20230331 to /20260930, 15 filings (first 0000950170-23-021206: 8 facts on 8 contexts). Read as the fair value only where a context has no us-gaap fair-value fact. Controller ruling 2026-11-19; moved here from warehouse seed filer_concept.csv (rows apollo_fv_cash_eq_*), slice 2 Task 5."
+    },
+    {
+      "target": "role",
+      "action": "subtotal_on_fair_value",
+      "evidence": "Owner decision D12, 2026-11-19: an Apollo issuer rollup whose fair value equals the sum of the rows below it is a subtotal even where its cost does not tie. Rule 6 otherwise unchanged: same label-prefix tree, same fair-value tolerance, same guard (a row with a rate, spread, PIK rate or maturity, or a zero fair value, is never removed). Measured on all parsed Apollo filings in slice 2 Task 5 (task-5-report.md): rows changed, none published by production."
+    }
+  ]
 }

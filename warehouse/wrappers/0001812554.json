@@ -535,7 +535,8 @@
       "0001812554-26-000027 c-933 :: Neptune Holdings, Inc. (dba NexTech) | First lien senior secured revolving loan :: NMI Acquisitionco, Inc. (dba Network Merchants) | First lien senior secured revolving loan",
       "0001812554-26-000027 c-934 :: NMI Acquisitionco, Inc. (dba Network Merchants) | First lien senior secured revolving loan :: Nova Women's Health, Inc. | First lien senior secured revolving loan",
       "0001812554-26-000027 c-940 :: OneOncology, LLC | First lien senior secured revolving loan :: Packaging Coordinators Midco, Inc. | First lien senior secured revolving loan",
-      "0001812554-26-000027 c-941 :: Packaging Coordinators Midco, Inc. | First lien senior secured revolving loan :: Paris US Holdco, Inc. (dba Precinmac) | First lien senior secured revolving loan"
+      "0001812554-26-000027 c-941 :: Packaging Coordinators Midco, Inc. | First lien senior secured revolving loan :: Paris US Holdco, Inc. (dba Precinmac) | First lien senior secured revolving loan",
+      "0001812554-26-000027 c-1013 :: LSI Financing LLC, Common Equity :: OWL-HP FINANCE LLC | Specialty finance equity investment"
     ]
   },
   "invariants": {
@@ -557,6 +558,22 @@
         "mechanism": "subtotal_filter",
         "verdict": "PASS"
       }
+    }
+  ],
+  "reading_rules": [
+    {
+      "target": "fair_value",
+      "action": "concept_is_fair_value",
+      "concept_namespace": "http://owlrockcoreincomecorp.com/*",
+      "concept_local": "InvestmentOwnedFairValueNetOfUnamortizedFees",
+      "evidence": "Blue Owl's own concept, fair value net of unamortized fees: the only fair-value tag on its unfunded commitment lines. Filed in the dated namespaces http://owlrockcoreincomecorp.com/20241231 to /20260930, 8 filings (0001812554-26-000027: 692 facts on 692 contexts, 0 with the us-gaap fair value). Read as the fair value only where a context has no us-gaap fair-value fact. Owner decision 2026-11-19 (D11: commitment lines are positions for now); moved here from warehouse seed filer_concept.csv (rows bo_fv_net_fees_*), slice 2 Task 5."
+    },
+    {
+      "target": "term_fact",
+      "action": "concept_is_term_fact",
+      "concept_namespace": "http://owlrockcoreincomecorp.com/*",
+      "concept_local": "InvestmentOwnedFairValueNetOfUnamortizedFees",
+      "evidence": "The same concept also stands as the term fact of an unfunded commitment line: it is the only fact the filer tags there. This switches off the term-fact cross-check for those lines; tests/baseline_concept_rule_value_and_term.sql holds them to a zero ceiling on positive or total-like published rows. Owner decision 2026-11-19 (D11); moved here from warehouse seed filer_concept.csv (rows bo_commit_term_*), slice 2 Task 5."
     }
   ]
 }

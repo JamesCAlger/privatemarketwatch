@@ -79,3 +79,19 @@ The loader run twice gives an identical manifest (input hashes, row counts, cont
 - The 1,413 label-keyed corrections are not yet tied to a context.
 - The CI job (`warehouse` in `.github/workflows/ci.yml`) is written but has not run: nothing was
   pushed.
+
+## Update, slice 2 Task 5 (loader version 2)
+
+- Source: the loader now reads the new pipeline's own wrapper copies, `warehouse/wrappers/<cik>.json`
+  (owner decision 2026-11-19), not `data/overrides/bdc_xbrl_wrappers/`. Production's wrappers are
+  unchanged and are only hashed, for the drift table below.
+- Rules: 126 (121 above + 5 class `fund_rule` from the copies' new `reading_rules` lists: Ares 1,
+  Blue Owl 2, Apollo 2). Two selector columns added (`sel_concept_namespace`, `sel_concept_local`);
+  since the id hashes every column, every rule_id changed.
+- Corrections: 4,196. Blue Owl `relabelled_contexts` 202 (was 201): one entry added to the copy for
+  0001812554-26-000027 c-1013, whose member names LSI Financing LLC while its facts sit on the
+  printed row of OWL-HP FINANCE LLC (`baseline_roles_2026-11-19.md`). Wrapper row-level entries are
+  therefore 285 in the copies; production's wrappers still hold 284 (201 relabels).
+- New table `wrapper_drift` (5 rows): each production wrapper's SHA-256 when copied
+  (`warehouse/wrappers/_source.json`) and now. Changed at load: none.
+- The loader run twice gives an identical manifest.

@@ -53,9 +53,21 @@ A passing build means the tables are internally consistent and their row counts 
 ## Readings (a third source)
 
 How each filer is read, and the fixes made to single rows, as two tables. A loader
-(`warehouse/readings_loader/`) copies them from the wrappers (`data/overrides/bdc_xbrl_wrappers/`) and the
-two row-correction files into `warehouse/data/readings/`. dbt reads them as source `readings` (staging views
-`stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`). Spec: `docs/intermediate_spine.md`.
+(`warehouse/readings_loader/`) copies them from the new pipeline's wrappers (`warehouse/wrappers/<cik>.json`) and
+the two row-correction files into `warehouse/data/readings/`. dbt reads them as source `readings` (staging views
+`stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`, `stg_wrapper_drift`). Spec:
+`docs/intermediate_spine.md`.
+
+**Where fund rules are edited.** Owner decision 2026-11-19: the new pipeline keeps its own copy of each v0.5
+fund's wrapper in `warehouse/wrappers/`, taken byte for byte from production's `data/overrides/bdc_xbrl_wrappers/`
+(hashes in `warehouse/wrappers/_source.json`). From now on the new pipeline's fund rules are edited there: the
+old-style `source_encodings` declarations, and the new-style top-level `reading_rules` list (objects with
+`target`, `action`, `parameter`, selectors `concept_namespace` (a glob on the filer's own domain) with
+`concept_local`, `accession`, `axis`, `member`, `label`, `feature`, optional `valid_from` / `valid_to`, and
+`evidence`). Production keeps reading its own wrappers until cutover. A change made to a production wrapper is
+not seen here and must be carried into the copy by hand: the loader compares each production wrapper with its
+recorded hash (table `wrapper_drift`), and `baseline_production_wrapper_changed` (ceiling 0) fails the build until
+the copy is brought up to date and `_source.json` updated.
 
     .\warehouse\load_readings.ps1    # rewrites the folder; same inputs give the same manifest
     .\warehouse\dbt.ps1 build

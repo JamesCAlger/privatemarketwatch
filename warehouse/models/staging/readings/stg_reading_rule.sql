@@ -10,6 +10,8 @@ select
     , nullif(sel_member, '') as sel_member
     , nullif(sel_label, '') as sel_label
     , nullif(sel_feature, '') as sel_feature
+    , nullif(sel_concept_namespace, '') as sel_concept_namespace
+    , nullif(sel_concept_local, '') as sel_concept_local
     , target
     , action
     , nullif(parameter, '') as parameter

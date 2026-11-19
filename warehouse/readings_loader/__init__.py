@@ -1,22 +1,28 @@
 """Readings loader: wrapper declarations and row-level fixes flattened into tables dbt reads.
 
 See warehouse/docs/intermediate_spine.md (section 5) and 2026-11-19-slice1-readings-loader-plan.md.
+New-style fund rules (`reading_rules`, Task 5 of slice 2) come from a wrapper's top-level `reading_rules` list or,
+while the wrapper schema forbids that key, from warehouse/fund_rules/<cik>.json; both go through one code path.
 The loader copies what the stores say. It does not decide or change any value.
 """
 import hashlib
 
-LOADER_VERSION = "1"
+# 2: rule rows gain sel_concept_namespace and sel_concept_local (new-style fund rules, `reading_rules`). Every
+# rule_id changes with the column list, since the id hashes every column.
+LOADER_VERSION = "2"
 
 RULE_COLUMNS = [
     "rule_id", "cik", "valid_from", "valid_to", "validity_basis", "sel_accession", "sel_axis",
-    "sel_member", "sel_label", "sel_feature", "target", "action", "parameter", "evidence",
-    "origin", "rule_class", "priority",
+    "sel_member", "sel_label", "sel_feature", "sel_concept_namespace", "sel_concept_local", "target", "action",
+    "parameter", "evidence", "origin", "rule_class", "priority",
 ]
 CORRECTION_COLUMNS = [
     "correction_id", "cik", "report_date", "accession", "context_id", "identifier", "field",
     "value", "value_unit", "expected_value", "kind", "store", "reason", "evidence", "author", "date_added",
 ]
 NOT_LOADED_COLUMNS = ["cik", "wrapper_key", "entry", "reason"]
+# Production wrapper against the copy the new pipeline reads: SHA-256 when copied, now, and whether it changed.
+WRAPPER_DRIFT_COLUMNS = ["cik", "copied_sha256", "current_sha256", "changed"]
 
 
 class LoadError(Exception):

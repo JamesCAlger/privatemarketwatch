@@ -48,6 +48,9 @@ with open_context as (
         , ('f14', 'Acme Group Treasury, LLC | First lien senior secured loan', null, false)
         , ('f15', 'Acme Government Services Holdings, LLC, First lien senior secured loan', null, false)
         , ('f16', 'Software ExampleTreasury Example Treasury SS LLC', null, false)
+        -- a private secondaries fund named liquidity fund is not a money-market fund (slice 2 Task 5 review)
+        , ('f17', 'Acme Secondary Liquidity Fund II, L.P. | LP interest', null, false)
+        , ('f18', 'Acme Liquidity Fund, L.P. | LP interest', null, false)
     ) v(context_id, identifier_label, expected_rule, expected_cash)
 )
 

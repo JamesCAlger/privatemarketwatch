@@ -16,3 +16,6 @@ sources:
       - name: manifest
         meta:
           external_location: "read_json('{{ var('readings_dir') }}/_manifest.json')"
+      - name: wrapper_drift
+        meta:
+          external_location: "read_parquet('{{ var('readings_dir') }}/wrapper_drift.parquet')"

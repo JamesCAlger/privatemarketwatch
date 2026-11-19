@@ -32,6 +32,18 @@ _FILING_LISTS = {
 }
 _PROCEDURES = {"rate_only_contexts", "gics_industry_carry_back"}
 
+# New-style fund rules (slice 2, Task 5): the top-level `reading_rules` list of the new pipeline's wrapper copy
+# (warehouse/wrappers/<cik>.json). Each entry is an object; entry key -> rule column.
+_RULE_SELECTORS = {
+    "concept_namespace": "sel_concept_namespace", "concept_local": "sel_concept_local", "accession": "sel_accession",
+    "axis": "sel_axis", "member": "sel_member", "label": "sel_label", "feature": "sel_feature",
+}
+_RULE_KEYS = {"target", "action", "parameter", "valid_from", "valid_to", "evidence"} | set(_RULE_SELECTORS)
+# A namespace selector names the filer's own domain: a literal scheme and host, then a path in which '*' (glob) may
+# stand for the dated part. Never a wildcard in the host, so a rule cannot reach another filer's taxonomy.
+_NAMESPACE_SELECTOR = re.compile(r"https?://[A-Za-z0-9.-]+\.[A-Za-z]{2,}/[A-Za-z0-9._/*-]*")
+_CONCEPT_LOCAL = re.compile(r"[A-Za-z][A-Za-z0-9]*")
+
 
 def _rule(cik, key, rule_class, target, action, parameter="", priority=FILER, **cols):
     row = {c: "" for c in RULE_COLUMNS}
@@ -70,9 +82,51 @@ def _accession(cik, key, entry):
     return text
 
 
+def _reading_rules(cik, entries):
+    """Rule rows (origin wrapper:reading_rules) for a wrapper's `reading_rules` list. Raises LoadError on anything
+    unknown. Which actions exist is not checked here: dbt tests every action against seeds/reading_action.csv."""
+    key = "reading_rules"
+    if not isinstance(entries, list) or not entries:
+        raise LoadError(f"{cik} {key}: expected a non-empty list, got {entries!r}")
+    rules = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise _bad(cik, key, entry)
+        unknown = sorted(set(entry) - _RULE_KEYS)
+        if unknown:
+            raise LoadError(f"{cik} {key}: unknown field(s) {', '.join(unknown)} in {entry!r}")
+        if any(not isinstance(v, str) for v in entry.values()):
+            raise _bad(cik, key, entry)
+        e = {k: v.strip() for k, v in entry.items()}
+        for required in ("target", "action", "evidence"):
+            if not e.get(required):
+                raise LoadError(f"{cik} {key}: {required} is required in {entry!r}")
+        namespace, local = e.get("concept_namespace", ""), e.get("concept_local", "")
+        if bool(namespace) != bool(local):
+            # filed_layer.md ruling 12: a concept is matched on namespace and local name together, never one alone
+            raise LoadError(f"{cik} {key}: concept_namespace and concept_local go together in {entry!r}")
+        if namespace and not _NAMESPACE_SELECTOR.fullmatch(namespace):
+            raise LoadError(f"{cik} {key}: concept_namespace must be a literal scheme and host then a path: {namespace!r}")
+        if local and not _CONCEPT_LOCAL.fullmatch(local):
+            raise LoadError(f"{cik} {key}: concept_local is one local name, no prefix: {local!r}")
+        if e.get("accession") and not _ACCESSION.fullmatch(e["accession"]):
+            raise _bad(cik, key, entry)
+        for d in ("valid_from", "valid_to"):
+            if e.get(d) and not re.fullmatch(_DATE, e[d]):
+                raise LoadError(f"{cik} {key}: {d} must read YYYY-MM-DD in {entry!r}")
+        cols = {col: e[k] for k, col in _RULE_SELECTORS.items() if e.get(k)}
+        row = _rule(cik, key, "fund_rule", e["target"], e["action"], parameter=e.get("parameter", ""),
+                    priority=SELECTED if cols else FILER, evidence=e["evidence"],
+                    valid_from=e.get("valid_from", ""), valid_to=e.get("valid_to", ""), **cols)
+        rules.append(row)
+    return rules
+
+
 def flatten(cik, wrapper):
     """(rules, corrections, not_loaded) for one wrapper. Raises LoadError on anything unknown."""
     rules, corrections, not_loaded = [], [], []
+    if "reading_rules" in wrapper:
+        rules += _reading_rules(cik, wrapper["reading_rules"])
     encodings = wrapper.get("source_encodings") or {}
     if not isinstance(encodings, dict):
         raise LoadError(f"{cik}: source_encodings is not an object")

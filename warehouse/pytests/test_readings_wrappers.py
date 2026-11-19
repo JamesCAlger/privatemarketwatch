@@ -146,3 +146,59 @@ def test_same_declaration_for_another_fund_has_another_id():
     a, _, _ = flatten("0000000001", {"source_encodings": {"filed_rate_reading": ["all_in"]}})
     b, _, _ = flatten("0000000002", {"source_encodings": {"filed_rate_reading": ["all_in"]}})
     assert a[0]["rule_id"] != b[0]["rule_id"]
+
+
+# New-style fund rules: the wrapper copy's top-level reading_rules list (slice 2, Task 5).
+
+_CONCEPT_RULE = {"target": "fair_value", "action": "concept_is_fair_value",
+                 "concept_namespace": "http://filer.example/*", "concept_local": "FilerFairValue",
+                 "evidence": "0000000001-26-000001: 3 facts"}
+
+
+def test_reading_rule_becomes_a_fund_rule_row():
+    rules, corrections, not_loaded = flatten(CIK, {"reading_rules": [_CONCEPT_RULE]})
+    r = _one(rules)
+    assert (r["target"], r["action"], r["rule_class"], r["origin"]) == (
+        "fair_value", "concept_is_fair_value", "fund_rule", "wrapper:reading_rules")
+    assert (r["sel_concept_namespace"], r["sel_concept_local"]) == ("http://filer.example/*", "FilerFairValue")
+    assert r["evidence"] == "0000000001-26-000001: 3 facts"
+    assert r["priority"] == 30 and r["validity_basis"] == "assumed_all_quarters"
+    assert corrections == [] and not_loaded == []
+
+
+def test_reading_rule_without_selector_is_a_filer_rule_and_dates_are_stated():
+    rule = {"target": "role", "action": "subtotal_on_fair_value", "evidence": "D12", "valid_from": "2023-06-30"}
+    r = _one(flatten(CIK, {"reading_rules": [rule]})[0])
+    assert r["priority"] == 20 and r["valid_from"] == "2023-06-30" and r["validity_basis"] == "stated"
+
+
+def test_reading_rules_sit_beside_source_encodings():
+    rules, _, _ = flatten(CIK, {"source_encodings": {"filed_rate_reading": ["all_in"]}, "reading_rules": [_CONCEPT_RULE]})
+    assert sorted(r["origin"] for r in rules) == ["wrapper:filed_rate_reading", "wrapper:reading_rules"]
+
+
+def test_two_reading_rules_on_one_concept_have_distinct_ids():
+    term = dict(_CONCEPT_RULE, target="term_fact", action="concept_is_term_fact")
+    rules, _, _ = flatten(CIK, {"reading_rules": [_CONCEPT_RULE, term]})
+    assert len({r["rule_id"] for r in rules}) == 2
+
+
+@pytest.mark.parametrize("rules", [
+    [],
+    "not a list",
+    ["text entry"],
+    [dict(_CONCEPT_RULE, colour="red")],                                   # unknown field
+    [{k: v for k, v in _CONCEPT_RULE.items() if k != "evidence"}],         # evidence required
+    [dict(_CONCEPT_RULE, evidence=" ")],
+    [{k: v for k, v in _CONCEPT_RULE.items() if k != "concept_namespace"}],  # local name alone (ruling 12)
+    [{k: v for k, v in _CONCEPT_RULE.items() if k != "concept_local"}],      # namespace alone
+    [dict(_CONCEPT_RULE, concept_namespace="http://*.example/2026")],      # wildcard in the host
+    [dict(_CONCEPT_RULE, concept_namespace="*")],
+    [dict(_CONCEPT_RULE, concept_local="ns:FilerFairValue")],              # a prefix
+    [dict(_CONCEPT_RULE, valid_to="31/03/2026")],
+    [dict(_CONCEPT_RULE, accession="not-an-accession")],
+    [dict(_CONCEPT_RULE, target=1)],
+])
+def test_malformed_reading_rule_stops_the_load(rules):
+    with pytest.raises(LoadError):
+        flatten(CIK, {"reading_rules": rules})

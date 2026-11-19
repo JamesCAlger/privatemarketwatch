@@ -8,14 +8,17 @@ from pathlib import Path
 
 import duckdb
 
-from . import CORRECTION_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS, RULE_COLUMNS, LoadError
+from . import (CORRECTION_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS, RULE_COLUMNS, WRAPPER_DRIFT_COLUMNS,
+               LoadError)
 
 TABLES = {
     "reading_rule": (RULE_COLUMNS, ["rule_id"]),
     "correction": (CORRECTION_COLUMNS, ["correction_id"]),
     "not_loaded": (NOT_LOADED_COLUMNS, ["cik", "wrapper_key", "entry"]),
+    "wrapper_drift": (WRAPPER_DRIFT_COLUMNS, ["cik"]),
 }
 _INTEGER = {"priority"}
+_BOOLEAN = {"changed"}
 
 
 def file_sha256(path):
@@ -46,7 +49,7 @@ def _content_hash(rows):
 
 def _write_parquet(con, name, rows, folder):
     columns, _ = TABLES[name]
-    types = {c: ("INTEGER" if c in _INTEGER else "VARCHAR") for c in columns}
+    types = {c: ("INTEGER" if c in _INTEGER else "BOOLEAN" if c in _BOOLEAN else "VARCHAR") for c in columns}
     con.execute(f'CREATE OR REPLACE TABLE "{name}" (' + ", ".join(f'"{c}" {types[c]}' for c in columns) + ")")
     if rows:
         tmp = Path(folder) / f"{name}.ndjson"
@@ -74,6 +77,8 @@ def write(out_dir, tables, inputs):
         "inputs": dict(sorted(inputs.items())),
         "tables": {name: {"rows": len(rows), "content_sha256": _content_hash(rows)}
                    for name, rows in prepared.items()},
+        # Funds whose production wrapper changed since the new pipeline's copy was taken (table wrapper_drift).
+        "production_wrappers_changed": sorted(r["cik"] for r in tables.get("wrapper_drift", []) if r["changed"]),
     }
     tmp = Path(tempfile.mkdtemp(prefix=".readings_tmp_", dir=str(out_dir.parent)))
     try:

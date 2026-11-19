@@ -21,7 +21,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: [convention, vocabulary, source, scope, value_test, filing_scoped]
+                values: [convention, vocabulary, source, scope, value_test, filing_scoped, fund_rule]
       - name: validity_basis
         data_tests:
           - accepted_values:
@@ -53,3 +53,15 @@ models:
     description: Wrapper declarations that need a procedure and are not loaded as rules.
   - name: stg_readings_manifest
     description: Row counts the loader recorded, for the count test.
+  - name: stg_wrapper_drift
+    description: >
+      One row per fund in scope: the SHA-256 of the production wrapper (data/overrides/bdc_xbrl_wrappers) when the
+      new pipeline's copy (warehouse/wrappers) was taken, its SHA-256 now, and whether it changed. A change on the
+      production side must be carried into the copy by hand until cutover (tests/baseline_production_wrapper_changed.sql).
+    columns:
+      - name: cik
+        data_tests: [unique, not_null]
+      - name: copied_sha256
+        data_tests: [not_null]
+      - name: changed
+        data_tests: [not_null]

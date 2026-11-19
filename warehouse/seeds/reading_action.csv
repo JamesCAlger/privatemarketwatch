@@ -23,3 +23,6 @@ label_is_unspecified,reference_rate,text
 label_is_equity,instrument_type,text
 label_is_industry,industry,text
 identifier_format,identifier,text
+concept_is_fair_value,fair_value,2
+concept_is_term_fact,term_fact,2
+subtotal_on_fair_value,role,2

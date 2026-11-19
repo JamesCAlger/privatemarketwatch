@@ -11,7 +11,9 @@
 -- maturity; a nil fact counts, see int_context_feature). Where it disagrees with rules 4 to 6 the role is unresolved:
 -- a row rules 4 to 6 call an aggregate that carries a term fact, or a row that reaches rule 7 or 9 without one. A cash
 -- row (is_cash) is exempt: cash carries no loan or share terms (D7). Two different scopes on one row are unresolved.
--- filer_concept_id names the filer concept (seeds/filer_concept.csv) a role was decided through (fix round 3).
+-- concept_rule_id names the fund rule (stg_reading_rule, concept_is_fair_value or concept_is_term_fact) a role was
+-- decided through. rule_id on a rule 6 row names the fund rule subtotal_on_fair_value where the row is a subtotal only
+-- through it (its fair value ties and its cost does not).
 -- is_published is false for a JV's own schedule rows (scope other than 'fund'), matching production's published basis.
 with base as (
     select
@@ -31,6 +33,7 @@ with base as (
         , t.cash_pattern_id
         , st.is_subtotal
         , st.child_count
+        , st.subtotal_rule_id
         , sc.scope_count
         , sc.scope
         , sc.scopes
@@ -76,6 +79,7 @@ select
     , role_rule
     , case
         when role_rule in (4, 5) then pattern_id
+        when role_rule = 6 then subtotal_rule_id
         when role_rule = 7 then scope_rule_id
         when role_rule in (8, 9) then cash_rule_id
       end as rule_id
@@ -84,6 +88,8 @@ select
         when role_rule in (4, 5) and has_term_fact then 'label pattern ' || pattern_id || ' reads as an aggregate but the row carries a term fact'
         when role_rule in (4, 5) then 'label pattern ' || pattern_id
         when role_rule = 6 and has_term_fact then 'sum of ' || child_count || ' rows below it, but the row carries a term fact'
+        when role_rule = 6 and subtotal_rule_id is not null
+            then 'fair value equals the sum of ' || child_count || ' rows below it; cost does not (fund rule subtotal_on_fair_value)'
         when role_rule = 6 then 'fair value (and cost) equal the sum of ' || child_count || ' rows below it'
         when role_rule = 7 and scope_count > 1 then 'two scopes: ' || scopes
         when role_rule = 7 and not has_term_fact and not is_cash_row then 'scope ' || scope || ' by ' || scope_how || ', but no term fact'
@@ -103,12 +109,12 @@ select
         else has_term_fact or is_cash_row
       end as cross_check_agrees
     , cash_rule_id
-    -- The filer concept (seeds/filer_concept.csv) a role was decided through: the fair value that let the row past
+    -- The fund concept rule a role was decided through: the fair value that let the row past
     -- rule 3, else the only term fact the cross-check read (on a row that reached rules 4 to 9).
     , case
         when role_rule >= 4 and fair_value_source <> 'standard' then fair_value_source
         when role_rule >= 4 and term_fact_source <> 'standard' then term_fact_source
-      end as filer_concept_id
+      end as concept_rule_id
 from ruled
 )
 
@@ -126,5 +132,5 @@ select
     , role = 'position' and scope = 'fund' as is_published
     , cross_check_agrees
     , cash_rule_id
-    , filer_concept_id
+    , concept_rule_id
 from decided

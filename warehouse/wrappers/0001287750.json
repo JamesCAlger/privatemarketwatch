@@ -441,5 +441,14 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
-  }
+  },
+  "reading_rules": [
+    {
+      "target": "term_fact",
+      "action": "concept_is_term_fact",
+      "concept_namespace": "http://www.arescapitalcorp.com/*",
+      "concept_local": "InvestmentOwnedBalancePercentOfShares",
+      "evidence": "Ares's own concept for the percent of the issuer's shares or units held, tagged on partnership member and LLC interest lines in place of a share count. Filed in the dated namespaces http://www.arescapitalcorp.com/20220930 to /20260930, 17 filings (first 0001287750-22-000052: 34 facts on 34 contexts, each with an investment identifier member and the us-gaap fair value). Counts as the line's term fact. Controller ruling 2026-11-19; moved here from warehouse seed filer_concept.csv (rows ares_pct_shares_*), slice 2 Task 5."
+    }
+  ]
 }

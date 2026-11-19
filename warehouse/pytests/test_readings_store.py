@@ -61,7 +61,8 @@ def test_load_and_write_round_trip(tmp_path):
     wrappers, stores = _inputs(tmp_path)
     tables, inputs = cli.load(["0000000001"], wrappers, stores)
     manifest = store.write(tmp_path / "out", tables, inputs)
-    assert {k: v["rows"] for k, v in manifest["tables"].items()} == {"reading_rule": 1, "correction": 2, "not_loaded": 1}
+    assert {k: v["rows"] for k, v in manifest["tables"].items()} == {"reading_rule": 1, "correction": 2, "not_loaded": 1,
+                                                                    "wrapper_drift": 0}
     con = duckdb.connect()
     got = con.execute(f"select action, priority from read_parquet('{(tmp_path / 'out' / 'reading_rule.parquet').as_posix()}')").fetchall()
     assert got == [("rate_is_all_in", 20)]
@@ -76,7 +77,7 @@ def test_two_runs_give_the_same_manifest_and_replace_the_output(tmp_path):
     second = store.write(tmp_path / "out", *cli.load(["0000000001"], wrappers, stores))
     assert first == second
     assert sorted(p.name for p in (tmp_path / "out").iterdir()) == [
-        "_manifest.json", "correction.parquet", "not_loaded.parquet", "reading_rule.parquet"]
+        "_manifest.json", "correction.parquet", "not_loaded.parquet", "reading_rule.parquet", "wrapper_drift.parquet"]
     assert [p.name for p in tmp_path.iterdir() if p.name.startswith(".readings_tmp_")] == []
 
 
@@ -94,3 +95,78 @@ def test_missing_wrapper_stops_the_load(tmp_path):
     wrappers, stores = _inputs(tmp_path)
     with pytest.raises(LoadError, match="no wrapper"):
         cli.load(["0000000002"], wrappers, stores)
+
+
+# Drift check (owner decision 2026-11-19): the new pipeline reads its own wrapper copies; the loader reports whether
+# each production wrapper changed since its copy was taken.
+
+def _copies(tmp_path, production_text):
+    wrappers, stores = _inputs(tmp_path)
+    production = tmp_path / "production"
+    production.mkdir()
+    prod_file = production / "0000000001.json"
+    prod_file.write_text(production_text, encoding="utf-8")
+    copied = store.file_sha256(prod_file)
+    (wrappers / "_source.json").write_text(json.dumps(
+        {"copied_on": "2026-11-19", "funds": {"0000000001": {"sha256": copied, "git_blob": "x"}}}), encoding="utf-8")
+    return wrappers, stores, production, prod_file
+
+
+def test_unchanged_production_wrapper_is_not_drift(tmp_path):
+    wrappers, stores, production, _ = _copies(tmp_path, '{"a": 1}\n')
+    tables, inputs = cli.load(["0000000001"], wrappers, stores, production)
+    assert [r["changed"] for r in tables["wrapper_drift"]] == [False]
+    manifest = store.write(tmp_path / "out", tables, inputs)
+    assert manifest["production_wrappers_changed"] == []
+    assert manifest["tables"]["wrapper_drift"]["rows"] == 1
+    assert (wrappers / "_source.json").as_posix() in inputs
+
+
+def test_edited_production_wrapper_is_drift_in_table_and_manifest(tmp_path):
+    wrappers, stores, production, prod_file = _copies(tmp_path, '{"a": 1}\n')
+    prod_file.write_text('{"a": 2}\n', encoding="utf-8")
+    tables, inputs = cli.load(["0000000001"], wrappers, stores, production)
+    row = _one_row(tables["wrapper_drift"])
+    assert row["changed"] is True and row["current_sha256"] == store.file_sha256(prod_file)
+    manifest = store.write(tmp_path / "out", tables, inputs)
+    assert manifest["production_wrappers_changed"] == ["0000000001"]
+    con = duckdb.connect()
+    got = con.execute(f"select cik, changed from read_parquet('{(tmp_path / 'out' / 'wrapper_drift.parquet').as_posix()}')").fetchall()
+    assert got == [("0000000001", True)]
+
+
+def test_missing_production_wrapper_is_drift(tmp_path):
+    wrappers, stores, production, prod_file = _copies(tmp_path, '{"a": 1}\n')
+    prod_file.unlink()
+    tables, _ = cli.load(["0000000001"], wrappers, stores, production)
+    assert _one_row(tables["wrapper_drift"])["changed"] is True
+
+
+def test_missing_copy_record_stops_the_load(tmp_path):
+    wrappers, stores, production, _ = _copies(tmp_path, '{"a": 1}\n')
+    (wrappers / "_source.json").unlink()
+    with pytest.raises(LoadError, match="no copy record"):
+        cli.load(["0000000001"], wrappers, stores, production)
+
+
+def test_fund_missing_from_copy_record_stops_the_load(tmp_path):
+    wrappers, stores, production, _ = _copies(tmp_path, '{"a": 1}\n')
+    (wrappers / "0000000002.json").write_text('{"source_encodings": {}}', encoding="utf-8")
+    with pytest.raises(LoadError, match="no copied hash"):
+        cli.load(["0000000001", "0000000002"], wrappers, stores, production)
+
+
+def test_wrapper_reading_rules_load_end_to_end(tmp_path):
+    wrappers, stores = _inputs(tmp_path)
+    (wrappers / "0000000001.json").write_text(json.dumps({"source_encodings": {}, "reading_rules": [
+        {"target": "role", "action": "subtotal_on_fair_value", "evidence": "D12"}]}), encoding="utf-8")
+    tables, inputs = cli.load(["0000000001"], wrappers, stores)
+    store.write(tmp_path / "out", tables, inputs)
+    con = duckdb.connect()
+    got = con.execute(f"select origin, rule_class, sel_concept_namespace from read_parquet('{(tmp_path / 'out' / 'reading_rule.parquet').as_posix()}')").fetchall()
+    assert got == [("wrapper:reading_rules", "fund_rule", "")]
+
+
+def _one_row(rows):
+    assert len(rows) == 1
+    return rows[0]

@@ -14,7 +14,9 @@
 -- cause is set by rules on row features, first match wins, never by a list of accession or context ids. Closed
 -- list: old_wrong, new_wrong, convention, needs_store_not_loaded, needs_correction, owner_review,
 -- not_yet_explained. old_wrong has no rule today: no measured group shows production reading a filing wrongly. The
--- evidence behind each rule is in docs/baseline_roles_2026-11-19.md. Agreement between the two sides shows they
+-- evidence behind each rule is in docs/baseline_roles_2026-11-19.md. needs_correction|relabel_loaded (slice 2 Task 5):
+-- a one-sided row named by a loaded relabel (the store says the filer's label names the wrong position); the relabel
+-- is not applied here, and it says nothing about why the other side lacks the row. Agreement between the two sides shows they
 -- agree. It does not show either is right.
 with prod as (
     select
@@ -84,6 +86,13 @@ with prod as (
       and field in ('fair_value', 'principal_amount', 'shares_held', 'interest_rate', 'basis_spread', 'pik_rate', 'maturity_date')
 )
 
+, relabel_correction as (
+    -- a loaded context-keyed relabel: the store says the context carries another position's label (not applied here)
+    select distinct accession, context_id
+    from {{ ref('stg_correction') }}
+    where kind = 'relabel' and context_id is not null
+)
+
 , filer_not_loaded as (
     select distinct cik, wrapper_key from {{ ref('stg_reading_not_loaded') }}
 )
@@ -98,6 +107,7 @@ with prod as (
         , cf.fair_value_fact_count
         , rf.accession is not null as has_rate_fact
         , tc.accession is not null as has_term_correction
+        , rc.accession is not null as has_relabel_correction
         , coalesce(o.corrected_fields like '%_row:added%', false) as production_row_added
         , nl.cik is not null as filer_has_rate_only_declaration
     from one_sided o
@@ -105,6 +115,7 @@ with prod as (
     left join {{ ref('int_context_feature') }} cf on cf.accession = o.accession and cf.context_id = o.context_id
     left join rate_facts rf on rf.accession = o.accession and rf.context_id = o.context_id
     left join term_correction tc on tc.accession = o.accession and tc.context_id = o.context_id
+    left join relabel_correction rc on rc.accession = o.accession and rc.context_id = o.context_id
     left join filer_not_loaded nl on nl.cik = o.cik and nl.wrapper_key = 'rate_only_contexts'
 )
 
@@ -135,6 +146,8 @@ with prod as (
                 then 'needs_store_not_loaded|rate_only_context_pair'
             when side = 'production_only' and has_term_correction
                 then 'needs_correction|correction_supplies_value_or_term'
+            when has_relabel_correction
+                then 'needs_correction|relabel_loaded'
             when side = 'new_only' and is_cash
                 then 'convention|cash_published_d7'
           end as early_cause

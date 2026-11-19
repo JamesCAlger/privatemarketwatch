@@ -32,13 +32,24 @@
 --   children's sum, so the level above sees the same total either way. It can differ only by rounding within the
 --   tolerances, or where a removed subtotal has no cost of its own (then the level above fails the cost test here and
 --   is kept; the pilot would have summed the grandchildren's costs). So the repeat is not needed and SQL suffices.
-with pool as (
+-- Fund rule subtotal_on_fair_value (stg_reading_rule; owner decision D12, Apollo): for that filer, inside the rule's
+--   dates, a parent whose fair value ties is a subtotal even where the cost test fails or cannot be made. The tree,
+--   the fair-value tolerance and the guard are unchanged. subtotal_rule_id names the rule where it decided.
+with fair_value_only_rule as (
+    select rule_id, cik, valid_from, valid_to
+    from {{ ref('stg_reading_rule') }}
+    where action = 'subtotal_on_fair_value'
+)
+
+, pool as (
     select
         cf.accession
         , cf.context_id
         , cf.fair_value
         , cf.cost
         , cf.cost_fact_count
+        , cf.cik
+        , cf.instant_date as report_date
         , coalesce(sc.scopes, 'fund') as scope
         , contains(cf.identifier_label, '|') as is_segmented
         , cf.fair_value <> 0 and not (cf.has_rate or cf.has_spread or cf.has_pik_rate or cf.has_maturity) as can_be_parent
@@ -134,12 +145,16 @@ with pool as (
         , abs(p.fair_value - ch.child_fair_value)
             <= greatest(0.5 * power(10, -coalesce(d.fv_decimals, 0)) * (ch.child_count + 1), 1) as fair_value_matches
         , p.cost_fact_count > 0 as cost_needed
+        , fr.rule_id as fair_value_only_rule_id
         , p.cost is not null and ch.child_cost_missing = 0 as cost_comparable
         , abs(p.cost - ch.child_cost)
             <= greatest(0.5 * power(10, -coalesce(d.cost_decimals, 0)) * (ch.child_count + 1), 1) as cost_matches
     from pool p
     join children ch on ch.accession = p.accession and ch.scope = p.scope and ch.parent_key = p.key
     left join decimals d on d.accession = p.accession and d.context_id = p.context_id
+    left join fair_value_only_rule fr on fr.cik = p.cik
+        and (fr.valid_from is null or fr.valid_from <= p.report_date)
+        and (fr.valid_to is null or fr.valid_to >= p.report_date)
     where p.can_be_parent
 )
 
@@ -149,7 +164,14 @@ select
     , child_count
     , child_fair_value
     , child_cost
-    , coalesce(fair_value_matches and (not cost_needed or (cost_comparable and cost_matches)), false) as is_subtotal
+    , coalesce(fair_value_matches and (not cost_needed or (cost_comparable and cost_matches)), false)
+      or coalesce(fair_value_matches and fair_value_only_rule_id is not null, false) as is_subtotal
+    -- The fund rule, where the row is a subtotal only through it (fair value ties, the cost test does not pass).
+    , case
+        when coalesce(fair_value_matches and (not cost_needed or (cost_comparable and cost_matches)), false) then null
+        when coalesce(fair_value_matches, false) then fair_value_only_rule_id
+      end as subtotal_rule_id
+    -- Why the general rule 6 does not pass, whether or not a fund rule then makes the row a subtotal.
     , case
         when not fair_value_matches then 'fair_value_differs'
         when cost_needed and not cost_comparable then 'cost_not_comparable'

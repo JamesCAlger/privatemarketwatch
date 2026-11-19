@@ -61,6 +61,9 @@ accession inside HPS `par_tagged_as_units`. These fit as rules whose valid range
 
 These belong in the corrections store. Context ids change every filing, so none carries forward.
 Why Blue Owl needs 201 relabelled contexts was not examined.
+(Production's wrappers as measured here. Slice 2 Task 5 added a 202nd entry, c-1013 of
+0001812554-26-000027, to the new pipeline's copy `warehouse/wrappers/0001812554.json` only, so the
+copies hold 285 row-level entries: `baseline_roles_2026-11-19.md`.)
 
 ### What does not fit, and gaps
 
