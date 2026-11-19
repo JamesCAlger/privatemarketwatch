@@ -369,6 +369,86 @@ unit_tests:
         - {context_id: x2, is_cash_axis: false, role: not_schedule, role_rule: 1}
         - {context_id: x3, is_cash_axis: true, role: null, role_rule: null}
 
+  - name: int_context_feature_filer_concepts
+    description: >
+      Fix round 3. A context with only the filer-concept fair value takes it (source = the seed id) for the filer the
+      seed row names, so rule 3 lets it through; the same namespace and concept in another filer's filing is not read
+      (no fair value, fair_value_fact_count 0: rule 3 not_schedule). With both concepts present the us-gaap value is
+      kept and the overlap is flagged. Two filer-concept facts that disagree give null. A filer term-fact row counts
+      toward has_term_fact and sets has_ownership_percent.
+    model: int_context_feature
+    given:
+      - input: ref('stg_filed_filing')
+        rows:
+          - {accession: A, cik: "1", document_period_end_date: 2026-03-31}
+          - {accession: B, cik: "2", document_period_end_date: 2026-03-31}
+      - input: ref('stg_filed_context')
+        rows:
+          - {accession: A, context_id: a1, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: A, context_id: a2, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: A, context_id: a3, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: A, context_id: a4, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+          - {accession: B, context_id: b1, instant_date: 2026-03-31, period_type: instant, member_count: 1}
+      - input: ref('stg_filed_context_member')
+        rows:
+          - {accession: A, context_id: a1, axis: "x:InvestmentIdentifierAxis", member: "Line One", member_index: 0}
+          - {accession: A, context_id: a2, axis: "x:InvestmentIdentifierAxis", member: "Line Two", member_index: 0}
+          - {accession: A, context_id: a3, axis: "x:InvestmentIdentifierAxis", member: "Line Three", member_index: 0}
+          - {accession: A, context_id: a4, axis: "x:InvestmentIdentifierAxis", member: "Line Four", member_index: 0}
+          - {accession: B, context_id: b1, axis: "y:InvestmentIdentifierAxis", member: "Other Line", member_index: 0}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: A, context_id: a1, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 7}
+          - {accession: A, context_id: a2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, value_numeric: 10}
+          - {accession: A, context_id: a2, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 9}
+          - {accession: A, context_id: a3, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 1}
+          - {accession: A, context_id: a3, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 2}
+          - {accession: A, context_id: a4, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, value_numeric: 5}
+          - {accession: A, context_id: a4, concept_namespace: "http://filer.example/2026", concept_local: InvestmentOwnedBalancePercentOfShares, value_numeric: 0.5}
+          - {accession: B, context_id: b1, concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, value_numeric: 7}
+      - input: ref('filer_concept')
+        rows:
+          - {filer_concept_id: fc_fv, cik: "1", concept_namespace: "http://filer.example/2026", concept_local: FilerFairValue, maps_to: fair_value}
+          - {filer_concept_id: fc_pct, cik: "1", concept_namespace: "http://filer.example/2026", concept_local: InvestmentOwnedBalancePercentOfShares, maps_to: term_fact}
+    expect:
+      rows:
+        - {context_id: a1, fair_value: 7, fair_value_source: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
+        - {context_id: a2, fair_value: 10, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
+        - {context_id: a3, fair_value: null, fair_value_source: fc_fv, fair_value_fact_count: 2, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
+        - {context_id: a4, fair_value: 5, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: fc_pct}
+        - {context_id: b1, fair_value: null, fair_value_source: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
+
+  - name: int_role_structure_filer_fair_value_passes_rule_3
+    description: >
+      Fix round 3, the step after int_context_feature_filer_concepts: a period-end identifier context whose fair value
+      came from a filer concept (fact count 1) goes on past rule 3; one with no fair-value fact for its filer (count
+      0) is not_schedule by rule 3.
+    model: int_role_structure
+    given:
+      - input: ref('int_filing_candidate')
+        rows:
+          - {accession: A, cik: "1", report_date: 2026-03-31}
+          - {accession: B, cik: "2", report_date: 2026-03-31}
+      - input: ref('int_filing_selected')
+        rows:
+          - {cik: "1", report_date: 2026-03-31, accession: A, refusal_reason: null}
+          - {cik: "2", report_date: 2026-03-31, accession: B, refusal_reason: null}
+      - input: ref('stg_filed_context_member')
+        rows:
+          - {accession: A, context_id: a1, axis: "x:InvestmentIdentifierAxis", member: "Line One"}
+          - {accession: B, context_id: b1, axis: "y:InvestmentIdentifierAxis", member: "Other Line"}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: a1, has_identifier_member: true, is_filing_period_end: true, period_type: instant, fair_value_fact_count: 1, fair_value: 7}
+          - {accession: B, context_id: b1, has_identifier_member: true, is_filing_period_end: true, period_type: instant, fair_value_fact_count: 0, fair_value: null}
+      - input: ref('role_pattern')
+        rows:
+          - {pattern_id: r8_affiliation_axis, rule_number: 8, applies_to: axis, pattern: "^investmentissueraffiliationaxis$", role: position, priority: 10}
+    expect:
+      rows:
+        - {context_id: a1, role: null, role_rule: null}
+        - {context_id: b1, role: not_schedule, role_rule: 3}
+
   - name: int_source_row_rule_order_and_cross_check
     description: >
       Hand-made rows. First match decides; an aggregate by rules 4 to 6 that carries a term fact, or a position

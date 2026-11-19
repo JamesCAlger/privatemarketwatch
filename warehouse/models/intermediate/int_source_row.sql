@@ -11,6 +11,7 @@
 -- maturity; a nil fact counts, see int_context_feature). Where it disagrees with rules 4 to 6 the role is unresolved:
 -- a row rules 4 to 6 call an aggregate that carries a term fact, or a row that reaches rule 7 or 9 without one. A cash
 -- row (is_cash) is exempt: cash carries no loan or share terms (D7). Two different scopes on one row are unresolved.
+-- filer_concept_id names the filer concept (seeds/filer_concept.csv) a role was decided through (fix round 3).
 -- is_published is false for a JV's own schedule rows (scope other than 'fund'), matching production's published basis.
 with base as (
     select
@@ -23,6 +24,8 @@ with base as (
         , s.reason as structure_reason
         , s.is_cash_axis
         , cf.has_term_fact
+        , cf.fair_value_source
+        , cf.term_fact_source
         , t.text_rule
         , t.pattern_id
         , t.cash_pattern_id
@@ -100,6 +103,12 @@ select
         else has_term_fact or is_cash_row
       end as cross_check_agrees
     , cash_rule_id
+    -- The filer concept (seeds/filer_concept.csv) a role was decided through: the fair value that let the row past
+    -- rule 3, else the only term fact the cross-check read (on a row that reached rules 4 to 9).
+    , case
+        when role_rule >= 4 and fair_value_source <> 'standard' then fair_value_source
+        when role_rule >= 4 and term_fact_source <> 'standard' then term_fact_source
+      end as filer_concept_id
 from ruled
 )
 
@@ -117,4 +126,5 @@ select
     , role = 'position' and scope = 'fund' as is_published
     , cross_check_agrees
     , cash_rule_id
+    , filer_concept_id
 from decided

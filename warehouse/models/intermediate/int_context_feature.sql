@@ -9,11 +9,16 @@
 --   spread     : InvestmentBasisSpreadVariableRate               us-gaap or us-gaap-sup
 --   PIK rate   : InvestmentInterestRatePaidInKind                us-gaap or us-gaap-sup
 --   maturity   : InvestmentMaturityDate                          us-gaap or us-gaap-sup
---   ownership  : InvestmentOwnedBalancePercentOfShares            us-gaap or us-gaap-sup (fix round 2). Today the five funds
---                file it only in a filer namespace (Ares), which this does not read; see the task 2 report.
+--   ownership  : InvestmentOwnedBalancePercentOfShares            us-gaap or us-gaap-sup (fix round 2); a filer namespace
+--                only through a filer_concept seed row (fix round 3).
 -- The term facts also accept the FASB supplement namespace (http://fasb.org/us-gaap-sup/2022q3): nine filings
 -- with period ends 2022-09-30 to 2023-03-31 tag spread, PIK rate and floor there and nowhere else.
 -- Investment identifier: a member on an axis whose local name is InvestmentIdentifierAxis (any prefix).
+-- Filer concepts (seeds/filer_concept.csv, fix round 3): a concept a filer files in its own namespace, matched on the
+-- filer's cik plus the exact namespace and local name. maps_to fair_value: the fair value of a context that has no
+-- us-gaap fair-value fact (fair_value_source names the seed row). maps_to term_fact: counts toward has_term_fact
+-- (term_fact_source names the seed row when no standard term fact is present). The seed's values are joined, never
+-- written here.
 with filing as (
     select accession, cik, document_period_end_date
     from {{ ref('stg_filed_filing') }}
@@ -70,6 +75,45 @@ with filing as (
     group by 1, 2
 )
 
+, filer_facts as (
+    select
+        f.accession
+        , f.context_id
+        , cast(s.filer_concept_id as varchar) as filer_concept_id
+        , cast(s.maps_to as varchar) as maps_to
+        , cast(s.concept_local as varchar) as concept_local
+        , f.value_numeric
+    from {{ ref('stg_filed_fact') }} f
+    join filing fi on fi.accession = f.accession
+    join {{ ref('filer_concept') }} s
+        on cast(s.cik as varchar) = fi.cik and cast(s.concept_namespace as varchar) = f.concept_namespace
+        and cast(s.concept_local as varchar) = f.concept_local
+)
+
+, filer_features as (
+    select
+        accession
+        , context_id
+        , count(*) filter (where maps_to = 'fair_value') as filer_fair_value_fact_count
+        , count(distinct value_numeric) filter (where maps_to = 'fair_value') as filer_fair_value_distinct
+        , min(value_numeric) filter (where maps_to = 'fair_value') as filer_fair_value_any
+        , min(filer_concept_id) filter (where maps_to = 'fair_value') as fair_value_filer_concept_id
+        , bool_or(maps_to = 'term_fact') as has_filer_term_fact
+        , bool_or(maps_to = 'term_fact' and concept_local = 'InvestmentOwnedBalancePercentOfShares') as has_filer_ownership_percent
+        , min(filer_concept_id) filter (where maps_to = 'term_fact') as term_fact_filer_concept_id
+    from filer_facts
+    group by 1, 2
+)
+
+, standard_term as (
+    select
+        accession
+        , context_id
+        , has_principal or has_shares or has_rate or has_spread or has_pik_rate or has_maturity or has_ownership_percent
+            as has_standard_term_fact
+    from fact_features
+)
+
 select
     c.accession
     , c.context_id
@@ -85,9 +129,23 @@ select
     , coalesce(c.instant_date = f.document_period_end_date, false) as is_filing_period_end
     -- One value only when the facts of the concept on the context carry exactly one distinct number
     -- (repeated equal facts agree; a nil fact carries no number). Two different numbers give null.
-    , case when ff.fair_value_distinct = 1 then ff.fair_value_any end as fair_value
+    -- The us-gaap concept comes first; a filer concept is read only where the context has no us-gaap fact.
+    , case
+        when coalesce(ff.fair_value_fact_count, 0) > 0 then case when ff.fair_value_distinct = 1 then ff.fair_value_any end
+        when coalesce(fl.filer_fair_value_fact_count, 0) > 0 then case when fl.filer_fair_value_distinct = 1 then fl.filer_fair_value_any end
+      end as fair_value
+    , case
+        when coalesce(ff.fair_value_fact_count, 0) > 0 then 'standard'
+        when coalesce(fl.filer_fair_value_fact_count, 0) > 0 then fl.fair_value_filer_concept_id
+      end as fair_value_source
+    , coalesce(ff.fair_value_fact_count, 0) > 0 and coalesce(fl.filer_fair_value_fact_count, 0) > 0
+        as fair_value_filer_concept_also_present
     , case when ff.cost_distinct = 1 then ff.cost_any end as cost
-    , coalesce(ff.fair_value_fact_count, 0) as fair_value_fact_count
+    -- Facts of the concept the fair value was read from (us-gaap, else the filer concept).
+    , case
+        when coalesce(ff.fair_value_fact_count, 0) > 0 then ff.fair_value_fact_count
+        else coalesce(fl.filer_fair_value_fact_count, 0)
+      end as fair_value_fact_count
     , coalesce(ff.cost_fact_count, 0) as cost_fact_count
     , coalesce(ff.has_principal, false) as has_principal
     , coalesce(ff.has_shares, false) as has_shares
@@ -95,10 +153,17 @@ select
     , coalesce(ff.has_spread, false) as has_spread
     , coalesce(ff.has_pik_rate, false) as has_pik_rate
     , coalesce(ff.has_maturity, false) as has_maturity
-    , coalesce(ff.has_ownership_percent, false) as has_ownership_percent
-    , coalesce(ff.has_principal or ff.has_shares or ff.has_rate or ff.has_spread or ff.has_pik_rate or ff.has_maturity
-        or ff.has_ownership_percent, false) as has_term_fact
+    , coalesce(ff.has_ownership_percent or fl.has_filer_ownership_percent, ff.has_ownership_percent, fl.has_filer_ownership_percent, false)
+        as has_ownership_percent
+    , coalesce(st.has_standard_term_fact or fl.has_filer_term_fact, st.has_standard_term_fact, fl.has_filer_term_fact, false)
+        as has_term_fact
+    , case
+        when coalesce(st.has_standard_term_fact, false) then 'standard'
+        when coalesce(fl.has_filer_term_fact, false) then fl.term_fact_filer_concept_id
+      end as term_fact_source
 from {{ ref('stg_filed_context') }} c
 join filing f on f.accession = c.accession
 left join members m on m.accession = c.accession and m.context_id = c.context_id
 left join fact_features ff on ff.accession = c.accession and ff.context_id = c.context_id
+left join filer_features fl on fl.accession = c.accession and fl.context_id = c.context_id
+left join standard_term st on st.accession = c.accession and st.context_id = c.context_id

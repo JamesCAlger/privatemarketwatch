@@ -59,11 +59,16 @@ vars:
     int_filing_accession_differs: 0
     int_filing_production_only: 0
     int_filing_new_only: 3
-    int_source_row_unresolved: 974
+    int_source_row_unresolved: 743
     # cmp_row_set, measured 2026-11-19 (docs/baseline_roles_2026-11-19.md). Both bases (published and JV schedules).
-    cmp_row_set_new_only: 2749
-    cmp_row_set_production_only: 2417
-    cmp_row_set_not_yet_explained: 1
+    # new_only 3,080 (task 2 fix round 3, 2026-11-19): the 2,749 measured by task 3, plus 330 rows in the three Q3-2026
+    # filings production has not been built with (Blue Owl 314 commitment lines, Ares 14, Apollo 2), plus 1 Blue Owl
+    # row not yet explained (0001812554-26-000027 c-1013).
+    cmp_row_set_new_only: 3080
+    cmp_row_set_production_only: 195
+    # not_yet_explained 2: the 1 measured by task 3, plus the Blue Owl row 0001812554-26-000027 c-1013 ("LSI Financing
+    # LLC, Common Equity"; accepted 2026-11-19 pending task 3 fix round).
+    cmp_row_set_not_yet_explained: 2
     cmp_row_set_no_context: 0
 
 models:
