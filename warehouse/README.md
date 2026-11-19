@@ -49,3 +49,23 @@ What the new tests measure (`tests/filed_*.sql` must return nothing; `tests/base
 - Bridge to the old pipeline: does each published holdings row's filing and context exist in the filed layer, does its fair value equal the filed fair-value fact, and how many position facts sit in no table row. Measured counts and their causes are in `docs/baseline_filed_2026-11-18.md`.
 
 A passing build means the tables are internally consistent and their row counts tie to the manifests. The bridge tests measure where the filed layer differs from the old extractor (2,009 published rows have no fair-value fact on their context, 896 position facts sit in no table row, 2 values differ). Neither shows the data is right: passing tests do not mean the data is correct.
+
+## Readings (a third source)
+
+How each filer is read, and the fixes made to single rows, as two tables. A loader
+(`warehouse/readings_loader/`) copies them from the wrappers (`data/overrides/bdc_xbrl_wrappers/`) and the
+two row-correction files into `warehouse/data/readings/`. dbt reads them as source `readings` (staging views
+`stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`). Spec: `docs/intermediate_spine.md`.
+
+    .\warehouse\load_readings.ps1    # rewrites the folder; same inputs give the same manifest
+    .\warehouse\dbt.ps1 build
+
+- A **rule** says how a filer's tag or label is read (for example: the rate tag holds the all-in rate). It
+  carries forward every quarter.
+- A **correction** fixes one field on one row of one filing. It does not carry forward.
+- `seeds/reading_action.csv` is the closed list of actions a rule may name. A rule naming anything else
+  fails the build.
+- The loader stops on a wrapper key or entry it does not understand. Nothing is skipped silently.
+
+Nothing in this layer is applied to data yet. A passing build shows the stores were copied faithfully,
+not that any rule or fix is right. Counts: `docs/baseline_readings_2026-11-19.md`.

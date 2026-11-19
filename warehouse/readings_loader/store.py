@@ -1,0 +1,91 @@
+"""Writes the three tables and a manifest. Same inputs give the same manifest: no timestamps."""
+import hashlib
+import json
+import os
+import shutil
+import tempfile
+from pathlib import Path
+
+import duckdb
+
+from . import CORRECTION_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS, RULE_COLUMNS, LoadError
+
+TABLES = {
+    "reading_rule": (RULE_COLUMNS, ["rule_id"]),
+    "correction": (CORRECTION_COLUMNS, ["correction_id"]),
+    "not_loaded": (NOT_LOADED_COLUMNS, ["cik", "wrapper_key", "entry"]),
+}
+_INTEGER = {"priority"}
+
+
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def _sorted_unique(name, rows):
+    columns, key = TABLES[name]
+    rows = sorted(rows, key=lambda r: tuple(str(r[c]) for c in key))
+    keys = [tuple(r[c] for c in key) for r in rows]
+    dups = sorted({k for a, k in zip(keys, keys[1:]) if a == k})
+    if dups:
+        raise LoadError(f"{name}: {len(dups)} duplicate key(s), first {dups[0]}")
+    return [[r[c] for c in columns] for r in rows]
+
+
+def _content_hash(rows):
+    h = hashlib.sha256()
+    for r in rows:
+        h.update(json.dumps(r, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+        h.update(b"\x1e")
+    return h.hexdigest()
+
+
+def _write_parquet(con, name, rows, folder):
+    columns, _ = TABLES[name]
+    types = {c: ("INTEGER" if c in _INTEGER else "VARCHAR") for c in columns}
+    con.execute(f'CREATE OR REPLACE TABLE "{name}" (' + ", ".join(f'"{c}" {types[c]}' for c in columns) + ")")
+    if rows:
+        tmp = Path(folder) / f"{name}.ndjson"
+        with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+            for r in rows:
+                fh.write(json.dumps(dict(zip(columns, r)), ensure_ascii=True) + "\n")
+        spec = ", ".join(f"'{c}': '{types[c]}'" for c in columns)
+        con.execute(f"INSERT INTO \"{name}\" SELECT * FROM read_json('{tmp.as_posix()}', "
+                    f"format='newline_delimited', columns={{{spec}}}, maximum_object_size=67108864)")
+        os.remove(tmp)
+    con.execute(f"COPY \"{name}\" TO '{(Path(folder) / (name + '.parquet')).as_posix()}' (FORMAT PARQUET)")
+
+
+def write(out_dir, tables, inputs):
+    """Write the tables under out_dir, replacing what is there. Returns the manifest.
+
+    `tables` maps table name to a list of row dicts; `inputs` maps a relative path to its SHA-256.
+    Everything is written to a temporary folder first, so a failure leaves the old output in place.
+    """
+    out_dir = Path(out_dir)
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
+    prepared = {name: _sorted_unique(name, tables.get(name, [])) for name in TABLES}
+    manifest = {
+        "loader_version": LOADER_VERSION,
+        "inputs": dict(sorted(inputs.items())),
+        "tables": {name: {"rows": len(rows), "content_sha256": _content_hash(rows)}
+                   for name, rows in prepared.items()},
+    }
+    tmp = Path(tempfile.mkdtemp(prefix=".readings_tmp_", dir=str(out_dir.parent)))
+    try:
+        con = duckdb.connect()
+        for name, rows in prepared.items():
+            _write_parquet(con, name, rows, tmp)
+        con.close()
+        (tmp / "_manifest.json").write_text(json.dumps(manifest, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        if out_dir.exists():
+            shutil.rmtree(out_dir)
+        os.replace(tmp, out_dir)
+    except BaseException:
+        shutil.rmtree(tmp, ignore_errors=True)
+        raise
+    return manifest

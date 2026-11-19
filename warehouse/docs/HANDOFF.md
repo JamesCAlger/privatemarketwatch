@@ -66,3 +66,19 @@ Listed with the cost of each in `docs/filed_layer.md` section 7 and in the step 
 - No inline Python (`python -`, `python -c`). Two subagents sent a bare `python -` by mistake and had to be stopped. Say it explicitly in every dispatch.
 - Subagents on Sonnet or Opus only.
 - The owner is learning dbt: explain dbt terms in plain words.
+
+## Update 2026-11-19 (supersedes the State and step 3 lines above)
+
+- Committed: steps 1 and 2 (8be2e525), cash (9cb9bb44), the spine spec and wrapper fit check (4c02761e).
+- Step 3 has a spec, `docs/intermediate_spine.md`, with owner decisions D1 to D8. Also confirmed by the
+  owner on 2026-11-19: ids come from today's holdings (accession and context); the 13 step 2 rulings
+  (`filed_layer.md` section 7) stand; base rate plus spread is specified (section 10) but built only
+  after the reproduction test passes; the end state is one wrapper per fund plus one corrections list.
+- Slice 1 of 6 is built, NOT committed: readings loader and rule table. Plan
+  `docs/2026-11-19-slice1-readings-loader-plan.md`, counts `docs/baseline_readings_2026-11-19.md`.
+  Run `.\warehouse\load_readings.ps1`, then the build: `PASS=190 WARN=10 ERROR=0 TOTAL=200`. Python
+  tests: 97.
+- Next: slice 2, filing selection and row roles, compared with production's row set. It also takes
+  the stores slice 1 left out that change row roles (`bdc_aggregate_row_overrides.json`,
+  `bdc_xbrl_html_section_bridges`) and the CI build on a committed fixture.
+- The `warehouse` CI job is written and has not run (nothing pushed).

@@ -11,3 +11,10 @@ seeds:
       - name: manager_brand
         data_tests:
           - not_null
+  - name: reading_action
+    description: The closed list of actions a reading rule may name, and the slice of the intermediate layer that builds each ('text' is the second spec). A rule naming an action not listed here fails the build.
+    columns:
+      - name: action
+        data_tests:
+          - unique
+          - not_null

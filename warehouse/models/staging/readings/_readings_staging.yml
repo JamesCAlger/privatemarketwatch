@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: stg_reading_rule
+    description: One row per wrapper declaration entry (how a filer is read). Loaded as it stands; no rule is applied to data yet.
+    columns:
+      - name: rule_id
+        data_tests: [unique, not_null]
+      - name: cik
+        description: The filer. Null would mean a global rule; none is loaded yet.
+      - name: action
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('reading_action')
+                field: action
+      - name: target
+        data_tests: [not_null]
+      - name: rule_class
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [convention, vocabulary, source, scope, value_test, filing_scoped]
+      - name: validity_basis
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [stated, assumed_all_quarters]
+      - name: priority
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [10, 20, 30]
+                quote: false
+  - name: stg_correction
+    description: One row per row-level fix, from the wrappers' row-level entries and the two row-correction files. Loaded as it stands; nothing is applied yet.
+    columns:
+      - name: correction_id
+        data_tests: [unique, not_null]
+      - name: cik
+        data_tests: [not_null]
+      - name: accession
+        data_tests: [not_null]
+      - name: field
+        data_tests: [not_null]
+      - name: kind
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [value, relabel, exception, evidence]
+  - name: stg_reading_not_loaded
+    description: Wrapper declarations that need a procedure and are not loaded as rules.
+  - name: stg_readings_manifest
+    description: Row counts the loader recorded, for the count test.

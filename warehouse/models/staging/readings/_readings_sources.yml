@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: readings
+    description: Tables written by the readings loader under warehouse/data/readings (load_readings.ps1). Wrapper declarations and row-level fixes for the scope funds, copied as they stand. Read-only.
+    tables:
+      - name: reading_rule
+        meta:
+          external_location: "read_parquet('{{ var('readings_dir') }}/reading_rule.parquet')"
+      - name: correction
+        meta:
+          external_location: "read_parquet('{{ var('readings_dir') }}/correction.parquet')"
+      - name: not_loaded
+        meta:
+          external_location: "read_parquet('{{ var('readings_dir') }}/not_loaded.parquet')"
+      - name: manifest
+        meta:
+          external_location: "read_json('{{ var('readings_dir') }}/_manifest.json')"

@@ -25,6 +25,8 @@ vars:
   cohort_manifest_file: "../data/overrides/wrapper_cohorts/v2_70_gate_verified_wrapper_manifest.json"
   # Folder of the filed-layer Parquet tables (one folder per filing). Relative to warehouse/.
   filed_dir: "data/filed"
+  # Folder of the readings tables written by load_readings.ps1. Relative to warehouse/.
+  readings_dir: "data/readings"
   # Baseline ceilings. Each baseline test warns while its count is above zero and FAILS the build if
   # the count rises above the ceiling. A count may fall freely. Raising a ceiling is a deliberate edit.
   baseline_max:

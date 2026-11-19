@@ -15616,3 +15616,13 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - `filed_total_excludes_cash` applies the evidence half of the 2026-11-04 ruling (A04): with cash misses, without cash ties, cash rows equal filed cash equivalents within 0.5 pct of the investments line. Wrapper declarations are not read; none of the five funds has one.
 - Result: `baseline_published_equals_filed` 11 to 0, ceiling lowered to 0. All 11 were Apollo (18 cash rows over 13 quarters; 11 quarters on the ex-cash basis, largest gap with cash 785.9M, on basis under 0.1M for every fund). Build PASS=166 WARN=10 ERROR=0.
 - A tie to the filed total does not show the rows are right.
+
+## 2026-11-19 - warehouse/: readings loader and rule table (slice 1 of the intermediate layer)
+
+- Spec `warehouse/docs/intermediate_spine.md` (committed 4c02761e, owner decisions D1 to D8). This entry is slice 1 of 6; nothing is applied to data and no pipeline code, output or wrapper changed.
+- New `warehouse/readings_loader/` and `warehouse/load_readings.ps1`: copies the five v0.5 wrappers' `source_encodings` and `identifier_format`, plus `row_corrections.csv` and `row_corrections_by_context.csv` for those funds, into `warehouse/data/readings/` (git-ignored). It stops on an unknown key or entry.
+- Counts: 121 rule rows (73 vocabulary, 21 convention, 9 scope, 7 source, 6 value test, 5 filing scoped; 116 with no date, none with evidence); 3 declarations not loaded (need a procedure); 4,195 corrections (3,911 from the two files, 284 from wrapper row-level entries). All 3,911 file entries match a row in today's holdings and the field is marked corrected there.
+- dbt: source `readings`, four staging views, seed `reading_action` (closed list of actions), new var `readings_dir`. Build `PASS=190 WARN=10 ERROR=0 TOTAL=200` (was 166 / 10 / 0). Python tests in `warehouse/pytests`: 97 (30 new).
+- CI: a `warehouse` job added to `.github/workflows/ci.yml` (Python tests and `dbt parse`). Not yet run.
+- Not loaded yet: the other override stores that change published values (agent rules, B2 corrections, anchors, aggregate-row overrides, section bridges, rate grammars). Counts and detail: `warehouse/docs/baseline_readings_2026-11-19.md`.
+- A passing build shows the stores were copied faithfully and repeatably. It does not show that any rule or fix is right.

@@ -23,6 +23,29 @@ jobs:
       - name: Run cache-free test suite
         run: pytest tests/ -m "not needs_cache" -q --durations=20
 
+  # warehouse/ (dbt + DuckDB). Tier 1 only: the parser and loader tests on committed fixtures, and
+  # a check that the dbt project parses. It builds nothing: the data is not in the repository.
+  warehouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: warehouse
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: warehouse/requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Parser and loader tests
+        run: python -m pytest -q
+      - name: dbt project parses
+        run: dbt parse --profiles-dir . --no-version-check
+        env:
+          DBT_SEND_ANONYMOUS_USAGE_STATS: "false"
+
   frontend-build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
