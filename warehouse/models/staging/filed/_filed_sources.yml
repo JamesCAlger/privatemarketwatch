@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: filed
+    description: Parquet tables written by the filed parser under warehouse/data/filed. One folder per filing. Read-only.
+    tables:
+      - name: filing
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/filing.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: context
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/context.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: context_member
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/context_member.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: unit
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/unit.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: tagged_fact
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/tagged_fact.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: document_row
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/document_row.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: fact_placement
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/fact_placement.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: footnote
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/footnote.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: fact_footnote
+        meta:
+          external_location: "read_parquet('{{ var('filed_dir') }}/*/*/fact_footnote.parquet', hive_partitioning=false, union_by_name=true)"
+      - name: manifest
+        description: The _manifest.json of each filing folder (parser version, input hashes, row count and content hash per table).
+        meta:
+          external_location: "read_json('{{ var('filed_dir') }}/*/*/_manifest.json', format='auto', union_by_name=true, filename=true, sample_size=-1)"

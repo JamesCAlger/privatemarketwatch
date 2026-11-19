@@ -1,0 +1,13 @@
+version: 2
+
+seeds:
+  - name: manager_brand
+    description: Fund to manager brand. Generated from CIK_TO_MANAGER_BRAND in pipeline/config.py by scripts/make_manager_brand_seed.py. A brand, not the registered adviser.
+    columns:
+      - name: cik
+        data_tests:
+          - unique
+          - not_null
+      - name: manager_brand
+        data_tests:
+          - not_null

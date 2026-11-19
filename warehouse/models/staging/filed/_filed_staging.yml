@@ -1,0 +1,105 @@
+version: 2
+
+models:
+  - name: stg_filed_filing
+    description: One row per parsed filing (instance plus inline document). Thin view over the filed layer.
+    columns:
+      - name: accession
+        data_tests: [unique, not_null]
+      - name: cik
+        data_tests: [not_null]
+  - name: stg_filed_context
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+  - name: stg_filed_context_member
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+  - name: stg_filed_unit
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+  - name: stg_filed_fact
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+  - name: stg_filed_document_row
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+      - name: cell_colspans
+        description: colspan of each cell, one integer per cell in the order of cells; 1 when absent or not a positive integer.
+      - name: cell_rowspans
+        description: rowspan of each cell, same rule as cell_colspans.
+  - name: stg_filed_fact_placement
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+      - name: shown_row_index
+        description: Row of the printed element whose style points at this (hidden) fact with -sec-ix-hidden; null if none.
+      - name: shown_cell_index
+        description: Cell of that element within the row.
+  - name: stg_filed_footnote
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+  - name: stg_filed_fact_footnote
+    description: Thin view over the filed-layer table. Composite keys are tested in tests/filed_*_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_filed_filing')
+                field: accession
+  - name: stg_filed_manifest
+    description: One row per filing folder and table, from the folder's _manifest.json (the row count the parser recorded). Tested against the tables in tests/filed_manifest_*.sql.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: table_name
+        data_tests: [not_null]

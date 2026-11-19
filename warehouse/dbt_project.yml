@@ -1,0 +1,63 @@
+name: warehouse
+version: "0.1.0"
+config-version: 2
+profile: warehouse
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+flags:
+  send_anonymous_usage_stats: false
+  partial_parse: false
+
+vars:
+  # Paths are relative to the warehouse/ folder (dbt.ps1 runs from there).
+  output_dir: "../data/output"
+  # Quarter used by the baseline tests that are measured at one date.
+  baseline_date: "2026-03-31"
+  # Largest difference between published and filed fair value that still counts as tied, in dollars.
+  reconcile_tolerance: 500000
+  # Files outside data/output that staging reads. Relative to the warehouse/ folder.
+  thresholds_file: "../data/reference/quarter_acceptance_thresholds.json"
+  cohort_manifest_file: "../data/overrides/wrapper_cohorts/v2_70_gate_verified_wrapper_manifest.json"
+  # Folder of the filed-layer Parquet tables (one folder per filing). Relative to warehouse/.
+  filed_dir: "data/filed"
+  # Baseline ceilings. Each baseline test warns while its count is above zero and FAILS the build if
+  # the count rises above the ceiling. A count may fall freely. Raising a ceiling is a deliberate edit.
+  baseline_max:
+    one_sector_per_borrower: 132
+    one_asset_category_per_position: 63
+    one_lien_per_position: 116
+    one_instrument_type_per_position: 6
+    one_borrower_per_position: 210
+    filing_single_form_type: 1
+    published_equals_filed: 11
+    fund_quarter_without_positions: 6
+    filed_filing_missing: 0
+    filed_context_missing: 0
+    filed_fair_value_no_fact: 2009
+    filed_fair_value_ambiguous: 0
+    filed_fair_value_differs: 0
+    filed_fair_value_differs_corrected: 2
+    filed_fair_value_null: 0
+    filed_position_fact_no_row: 896
+
+models:
+  warehouse:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
+
+seeds:
+  warehouse:
+    +column_types:
+      cik: varchar
+
+data_tests:
+  warehouse:
+    # Keep the failing rows of every test in a table, so a failure can be inspected.
+    +store_failures: true

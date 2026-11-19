@@ -1,0 +1,13 @@
+# dbt environment and build output: local only
+.venv/
+target/
+logs/
+dbt_packages/
+*.duckdb
+*.duckdb.wal
+.user.yml
+
+# filed layer output and Python/pytest caches: local only
+data/
+.pytest_cache/
+__pycache__/

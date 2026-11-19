@@ -1,0 +1,28 @@
+version: 2
+
+sources:
+  - name: pipeline
+    description: Files written by the existing pipeline under data/output. Read-only.
+    meta:
+      external_location: "{{ var('output_dir') }}/{name}.parquet"
+    tables:
+      - name: private_markets_holdings
+        description: One row per position per fund per report date. 101 columns.
+      - name: position_pik_status
+        description: PIK status per holding. Its own key is a row number; join on fund, date and position.
+      - name: cost_donor_audit
+        description: Per holdings row, whether the cost is reported or not filed.
+      - name: entity_lookup
+        description: One row per borrower name variant.
+      - name: fund_financials
+        description: Fund-level balance sheet per quarter. CSV, all text.
+        meta:
+          external_location: "read_csv('{{ var('output_dir') }}/fund_financials.csv', header=true, all_varchar=true)"
+      - name: bdc_universe
+        description: One row per BDC. CSV, all text.
+        meta:
+          external_location: "read_csv('{{ var('output_dir') }}/bdc_universe.csv', header=true, all_varchar=true)"
+      - name: bdc_filings_index
+        description: Filing metadata. CSV, all text. Has duplicate rows per accession.
+        meta:
+          external_location: "read_csv('{{ var('output_dir') }}/bdc_filings_index.csv', header=true, all_varchar=true)"

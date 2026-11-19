@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: stg_v05_scope
+    description: The funds in scope, read from the acceptance thresholds file.
+    columns:
+      - name: cik
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_holdings
+    description: Holdings rows for the funds in scope, BDC source only. No business rule.
+    columns:
+      - name: row_id
+        data_tests:
+          - unique
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_v05_scope')
+                field: cik
+      - name: position_id
+        data_tests:
+          - not_null
+      - name: entity_id
+        data_tests:
+          - not_null
+
+  - name: stg_position_pik_status
+    columns:
+      - name: position_id
+        data_tests:
+          - not_null
+
+  - name: stg_cost_donor_audit
+    columns:
+      - name: row_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_holdings')
+                field: row_id
+      - name: cost_method
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['reported', 'not_filed']
+
+  - name: stg_entity_lookup
+    columns:
+      - name: entity_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_fund_financials
+    columns:
+      - name: cik
+        data_tests:
+          - not_null
+
+  - name: stg_bdc_universe
+    columns:
+      - name: cik
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_filings_index
+    columns:
+      - name: accession_number
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_cohort
+    columns:
+      - name: cik
+        data_tests:
+          - unique
+          - not_null
+      - name: cohort_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['active', 'deferred', 'held_back']

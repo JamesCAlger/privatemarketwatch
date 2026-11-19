@@ -1,0 +1,185 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: One row per report date in scope.
+    columns:
+      - name: report_date
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_filing
+    description: One row per filing used by the holdings in scope.
+    columns:
+      - name: accession_number
+        data_tests:
+          - unique
+          - not_null
+      - name: cik
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fund')
+                field: cik
+      - name: form_type
+        data_tests:
+          - not_null
+
+  - name: dim_adviser
+    description: One row per manager brand of a fund in scope. A brand, not the registered adviser.
+    columns:
+      - name: adviser_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_fund
+    description: One row per fund in scope.
+    columns:
+      - name: cik
+        data_tests:
+          - unique
+          - not_null
+      - name: fund_name
+        data_tests:
+          - not_null
+      - name: adviser_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_adviser')
+                field: adviser_id
+      - name: cohort_status
+        data_tests:
+          - not_null
+
+  - name: dim_entity
+    description: One row per borrower held by a fund in scope. Sector is not here in step 1; it is on the fact as read.
+    columns:
+      - name: entity_id
+        data_tests:
+          - unique
+          - not_null
+      - name: canonical_name
+        data_tests:
+          - not_null
+
+  - name: dim_position
+    description: One row per position. Class is not here in step 1; it is on the fact as read.
+    columns:
+      - name: position_id
+        data_tests:
+          - unique
+          - not_null
+      - name: cik
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fund')
+                field: cik
+      - name: anchor_row_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fact_observation
+    description: One position, one fund, one report date. Sector and class are held here as read.
+    columns:
+      - name: row_id
+        data_tests:
+          - unique
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fund')
+                field: cik
+      - name: report_date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: report_date
+      - name: accession_number
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_filing')
+                field: accession_number
+      - name: position_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_position')
+                field: position_id
+      - name: entity_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_entity')
+                field: entity_id
+      - name: is_published
+        data_tests:
+          - not_null
+      - name: fair_value
+        data_tests:
+          - not_null
+      - name: cost_is_proxy
+        data_tests:
+          - not_null
+      - name: pik_terms_flag
+        data_tests:
+          - not_null
+
+  - name: fact_fund_period
+    description: One fund at one report date. Includes fund-quarters with financials and no positions (has_positions is false). Reconciles the published positions to the fund's filed total. NAV per share and income are deliberately left out until their known defects are fixed.
+    columns:
+      - name: cik
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fund')
+                field: cik
+      - name: report_date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: report_date
+      - name: accession_number
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_filing')
+                field: accession_number
+      - name: investments_at_fair_value_filed
+        data_tests:
+          # A fund-quarter with positions must have a filed total; without one the reconciliation skips it.
+          - not_null:
+              config:
+                where: "has_positions"
+      - name: has_positions
+        data_tests:
+          - not_null
+      - name: net_assets
+        data_tests:
+          - not_null
+      - name: total_assets
+        data_tests:
+          # Three fund-quarters without positions (2022-09-30) have no total assets either.
+          - not_null:
+              config:
+                where: "has_positions"
+      - name: published_fair_value
+        data_tests:
+          - not_null
