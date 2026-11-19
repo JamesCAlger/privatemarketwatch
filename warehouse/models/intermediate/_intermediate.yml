@@ -204,9 +204,127 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['old_wrong', 'new_wrong', 'convention', 'needs_store_not_loaded', 'needs_correction', 'not_yet_explained']
+                values: ['old_wrong', 'new_wrong', 'convention', 'needs_store_not_loaded',
+                         'needs_correction', 'owner_review', 'not_yet_explained']
+    # One baseline per basis and cause; ceilings cmp_<basis>_<cause> in dbt_project.yml.
+    data_tests:
+      - baseline_cmp_cause: {arguments: {basis: published, cause: old_wrong}, name: baseline_cmp_published_old_wrong}
+      - baseline_cmp_cause: {arguments: {basis: published, cause: new_wrong}, name: baseline_cmp_published_new_wrong}
+      - baseline_cmp_cause: {arguments: {basis: published, cause: convention}, name: baseline_cmp_published_convention}
+      - baseline_cmp_cause: {arguments: {basis: published, cause: needs_store_not_loaded}, name: baseline_cmp_published_needs_store_not_loaded}
+      - baseline_cmp_cause: {arguments: {basis: published, cause: needs_correction}, name: baseline_cmp_published_needs_correction}
+      - baseline_cmp_cause: {arguments: {basis: published, cause: owner_review}, name: baseline_cmp_published_owner_review}
+      - baseline_cmp_cause: {arguments: {basis: published, cause: not_yet_explained}, name: baseline_cmp_published_not_yet_explained}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: old_wrong}, name: baseline_cmp_unpublished_old_wrong}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: new_wrong}, name: baseline_cmp_unpublished_new_wrong}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: convention}, name: baseline_cmp_unpublished_convention}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: needs_store_not_loaded}, name: baseline_cmp_unpublished_needs_store_not_loaded}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: needs_correction}, name: baseline_cmp_unpublished_needs_correction}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: owner_review}, name: baseline_cmp_unpublished_owner_review}
+      - baseline_cmp_cause: {arguments: {basis: unpublished, cause: not_yet_explained}, name: baseline_cmp_unpublished_not_yet_explained}
+
+  - name: cmp_excluded_quarter
+    description: >
+      Fund-quarters left out of the comparison because production has no rows for them (owner, 2026-11-19), with
+      the rows left out per basis. Counted by tests/baseline_cmp_excluded_quarter.sql.
+    columns:
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
 
 unit_tests:
+  - name: cmp_row_set_catch_all_causes
+    description: >
+      Invented rows for the catch-all cause rules. Fund 1 at D1: this layer misses the filed total by 100m and the one
+      held row (production only, unresolved, fair value 100m) closes it -> new_wrong. Same fund at D2: the held row
+      (100m) does not close the gap (300m) -> owner_review. A held row with fair value 0 is never tested by the tie ->
+      owner_review. A production-only row that is not_schedule with no correction is NOT owner_review ->
+      not_yet_explained. New-only cash row in a filing production has -> convention; a new-only row that is not cash
+      -> not_yet_explained (not convention); a new-only cash row in a quarter production has no rows for is left out
+      of the comparison (no row, owner 2026-11-19). A JV-schedule held row -> owner_review (no filed total).
+    model: cmp_row_set
+    given:
+      - input: ref('stg_holdings')
+        rows:
+          - {cik: "1", report_date: 2026-01-31, accession_number: A1, src_context_id: p1, accounting_record_class: parent_schedule, fair_value: 900000000, corrected_fields: null}
+          - {cik: "1", report_date: 2026-01-31, accession_number: A1, src_context_id: h1, accounting_record_class: parent_schedule, fair_value: 100000000, corrected_fields: null}
+          - {cik: "1", report_date: 2026-01-31, accession_number: A1, src_context_id: z1, accounting_record_class: parent_schedule, fair_value: 0, corrected_fields: null}
+          - {cik: "1", report_date: 2026-01-31, accession_number: A1, src_context_id: x1, accounting_record_class: parent_schedule, fair_value: 5, corrected_fields: null}
+          - {cik: "1", report_date: 2026-01-31, accession_number: A1, src_context_id: j1, accounting_record_class: underlying_schedule, fair_value: 7, corrected_fields: null}
+          - {cik: "1", report_date: 2026-02-28, accession_number: A2, src_context_id: p2, accounting_record_class: parent_schedule, fair_value: 800000000, corrected_fields: null}
+          - {cik: "1", report_date: 2026-02-28, accession_number: A2, src_context_id: h2, accounting_record_class: parent_schedule, fair_value: 100000000, corrected_fields: null}
+      - input: ref('int_source_row')
+        rows:
+          - {accession: A1, context_id: p1, cik: "1", report_date: 2026-01-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true}
+          - {accession: A1, context_id: h1, cik: "1", report_date: 2026-01-31, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false}
+          - {accession: A1, context_id: z1, cik: "1", report_date: 2026-01-31, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false}
+          - {accession: A1, context_id: x1, cik: "1", report_date: 2026-01-31, role: not_schedule, role_rule: 3, reason: "no fair value", is_cash: false, is_published: false}
+          - {accession: A1, context_id: j1, cik: "1", report_date: 2026-01-31, role: unresolved, role_rule: 7, reason: "scope JV by set_scope, but no term fact", is_cash: false, is_published: false}
+          - {accession: A1, context_id: c1, cik: "1", report_date: 2026-01-31, role: position, role_rule: 9, reason: "position; money market", is_cash: true, is_published: true}
+          - {accession: A1, context_id: n1, cik: "1", report_date: 2026-01-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true}
+          - {accession: A2, context_id: p2, cik: "1", report_date: 2026-02-28, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true}
+          - {accession: A2, context_id: h2, cik: "1", report_date: 2026-02-28, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false}
+          - {accession: A3, context_id: c3, cik: "1", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; money market", is_cash: true, is_published: true}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A1, context_id: p1, identifier_label: "Alpha | Loan", fair_value: 900000000, fair_value_fact_count: 1}
+          - {accession: A1, context_id: h1, identifier_label: "Beta | LP interest", fair_value: 100000000, fair_value_fact_count: 1}
+          - {accession: A1, context_id: z1, identifier_label: "Gamma | Revolver", fair_value: 0, fair_value_fact_count: 1}
+          - {accession: A1, context_id: x1, identifier_label: "Delta | Loan", fair_value: null, fair_value_fact_count: 0}
+          - {accession: A1, context_id: j1, identifier_label: "Eps | Loan, JV", fair_value: 7, fair_value_fact_count: 1}
+          - {accession: A1, context_id: c1, identifier_label: "Some Money Market Fund", fair_value: 50, fair_value_fact_count: 1}
+          - {accession: A1, context_id: n1, identifier_label: "Zeta | Loan", fair_value: 0, fair_value_fact_count: 1}
+          - {accession: A2, context_id: p2, identifier_label: "Alpha | Loan", fair_value: 800000000, fair_value_fact_count: 1}
+          - {accession: A2, context_id: h2, identifier_label: "Beta | LP interest", fair_value: 100000000, fair_value_fact_count: 1}
+          - {accession: A3, context_id: c3, identifier_label: "Some Money Market Fund", fair_value: 60, fair_value_fact_count: 1}
+      - input: ref('stg_fund_financials')
+        rows:
+          - {cik: "1", report_date: 2026-01-31, investments_at_fair_value: 1000000000}
+          - {cik: "1", report_date: 2026-02-28, investments_at_fair_value: 1100000000}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: A1, context_id: p1, concept_local: InvestmentOwnedAtFairValue}
+      - input: ref('stg_correction')
+        rows:
+          - {accession: A9, context_id: q9, kind: value, field: fair_value}
+      - input: ref('stg_reading_not_loaded')
+        rows:
+          - {cik: "9", wrapper_key: rate_only_contexts}
+    expect:
+      rows:
+        - {basis: published, context_id: p1, side: both, cause: null}
+        - {basis: published, context_id: h1, side: production_only, cause: new_wrong}
+        - {basis: published, context_id: z1, side: production_only, cause: owner_review}
+        - {basis: published, context_id: x1, side: production_only, cause: not_yet_explained}
+        - {basis: unpublished, context_id: j1, side: production_only, cause: owner_review}
+        - {basis: published, context_id: c1, side: new_only, cause: convention}
+        - {basis: published, context_id: n1, side: new_only, cause: not_yet_explained}
+        - {basis: published, context_id: p2, side: both, cause: null}
+        - {basis: published, context_id: h2, side: production_only, cause: owner_review}
+
+  - name: cmp_excluded_quarter_lists_quarters_production_lacks
+    description: >
+      Invented rows. A fund-quarter with positions here and no production rows is listed with its row counts per
+      basis; a fund-quarter production has rows for is not, even when one of its rows is on this side only.
+    model: cmp_excluded_quarter
+    given:
+      - input: ref('int_source_row')
+        rows:
+          - {accession: A1, context_id: p1, cik: "1", report_date: 2026-01-31, role: position, is_published: true}
+          - {accession: A1, context_id: n1, cik: "1", report_date: 2026-01-31, role: position, is_published: true}
+          - {accession: A3, context_id: c3, cik: "1", report_date: 2026-03-31, role: position, is_published: true}
+          - {accession: A3, context_id: c4, cik: "1", report_date: 2026-03-31, role: position, is_published: false}
+          - {accession: A3, context_id: u3, cik: "1", report_date: 2026-03-31, role: unresolved, is_published: false}
+      - input: ref('stg_holdings')
+        rows:
+          - {cik: "1", report_date: 2026-01-31, accession_number: A1, src_context_id: p1}
+    expect:
+      rows:
+        - {cik: "1", report_date: 2026-03-31, accessions: A3, published_rows: 1, unpublished_rows: 1}
+
   - name: int_role_subtotal_levels_guard_null_and_scope
     description: >
       Hand-made rows. Two levels (industry over issuers over loans); a loan carrying a rate is never a parent, so

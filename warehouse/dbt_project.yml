@@ -60,16 +60,28 @@ vars:
     int_filing_production_only: 0
     int_filing_new_only: 3
     int_source_row_unresolved: 743
-    # cmp_row_set, measured 2026-11-19 (docs/baseline_roles_2026-11-19.md). Both bases (published and JV schedules).
-    # new_only 3,080 (task 2 fix round 3, 2026-11-19): the 2,749 measured by task 3, plus 330 rows in the three Q3-2026
-    # filings production has not been built with (Blue Owl 314 commitment lines, Ares 14, Apollo 2), plus 1 Blue Owl
-    # row not yet explained (0001812554-26-000027 c-1013).
-    cmp_row_set_new_only: 3080
-    cmp_row_set_production_only: 195
-    # not_yet_explained 2: the 1 measured by task 3, plus the Blue Owl row 0001812554-26-000027 c-1013 ("LSI Financing
-    # LLC, Common Equity"; accepted 2026-11-19 pending task 3 fix round).
-    cmp_row_set_not_yet_explained: 2
+    # cmp_row_set one-sided rows, one ceiling per basis and cause (tests/generic/baseline_cmp_cause.sql), measured
+    # 2026-11-19 after task 3 fix round 1 (docs/baseline_roles_2026-11-19.md). The two bases are never summed.
+    # old_wrong: no rule and no row today; the ceiling keeps it at 0 until a rule is added.
+    cmp_published_old_wrong: 0
+    cmp_published_new_wrong: 54
+    cmp_published_convention: 31
+    cmp_published_needs_store_not_loaded: 12
+    cmp_published_needs_correction: 52
+    cmp_published_owner_review: 45
+    # 2: BCRED Box Co-Invest (0001803498-25-000062 c-1259) and Blue Owl LSI Financing (0001812554-26-000027 c-1013).
+    cmp_published_not_yet_explained: 2
+    cmp_unpublished_old_wrong: 0
+    cmp_unpublished_new_wrong: 0
+    cmp_unpublished_convention: 30
+    cmp_unpublished_needs_store_not_loaded: 0
+    cmp_unpublished_needs_correction: 0
+    cmp_unpublished_owner_review: 34
+    cmp_unpublished_not_yet_explained: 0
     cmp_row_set_no_context: 0
+    # Fund-quarters left out of the comparison (production has no rows): the three Q3-2026 filings (Ares, Blue Owl,
+    # Apollo). Falls to 0 when production is built with them.
+    cmp_excluded_quarter: 3
 
 models:
   warehouse:
