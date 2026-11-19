@@ -60,6 +60,11 @@ vars:
     int_filing_production_only: 0
     int_filing_new_only: 3
     int_source_row_unresolved: 974
+    # cmp_row_set, measured 2026-11-19 (docs/baseline_roles_2026-11-19.md). Both bases (published and JV schedules).
+    cmp_row_set_new_only: 2749
+    cmp_row_set_production_only: 2417
+    cmp_row_set_not_yet_explained: 1
+    cmp_row_set_no_context: 0
 
 models:
   warehouse:

@@ -165,6 +165,47 @@ models:
         data_tests:
           - not_null
 
+  - name: cmp_row_set
+    description: >
+      This layer's position rows against production's, joined on accession and context id, on two bases: published
+      and a JV's own schedule (unpublished). One row per (basis, accession, context_id) that is a position on either
+      side, with the side, this layer's role, rule and reason, production's record class and fair value, and for a
+      row on one side only a cause from the closed list with a detail. Key and cause are tested in
+      tests/cmp_row_set_key_and_cause.sql. Agreement shows the two agree, not that either is right.
+    columns:
+      - name: basis
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['published', 'unpublished']
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
+      - name: side
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['both', 'new_only', 'production_only']
+      - name: role
+        data_tests:
+          - not_null
+      - name: cause
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['old_wrong', 'new_wrong', 'convention', 'needs_store_not_loaded', 'needs_correction', 'not_yet_explained']
+
 unit_tests:
   - name: int_role_subtotal_levels_guard_null_and_scope
     description: >
