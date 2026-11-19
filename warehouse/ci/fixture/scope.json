@@ -1,0 +1,4 @@
+{
+  "note": "CI fixture counterpart of data/reference/quarter_acceptance_thresholds.json: only findings_scope.ciks is read (stg_v05_scope, the parser, the loader). The fund is invented.",
+  "findings_scope": {"ciks": ["0000000001"]}
+}

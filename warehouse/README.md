@@ -1,7 +1,8 @@
 # warehouse
 
 A dbt project that turns the pipeline's outputs into position-level marts for the five v0.5 funds.
-It only reads `data/output/`. It builds into `warehouse/target/warehouse.duckdb`, which is not tracked.
+It reads `data/output/`, the filed layer and the readings (below), and writes nothing outside
+`warehouse/`. It builds into `warehouse/target/warehouse.duckdb`, which is not tracked.
 
 ## Run
 
@@ -81,3 +82,48 @@ the copy is brought up to date and `_source.json` updated.
 
 Nothing in this layer is applied to data yet. A passing build shows the stores were copied faithfully,
 not that any rule or fix is right. Counts: `docs/baseline_readings_2026-11-19.md`.
+
+## The intermediate layer (row roles)
+
+The models in `models/intermediate/` read the filed layer and the readings and decide, for every context of
+every parsed filing of the five funds, what the row is. They are tables (`int_*`), built after the staging
+views. Spec: `docs/intermediate_spine.md` (section 6.2). Counts: `docs/baseline_roles_2026-11-19.md`.
+
+- A **context** is one filed row of facts: a date and the members that say what it is about (for a
+  position, the investment identifier, which carries the label).
+- A **selected filing** is the one filing that speaks for a fund and quarter (`int_filing_selected`). When
+  a quarter has an original and an amendment, the amendment wins if it is full; a cover-only amendment is
+  skipped. A quarter it cannot decide (two originals, a partial amendment) is refused, with the reason.
+- A **role** is what a context is. Rules are tried in order and the first that fires decides
+  (`int_source_row`, with the rule number and a reason on every row):
+
+| Role | Meaning |
+|---|---|
+| position | A holding: one loan, equity line or fund interest. Published unless it sits in a JV's own schedule, or is cash (published, flagged `is_cash`). |
+| aggregate | A total, subtotal, heading or the cash bucket: by its label, or because its fair value equals the rows below it. |
+| comparative | A prior-period figure in the same filing. |
+| not_schedule | Not a schedule row (no investment identifier, or no fair value). |
+| superseded | In a filing that was not selected for its quarter. |
+| unresolved | The rules disagree, or a row reads as a position but carries no term (no principal, shares, rate, spread, PIK rate or maturity) and no rule says it is one. Never published; counted by a baseline test. |
+
+- A **general rule** applies to every fund. Text patterns and axes live in `seeds/role_pattern.csv`
+  (for example: a label segment starting with "total" is an aggregate).
+- A **fund rule** applies to one fund and lives in that fund's wrapper copy, `warehouse/wrappers/<cik>.json`
+  (old-style `source_encodings`, new-style `reading_rules`). A fund rule wins over a general one.
+  `seeds/reading_action.csv` lists the actions a rule may name.
+- **The comparison with production** (`cmp_row_set`): this layer's position rows against production's
+  holdings, joined on filing and context. Every row on one side only gets a cause (for example
+  `convention`: cash this layer keeps and production drops). Each cause has a ceiling in `dbt_project.yml`.
+  Quarters production has not been built with are left out and listed (`cmp_excluded_quarter`).
+  Agreement shows the two pipelines agree. It does not show either is right.
+
+After editing a wrapper copy:
+
+    .\warehouse\load_readings.ps1    # the copy into warehouse\data\readings
+    .\warehouse\dbt.ps1 build        # roles, comparison and every test
+
+A new fund rule needs `evidence` (the loader stops without it), and a `label_pattern` needs at least one
+`label_examples_no_match` (the build fails without it); every listed example is tested against the pattern. A row moving between roles shows in the comparison
+counts and the unresolved count, and fails the build if a ceiling is passed.
+
+CI runs a build on an invented fund, without the repository's data: `ci/README.md`.

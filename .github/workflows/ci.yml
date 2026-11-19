@@ -23,8 +23,10 @@ jobs:
       - name: Run cache-free test suite
         run: pytest tests/ -m "not needs_cache" -q --durations=20
 
-  # warehouse/ (dbt + DuckDB). Tier 1 only: the parser and loader tests on committed fixtures, and
-  # a check that the dbt project parses. It builds nothing: the data is not in the repository.
+  # warehouse/ (dbt + DuckDB). Tier 1: the parser and loader tests on committed fixtures, a check that
+  # the dbt project parses, and a build on an invented fund (warehouse/ci/README.md): the filed layer,
+  # the readings, the seeds and the row-role models with their tests and every unit test. The models
+  # that read the pipeline's data/output are not built: that data is not in the repository.
   warehouse:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -45,6 +47,10 @@ jobs:
         run: dbt parse --profiles-dir . --no-version-check
         env:
           DBT_SEND_ANONYMOUS_USAGE_STATS: "false"
+      # Same command as locally. Writes only under the work folder; sets DBT_SEND_ANONYMOUS_USAGE_STATS
+      # and passes --no-version-check itself.
+      - name: Fixture build (parse, load readings, dbt build and unit tests)
+        run: python ci/run_fixture_build.py --work "$RUNNER_TEMP/warehouse_ci"
 
   frontend-build:
     runs-on: ubuntu-latest

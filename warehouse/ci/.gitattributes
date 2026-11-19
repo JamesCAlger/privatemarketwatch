@@ -1,0 +1,3 @@
+# The fixture's bytes are hashed (the loader's wrapper drift check, the parser's input hashes): no line-ending
+# conversion on checkout, on any machine.
+fixture/** -text

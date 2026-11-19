@@ -1,0 +1,52 @@
+{
+  "cik": "0000000001",
+  "note": "Invented wrapper copy of the CI fixture fund (warehouse/ci/README.md), the counterpart of warehouse/wrappers/<cik>.json. It holds the production wrapper's declarations plus fund rules of each kind the loader and the row-role models read. Contexts named here are in ../raw/bdc_xbrl/1/000000000126000011.xml.",
+  "source_encodings": {
+    "filed_rate_reading": ["all_in"],
+    "legal_entity_members": ["legalentityaxis=FixtureJvMember -> Fixture JV LLC"],
+    "reporting_entity_suffixes": ["Fixture JV LLC"],
+    "cash_identifiers": ["Fixture Sweep Account"],
+    "rate_only_contexts": ["adopt_adjacent"],
+    "untagged_values": ["0000000001-26-000011 c-4 principal_amount 500"],
+    "relabelled_contexts": ["0000000001-26-000011 c-19 :: Mu Fund LP | LP interest :: Mu Fund LP | LP interest (relabelled)"]
+  },
+  "reading_rules": [
+    {
+      "target": "fair_value",
+      "action": "concept_is_fair_value",
+      "concept_namespace": "http://fixturefund.example.com/*",
+      "concept_local": "InvestmentOwnedAtFairValueNetOfFees",
+      "evidence": "Fixture: c-17 carries its fair value only in the fund's own concept."
+    },
+    {
+      "target": "term_fact",
+      "action": "concept_is_term_fact",
+      "concept_namespace": "http://fixturefund.example.com/*",
+      "concept_local": "InvestmentOwnedPercentOfShares",
+      "evidence": "Fixture: c-18 carries its only term fact in the fund's own concept."
+    },
+    {
+      "target": "role",
+      "action": "subtotal_on_fair_value",
+      "evidence": "Fixture: c-23 Theta Group ties to its two tranches on fair value, not on cost."
+    },
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": "nu equity holdings lp",
+      "label_examples_match": ["Nu Equity Holdings LP", "NU EQUITY HOLDINGS LP | Common equity"],
+      "label_examples_no_match": ["Nu Equity Holdings LP 2", "Total Nu Equity Holdings LP", "Mu Fund LP"],
+      "evidence": "Fixture: c-20, equity with no units tagged."
+    },
+    {
+      "target": "role",
+      "action": "position_without_term_fact",
+      "label_pattern": "xi corp",
+      "feature": "fair_value_zero",
+      "valid_from": "2026-01-01",
+      "label_examples_match": ["Xi Corp | Revolver"],
+      "label_examples_no_match": ["Xi Corporation"],
+      "evidence": "Fixture: c-21, a zero-value undrawn revolver."
+    }
+  ]
+}

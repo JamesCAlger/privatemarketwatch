@@ -168,6 +168,37 @@ def test_wrapper_reading_rules_load_end_to_end(tmp_path):
     assert got == [("wrapper:reading_rules", "fund_rule", "")]
 
 
+def test_command_line_reads_the_stores_and_folders_it_is_given(tmp_path, capsys):
+    # The CI fixture build (warehouse/ci) passes every input by option; nothing is read from the default paths.
+    wrappers, stores, production, _ = _copies(tmp_path, '{"a": 1}\n')
+    by_context = _csv(tmp_path, "by_context.csv", ["1,2026-03-31,0000000001-26-000001,Acme,cost,5,why,where,me,2026-11-01,c-2"])
+    scope = tmp_path / "scope.json"
+    scope.write_text(json.dumps({"findings_scope": {"ciks": ["0000000001"]}}), encoding="utf-8")
+    out = tmp_path / "out"
+    code = cli.main(["--out", str(out), "--scope-file", str(scope), "--wrappers", str(wrappers),
+                     "--production-wrappers", str(production), "--row-corrections", str(stores[0][1]),
+                     "--row-corrections-by-context", str(by_context)])
+    assert code == 0
+    manifest = json.loads((out / "_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["production_wrappers_changed"] == []
+    assert manifest["tables"]["wrapper_drift"]["rows"] == 1
+    assert by_context.as_posix() in manifest["inputs"] and stores[0][1].as_posix() in manifest["inputs"]
+    con = duckdb.connect()
+    got = con.execute(f"select store, context_id from read_parquet('{(out / 'correction.parquet').as_posix()}') order by 1").fetchall()
+    assert got == [("row_corrections", "c-1"), ("row_corrections_by_context", "c-2"), ("wrapper:untagged_values", "c-9")]
+    assert "production wrappers changed since the copy: none" in capsys.readouterr().out
+
+
+def test_command_line_missing_row_store_is_an_error_not_an_empty_table(tmp_path):
+    wrappers, stores, production, _ = _copies(tmp_path, '{"a": 1}\n')
+    scope = tmp_path / "scope.json"
+    scope.write_text(json.dumps({"findings_scope": {"ciks": ["0000000001"]}}), encoding="utf-8")
+    with pytest.raises(FileNotFoundError):
+        cli.main(["--out", str(tmp_path / "out"), "--scope-file", str(scope), "--wrappers", str(wrappers),
+                  "--production-wrappers", str(production), "--row-corrections", str(stores[0][1]),
+                  "--row-corrections-by-context", str(tmp_path / "missing.csv")])
+
+
 def _one_row(rows):
     assert len(rows) == 1
     return rows[0]

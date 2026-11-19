@@ -79,9 +79,14 @@ def main(argv=None):
     p.add_argument("--scope-file", default=str(SCOPE_FILE))
     p.add_argument("--wrappers", default=str(WRAPPERS_DIR))
     p.add_argument("--production-wrappers", default=str(PRODUCTION_WRAPPERS_DIR))
+    # The two row-correction stores. Defaults are production's files; the CI fixture build passes its own
+    # (warehouse/ci/run_fixture_build.py).
+    for name, path in ROW_STORES:
+        p.add_argument("--" + name.replace("_", "-"), dest=name, default=str(path))
     args = p.parse_args(argv)
+    row_store_paths = [(name, Path(getattr(args, name))) for name, _ in ROW_STORES]
     try:
-        tables, inputs = load(load_scope(args.scope_file), args.wrappers, ROW_STORES, args.production_wrappers)
+        tables, inputs = load(load_scope(args.scope_file), args.wrappers, row_store_paths, args.production_wrappers)
         manifest = store.write(args.out, tables, inputs)
     except LoadError as exc:
         print(f"ERROR: {exc}")

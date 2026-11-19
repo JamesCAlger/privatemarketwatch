@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Invented filing of an invented fund (cik 0000000001) for the CI fixture build (warehouse/ci/README.md).
+     One 10-Q at 2026-03-31. Each context is there to reach one row-role rule; the expected role is in the
+     comment above it. The inline document of the same name places every numeric fact. -->
+<xbrl
+  xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:ffx="http://fixturefund.example.com/20260331"
+  xmlns:dei="http://xbrl.sec.gov/dei/2025"
+  xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:us-gaap="http://fasb.org/us-gaap/2025"
+  xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <link:schemaRef xlink:href="ffx-20260331.xsd" xlink:type="simple"/>
+    <unit id="usd"><measure>iso4217:USD</measure></unit>
+    <unit id="pure"><measure>xbrli:pure</measure></unit>
+    <!-- duration for dei: no member, rule 1 not_schedule -->
+    <context id="c-1"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier></entity>
+        <period><startDate>2026-01-01</startDate><endDate>2026-03-31</endDate></period></context>
+    <!-- balance sheet instant: rule 1 not_schedule -->
+    <context id="c-2"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier></entity>
+        <period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position (principal and rate) -->
+    <context id="c-3"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Acme Corp | First lien term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position (maturity only) -->
+    <context id="c-4"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Beta LLC | Second lien loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 4 aggregate (total) -->
+    <context id="c-5"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Total Investments</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 6 aggregate: fair value and cost equal the sum of c-7 and c-8 -->
+    <context id="c-6"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Gamma Holdings</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <context id="c-7"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Gamma Holdings | Term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <context id="c-8"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Gamma Holdings | Revolver</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 2 comparative (prior period end) -->
+    <context id="c-9"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Acme Corp | First lien term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2025-12-31</instant></period></context>
+    <!-- rule 8 position, is_cash (cash axis, no identifier) -->
+    <context id="c-10"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:explicitMember dimension="us-gaap:CashAndCashEquivalentsAxis">ffx:OperatingAccountMember</xbrldi:explicitMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 5 aggregate (cash bucket) -->
+    <context id="c-11"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Cash and Cash Equivalents</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position, is_cash by the money-market pattern -->
+    <context id="c-12"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Example Treasury Money Market Fund</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position, is_cash by the wrapper's cash_identifiers -->
+    <context id="c-13"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Fixture Sweep Account</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 7 position, scope by the wrapper's legal_entity_members (not published) -->
+    <context id="c-14"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:explicitMember dimension="dei:LegalEntityAxis">ffx:FixtureJvMember</xbrldi:explicitMember>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Delta Inc | Term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 7 position, scope by the wrapper's reporting_entity_suffixes (not published) -->
+    <context id="c-15"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Epsilon Inc | Term loan | Fixture JV LLC</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 7 position, scope by the global subsidiary axis in seeds/role_pattern.csv (not published) -->
+    <context id="c-16"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:explicitMember dimension="us-gaap:InvestmentCompanyNonconsolidatedSubsidiaryAxis">ffx:FixtureSubsidiaryMember</xbrldi:explicitMember>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Iota LLC | Senior loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position, fair value only in the fund's own concept (fund rule concept_is_fair_value) -->
+    <context id="c-17"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Kappa Corp | Delayed draw term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position, only term fact in the fund's own concept (fund rule concept_is_term_fact) -->
+    <context id="c-18"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Lambda Partners LP | Membership interest</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- unresolved: no term fact and no fund rule releases it -->
+    <context id="c-19"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Mu Fund LP | LP interest</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position, no term fact, released by fund rule position_without_term_fact -->
+    <context id="c-20"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Nu Equity Holdings LP | Common equity</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 9 position, zero value and no term fact, released by fund rule position_without_term_fact (fair_value_zero) -->
+    <context id="c-21"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Xi Corp | Revolver</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 3 unresolved: two fair-value facts with different numbers -->
+    <context id="c-22"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Omicron LLC | Term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- rule 6 aggregate through the fund rule subtotal_on_fair_value: fair value ties to c-24 plus c-25, cost does not -->
+    <context id="c-23"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Theta Group</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <context id="c-24"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Theta Group | Tranche A</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <context id="c-25"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Theta Group | Tranche B</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- unresolved: the label reads as a total (rule 4) but the row carries a term fact (cross-check) -->
+    <context id="c-26"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Total Rho Corp | Term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+
+    <dei:DocumentType contextRef="c-1" id="d-1">10-Q</dei:DocumentType>
+    <dei:DocumentPeriodEndDate contextRef="c-1" id="d-2">2026-03-31</dei:DocumentPeriodEndDate>
+    <dei:AmendmentFlag contextRef="c-1" id="d-3">false</dei:AmendmentFlag>
+    <dei:EntityRegistrantName contextRef="c-1" id="d-4">Fixture Fund (invented)</dei:EntityRegistrantName>
+    <dei:EntityCentralIndexKey contextRef="c-1" id="d-5">0000000001</dei:EntityCentralIndexKey>
+
+    <us-gaap:Assets contextRef="c-2" unitRef="usd" decimals="0" id="f-1">10000</us-gaap:Assets>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-3" unitRef="usd" decimals="0" id="f-2">1000</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-3" unitRef="usd" decimals="0" id="f-3">990</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-3" unitRef="usd" decimals="0" id="f-4">1000</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <us-gaap:InvestmentInterestRate contextRef="c-3" unitRef="pure" decimals="4" id="f-5">0.0900</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-4" unitRef="usd" decimals="0" id="f-6">500</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-4" unitRef="usd" decimals="0" id="f-7">510</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentMaturityDate contextRef="c-4" id="t-1">2030-01-01</us-gaap:InvestmentMaturityDate>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-5" unitRef="usd" decimals="0" id="f-8">4000</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-6" unitRef="usd" decimals="0" id="f-9">300</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-6" unitRef="usd" decimals="0" id="f-10">300</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-7" unitRef="usd" decimals="0" id="f-11">200</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-7" unitRef="usd" decimals="0" id="f-12">200</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentInterestRate contextRef="c-7" unitRef="pure" decimals="4" id="f-13">0.0800</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-8" unitRef="usd" decimals="0" id="f-14">100</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-8" unitRef="usd" decimals="0" id="f-15">100</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentInterestRate contextRef="c-8" unitRef="pure" decimals="4" id="f-16">0.0800</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-9" unitRef="usd" decimals="0" id="f-17">950</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-10" unitRef="usd" decimals="0" id="f-18">50</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-11" unitRef="usd" decimals="0" id="f-19">80</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-12" unitRef="usd" decimals="0" id="f-20">30</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-13" unitRef="usd" decimals="0" id="f-21">10</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-14" unitRef="usd" decimals="0" id="f-22">400</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-14" unitRef="usd" decimals="0" id="f-23">400</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-15" unitRef="usd" decimals="0" id="f-24">60</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-15" unitRef="usd" decimals="0" id="f-25">60</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-16" unitRef="usd" decimals="0" id="f-26">70</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-16" unitRef="usd" decimals="0" id="f-27">70</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <ffx:InvestmentOwnedAtFairValueNetOfFees contextRef="c-17" unitRef="usd" decimals="0" id="f-28">-5</ffx:InvestmentOwnedAtFairValueNetOfFees>
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-17" unitRef="usd" decimals="0" id="f-29">500</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-18" unitRef="usd" decimals="0" id="f-30">90</us-gaap:InvestmentOwnedAtFairValue>
+    <ffx:InvestmentOwnedPercentOfShares contextRef="c-18" unitRef="pure" decimals="4" id="f-31">0.2500</ffx:InvestmentOwnedPercentOfShares>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-19" unitRef="usd" decimals="0" id="f-32">45</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-20" unitRef="usd" decimals="0" id="f-33">85</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-21" unitRef="usd" decimals="0" id="f-34">0</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-22" unitRef="usd" decimals="0" id="f-35">100</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-22" unitRef="usd" decimals="0" id="f-36">101</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-23" unitRef="usd" decimals="0" id="f-37">400</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-23" unitRef="usd" decimals="0" id="f-38">999</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-24" unitRef="usd" decimals="0" id="f-39">250</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-24" unitRef="usd" decimals="0" id="f-40">250</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentInterestRate contextRef="c-24" unitRef="pure" decimals="4" id="f-41">0.0700</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-25" unitRef="usd" decimals="0" id="f-42">150</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-25" unitRef="usd" decimals="0" id="f-43">150</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentInterestRate contextRef="c-25" unitRef="pure" decimals="4" id="f-44">0.0700</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-26" unitRef="usd" decimals="0" id="f-45">20</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-26" unitRef="usd" decimals="0" id="f-46">20</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+</xbrl>

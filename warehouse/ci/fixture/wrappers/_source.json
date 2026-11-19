@@ -1,0 +1,8 @@
+{
+ "copied_on": "2026-11-19",
+ "copied_from": "warehouse/ci/fixture/production_wrappers",
+ "note": "CI fixture counterpart of warehouse/wrappers/_source.json: the SHA-256 of the invented production wrapper the fixture copy stands beside. The bytes must not change on checkout: warehouse/ci/.gitattributes turns off line-ending conversion for the fixture.",
+ "funds": {
+  "0000000001": {"sha256": "ce6935d5b5e24ea7783f89ecfeed93a7cc3ec03229964922d6cc438812f219d4", "git_blob": "193417dd41f98b8e1944d2fd3ab74b8b3e90556d"}
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "cik": "0000000001",
+  "note": "Invented production wrapper of the CI fixture fund (warehouse/ci/README.md). Stands in for data/overrides/bdc_xbrl_wrappers so the loader's drift check has a file to hash. Its SHA-256 is in ../wrappers/_source.json; an edit here is drift and fails baseline_production_wrapper_changed.",
+  "source_encodings": {
+    "filed_rate_reading": ["all_in"],
+    "legal_entity_members": ["legalentityaxis=FixtureJvMember -> Fixture JV LLC"],
+    "reporting_entity_suffixes": ["Fixture JV LLC"],
+    "cash_identifiers": ["Fixture Sweep Account"],
+    "rate_only_contexts": ["adopt_adjacent"],
+    "untagged_values": ["0000000001-26-000011 c-4 principal_amount 500"]
+  }
+}

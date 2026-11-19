@@ -5,3 +5,9 @@ warehouse:
       type: duckdb
       path: target/warehouse.duckdb
       threads: 4
+    # The CI fixture build (warehouse/ci/run_fixture_build.py): its own database file in the run's work folder, set by
+    # the script. Never target/warehouse.duckdb.
+    ci:
+      type: duckdb
+      path: "{{ env_var('WAREHOUSE_CI_DUCKDB', 'target/ci_fixture.duckdb') }}"
+      threads: 4
