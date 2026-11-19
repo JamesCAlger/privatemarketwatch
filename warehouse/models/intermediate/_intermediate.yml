@@ -243,9 +243,10 @@ unit_tests:
       (100m) does not close the gap (300m) -> owner_review. A held row with fair value 0 is never tested by the tie ->
       owner_review. A production-only row that is not_schedule with no correction is NOT owner_review ->
       not_yet_explained. New-only cash row in a filing production has -> convention; a new-only row that is not cash
-      -> not_yet_explained (not convention); a new-only row named by a loaded relabel correction -> needs_correction
-      (slice 2 Task 5); a new-only cash row in a quarter production has no rows for is left out
-      of the comparison (no row, owner 2026-11-19). A JV-schedule held row -> owner_review (no filed total).
+      -> not_yet_explained (not convention). A loaded relabel is not a cause (Task 5 fix round 1): the relabelled
+      production-only rows h1 and z1 still reach the total-tie rules, and the relabelled new-only row r1 is
+      not_yet_explained with detail relabel_loaded. A new-only cash row in a quarter production has no rows for is
+      left out of the comparison (no row, owner 2026-11-19). A JV-schedule held row -> owner_review (no filed total).
     model: cmp_row_set
     given:
       - input: ref('stg_holdings')
@@ -294,21 +295,23 @@ unit_tests:
         rows:
           - {accession: A9, context_id: q9, kind: value, field: fair_value}
           - {accession: A1, context_id: r1, kind: relabel, field: identifier}
+          - {accession: A1, context_id: h1, kind: relabel, field: identifier}
+          - {accession: A1, context_id: z1, kind: relabel, field: identifier}
       - input: ref('stg_reading_not_loaded')
         rows:
           - {cik: "9", wrapper_key: rate_only_contexts}
     expect:
       rows:
-        - {basis: published, context_id: p1, side: both, cause: null}
-        - {basis: published, context_id: h1, side: production_only, cause: new_wrong}
-        - {basis: published, context_id: z1, side: production_only, cause: owner_review}
-        - {basis: published, context_id: x1, side: production_only, cause: not_yet_explained}
-        - {basis: unpublished, context_id: j1, side: production_only, cause: owner_review}
-        - {basis: published, context_id: c1, side: new_only, cause: convention}
-        - {basis: published, context_id: n1, side: new_only, cause: not_yet_explained}
-        - {basis: published, context_id: r1, side: new_only, cause: needs_correction}
-        - {basis: published, context_id: p2, side: both, cause: null}
-        - {basis: published, context_id: h2, side: production_only, cause: owner_review}
+        - {basis: published, context_id: p1, side: both, cause: null, cause_detail: null}
+        - {basis: published, context_id: h1, side: production_only, cause: new_wrong, cause_detail: held_unresolved_ties_filed_total}
+        - {basis: published, context_id: z1, side: production_only, cause: owner_review, cause_detail: held_unresolved_d5}
+        - {basis: published, context_id: x1, side: production_only, cause: not_yet_explained, cause_detail: none}
+        - {basis: unpublished, context_id: j1, side: production_only, cause: owner_review, cause_detail: held_unresolved_d5}
+        - {basis: published, context_id: c1, side: new_only, cause: convention, cause_detail: cash_published_d7}
+        - {basis: published, context_id: n1, side: new_only, cause: not_yet_explained, cause_detail: none}
+        - {basis: published, context_id: r1, side: new_only, cause: not_yet_explained, cause_detail: relabel_loaded}
+        - {basis: published, context_id: p2, side: both, cause: null, cause_detail: null}
+        - {basis: published, context_id: h2, side: production_only, cause: owner_review, cause_detail: held_unresolved_d5}
 
   - name: cmp_excluded_quarter_lists_quarters_production_lacks
     description: >

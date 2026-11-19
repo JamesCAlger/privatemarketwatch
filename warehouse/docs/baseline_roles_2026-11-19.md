@@ -80,10 +80,10 @@ ceiling (`baseline_cmp_<basis>_<cause>`).
 |---|---:|---:|---|
 | new_wrong | 54 | 0 | held_unresolved_ties_filed_total |
 | owner_review | 45 | 34 | held_unresolved_d5 |
-| needs_correction | 53 | 0 | correction_supplies_value_or_term 52, relabel_loaded 1 |
+| needs_correction | 52 | 0 | correction_supplies_value_or_term |
 | needs_store_not_loaded | 12 | 0 | production_row_added 8, rate_only_context_pair 4 |
 | convention | 31 | 30 | cash_published_d7 |
-| not_yet_explained | 1 | 0 | none |
+| not_yet_explained | 2 | 0 | none 1, relabel_loaded 1 (a relabel is on file; not a cause) |
 | old_wrong | 0 | 0 | no rule |
 
 `old_wrong` has no rule: no group measured here shows production reading a filing wrongly. Its
@@ -110,14 +110,11 @@ were opened (see the owner-review section).
 row `unresolved` under D5; not tied by the rule above; no rule change proposed here. Classified row
 by row in the owner-review section.
 
-**needs_correction (53).** Corrections are not applied in this slice.
+**needs_correction (52).** Corrections are not applied in this slice.
 - correction_supplies_value_or_term (52): production only and a loaded context-keyed value
   correction names the context with fair value or a term field. Apollo 44: `wrapper:untagged_values`
   fair value 0, printed as a dash, no fact. Apollo 6 and Ares 2: untagged principal and cost. Opened
   4, 4 and 2 printed rows: the number is printed and not tagged.
-- relabel_loaded (1, Task 5): a one-sided row named by a loaded `relabelled_contexts` entry. Blue Owl
-  c-1013, below. The entry was added to the new pipeline's copy of the Blue Owl wrapper. It explains
-  the wrong label. It does not explain why production leaves the row out; that was not checked.
 
 **needs_store_not_loaded (12).**
 - production_row_added (8): production's `corrected_fields` has `_row:added`. Ares 2025-03-31 and
@@ -146,12 +143,14 @@ difference. Measured on production's side: it drops these BCRED rows (`pipeline/
 treats money-market names as non-private-market rows) and publishes Apollo's money-market rows (8,
 asset category CASH, on both sides here). Neither side is called right by this.
 
-**not_yet_explained (1).**
+**not_yet_explained (2).**
 - BCRED 2025-06-30 c-1259, "Box Co-Invest Blocker, LLC - (BP Alpha Holdings, LP) - Class C Preferred
   Units", fair value 0, cost 390,000. Production has the line in every other quarter from 2023-09-30.
   Production code not read for it.
 
-**Blue Owl c-1013 (needs_correction, relabel_loaded, since Task 5; was not_yet_explained).**
+- Blue Owl c-1013, below (detail `relabel_loaded` since Task 5).
+
+**Blue Owl c-1013 (not_yet_explained, detail relabel_loaded).**
 - Blue Owl 2026-03-31, 0001812554-26-000027 c-1013, "LSI Financing LLC, Common Equity", fair value 0
   (filer commitment concept), commitment 171,438,000. Checked:
   1. Corrections: no `stg_correction` row names c-1013 or LSI in that filing. The 201
@@ -176,7 +175,9 @@ asset category CASH, on both sides here). Neither side is called right by this.
      contractually required 44,062,000), printed row 1452 as above, sibling c-1012 on row 1451 ("LSI
      Financing LLC | Specialty finance equity investment", the label form used), and that no stored
      correction named c-1013. Production's wrapper is unchanged, so production still has 201.
-     Not applied in this slice; the row's cause is now `needs_correction|relabel_loaded`.
+     Not applied in this slice. The relabel fixes the name the row carries; why production omits the
+     row is not known. So the row stays `not_yet_explained`, with detail `relabel_loaded` to show the
+     relabel is on file (Task 5 fix round 1; an earlier version made the relabel a cause).
 
 ## Blue Owl commitment lines
 
@@ -251,6 +252,19 @@ sit in the copy's top-level `reading_rules` list (origin `wrapper:reading_rules`
   cost cannot be compared (1.61bn). None has a row in production's holdings, none carries a rate,
   spread, PIK rate, maturity, principal or shares, and Apollo's published total per quarter is the
   same before and after (`scripts/slice2/q_t5_apollo_rule_effect.sql`, `q_t5_apollo_rule_summary.sql`).
+- For the owner: rollups the rule removes whose own cost differs from the summed cost of the rows
+  directly beneath by more than 10 percent of that sum (`scripts/slice2/q_apollo_rule_cost_gap.sql`;
+  $m; fair value ties in every case). A large cost gap with an exact fair-value tie may mean a
+  position beneath the rollup that carries cost and no fair value and is not tagged. Fair-value
+  totals are unaffected either way. Listed for review; the rule is not changed. The 20 rollups whose
+  cost cannot be compared have no gap to measure and are not in this list.
+
+| Date | Rollup label | Rollup cost | Cost beneath | Rollup FV | FV beneath | Rows beneath |
+|---|---|---:|---:|---:|---:|---:|
+| 2024-12-31 | Chemicals Heubach | 11.002 | 1.457 | 0.828 | 0.828 | 1 |
+| 2024-12-31 | Media Material+ | 7.951 | 6.375 | 5.642 | 5.642 | 1 |
+| 2025-03-31 | Chemicals Heubach | 9.816 | 0.385 | 0.243 | 0.243 | 1 |
+| 2025-03-31 | Media Material+ Material Holdings, LLC | 8.109 | 6.533 | 4.051 | 4.051 | 1 |
 
 ## For the owner's review (decision D5)
 

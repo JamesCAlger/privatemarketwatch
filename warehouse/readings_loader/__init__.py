@@ -1,8 +1,9 @@
 """Readings loader: wrapper declarations and row-level fixes flattened into tables dbt reads.
 
 See warehouse/docs/intermediate_spine.md (section 5) and 2026-11-19-slice1-readings-loader-plan.md.
-New-style fund rules (`reading_rules`, Task 5 of slice 2) come from a wrapper's top-level `reading_rules` list or,
-while the wrapper schema forbids that key, from warehouse/fund_rules/<cik>.json; both go through one code path.
+The wrappers read are the new pipeline's own copies, warehouse/wrappers/<cik>.json (owner decision 2026-11-19);
+production's wrappers are only hashed, for the drift table. New-style fund rules (Task 5 of slice 2) are the
+copy's top-level `reading_rules` list.
 The loader copies what the stores say. It does not decide or change any value.
 """
 import hashlib

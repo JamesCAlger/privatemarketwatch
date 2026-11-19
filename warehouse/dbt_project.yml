@@ -68,12 +68,11 @@ vars:
     cmp_published_new_wrong: 54
     cmp_published_convention: 31
     cmp_published_needs_store_not_loaded: 12
-    # 53: +1, Blue Owl c-1013, moved from not_yet_explained by the relabel entry added to the
-    # wrapper copy in slice 2 Task 5 (cause detail relabel_loaded).
-    cmp_published_needs_correction: 53
+    cmp_published_needs_correction: 52
     cmp_published_owner_review: 45
-    # 1: BCRED Box Co-Invest (0001803498-25-000062 c-1259). Blue Owl c-1013 left in Task 5 (relabel loaded).
-    cmp_published_not_yet_explained: 1
+    # 2: BCRED Box Co-Invest (0001803498-25-000062 c-1259) and Blue Owl LSI Financing (0001812554-26-000027 c-1013;
+    # detail relabel_loaded since Task 5: a relabel is on file in the wrapper copy, why production omits the row is not known).
+    cmp_published_not_yet_explained: 2
     cmp_unpublished_old_wrong: 0
     cmp_unpublished_new_wrong: 0
     cmp_unpublished_convention: 30

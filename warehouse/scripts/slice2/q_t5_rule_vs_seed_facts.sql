@@ -1,3 +1,5 @@
+-- ONE-OFF RECORD: needs the pre-move database (the table of the deleted seed filer_concept, left in the local
+-- warehouse.duckdb by dbt); fails on a fresh database. Kept as the record of the Task 5 measurement below.
 -- Task 5, review finding I1: the facts the fund concept rules (one per fund and reading, namespace glob) match,
 -- against the facts the 48 rows of the deleted seed filer_concept.csv matched (40 at fix round 3 plus 8 bo_commit_term
 -- rows in 3b; exact namespaces). The seed is read from the table filer_concept that stays in the local
