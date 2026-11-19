@@ -300,3 +300,53 @@ Task 4.
 the comparison counts are unchanged by the move, the Apollo rule's effect is listed row by row, the
 build ends `ERROR=0`, and the work is committed. Wrapper files are committed in the same commit as
 the loader change, staged by path.
+
+---
+
+### Task 6: Fund rules for positions with no term fact
+
+Added 2026-11-19 after owner decision D15 ("treat them as recommended"). Run after Task 5 and
+before Task 4.
+
+**Files:**
+- Modify: wrappers under `data/overrides/bdc_xbrl_wrappers/` (the `reading_rules` section of
+  Task 5 only; same additive-edit discipline)
+- Modify: `warehouse/seeds/reading_action.csv`, role models under `warehouse/models/intermediate/`
+- Modify: `warehouse/dbt_project.yml` (ceilings), `warehouse/docs/baseline_roles_2026-11-19.md`,
+  `warehouse/docs/owner_review_rows_2026-11-19.csv`
+
+**Interfaces:**
+- Consumes: the `reading_rules` wrapper section and loader path of Task 5; the four classes in
+  `owner_review_rows_2026-11-19.csv` (133 rows): the fund's own interest in a JV or fund (BCRED 33,
+  HPS 11); an equity or fund interest with no units tagged (Ares 10, BCRED 11, Blue Owl 1); an
+  undrawn revolver with zero value (Ares 34); an unfunded commitment line (HPS 32 in its JV
+  schedule, Blue Owl 1).
+- Produces: fund rules that let these rows pass the term-fact cross-check, each row carrying the
+  `rule_id` that released it.
+
+**Requirements:**
+- One rule per class per fund, in that fund's wrapper. A rule selects on row features (a label
+  pattern, an axis member, a concept the fund uses, a value condition such as zero fair value plus
+  a label form). Never a context id or an accession. If a fund's concept is what marks the class
+  (HPS tags its commitment lines with a commitment concept), use the term-fact action of Task 5.
+- No change to the general cross-check. A fund without a rule behaves as before.
+- Guard, measured and reported per rule: every row the rule releases is a row production
+  publishes on the same basis; the rule releases no row that production leaves out. The 610 or so
+  unresolved rows production also leaves out are the false-positive set: test against them. If a
+  class cannot be selected without also releasing rows production leaves out, write the narrowest
+  rule that releases none of those, leave the remainder as `owner_review`, and list them.
+- The two zero-value classes (undrawn revolvers, unfunded commitments) are included to match
+  production (D15). The baseline document states that a zero-value row is not tested by any tie to
+  a filed total, and that whether such lines belong is the same after-reproduction question as
+  Blue Owl's commitment lines (D11).
+- After the rules: the new layer's published total per fund and quarter against the filed total,
+  before and after, for BCRED and HPS (the classes that move totals).
+- Blue Owl context c-1013 (accession 0001812554-26-000027): its label names the wrong company.
+  Add one entry to Blue Owl's existing `relabelled_contexts` list is NOT allowed in this task
+  (production acts on that list). Record it in the baseline document as a correction to make
+  through the fund-clearing workflow, with the printed row as evidence.
+- Update the cause counts, the ceilings (each set to its measured count), the owner-review section
+  and the CSV (add a column for the rule that now releases each row, empty where none).
+
+**Done when:** each class has its rules in the wrappers, the guard holds for every rule, the
+comparison is re-measured and recorded, the build ends `ERROR=0`, and the work is committed.
