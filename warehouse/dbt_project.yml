@@ -95,6 +95,10 @@ vars:
     # Slice 2 Task 6 (D15): rows a fund rule position_without_term_fact made positions that production has no row for
     # on the same basis. The rules were written to release none; any such row fails the build.
     fund_rule_release_not_in_production: 0
+    # Task 6 fix round 1: positions at rule 7 or 9 whose only term fact comes from a fund concept rule, with no
+    # production row on the same basis in the compared quarters (macro concept_release_unmatched). Measured 1: Blue Owl
+    # 0001812554-26-000027 c-1013 (LSI Financing, the cmp not_yet_explained row; term fact from its fees-concept rule).
+    concept_rule_release_not_in_production: 1
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   cmp_excluded_quarters_pinned:

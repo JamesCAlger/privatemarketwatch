@@ -586,6 +586,8 @@
       "target": "role",
       "action": "position_without_term_fact",
       "label_pattern": "insight cp \\(blocker\\) holdings, l\\.p\\. \\(dba civicplus, llc\\)",
+      "valid_from": "2023-03-31",
+      "valid_to": "2023-03-31",
       "label_examples_match": [
         "Insight CP (Blocker) Holdings, L.P. (dba CivicPlus, LLC)"
       ],

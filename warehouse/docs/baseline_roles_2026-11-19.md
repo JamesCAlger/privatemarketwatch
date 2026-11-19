@@ -251,7 +251,7 @@ sit in the copy's top-level `reading_rules` list (origin `wrapper:reading_rules`
 | Ares | position_without_term_fact | label `.+, (membership interest\|member interest\|equity interests\|limited partnership interests?\|class a (preferred )?units\|warrant to purchase .+)` | equity line with no units tagged is a position | D15 |
 | BCRED | position_without_term_fact | label `bcred (emerald\|verdelite) jv( lp - lp interest)?\|specialty lending company llc - llc interest` | the fund's own JV and fund interests are positions | D15 |
 | BCRED | position_without_term_fact | label `.+ - (class a common units\|series a preferred units)\|pigments lp int` | co-invest and LP units with none tagged are positions | D15 |
-| Blue Owl | position_without_term_fact | label `insight cp \(blocker\) holdings, l\.p\. \(dba civicplus, llc\)` | one blocker LP interest is a position | D15 |
+| Blue Owl | position_without_term_fact | label `insight cp \(blocker\) holdings, l\.p\. \(dba civicplus, llc\)`, valid 2023-03-31 only | one blocker LP interest is a position | D15; dated by controller ruling (fix round 1) |
 | Blue Owl | concept_is_term_fact | InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount, `http://fasb.org/us-gaap/*` | commitment amount is the term fact | D15 with D11 |
 | HPS | position_without_term_fact | label `ultra iii, llc( - llc interest)?` | the fund's own JV interest is a position | D15 |
 | HPS | concept_is_term_fact | QualifiedAffordableHousingProjectInvestmentsCommitment, `http://fasb.org/us-gaap/*` | commitment amount in the JV schedule is the term fact | D15 with D11 |
@@ -295,15 +295,44 @@ has no row for (397 it leaves out, 65 in the excluded quarters):
   that rules 1 to 3 had already decided (Blue Owl 853, HPS 31: comparative or not_schedule); their
   roles did not change. The label rules also match 2,180 contexts that already carry a term fact
   and are positions; nothing changes on them.
+- `tests/baseline_concept_rule_release_not_in_production.sql` (Task 6 fix round 1; macro
+  `concept_release_unmatched`, fixture `tests/concept_release_unmatched_fixture.sql`) covers releases
+  through concept rules: a position at rule 7 or 9, not cash, whose only term fact comes from a fund
+  concept rule must have a production row on the same basis, in the compared quarters. Of 2,575 such
+  rows today, 2,247 are in compared quarters and checked; 328 are in the excluded quarters (`scripts/slice2/q_t6f1_concept_release_scope.sql`): Ares ownership-percent
+  concept 272 (258 compared, all in production; 14 in the excluded quarter), Blue Owl fees concept
+  2,270 (1,955 compared and in production, 314 in the excluded quarter, 1 not in production), Blue
+  Owl us-gaap commitment concept 1 (in production), HPS commitment concept 32 (in production, JV
+  schedule). The one row production lacks is c-1013 (LSI Financing, `not_yet_explained`); ceiling 1.
 - The Blue Owl label rule names one position in full: no feature of the row separates it from the
-  issuer-level lines of the same fund that production leaves out. It is as narrow as a correction.
+  issuer-level lines of the same fund that production leaves out. Controller ruling (fix round 1): it
+  stays a rule but is bounded to the one quarter it is needed, `valid_from` = `valid_to` = 2023-03-31
+  (the report date of 0001812554-23-000014, the only filing where the line lacks a term fact). It
+  matched 4 other contexts in other quarters, all positions with term facts and unaffected; the
+  dates stop it firing anywhere else. Listed under corrections to make below.
 
-**Zero-value rows.** The Ares undrawn revolvers (34, fair value 0), six Ares and one BCRED equity
-lines at fair value 0, and the HPS and Blue Owl commitment lines (fair value 0 or the small negative
-or positive value of an undrawn line, in a JV schedule for HPS) are not tested by any tie to a filed
-total: a tie of sums cannot see a zero row, and the HPS JV schedule has no filed total here. They
-rest only on "production publishes them". Whether such lines belong in the position set is the same
-after-reproduction question as Blue Owl's commitment lines (D11).
+**Corrections to make (slice 5).** A rule that selects a single row is a correction in disguise. It
+moves to the corrections list when corrections are applied:
+- Blue Owl 0001812554-23-000014 i1ea4da3619cb477ca57e60c8b01afc11_I20230331, "Insight CP (Blocker)
+  Holdings, L.P. (dba CivicPlus, LLC)", fair value 987,000: today released by the dated
+  `position_without_term_fact` rule in `warehouse/wrappers/0001812554.json`.
+- Blue Owl c-1013 relabel (section above): a correction already on file, not yet applied.
+
+**Zero-value and commitment rows.** The Ares undrawn revolvers (34, fair value 0) and six Ares and
+one BCRED equity lines at fair value 0 are not tested by any tie to a filed total: a tie of sums
+cannot see a zero row. The commitment lines are not all zero. Measured on the 32 HPS lines
+(`scripts/slice2/q_t6f1_hps_commitment_fv.sql`, filed layer only): 13 positive, 2 zero, 17
+negative; range -1,871,000 to 500,000. The positive ones sit on issuer-only labels and repeat across
+quarters (Brandt Information Services 500,000 at 2025-03-31 and 2025-06-30; Compsych Investments
+433,000 in five quarters 2024-12-31 to 2025-12-31). On the same context the commitment concept
+carries 50,000,000 and 43,333,000: the fair value is about 1 pct of the commitment in those cases (FH BMX Buyer 2024-12-31 too:
+346,000 against 34,600,000), so it
+is not the commitment amount itself; what it is was not established. All 32 are in HPS's JV schedule
+(unpublished), so the headline total is unaffected, and the JV schedule has no filed total here.
+Blue Owl's commitment line c-1230 is 0. These rows rest only on "production publishes them".
+Whether zero-value and commitment lines belong in the position set, and what the HPS JV commitment
+lines' fair value means, is the same after-reproduction question as Blue Owl's commitment lines
+(D11).
 
 - One rule per fund and reading, with a namespace glob for the filer's own domain (no wildcard in
   the host; ruling 12: never the local name alone). It matches exactly the facts the 48 seed rows
