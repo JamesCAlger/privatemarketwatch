@@ -1,0 +1,120 @@
+-- Decides the role of every context of every parsed filing of the five funds (spec intermediate_spine.md 6.2): rules 0
+-- to 9 in order, the first that fires decides, then the cross-check.
+--
+--   0-3  int_role_structure (superseded, not_schedule, comparative; unresolved where fair-value facts disagree)
+--   4-5  int_role_text      (label reads total, net assets, an affiliation heading, or the cash bucket) -> aggregate
+--   6    int_role_subtotal  (label starts other rows' labels and its fair value, and cost, equal their sum) -> aggregate
+--   7    int_role_scope     (a JV or entity member or label from the rule table) -> position, scope = that entity
+--   8    the context's only member is on the cash and cash equivalents axis -> position, is_cash
+--   9    anything left -> position
+-- Cross-check (spec 6.2): a position should carry at least one term fact (principal, shares, rate, spread, PIK rate,
+-- maturity; a nil fact counts, see int_context_feature). Where it disagrees with rules 4 to 6 the role is unresolved:
+-- a row rules 4 to 6 call an aggregate that carries a term fact, or a row that reaches rule 7 or 9 without one. A cash
+-- row (is_cash) is exempt: cash carries no loan or share terms (D7). Two different scopes on one row are unresolved.
+-- is_published is false for a JV's own schedule rows (scope other than 'fund'), matching production's published basis.
+with base as (
+    select
+        s.accession
+        , s.context_id
+        , s.cik
+        , s.report_date
+        , s.role as structure_role
+        , s.role_rule as structure_rule
+        , s.reason as structure_reason
+        , s.is_cash_axis
+        , cf.has_term_fact
+        , t.text_rule
+        , t.pattern_id
+        , t.cash_pattern_id
+        , st.is_subtotal
+        , st.child_count
+        , sc.scope_count
+        , sc.scope
+        , sc.scopes
+        , sc.scope_rule_id
+        , sc.scope_how
+        , sc.cash_rule_id
+    from {{ ref('int_role_structure') }} s
+    join {{ ref('int_context_feature') }} cf on cf.accession = s.accession and cf.context_id = s.context_id
+    left join {{ ref('int_role_text') }} t on t.accession = s.accession and t.context_id = s.context_id
+    left join {{ ref('int_role_subtotal') }} st on st.accession = s.accession and st.context_id = s.context_id
+    left join {{ ref('int_role_scope') }} sc on sc.accession = s.accession and sc.context_id = s.context_id
+)
+
+, ruled as (
+    select
+        *
+        , case
+            when structure_role is not null then structure_rule
+            when text_rule is not null then text_rule
+            when coalesce(is_subtotal, false) then 6
+            when scope_count > 0 then 7
+            when is_cash_axis then 8
+            else 9
+          end as role_rule
+        , structure_role is null and (is_cash_axis or cash_rule_id is not null or cash_pattern_id is not null) as is_cash_row
+    from base
+)
+
+, decided as (
+select
+    accession
+    , context_id
+    , cik
+    , report_date
+    , case
+        when role_rule <= 3 then structure_role
+        when role_rule in (4, 5, 6) and has_term_fact then 'unresolved'
+        when role_rule in (4, 5, 6) then 'aggregate'
+        when role_rule = 7 and scope_count > 1 then 'unresolved'
+        when role_rule in (7, 9) and not has_term_fact and not is_cash_row then 'unresolved'
+        else 'position'
+      end as role
+    , role_rule
+    , case
+        when role_rule in (4, 5) then pattern_id
+        when role_rule = 7 then scope_rule_id
+        when role_rule in (8, 9) then cash_rule_id
+      end as rule_id
+    , case
+        when role_rule <= 3 then structure_reason
+        when role_rule in (4, 5) and has_term_fact then 'label pattern ' || pattern_id || ' reads as an aggregate but the row carries a term fact'
+        when role_rule in (4, 5) then 'label pattern ' || pattern_id
+        when role_rule = 6 and has_term_fact then 'sum of ' || child_count || ' rows below it, but the row carries a term fact'
+        when role_rule = 6 then 'fair value (and cost) equal the sum of ' || child_count || ' rows below it'
+        when role_rule = 7 and scope_count > 1 then 'two scopes: ' || scopes
+        when role_rule = 7 and not has_term_fact and not is_cash_row then 'scope ' || scope || ' by ' || scope_how || ', but no term fact'
+        when role_rule = 7 then 'scope ' || scope || ' by ' || scope_how
+        when role_rule = 8 then 'fair value on the cash and cash equivalents axis alone'
+        when not has_term_fact and not is_cash_row then 'no rule removes it, but no term fact'
+        when cash_rule_id is not null then 'position; cash identifier from the rule table'
+        when cash_pattern_id is not null then 'position; label names a money-market fund (' || cash_pattern_id || ')'
+        else 'position'
+      end as reason
+    , case when role_rule = 7 and scope_count = 1 then scope when role_rule = 7 then scopes else 'fund' end as scope
+    , coalesce(is_cash_row, false) as is_cash
+    , case
+        when role_rule <= 3 then null
+        when role_rule in (4, 5, 6) then not has_term_fact
+        when role_rule = 7 and scope_count > 1 then null
+        else has_term_fact or is_cash_row
+      end as cross_check_agrees
+    , cash_rule_id
+from ruled
+)
+
+select
+    accession
+    , context_id
+    , cik
+    , report_date
+    , role
+    , role_rule
+    , rule_id
+    , reason
+    , scope
+    , is_cash
+    , role = 'position' and scope = 'fund' as is_published
+    , cross_check_agrees
+    , cash_rule_id
+from decided

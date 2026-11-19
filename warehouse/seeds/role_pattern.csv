@@ -1,0 +1,6 @@
+pattern_id,rule_number,pattern,role,note
+r4_total,4,^(sub-?\s*)?total\b,aggregate,"A segment that starts with the word total or subtotal. From the pilot (census_published.v2 LABEL_SEGMENT)."
+r4_net_assets,4,^net assets$,aggregate,"A segment that is exactly net assets. From the pilot (LABEL_SEGMENT)."
+r4_affiliation_heading,4,"^(non-?)?controlled[\s,/-]*(non-?)?affiliated investments$",aggregate,"A segment that is exactly an affiliation heading (controlled / non-controlled, affiliated / non-affiliated investments). From the pilot (CATEGORY_HEADING). A qualifier such as affiliated issuer does not match."
+r5_cash_bucket,5,"(^|,\s*)(other\s+)?cash and cash equivalents\b",aggregate,"A segment that starts with cash and cash equivalents, at its start or after a comma. Pilot CASH_BUCKET matched the segment start only; the comma form is added for labels that put an entity name first."
+r5_money_market,5,money market,position,"Exception to r5_cash_bucket: a label naming a money-market fund is a cash position, not the cash bucket. From the pilot (r4_generic_cash_bucket). A row matching it is also marked is_cash (spec D7)."

@@ -55,6 +55,7 @@ with filing as (
         , count(*) filter (where concept_local = 'InvestmentOwnedAtCost' and is_us_gaap) as cost_fact_count
         , count(distinct value_numeric) filter (where concept_local = 'InvestmentOwnedAtCost' and is_us_gaap) as cost_distinct
         , min(value_numeric) filter (where concept_local = 'InvestmentOwnedAtCost' and is_us_gaap) as cost_any
+        -- has_* flags: a nil fact counts as present (the filer tagged the term on the row); row roles rely on this.
         , bool_or(concept_local = 'InvestmentOwnedBalancePrincipalAmount' and is_fasb) as has_principal
         , bool_or(concept_local = 'InvestmentOwnedBalanceShares' and is_fasb) as has_shares
         , bool_or(concept_local in ('InvestmentInterestRate', 'InvestmentInterestRatePaidInCash') and is_fasb) as has_rate

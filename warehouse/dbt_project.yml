@@ -31,6 +31,11 @@ vars:
   # position facts of the fullest candidate for the same fund and date. A placeholder from the pilot: every
   # amendment seen so far was empty or at least 98 pct full (spec intermediate_spine.md 6.1).
   filing_fullness_min: 90
+  # Row roles (int_role_scope), the detached_schedule filer rule: position contexts of one schedule are numbered
+  # contiguously; a second schedule in the notes starts after a jump of at least this many context numbers. Ported
+  # from pipeline/source_encodings.py DETACHED_MIN_CONTEXT_GAP (HPS: largest gap inside the main schedule 4, gap to
+  # the JV schedule 1,353 to 2,761 across the parsed filings).
+  detached_min_context_gap: 200
   # Baseline ceilings. Each baseline test warns while its count is above zero and FAILS the build if
   # the count rises above the ceiling. A count may fall freely. Raising a ceiling is a deliberate edit.
   baseline_max:
@@ -54,6 +59,7 @@ vars:
     int_filing_accession_differs: 0
     int_filing_production_only: 0
     int_filing_new_only: 3
+    int_source_row_unresolved: 974
 
 models:
   warehouse:

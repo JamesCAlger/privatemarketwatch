@@ -83,3 +83,203 @@ models:
                   - partial_amendment_needs_review
                   - partial_original_needs_review
                   - two_full_amendments_order_unknown
+
+  - name: int_role_structure
+    description: >
+      Rules 0 to 3 of the row roles for every context of every parsed filing of the five funds (superseded,
+      not_schedule, comparative, unresolved where fair-value facts carry no single number); role null when the
+      context goes on to rules 4 to 9.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+
+  - name: int_role_text
+    description: Rules 4 and 5 (label patterns from seeds/role_pattern.csv) for the contexts rules 0 to 3 left open.
+    columns:
+      - name: text_rule
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [4, 5]
+                quote: false
+      - name: pattern_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('role_pattern')
+                field: pattern_id
+
+  - name: int_role_scope
+    description: Rule 7 scope (fund, or a JV or entity) and the filer cash identifiers, for the contexts rules 0 to 3 left open.
+    columns:
+      - name: scope_rule_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_reading_rule')
+                field: rule_id
+
+  - name: int_role_subtotal
+    description: Rule 6 (subtotal by label prefix and sums) for every open context that has direct children.
+    columns:
+      - name: is_subtotal
+        data_tests:
+          - not_null
+
+  - name: int_source_row
+    description: >
+      One row per context of every parsed filing of the five funds with its role, the numbered rule that decided it
+      (spec intermediate_spine.md 6.2), the rule-table or seed row used, a reason, the scope, is_cash, is_published
+      and the cross-check. Grain is tested in tests/int_source_row_key_unique.sql.
+    columns:
+      - name: cik
+        data_tests:
+          - not_null
+      - name: role
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['position', 'aggregate', 'comparative', 'superseded', 'not_schedule', 'unresolved']
+      - name: role_rule
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                quote: false
+      - name: reason
+        data_tests:
+          - not_null
+      - name: scope
+        data_tests:
+          - not_null
+      - name: is_cash
+        data_tests:
+          - not_null
+      - name: is_published
+        data_tests:
+          - not_null
+
+unit_tests:
+  - name: int_role_subtotal_levels_guard_null_and_scope
+    description: >
+      Hand-made rows. Two levels (industry over issuers over loans); a loan carrying a rate is never a parent, so
+      loan 2 still counts under its issuer; a null cost is never read as zero (the industry fails its cost test);
+      a zero fair value or a row with a maturity is never a parent; a mismatch is a near miss; children are
+      matched within one scope only; a segmented parent must end on a whole segment.
+    model: int_role_subtotal
+    given:
+      - input: ref('int_role_text')
+        rows:
+          - {accession: A, context_id: c1, text_rule: null}
+          - {accession: A, context_id: c2, text_rule: null}
+          - {accession: A, context_id: c3, text_rule: null}
+          - {accession: A, context_id: c4, text_rule: null}
+          - {accession: A, context_id: c5, text_rule: null}
+          - {accession: A, context_id: c6, text_rule: null}
+          - {accession: A, context_id: c7, text_rule: null}
+          - {accession: A, context_id: c8, text_rule: null}
+          - {accession: A, context_id: c9, text_rule: null}
+          - {accession: A, context_id: c10, text_rule: null}
+          - {accession: A, context_id: c11, text_rule: null}
+          - {accession: A, context_id: c12, text_rule: null}
+          - {accession: A, context_id: c13, text_rule: null}
+          - {accession: A, context_id: c14, text_rule: null}
+          - {accession: A, context_id: c15, text_rule: null}
+          - {accession: A, context_id: c16, text_rule: null}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: c1, identifier_label: "Ind", fair_value: 300, cost: 290, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c2, identifier_label: "Ind Iss1", fair_value: 100, cost: 95, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c3, identifier_label: "Ind Iss1 Loan", fair_value: 60, cost: 55, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c4, identifier_label: "Ind Iss1 Loan 2", fair_value: 40, cost: 40, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c5, identifier_label: "Ind Iss2", fair_value: 200, cost: null, cost_fact_count: 0, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c6, identifier_label: "Ind Iss2 Term", fair_value: 200, cost: 195, cost_fact_count: 1, has_rate: false, has_spread: true, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c7, identifier_label: "Zero Co", fair_value: 0, cost: 0, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c8, identifier_label: "Zero Co Loan", fair_value: 0, cost: 0, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c9, identifier_label: "Guarded", fair_value: 50, cost: 50, cost_fact_count: 1, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: true}
+          - {accession: A, context_id: c10, identifier_label: "Guarded Loan B", fair_value: 50, cost: 50, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c11, identifier_label: "Mismatch Co", fair_value: 10, cost: null, cost_fact_count: 0, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c12, identifier_label: "Mismatch Co Loan", fair_value: 7, cost: 7, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c13, identifier_label: "Jv Co", fair_value: 5, cost: null, cost_fact_count: 0, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c14, identifier_label: "Jv Co Loan", fair_value: 5, cost: 5, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c15, identifier_label: "Seg Co | A", fair_value: 5, cost: null, cost_fact_count: 0, has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: c16, identifier_label: "Seg Co | A B", fair_value: 5, cost: 5, cost_fact_count: 1, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('int_role_scope')
+        rows:
+          - {accession: A, context_id: c13, scopes: "JV One"}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: A, context_id: c11, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
+    expect:
+      rows:
+        - {accession: A, context_id: c1, child_count: 2, is_subtotal: false, near_miss_reason: cost_not_comparable}
+        - {accession: A, context_id: c2, child_count: 2, is_subtotal: true, near_miss_reason: null}
+        - {accession: A, context_id: c5, child_count: 1, is_subtotal: true, near_miss_reason: null}
+        - {accession: A, context_id: c11, child_count: 1, is_subtotal: false, near_miss_reason: fair_value_differs}
+
+  - name: int_source_row_rule_order_and_cross_check
+    description: >
+      Hand-made rows. First match decides; an aggregate by rules 4 to 6 that carries a term fact, or a position
+      without one, is unresolved; cash rows are exempt; a JV scope is a position not published; two scopes are
+      unresolved; the cash axis alone is rule 8.
+    model: int_source_row
+    given:
+      - input: ref('int_role_structure')
+        rows:
+          - {accession: A, context_id: s1, cik: "1", role: superseded, role_rule: 0, reason: "filing not selected", is_cash_axis: false}
+          - {accession: A, context_id: s2, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s3, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s4, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s5, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s6, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s7, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s8, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s9, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s10, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: true}
+          - {accession: A, context_id: s11, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: s1, has_term_fact: true}
+          - {accession: A, context_id: s2, has_term_fact: false}
+          - {accession: A, context_id: s3, has_term_fact: true}
+          - {accession: A, context_id: s4, has_term_fact: false}
+          - {accession: A, context_id: s5, has_term_fact: true}
+          - {accession: A, context_id: s6, has_term_fact: false}
+          - {accession: A, context_id: s7, has_term_fact: false}
+          - {accession: A, context_id: s8, has_term_fact: true}
+          - {accession: A, context_id: s9, has_term_fact: true}
+          - {accession: A, context_id: s10, has_term_fact: false}
+          - {accession: A, context_id: s11, has_term_fact: false}
+      - input: ref('int_role_text')
+        rows:
+          - {accession: A, context_id: s2, text_rule: 4, pattern_id: r4_total, cash_pattern_id: null}
+          - {accession: A, context_id: s3, text_rule: 4, pattern_id: r4_total, cash_pattern_id: null}
+          - {accession: A, context_id: s7, text_rule: null, pattern_id: null, cash_pattern_id: r5_money_market}
+      - input: ref('int_role_subtotal')
+        rows:
+          - {accession: A, context_id: s4, is_subtotal: true, child_count: 3}
+          - {accession: A, context_id: s5, is_subtotal: false, child_count: 1}
+      - input: ref('int_role_scope')
+        rows:
+          - {accession: A, context_id: s8, scope_count: 1, scope: "JV One", scopes: "JV One", scope_rule_id: r1, scope_how: set_scope, cash_rule_id: null}
+          - {accession: A, context_id: s9, scope_count: 2, scope: null, scopes: "JV One; JV Two", scope_rule_id: r1, scope_how: set_scope, cash_rule_id: null}
+          - {accession: A, context_id: s11, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: r9}
+    expect:
+      rows:
+        - {context_id: s1, role: superseded, role_rule: 0, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: null}
+        - {context_id: s2, role: aggregate, role_rule: 4, rule_id: r4_total, scope: fund, is_cash: false, is_published: false, cross_check_agrees: true}
+        - {context_id: s3, role: unresolved, role_rule: 4, rule_id: r4_total, scope: fund, is_cash: false, is_published: false, cross_check_agrees: false}
+        - {context_id: s4, role: aggregate, role_rule: 6, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: true}
+        - {context_id: s5, role: position, role_rule: 9, rule_id: null, scope: fund, is_cash: false, is_published: true, cross_check_agrees: true}
+        - {context_id: s6, role: unresolved, role_rule: 9, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: false}
+        - {context_id: s7, role: position, role_rule: 9, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true}
+        - {context_id: s8, role: position, role_rule: 7, rule_id: r1, scope: "JV One", is_cash: false, is_published: false, cross_check_agrees: true}
+        - {context_id: s9, role: unresolved, role_rule: 7, rule_id: r1, scope: "JV One; JV Two", is_cash: false, is_published: false, cross_check_agrees: null}
+        - {context_id: s10, role: position, role_rule: 8, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true}
+        - {context_id: s11, role: position, role_rule: 9, rule_id: r9, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true}

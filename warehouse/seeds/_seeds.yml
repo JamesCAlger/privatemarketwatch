@@ -18,3 +18,29 @@ seeds:
         data_tests:
           - unique
           - not_null
+  - name: role_pattern
+    description: >
+      Global text patterns for row roles (spec intermediate_spine.md 6.2, rules 4 and 5). Each pattern is a
+      regular expression matched against each '|'-separated segment of an investment identifier label, lowercased,
+      trimmed and with white space collapsed. No fund name or label appears here. role 'position' marks an
+      exception that stops the cash-bucket pattern.
+    columns:
+      - name: pattern_id
+        data_tests:
+          - unique
+          - not_null
+      - name: rule_number
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [4, 5]
+                quote: false
+      - name: pattern
+        data_tests:
+          - not_null
+      - name: role
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['aggregate', 'position']
