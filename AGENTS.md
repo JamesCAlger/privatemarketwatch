@@ -53,7 +53,7 @@ Multiple agents may run concurrently. To keep project context fresh without race
 3. Appending is concurrency-safe; editing is not. Two agents editing this file simultaneously will cause one to silently overwrite the other.
 4. When consolidating: keep rules and pointers here, keep run-by-run detail in the changelog. Every number in this file goes stale; give the artifact to re-read instead of the number where you can, and date the ones you keep. Verify a claim against the code or artifact before writing it; mark anything unverified as such.
 
-Last consolidated: 2026-11-04, bounded owner-requested amendment of the two Quarter Acceptance Contract bullets on disposition classes and check repairs only (verified against `pipeline/finding_dispositions.py` CLASSES and `validate`). Other sections were not re-verified. Previous: 2026-10-20 (v1 scope amendment, 61 active funds, nine deferred); 2026-10-05 (broader consolidation).
+Last consolidated: 2026-11-19, owner-requested correction of the `interest_rate` bullet under Non-Negotiable Data Semantics (verified against today's holdings for the five v0.5 funds at 2026-03-31; the storage date and the `index_returns` statement are taken from the 2026-10-06 and 2026-11-13 changelog entries and were not re-read in code; nothing else touched). Previous: 2026-11-12 (later), owner-requested replacement of the "Outstanding ledger items" paragraph under Current State with the single findings workflow pointer (verified the scripts, skill and spec exist; nothing else touched). Previous: 2026-11-12, owner-approved /doctor trim: Scripts table moved to `docs/reference/scripts.md` (pointer and fleet constraints kept), Project Skills table cut (the skill listing carries it); nothing else touched. Previous: 2026-11-11, owner-requested one-line pointer to the outstanding-status command under Current State (verified the script runs; nothing else touched). Previous: 2026-11-04, bounded owner-requested amendment of the two Quarter Acceptance Contract bullets on disposition classes and check repairs only (verified against `pipeline/finding_dispositions.py` CLASSES and `validate`). Other sections were not re-verified. Previous: 2026-10-20 (v1 scope amendment, 61 active funds, nine deferred); 2026-10-05 (broader consolidation).
 
 ## Non-Negotiable Data Semantics
 
@@ -65,7 +65,7 @@ Last consolidated: 2026-11-04, bounded owner-requested amendment of the two Quar
 - Comparative-period BDC rows can be legitimate prior-period facts, not duplicates. Confirm `period`, `report_date`, accession, and dimension path before removing them.
 - PIK has two separate meanings in this repo. `pik_current_status` is strict current-payment/accrual evidence from N-PORT paid-in-kind flags or BDC position-level PIK income/accrual/capitalization facts. `pik_terms_flag` / `pik_terms_rate` is a schedule-rate proxy for disclosed PIK terms, comparable to S&P-style BDC PIK exposure, but not proof of current PIK income.
 - Do not label `pik_terms_started` as confirmed "bad PIK." It is a public-filing proxy that PIK terms appeared on an existing matched position. Confirmed bad PIK requires amendment/origination evidence showing cash-pay terms were changed because of borrower stress.
-- `interest_rate` convention is DECIDED (2026-07-12) as all-in rate with `pik_rate` carried separately, but the pipeline still stores the cash leg. Do not migrate one side alone: the storage change and the `index_returns` income formula must flip atomically.
+- `interest_rate` holds the all-in rate (decided 2026-07-12, stored that way since the 2026-10-06 financial contract). `interest_rate_cash` holds the cash leg, `pik_rate` the PIK leg, and `interest_rate_kind` says how the stored rate was read (`all_in`, `cash`, `unresolved`). A filer's rate tag is read through `source_encodings.filed_rate_reading` in its wrapper. A row with no supported reading stays `unresolved` with no rate; for some funds that is most rows (Blue Owl and Apollo at 2026-03-31), so a missing rate is not evidence that the position has none. `pipeline/index_returns.py` uses the all-in rate and must not add PIK on top. Do not change the stored meaning or the income formula separately.
 - Conservation sums are subsidiary-aware (retain-and-flag, 2026-08-29): JV/subsidiary rows are kept in holdings and flagged via `is_subsidiary`, and the FV-conservation gate excludes them. Do not add a global JV/subsidiary drop.
 - JV look-through rows are retained but NOT published (owner ruling 2026-09-30). The headline, the fund-level reconciliations, the PIK summaries and the acceptance gate all use the published basis, which excludes `underlying_schedule` rows. Do not swap a JV position for its underlying companies in the headline: the sum would stop reconciling to the fund's filed total, and gross JV assets are not comparable to the fund's stake. A look-through view, if built, is a separate labelled surface.
 - Position matching uses contested name-key assignment with a maturity veto (promoted 2026-09-07) and is deterministic since 3810a8f (2026-09-30). The finalizer allocates identities through a durable registry (`pipeline/durable_identity.py`, `data/output/identity_registry.duckdb`); the older `pipeline/position_id_registry.py` stays opt-in (`use_registry` defaults False). Cross-rebuild stability of `position_id` was not re-measured at the 2026-10-05 consolidation: verify before using raw pids as cross-rebuild keys.
@@ -241,6 +241,8 @@ Phases 1-6 (through the 2026-05 compatibility refactor) are complete; see [`docs
 - **Both signed-off quarters currently REGRESS on re-attestation** (since the 2026-09-30 base build, and they will also fail `outstanding_findings`). Treat the sign-off tags as history, not as a statement about today's build. Run `python scripts/reattest_quarters.py check` for the current reading before quoting either quarter as passing.
 - Remediation cycle: `scripts/run_quarter_pass.py` (staged: rebuild, oracle, validate, provenance, shadow, queue, ledger, preflight, select) plus the `quarter-pass-operator` skill for Codex fleet dispatch and verify/promote. `scripts/reattest_quarters.py` re-attests signed-off quarters after any pipeline change; a regression there is a stop-and-report event.
 
+**Outstanding findings (owner 2026-11-12, single findings workflow).** "Process outstanding ledger items" means the `findings-workflow` skill. Status comes from `python scripts/status.py`, written to `docs/investigations/findings_status.md`; quote counts only from it and give the batch id with every count. Production is the only build of record: fund sandboxes are scratch for testing a fix and have no status. Fixes enter production only through a batch (`scripts/run_batch.py`, one at a time, on the owner's go). Decisions are recorded only through `scripts/decide.py` into `data/decisions/` (append-only). Spec: `docs/superpowers/specs/2026-11-12-single-findings-workflow-design.md`.
+
 ### Current Blocker Accounting
 
 When asked how many "blockers" remain, read the header of the latest source-reconciliation residual artifacts. Do not quote numbers from this file without re-checking.
@@ -318,30 +320,7 @@ npm run build             # Static export to frontend/out/
 
 ## Scripts
 
-| Script | Purpose | Usage |
-|---|---|---|
-| `scripts/rebuild_outputs.py` | Rebuild all output CSVs from cached data (no downloads). Use after running tests. | `python scripts/rebuild_outputs.py` (all), `--unified`, `--income`, `--returns` |
-| `scripts/snapshot_outputs.py` | Refresh the active deterministic official baseline after approval. Archive the prior baseline first if retiring it. | `python scripts/snapshot_outputs.py --clean` |
-| `scripts/diff_outputs.py` | Compare current outputs with the active official baseline, including generated SQL and optional semantic summaries. | `python scripts/diff_outputs.py --semantic` |
-| `scripts/current_cache_phase6_parity.py` | One-off current-cache pre/post comparator for Phase 6-style refactor parity. Use named snapshots under `data/snapshots/`, not the official baseline. | `snapshot --clean --snapshot-dir ...`, `diff --semantic --snapshot-dir ...` |
-| `scripts/learn_template.py` | Manage per-CIK HTML extraction templates. Auto-detect, validate, inspect, accept, batch revalidate. | `--auto-detect <CIK>`, `--auto-detect-all`, `--validate <CIK>`, `--validate-only <CIK>`, `--next`, `--inspect <CIK>`, `--accept <CIK> --justification "..."`, `--revalidate-all`, `--add-periods <CIK\|ALL>`, `--list` |
-| `scripts/run_quarter_pass.py` | Staged quarter remediation pass: rebuild, oracle, validate, provenance re-verify, shadow rules, queue, ledger, preflight, packet selection. Writes to `data/output/quarter_pass/<pass_id>/`. | `--pass-id <id> --quarter YYYY-MM-DD [--from/--until <stage>] [--force] [--dry-run] [--list]` |
-| `scripts/reattest_quarters.py` | Record and re-check attestations for signed-off quarters. Run `check` after any pipeline change that touches cohort holdings. | `attest --quarter Q --source <battery.json>`, `check [--quarter Q]` |
-| `scripts/findings_ledger.py` | Findings lifecycle ledger: one state per finding across the review queue, verdicts and correction stores. Source of the `outstanding_findings` sign-off check. Read-only on production. | `python scripts/findings_ledger.py --out <csv> [--compare <prior.csv>]` |
-| `scripts/shadow_validation_runner.py` | Run the shadow-rule engines (conservation, identity, cross-source, weak, Agent A) and emit the disposition ledger. Invoked by the quarter pass; runnable standalone. | `python scripts/shadow_validation_runner.py` |
-| `scripts/run_codex_worker.ps1`, `scripts/dispatch_*_workers.ps1` | Sandboxed Codex worker fleets (Agent A / B / B2 / anchor / convention / investigation). Dispatch from an ADMIN PowerShell; MaxParallel ceiling is 2. See `docs/reference/codex_worker_dispatch.md`. | per-lane dispatch script |
-| `scripts/backup_raw_to_r2.ps1` | Sync the raw EDGAR cache (optionally baselines) to Cloudflare R2 via rclone. Setup in `docs/reference/cloud_backup_setup.md`. | `.\scripts\backup_raw_to_r2.ps1` |
-
-## Project Skills
-
-Skills under `.claude/skills/` (invoke by name; read the SKILL.md before use):
-
-| Skill | Purpose |
-|---|---|
-| `wrapper` | Create or update a BDC XBRL wrapper JSON for a CIK. |
-| `highlights-wrapper` | Create or validate a fund highlights wrapper JSON for a CIK. |
-| `identifier-grammar` | Induce or repair a per-CIK identifier rate-grammar and anchor dialect for Agent A. |
-| `quarter-pass-operator` | Orchestrate a quarter-pass remediation cycle (battery, Codex fleet dispatch, monitoring, verify/promote). Requires an ADMIN PowerShell and has hard escalation boundaries; do not improvise around them. |
+Main operator scripts and their usage: [`docs/reference/scripts.md`](./docs/reference/scripts.md). Codex worker fleets: dispatch from an ADMIN PowerShell, MaxParallel ceiling 2. Project skills are in `.claude/skills/`; read the SKILL.md before use, and do not improvise around `quarter-pass-operator`'s escalation boundaries.
 
 ## Files Worth Reading First
 
