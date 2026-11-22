@@ -4,8 +4,9 @@
 -- Fields: fair_value, cost, principal_amount, shares, pct_of_net_assets. Rows: every context int_source_row calls a
 -- position, published or not.
 -- Concepts: the seed concept_map (local name plus namespace glob, never the prefix: filed_layer.md section 7 ruling
--- 12). For fair value a fund rule concept_is_fair_value (stg_reading_rule) adds the filer's own concept, inside the
--- rule's dates. The standard concept wins: a fund rule's concept is read only where the context has no fact of a
+-- 12). For fair value a fund rule concept_is_fair_value, and for cost a fund rule concept_is_cost (stg_reading_rule, slice
+-- 3 Task 4 fix round 1), adds the filer's own concept, inside the rule's dates. int_context_feature reads only
+-- concept_is_fair_value, so a cost rule moves no role. The standard concept wins: a fund rule's concept is read only where the context has no fact of a
 -- standard concept for the field, as int_context_feature does. Facts of two seed rows of one field (the us-gaap and the
 -- FASB supplement namespace of one local name) are read together.
 -- What "as filed" means: value_filed is the instance value. In an inline filing the printed number carries scale and
@@ -64,11 +65,12 @@ with position as (
 )
 
 , filer_fact as (
-    -- facts of a filer's own fair-value concept, by a fund rule concept_is_fair_value; tier 2
+    -- facts of a filer's own fair-value or cost concept, by a fund rule concept_is_fair_value or concept_is_cost;
+    -- tier 2
     select
         f.accession
         , f.context_id
-        , 'fair_value' as field
+        , case r.action when 'concept_is_fair_value' then 'fair_value' when 'concept_is_cost' then 'cost' end as field
         , r.rule_id as read_rule_id
         , 2 as tier
         , f.fact_id
@@ -80,7 +82,7 @@ with position as (
     from position_fact f
     join filing fi on fi.accession = f.accession
     join {{ ref('stg_reading_rule') }} r
-        on r.action = 'concept_is_fair_value'
+        on r.action in ('concept_is_fair_value', 'concept_is_cost')
         and r.cik = fi.cik
         and f.concept_namespace glob r.sel_concept_namespace
         and r.sel_concept_local = f.concept_local

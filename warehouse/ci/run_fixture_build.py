@@ -44,6 +44,9 @@ BUILD_SELECT = [
     "path:tests/concept_rule_namespace_gaps_fixture.sql", "path:tests/filed_one_filing_row_per_folder.sql",
 ]
 BUILD_EXCLUDE = ["path:tests/baseline_*.sql"]
+# 2b. dbt run --empty: the two comparison models the cmp_amount unit test reads (slice 3 Task 4 fix round 1), built with
+#     no rows over the stand-ins, only so the unit test can read their column types. No test of theirs runs here.
+EMPTY_UNIT_TEST_INPUTS = ["cmp_row_set", "cmp_excluded_quarter"]
 # 3. dbt test: every unit test (dbt build runs a unit test only when its model is built, so those of the two cmp
 #    models need this step; the int_* ones run again, which costs seconds) and the one baseline whose ceiling is a
 #    rule, not a measurement: production_wrapper_changed (0), here on the fixture's wrapper copy and its stand-in, and
@@ -150,6 +153,8 @@ def main(argv=None):
     _run("dbt run (unit-test input views)", [dbt, "run", "--select", *UNIT_TEST_INPUTS, *common], WAREHOUSE, env)
     _run("dbt build (fixture selection)", [dbt, "build", "--select", *BUILD_SELECT, "--exclude", *BUILD_EXCLUDE,
                                            "--indirect-selection", "cautious", *common], WAREHOUSE, env)
+    _run("dbt run --empty (inputs of the cmp_amount unit test)", [dbt, "run", "--empty", "--select",
+                                                                   *EMPTY_UNIT_TEST_INPUTS, *common], WAREHOUSE, env)
     _run("dbt test (unit tests, wrapper drift)", [dbt, "test", "--select", *TEST_SELECT, *common], WAREHOUSE, env)
     print("== fixture build passed", flush=True)
     return 0

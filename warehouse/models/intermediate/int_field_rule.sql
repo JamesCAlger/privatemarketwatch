@@ -79,9 +79,15 @@ with read as (
         , r.context_id
         , r.field
         , r.value_filed
+        -- bracketed: the number's own cell is wholly "(...)"; or "(" ends the cell before it and ")" starts the cell
+        -- after it; or (slice 3 Task 4 fix round 1, a general layout rule) the number's own cell opens with "(" and
+        -- holds no ")" and the very next cell starts with ")": "(282" then ")"
         , regexp_full_match(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index) + 1], ''),
                             '\s*\$?\s*\(.*\)\s*%?\s*')
           or (rtrim(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index)], '')) like '%('
+              and ltrim(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index) + 2], '')) like ')%')
+          or (regexp_full_match(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index) + 1], ''),
+                                '\s*\$?\s*\([^)]*')
               and ltrim(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index) + 2], '')) like ')%') as is_bracketed
     from read r
     semi join listed_sign_filing l on l.accession = r.accession and l.cik = r.cik

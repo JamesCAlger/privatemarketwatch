@@ -152,32 +152,34 @@ vars:
     # quarters whose published normalised fair value misses the filed total investments on the step 1 basis
     # (fact_fund_period's A04 rule): Ares 3, BCRED 14 (it ties without cash rows, but its filed cash equivalents are
     # empty, so A04 keeps the published basis), Apollo 6; plus the three 2026-09-30 quarters with no filed total yet.
-    int_field_normalised_sum_not_tied: 26
+    # 25 (slice 3 Task 4 fix round 1): the split-bracket fix makes Apollo 2023-12-31 tie (ex cash 14.628m -> 0).
+    int_field_normalised_sum_not_tied: 25
     # Slice 3 Task 4: cost pairs where production's cost differs from cost_reported (a donor proxy). Measured 0.
     cmp_amount_cost_columns_differ: 0
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Fair value, cost and the three principal fields carry every cause; shares and share of net
   # assets carry not_yet_explained only (their other causes are counted in the doc, not tested).
-  #   fair value new_wrong 43: Apollo 2023-12-31 bracket_split_across_cells. cost new_wrong 238: 42 the same, 196 Apollo
-  #   filer cost concepts not read (filer_concept_not_read). principal owner_review 59 / 15: par_tagged_loan_test_stand_in.
-  #   principal convention 121 / 2: production_empties_principal_on_equity_class; currency convention 671:
-  #   count_principal_currency_blank_in_production.
+  #   new_wrong 0 since fix round 1 (the 85 bracket rows and 196 filer-cost rows now equal production). principal
+  #   owner_review 59 / 15: par_tagged_loan_test_stand_in. principal convention 107: production_empties_principal_on_
+  #   equity_class; not_yet_explained 14: principal_empty_class_not_equity (BCRED STRUCTURED_CREDIT units, step not
+  #   traced); JV old_wrong 2: principal_emptied_then_reclassified. currency convention 671: count_principal_currency_
+  #   blank_in_production.
   cmp_amount_max:
     published:
-      fair_value: {old_wrong: 0, new_wrong: 43, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      cost: {old_wrong: 0, new_wrong: 238, convention: 0, needs_correction: 14, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 121, needs_correction: 5, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
+      fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 14, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 107, needs_correction: 5, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 14}
       principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 671, needs_correction: 282, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
-      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 121, needs_correction: 196, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
+      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 107, needs_correction: 196, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 14}
       shares: {not_yet_explained: 0}
       pct_of_net_assets: {not_yet_explained: 0}
     unpublished:
       fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 2, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
+      principal_amount: {old_wrong: 2, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
       principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
-      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 2, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
+      principal_amount_usd: {old_wrong: 2, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
       shares: {not_yet_explained: 0}
       pct_of_net_assets: {not_yet_explained: 0}
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does

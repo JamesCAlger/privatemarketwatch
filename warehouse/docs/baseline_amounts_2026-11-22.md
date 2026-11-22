@@ -2,15 +2,16 @@
 
 This layer's amounts compared with production's. Spec: `intermediate_spine.md` sections 7 and 8 (D1).
 Model: `cmp_amount`. Production: `stg_holdings`, build of record b1116a. Plan:
-`2026-11-22-slice3-amounts-plan.md`, Task 4.
+`2026-11-22-slice3-amounts-plan.md`, Task 4. State: after Task 4 fix round 1 (the two defects the
+first comparison found are fixed; the equity-class convention is narrowed; a unit test covers the
+cause rules).
 
 Agreement with production shows the two agree. It does not show either is right. This comparison
 cannot see a value both pipelines read wrongly in the same way: such a row counts as `equal`. Nor can
 it see a field whose meaning changed, or offsetting errors that leave totals intact.
 
-Build line: `PASS=502 WARN=43 ERROR=0 TOTAL=545` (was 423 / 25 / 448). Python tests 144. CI fixture
-build `PASS=277`, unit-test and drift step `PASS=23` (unchanged; `cmp_amount` reads production and is
-not in the fixture build).
+Build line: `PASS=503 WARN=43 ERROR=0 TOTAL=546` (first comparison: 502 / 43 / 545). Python tests 144. CI fixture
+build: build `PASS=277`, empty run of the two comparison models `PASS=2`, unit-test and drift step `PASS=24`.
 
 ## How the sides are joined
 
@@ -50,23 +51,27 @@ Second measure: on all 71,477 holdings rows of the five funds the two columns ar
 
 ## Headline
 
-Published basis, all compared quarters, rows on both sides (60,675 rows).
+Published basis, all compared quarters, rows on both sides. Every row adds to 60,675
+(`scripts/slice3/q_t4_headline.sql`).
 
 | Field | Equal | Differs | New empty | Production empty | Both empty | Not yet explained |
 |---|---:|---:|---:|---:|---:|---:|
-| fair_value | 60,630 | 45 | 0 | 0 | 0 | 0 |
-| cost | 58,408 | 55 | 197 | 0 | 2,015 | 0 |
-| principal_amount | 49,554 | 0 | 5 | 180 | 10,936 | 0 |
+| fair_value | 60,673 | 2 | 0 | 0 | 0 | 0 |
+| cost | 58,646 | 13 | 1 | 0 | 2,015 | 0 |
+| principal_amount | 49,554 | 0 | 5 | 180 | 10,936 | 14 |
 | principal_amount_currency | 48,803 | 201 | 81 | 730 | 10,860 | 0 |
-| principal_amount_usd | 49,362 | 191 | 5 | 180 | 10,937 | 0 |
-| shares | 7,496 | 157 | 82 | 19 | 52,912 | 0 |
+| principal_amount_usd | 49,362 | 191 | 5 | 180 | 10,937 | 14 |
+| shares | 7,496 | 157 | 91 | 19 | 52,912 | 0 |
 | pct_of_net_assets | 20,112 | 0 | 0 | 0 | 40,563 | 0 |
 
-JV schedules (unpublished, 10,740 rows): fair value and cost equal on every row with a value.
-Differences: principal 17 production empty, share of net assets 2, shares 15 new empty.
+Before fix round 1: fair value 60,630 equal / 45 differs; cost 58,408 / 55 / 197 new empty.
 
-Fair value on published rows: this layer's total is 11.356m above production's, all in Apollo: the
-43 bracket rows (+14.628m) and the two sign-corrected rows (-3.272m).
+JV schedules (unpublished, 10,740 rows, every row adds to 10,740): fair value and cost equal on
+every row with a value. Differences: principal 17 production empty, share of net assets 2, shares 15
+new empty.
+
+Fair value on published rows: this layer's total is 3.272m below production's, all in Apollo
+2026-03-31: the two rows whose sign production corrects (needs_correction).
 
 ## Per fund and field
 
@@ -83,9 +88,9 @@ Published basis. E = equal, D = differs, NE = new empty, PE = production empty, 
 | Ares | pct_of_net_assets | 0 | 0 | 0 | 0 | 19,767 | |
 | BCRED | fair_value | 15,499 | 0 | 0 | 0 | 0 | |
 | BCRED | cost | 15,499 | 0 | 0 | 0 | 0 | |
-| BCRED | principal_amount | 14,444 | 0 | 1 | 38 | 1,016 | convention 14, owner_review 24, needs_correction 1 |
+| BCRED | principal_amount | 14,444 | 0 | 1 | 38 | 1,016 | not_yet_explained 14, owner_review 24, needs_correction 1 |
 | BCRED | principal currency | 14,456 | 2 | 1 | 24 | 1,016 | owner_review 24, needs_correction 3 |
-| BCRED | principal_amount_usd | 14,442 | 2 | 1 | 38 | 1,016 | convention 14, owner_review 24, needs_correction 3 |
+| BCRED | principal_amount_usd | 14,442 | 2 | 1 | 38 | 1,016 | not_yet_explained 14, owner_review 24, needs_correction 3 |
 | BCRED | shares | 971 | 0 | 24 | 0 | 14,504 | owner_review 24 |
 | BCRED | pct_of_net_assets | 15,499 | 0 | 0 | 0 | 0 | |
 | Blue Owl | fair_value | 9,719 | 0 | 0 | 0 | 0 | |
@@ -95,8 +100,8 @@ Published basis. E = equal, D = differs, NE = new empty, PE = production empty, 
 | Blue Owl | principal_amount_usd | 6,887 | 39 | 0 | 102 | 2,691 | needs_correction 39, convention 86, owner_review 16 |
 | Blue Owl | shares | 703 | 55 | 29 | 5 | 8,927 | needs_correction 66, owner_review 23 |
 | Blue Owl | pct_of_net_assets | 4,613 | 0 | 0 | 0 | 5,106 | |
-| Apollo | fair_value | 7,203 | 45 | 0 | 0 | 0 | new_wrong 43, needs_correction 2 |
-| Apollo | cost | 6,940 | 55 | 196 | 0 | 57 | new_wrong 238, needs_correction 13 |
+| Apollo | fair_value | 7,246 | 2 | 0 | 0 | 0 | needs_correction 2 |
+| Apollo | cost | 7,178 | 13 | 0 | 0 | 57 | needs_correction 13 |
 | Apollo | principal_amount | 6,063 | 0 | 3 | 7 | 1,175 | needs_correction 3, convention 7 |
 | Apollo | principal currency | 5,961 | 109 | 80 | 0 | 1,098 | needs_correction 189 |
 | Apollo | principal_amount_usd | 5,958 | 104 | 3 | 7 | 1,176 | needs_correction 107, convention 7 |
@@ -110,7 +115,7 @@ Published basis. E = equal, D = differs, NE = new empty, PE = production empty, 
 | HPS | shares | 141 | 101 | 19 | 0 | 8,181 | needs_correction 119, owner_review 1 |
 | HPS | pct_of_net_assets | 0 | 0 | 0 | 0 | 8,442 | |
 
-JV schedules: BCRED principal 17 PE (convention 2, owner_review 15), currency 15 PE (owner_review),
+JV schedules: BCRED principal 17 PE (old_wrong 2, owner_review 15), currency 15 PE (owner_review),
 dollar principal 17 PE (as principal), shares 15 NE (owner_review), share of net assets 2 D
 (old_wrong). Blue Owl and HPS JV rows: no difference.
 
@@ -124,64 +129,65 @@ ids. Each count has its own ceiling per basis and field (`cmp_amount_max` in `db
 
 | Cause and detail | Field: rows (published / JV) | FV affected | Funds | Opened |
 |---|---|---:|---|---:|
-| new_wrong, bracket_split_across_cells | fair value 43, cost 42 | -7.3 | Apollo | 6 |
-| new_wrong, filer_concept_not_read | cost 196 | 5,833.3 | Apollo | 3 |
 | needs_correction, correction_loaded(_applied) | fair value 2, cost 14, principal 5, currency 282, dollar principal 196, shares 219 | see below | all five | 6 |
 | owner_review, par_tagged_loan_test_stand_in | principal, currency, dollar principal 59 / 15 each; shares 34 / 15 | 1,892.2 / 19.1 | BCRED, Blue Owl, HPS | 3 |
 | owner_review, units_tagged_equity_test_stand_in | shares 14 | 586.2 | Blue Owl | 4 |
-| convention, production_empties_principal_on_equity_class | principal 121 / 2, dollar principal 121 / 2 | 3,680.4 / 3.9 | BCRED, Blue Owl, Apollo, HPS | 4 |
+| convention, production_empties_principal_on_equity_class | principal 107, dollar principal 107 | 3,614.7 | Blue Owl, Apollo, HPS | 3 |
 | convention, count_principal_currency_blank_in_production | currency 671 | 22,045.9 | Ares, Blue Owl, HPS | 1 |
 | old_wrong, pct_size_bound_keeps_fraction | share of net assets 0 / 2 | 2,165.5 | BCRED | 2 |
+| old_wrong, principal_emptied_then_reclassified | principal 0 / 2, dollar principal 0 / 2 | 3.9 | BCRED | 2 |
+| not_yet_explained, principal_empty_class_not_equity | principal 14, dollar principal 14 | 65.7 | BCRED | 2 |
+| new_wrong | 0 (85 + 196 before fix round 1, now fixed and equal) | | | |
 | needs_store_not_loaded | 0 | | | |
 | production_stale | 0 | | | |
-| not_yet_explained | 0 | | | |
 
 "Opened" counts the printed rows read in the filed layer (`stg_filed_document_row`, with every
 fact on the context) before the cause was named. Queries: `scripts/slice3/q_t4_sample.sql`,
 `q_t4_context_facts.sql`.
 
-### new_wrong: bracket_split_across_cells (85 rows, Apollo 2023-12-31)
+### Fixed in fix round 1: the two new_wrong groups
 
-- Rule: fair value or cost; the filing has a `bracketed_unsigned` rule; the two sides are opposite in
-  sign; the read fact's own printed cell opens with "(" and the next cell starts with ")".
-- What happens: filing 0000950170-24-031479 prints a negative as two cells, `'(282'` then `')'`.
-  Task 3's bracket test (`int_field_rule`, `sign_placement`) accepts a cell wholly in brackets, or a
-  "(" ending the cell before and a ")" starting the cell after. It misses this layout. So it reads
-  the row as unbracketed:
-  - 43 fair values and 40 costs tagged negative and printed in brackets are flipped to positive;
-  - 2 costs tagged positive and printed in brackets keep the wrong sign (production flips them).
-- Production reads 400 characters of raw HTML before the fact (`pipeline/printed_sign.py`), so it
-  sees the "(" inside the same cell, and gets all 85 right.
-- Opened: 6 rows, e.g. C_00d5bd4e ("11,729 | (282 | ) | (293 | )"), C_6b47bdb1, C_cc7340f8,
-  C_d2dd4e68, C_6aeac03c, and C_ec14f008 (cost tagged +30,000, printed "(30 )").
-- Effect: Apollo 2023-12-31 published total is 14.628m too high. This is exactly that quarter's gap
-  to the filed total without cash rows.
-- Every flip this rule made in that filing is wrong. The 21 cost flips in the other two listed
-  filings agree with production.
-- Fix proposed (not made here): in `int_field_rule` `sign_placement`, also count as bracketed a fact
-  whose own cell matches `\s*\$?\s*\([^)]*` and whose next cell starts with ")". Re-measure the three
-  listed filings after the change.
+**Bracket split across cells (85 rows, Apollo 2023-12-31, filing 0000950170-24-031479).** The filing
+prints a negative as two cells, `'(282'` then `')'`. Task 3's bracket test read that as unbracketed, so
+43 fair values and 40 costs tagged negative were flipped positive, and 2 costs tagged positive kept
+the wrong sign. Production reads raw HTML around the fact (`pipeline/printed_sign.py`) and got all 85
+right. Opened 6 rows before the fix (e.g. C_00d5bd4e "11,729 | (282 | ) | (293 | )", C_ec14f008 cost
+tagged +30,000 printed "(30 )").
 
-### new_wrong: filer_concept_not_read (196 costs, Apollo)
+- Fix (controller ruling): `int_field_rule` `sign_placement` now also counts as bracketed a number
+  whose own cell opens with "(" and holds no ")" when the very next cell starts with ")". It still
+  applies only in filings a `bracketed_unsigned` rule lists.
+- Rows whose sign changed (`scripts/slice3/q_t4f1_fields_moved.sql`): 85, all in that filing (43
+  fair values and 40 costs back to as filed, 2 costs now flipped). None elsewhere.
+- All 85 now equal production. The `bracketed_unsigned` rule now flips 23 costs and no fair value;
+  all 23 equal production.
+- Sum check, Apollo 2023-12-31: before, published +69.628m against the filed total and +14.628m
+  without cash rows; after, +55.000m with cash rows and 0 without. The quarter now ties on the step 1
+  basis (its cash rows equal the filed cash equivalents).
 
-- Rule: this layer read no cost; the context carries a numeric fact whose local name contains a
-  concept_map cost local name, in a namespace no concept_map cost row matches.
-- What happens: Apollo tags cost in its own namespace on these rows:
-  `InvestmentOwnedAtCostCredit` (190 rows, 2023-03-31, one filing) and
-  `InvestmentOwnedAtCostAfterCashEquivalents` (6 money-market rows, 2025-06-30 to 2026-03-31).
-  Production matches concept names as substrings in any namespace (`pipeline/bdc_filings.py`
-  `CONCEPT_MAP`), so it reads them as cost. Slice 2 added a fund rule for Apollo's fair-value twin
-  of the second concept, not for cost.
-- All 196 filer values equal production's cost (`scripts/slice3/q_t4_filer_concept_rows.sql`).
-- Searched across all five funds (`scripts/slice3/q_t4_substring_concepts.sql`): the only facts
-  production's substrings read that concept_map does not are these two Apollo cost concepts, Apollo's
-  fair-value concept and Blue Owl's fees concept. The last two already have fund rules.
-- Opened: 3 rows (C_0004efe0 "7,587 | 7,579 | 6,980" with the 7,579 in the cost column; 2U, Inc.
-  C_06bdb9df; the Goldman Sachs money-market row 2026-03-31).
-- Fix proposed: a fund rule in `warehouse/wrappers/0001837532.json` reading both concepts in
-  `http://gwms.apollo.com/*` as cost. No action does that today (`concept_is_fair_value` is fair
-  value only): a new action (or a field parameter on the existing one) in `seeds/reading_action.csv`
-  and in `int_field_read`.
+**Cost in the filer's own namespace (196 rows, Apollo).** Apollo tags cost as
+`InvestmentOwnedAtCostCredit` (190 positions, 2023-03-31) and
+`InvestmentOwnedAtCostAfterCashEquivalents` (6 money-market positions, 2025-06-30 to 2026-03-31).
+Production reads concept names as substrings in any namespace (`pipeline/bdc_filings.py`
+`CONCEPT_MAP`). A search over all five funds (`scripts/slice3/q_t4_substring_concepts.sql`) found no
+other filer concept production reads that lacks a fund rule. Opened 3 rows.
+
+- Fix (controller ruling): a new action `concept_is_cost` (`seeds/reading_action.csv`, slice 3),
+  read in `int_field_read` exactly as `concept_is_fair_value` is: tier 2, only where the context has
+  no standard cost fact. Two fund rules in `warehouse/wrappers/0001837532.json`, namespace
+  `http://gwms.apollo.com/*`: the first dated 2023-03-31 only (later filings carry the concept on
+  comparative contexts only), the second from 2023-03-31. Evidence in each rule: filing, table
+  heading and printed row.
+- Tests extended to the new action: `fund_rule_selectors_supported`, `fund_rule_no_overlap`,
+  `concept_rule_namespace_gaps` (both rules match filed facts; no namespace missed),
+  `int_field_read_rule_resolves`. `int_context_feature` reads only `concept_is_fair_value`, so its
+  cost column and every role are unchanged.
+- Guard: 196 cost fields moved (190 + 6), none elsewhere. No position carrying the concept also
+  carries a standard cost fact (`scripts/slice3/q_t4f1_concept_use.sql`). `int_source_row` and
+  `cmp_row_set`: 288,935 and 71,542 rows before and after, 0 moved
+  (`scripts/slice3/q_t4f1_roles_moved.sql`).
+- All 196 now equal production (one of them is in a foreign unit and is read as dollars by Apollo's
+  `reported_in_usd` declaration, as production does).
 
 ### needs_correction (718 field rows)
 
@@ -202,7 +208,7 @@ fact on the context) before the cause was named. Queries: `scripts/slice3/q_t4_s
   5, so these rows are expected to close then.
 - Opened: 3 printed rows (Apollo cost C_22ed3371 printed "(38)" tagged +38,000; HPS c-900 shares
   printed "16,598" tagged 16,598,000; Blue Owl c-1330 principal printed with "EUR" sign, tagged GBP)
-  plus the 3 rows above whose correction is the Apollo two-currency principal and untagged values.
+  plus the 3 rows whose correction is the Apollo two-currency principal and untagged values.
 - The two fair-value rows are the sign-corrected Apollo 2026-03-31 pair already known from slice 2
   (`baseline_filed_fair_value_differs_corrected`).
 - Every row production marks as corrected has a loaded correction:
@@ -232,20 +238,43 @@ fact on the context) before the cause was named. Queries: `scripts/slice3/q_t4_s
   neither shares nor principal for it.
 - Opened: 4.
 
-### convention: production_empties_principal_on_equity_class (123 principal rows, same 123 dollar principal)
+### The principal production empties (123 principal rows, same 123 dollar principal)
 
-- Rule: production has no principal and no dollar principal but kept the principal's currency; this
-  layer read the principal tag as filed.
-- Cause: `pipeline/unified_holdings.py` (lines 1346-1360) empties principal and dollar principal
-  on rows whose index class is common or preferred equity or a fund; it keeps the currency. This
-  layer reads the tag and has no index class (text fields are the second spec).
-- 107 of the 123 carry an equity or fund class in production today. 16 BCRED rows carry
-  STRUCTURED_CREDIT (14) or DIRECT_LENDING (2, class set by a row correction): the class at the time
-  of the step was not traced; the signature (principal empty, currency kept) matches the step.
-- Opened: 4 (BCRED Balboa Bay "Units | 779"; Blue Owl CD&R "LP Interest | 36,993"; Apollo Ishtar
-  "Common Equity - Stock | 38,889 Shares"; HPS Picard "Preferred Shares | 827").
-- Note for the owner: in at least the Apollo and Blue Owl samples the principal tag holds a unit
-  count, not a dollar par. Keeping it as principal is not obviously right either.
+Signature: production has no principal and no dollar principal but kept the principal's currency;
+this layer read the principal tag as filed. `pipeline/unified_holdings.py` (lines 1346-1360) empties
+principal and dollar principal on rows whose index class is common or preferred equity or a fund, and
+keeps the currency. Fix round 1 (review item 1) splits the signature by production's class:
+
+| Group | Rows | Production class | Cause |
+|---|---:|---|---|
+| Equity or fund class | 107 | COMMON_EQUITY 60, PREFERRED_EQUITY 26, PRIVATE_CREDIT_FUND 6, PRIVATE_EQUITY_FUND 15 | convention, production_empties_principal_on_equity_class |
+| BCRED JV bonds re-classed by a correction | 2 | DIRECT_LENDING | old_wrong, principal_emptied_then_reclassified |
+| BCRED warehouse and CLO-equity units | 14 | STRUCTURED_CREDIT | not_yet_explained, principal_empty_class_not_equity |
+
+- **convention (107).** Opened 3 (Blue Owl CD&R "LP Interest | 36,993"; Apollo Ishtar "Common Equity
+  - Stock | 38,889 Shares"; HPS Picard "Preferred Shares | 827"). This layer reads the tag and has no
+  index class (text fields are the second spec). In at least the Apollo and Blue Owl samples the
+  principal tag holds a unit count, not a dollar par: keeping it as principal is not obviously right
+  either.
+- **old_wrong (2).** Huntington Bancshares (2022-12-31, i4089ebdb...) and GTCR Investors LP A-1 Units
+  (2023-09-30, c-4549), both in BCRED's JV schedule. Production's raw extraction carries the
+  principal. Its class step empties it; afterwards `_apply_row_corrections` (unified_holdings.py line
+  1532, after the class step) re-classes both as LOAN / DIRECT_LENDING from `row_corrections.csv`
+  (decision D-021: "Printed in the JV schedule's Bonds section: 'Huntington Bancshares Inc | 4.44 % |
+  8/4/2028 | 620 | 598 | 592'"; GTCR "SOFR + 3.00 % | 8.40 % | 9/20/2030 | 3,335 | 3,319 | 3,336").
+  The correction does not restore the principal. Both printed rows show a par (620 and 3,335) equal to
+  this layer's principal. Opened 2. Rule: the signature, a class that is not equity or fund, and a
+  loaded correction that sets the row's index class or asset category.
+- **not_yet_explained (14).** Regatta Kilo, HPS Freshwater Warehouse Parent, Pikes Peak Bravo and Balboa
+  Bay Loan Funding 2025-3 "Units", 2025-06-30 to 2026-06-30. Production's raw extraction carries the
+  principal (e.g. c-1282: 6,298,000, `data/output/bdc_holdings.parquet`). Their final class is
+  STRUCTURED_CREDIT, which the step does not empty, and no loaded correction or pinned strategy
+  candidate names them (`row_corrections*.csv`, `fund_strategy_correction_candidates.pinned.csv`
+  searched). Their text has none of the structured-credit keywords (`classification.py`
+  `_STRUCTURED_CREDIT_KEYWORDS`). Read but not traced to a conclusion: the classification passes after
+  the class step (stabilisation, deterministic restore, strategy corrections, the class caches). The
+  likely shape (emptied under an equity or fund class, re-classed later) is a hypothesis, not
+  evidence. Opened 2 (c-1282 "Units | 6,298 | 6,298 | 6,948"; c-1232 "Units | 779"). Ceiling 14 each.
 
 ### convention: count_principal_currency_blank_in_production (671 currency rows)
 
@@ -279,18 +308,23 @@ fact on the context) before the cause was named. Queries: `scripts/slice3/q_t4_s
 | Its dollar principal (`principal_unresolved`) | 1 | new_empty, needs_correction |
 | `no_fx_rate` at 2026-09-30 | 129 | excluded quarters, not compared |
 | `no_fx_rate`, Apollo 2024-06-30 KPW principal | 1 | both_empty: production has no dollar principal either (`missing_reference_fx`) |
-| Foreign-unit fair value / cost read as dollars (`reported_in_usd`) | 73 / 77 | all equal, except 1 cost with a loaded sign correction |
+| Foreign-unit fair value / cost read as dollars (`reported_in_usd`) | 73 / 78 | all equal, except 1 cost with a loaded sign correction (the 78th cost is a filer-concept cost, fix round 1) |
 | `par_tagged_as_units` principal | 788 | 714 equal, 74 owner_review |
 | HPS 2026-03-31: 665 converted here, 696 in production's wrapper comment | 665 | 660 equal; 5 owner_review (production did not convert). Production converts 660 in this filing, not 696: the comment's figure does not show as a difference. Not followed further. |
 | `units_tagged_as_par` shares | 28 | 23 equal, 5 owner_review |
-| `bracketed_unsigned` | 104 | 21 equal, 83 new_wrong (above) |
+| `bracketed_unsigned` | 23 (104 before fix round 1) | all equal |
+| `concept_is_cost` (fix round 1) | 196 | all equal |
 | `fraction_to_percent` share of net assets | 30,051 | 30,049 equal, 2 old_wrong |
 | Blue Owl PCF Holdco preferred (Task 3 watch item) | | owner_review, par_tagged_loan_test_stand_in |
 
+Unresolved counts of Task 2 and Task 3 are unchanged by fix round 1: `int_field_read` unresolved cost
+3, principal 1; `int_field_normalised` unresolved principal values_differ 1, dollar principal
+principal_unresolved 1, no_fx_rate 130.
+
 ## The sum check
 
-The 26 fund-quarters that do not tie on the step 1 basis
-(`baseline_int_field_normalised_sum_not_tied`), against this comparison's groups
+The 25 fund-quarters that do not tie on the step 1 basis (26 before fix round 1;
+`baseline_int_field_normalised_sum_not_tied`), against this comparison's groups
 (`scripts/slice3/q_t4_sum_explained.sql`, $m):
 
 | Fund | Quarters | Gap | Explained by |
@@ -300,16 +334,16 @@ The 26 fund-quarters that do not tie on the step 1 basis
 | Ares | 2025-06-30 | -33.2 | row set: production_row_added 33.2 |
 | BCRED | 14 quarters | +13.8 to +1,183.4 | row set: new-only cash rows, convention (D13); ex cash the gap is 0 to 0.002 |
 | Apollo | 2023-09-30 | -33.3 ex cash | row set: production-only needs_correction 33.3 |
-| Apollo | 2023-12-31 | +14.6 ex cash | amounts: new_wrong bracket_split_across_cells +14.628 (exact) |
 | Apollo | 2024-06-30 | -41.6 ex cash | row set: needs_correction 41.6 |
 | Apollo | 2024-09-30 | -12.3 ex cash | row set: needs_correction 12.3 |
 | Apollo | 2025-03-31 | -67.2 ex cash | row set: needs_correction 67.2 |
 | Apollo | 2026-03-31 | -29.5 ex cash | row set: needs_correction 26.3; amounts: needs_correction -3.3 |
 | Ares, Blue Owl, Apollo | 2026-09-30 | | no filed total yet |
 
-Every non-tying quarter is explained by a named group, within 6,000 dollars. Only Apollo 2023-12-31
-is caused by this layer reading an amount wrongly. A tie of sums is a proxy: it cannot see zero rows,
-which row carries which value, or offsetting errors.
+Apollo 2023-12-31 left the list in fix round 1 (the bracket fix closed its +14.628m). Every
+remaining non-tying quarter is explained by a named group, within 6,000 dollars, and none by this
+layer reading an amount wrongly. A tie of sums is a proxy: it cannot see zero rows, which row carries
+which value, or offsetting errors.
 
 ## Owner items (evidence only, not decided)
 
@@ -385,23 +419,27 @@ fair-value fact of any concept this layer reads.
 | Test | Kind | Measured |
 |---|---|---:|
 | `cmp_amount_key_and_cause` (one row per key; seven fields per both-sides row; outcome list; cause from the closed list on every open row and only there; numbers and currency in their own columns; is_published equals the basis) | singular | 0 |
-| `baseline_cmp_amount_<basis>_<field>_<cause>`: fair value, cost, principal, currency, dollar principal, eight causes each, both bases | baseline, 80 tests | at ceiling (see `cmp_amount_max`) |
+| `baseline_cmp_amount_<basis>_<field>_<cause>`: fair value, cost, principal, currency, dollar principal, eight causes each, both bases | baseline, 80 tests | at ceiling (see `cmp_amount_max`); every new_wrong is 0 |
 | `baseline_cmp_amount_<basis>_shares_not_yet_explained`, `..._pct_of_net_assets_not_yet_explained` | baseline, 4 tests | 0 |
 | `baseline_cmp_amount_cost_columns_differ` | baseline | 0 |
 | yml: not_null on keys and outcome; accepted values on basis, outcome, cause | generic | pass |
+| unit test `cmp_amount_cause_rules`: invented rows for every cause rule, with a row each rule must not take (split brackets with the same sign; an unrelated filer fact; the equity signature with a non-equity class, with and without a class correction); a quarter in `cmp_excluded_quarter` and a new-only row give no rows | unit | pass |
+| unit test `int_field_rule_two_unit_cost_and_sign`, new cases s5 to s8: the split layout flips (s5); NOT: the same layout already negative (s8), a ")" cell after a number with no "(" (s6), a ")" not in the next cell (s7) | unit | pass |
 
 18 of the baselines are above zero and warn; each sits at its ceiling.
+
+CI: the fixture build now runs `dbt run --empty` on `cmp_row_set` and `cmp_excluded_quarter`
+before the unit-test step, so the `cmp_amount` unit test can read their column types, as the
+`cmp_row_set` unit tests read the stand-in staging views (`ci/run_fixture_build.py`). Result: build 277,
+empty run 2, unit-test and drift step 24 (was 23).
 
 ## Not checked
 
 - Fields beyond the seven. Rates, spreads, PIK and maturity are slice 4.
 - Whether either side is right where they agree. In particular: the 671 currency rows taken as USD;
-  the 3,680m of equity principals that are unit counts in the samples read; the Blue Owl zero-value
+  the 3,615m of equity principals that are unit counts in the samples read; the Blue Owl zero-value
   commitment lines.
 - Rows on one side only: they are slice 2's comparison (`baseline_roles_2026-11-19.md`).
-- The 16 BCRED rows whose production index class is not equity in the principal convention group:
-  the class at the time of production's step was not traced.
+- Which production step empties the principal of the 14 BCRED STRUCTURED_CREDIT units.
 - Why production's HPS wrapper comment says 696 rows where production converts 660.
 - Funds outside the five; the excluded 2026-09-30 quarters.
-- No unit test covers the cause rules of `cmp_amount`. Its inputs include `cmp_row_set`, which the
-  CI fixture build does not build. The rules are pinned only by the measured ceilings.

@@ -38,8 +38,14 @@
 --        where production did not, or production took them where this layer did not (its "is equity" test is "no
 --        debt term fact", production's is a text class).
 --   convention|production_empties_principal_on_equity_class  production holds no principal or dollar principal but
---        kept the principal's currency: the signature of pipeline/unified_holdings.py, which empties principal on
---        equity and fund index classes. This layer reads the tag and has no index class.
+--        kept the principal's currency, and its index class is one pipeline/unified_holdings.py empties principal on
+--        (common or preferred equity or a fund; lines 1346-1360). This layer reads the tag and has no index class.
+--   old_wrong|principal_emptied_then_reclassified  the same signature on a row whose production class is not one of
+--        those, where a loaded correction sets the row's index class or asset category: production emptied the
+--        principal under its first class (the class step comes before row corrections in unified_holdings.py) and the
+--        correction re-classed the row as debt without restoring the filed par (fix round 1, item 1).
+--   not_yet_explained|principal_empty_class_not_equity  the same signature, a class that is not equity or fund, and no
+--        loaded class correction: the step that empties the principal was not traced (fix round 1, item 1).
 --   convention|count_principal_currency_blank_in_production  a principal taken from a share count: production leaves
 --        its currency blank (and converts it as dollars), this layer writes USD.
 --   old_wrong|pct_size_bound_keeps_fraction  share of net assets: production stores the filed fraction unscaled (its
@@ -70,6 +76,7 @@ with both_rows as (
         , pct_of_net_assets
         , corrected_fields
         , bdc_investment_identifier
+        , index_classification
     from {{ ref('stg_holdings') }}
     where src_context_id is not null
 )
@@ -100,6 +107,14 @@ with both_rows as (
         ('shares', 'shares_held'),
         ('pct_of_net_assets', 'pct_of_net_assets')
     ) v(field, correction_field)
+)
+
+, production_equity_class as (
+    -- the index classes pipeline/unified_holdings.py empties principal on (lines 1346-1360)
+    select * from (values
+        ('COMMON_EQUITY'), ('PREFERRED_EQUITY'), ('PRIVATE_EQUITY_FUND'), ('PRIVATE_CREDIT_FUND'), ('REAL_ESTATE_FUND'),
+        ('HEDGE_FUND')
+    ) v(index_classification)
 )
 
 , norm as (
@@ -152,6 +167,8 @@ with both_rows as (
         , p.shares_held as production_shares
         , p.corrected_fields
         , p.bdc_investment_identifier
+        , p.index_classification as production_class
+        , pc.index_classification is not null as production_class_empties_principal
     from both_rows b
     cross join field_list fl
     join prod p on p.accession = b.accession and p.context_id = b.context_id
@@ -160,6 +177,7 @@ with both_rows as (
         and n.field = case when fl.field = 'principal_amount_currency' then 'principal_amount' else fl.field end
     left join principal_norm pn on pn.accession = b.accession and pn.context_id = b.context_id
     left join shares_norm sn on sn.accession = b.accession and sn.context_id = b.context_id
+    left join production_equity_class pc on pc.index_classification = p.index_classification
 )
 
 , outcomes as (
@@ -203,6 +221,16 @@ with both_rows as (
         and (c.context_id = o.context_id
              or (c.context_id is null and c.identifier = o.bdc_investment_identifier))
     group by 1, 2, 3
+)
+
+, class_correction as (
+    -- a loaded correction that sets the row's index class or asset category (by context id, or accession and identifier)
+    select distinct o.accession, o.context_id
+    from open_pairs o
+    join {{ ref('stg_correction') }} c
+        on c.kind = 'value' and c.field in ('index_classification', 'asset_category') and c.accession = o.accession
+        and (c.context_id = o.context_id
+             or (c.context_id is null and c.identifier = o.bdc_investment_identifier))
 )
 
 , filer_concept as (
@@ -255,11 +283,13 @@ with both_rows as (
         , fc.accession is not null as has_filer_concept
         , sb.accession is not null as has_split_bracket
         , ur.accession is not null as filing_has_units_rule
+        , cc.accession is not null as has_class_correction
     from open_pairs o
     left join loaded_correction lc on lc.accession = o.accession and lc.context_id = o.context_id and lc.field = o.field
     left join filer_concept fc on fc.accession = o.accession and fc.context_id = o.context_id and fc.field = o.field
     left join split_bracket sb on sb.accession = o.accession and sb.context_id = o.context_id and sb.field = o.field
     left join units_rule_filing ur on ur.cik = o.cik and ur.accession = o.accession
+    left join class_correction cc on cc.accession = o.accession and cc.context_id = o.context_id
 )
 
 , caused as (
@@ -290,8 +320,16 @@ with both_rows as (
                 then 'owner_review|units_tagged_equity_test_stand_in'
             when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
                  and production_principal is null and production_currency is not null
-                 and new_principal_action = 'as_filed'
+                 and new_principal_action = 'as_filed' and production_class_empties_principal
                 then 'convention|production_empties_principal_on_equity_class'
+            when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
+                 and production_principal is null and production_currency is not null
+                 and new_principal_action = 'as_filed' and has_class_correction
+                then 'old_wrong|principal_emptied_then_reclassified'
+            when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
+                 and production_principal is null and production_currency is not null
+                 and new_principal_action = 'as_filed'
+                then 'not_yet_explained|principal_empty_class_not_equity'
             when field = 'principal_amount_currency' and outcome = 'production_empty'
                  and new_principal_action = 'par_tagged_as_units' and currency_new = 'USD'
                 then 'convention|count_principal_currency_blank_in_production'

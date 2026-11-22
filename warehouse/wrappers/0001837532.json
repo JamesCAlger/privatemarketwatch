@@ -320,6 +320,23 @@
       "target": "role",
       "action": "subtotal_on_fair_value",
       "evidence": "Owner decision D12, 2026-11-19: an Apollo issuer rollup whose fair value equals the sum of the rows below it is a subtotal even where its cost does not tie. Rule 6 otherwise unchanged: same label-prefix tree, same fair-value tolerance, same guard (a row with a rate, spread, PIK rate or maturity, or a zero fair value, is never removed). Measured on all parsed Apollo filings in slice 2 Task 5 (task-5-report.md): rows changed, none published by production."
+    },
+    {
+      "target": "cost",
+      "action": "concept_is_cost",
+      "concept_namespace": "http://gwms.apollo.com/*",
+      "concept_local": "InvestmentOwnedAtCostCredit",
+      "valid_from": "2023-03-31",
+      "valid_to": "2023-03-31",
+      "evidence": "Apollo's own concept for a position's cost in its 10-Q for 2023-03-31 (0000950170-23-021206, namespace http://gwms.apollo.com/20230331), tagged instead of InvestmentOwnedAtCost on 190 positions, none of which carries a us-gaap cost fact. Table 14 is headed 'Industry/Company | Investment Type | Interest Rate | Maturity Date | Par/Shares | Cost | Fair Value'; printed row 518 (Asurion, LLC, First Lien Secured Debt, L+325, 7/31/2027) reads '7,587 | 7,579 | 6,980' and the concept's fact on context C_0004efe0-75af-4fa9-b6ce-ae08f25f44dd is 7,579,000, in the Cost column. Later filings carry the concept only on comparative contexts, so the rule is dated to that report date. Read as the cost only where a context has no us-gaap cost fact. Controller ruling, slice 3 Task 4 fix round 1."
+    },
+    {
+      "target": "cost",
+      "action": "concept_is_cost",
+      "concept_namespace": "http://gwms.apollo.com/*",
+      "concept_local": "InvestmentOwnedAtCostAfterCashEquivalents",
+      "valid_from": "2023-03-31",
+      "evidence": "Apollo's own concept for the cost of its cash equivalents (money-market funds), the cost twin of InvestmentOwnedAtFairValueAfterCashEquivalents (fair-value rule above). Filed in every Apollo filing from 2023-03-31 (namespaces http://gwms.apollo.com/20230331 to /20260930); on published positions from 2025-06-30 (6 positions in 4 filings, none with a us-gaap cost fact). 10-Q for 2026-03-31 (0001193125-26-215667) table 59 is headed 'Industry/Company | Investment Type | Interest Rate | Maturity Date | Par/Shares/Units | Cost | Fair Value'; printed row 1849 (Goldman Sachs Financial Square Government Fund Institutional) reads '159,399 | $ 159,399 | $ 159,399' and the concept's fact on context C_bc74b73b-06d0-4688-9d1d-640f0f415614 is 159,399,000, in the Cost column. Read as the cost only where a context has no us-gaap cost fact. Controller ruling, slice 3 Task 4 fix round 1."
     }
   ]
 }

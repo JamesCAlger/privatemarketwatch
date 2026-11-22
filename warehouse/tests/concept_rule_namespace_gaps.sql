@@ -4,7 +4,7 @@
 with rules as (
     select rule_id, cik, sel_concept_namespace, sel_concept_local
     from {{ ref('stg_reading_rule') }}
-    where action in ('concept_is_fair_value', 'concept_is_term_fact')
+    where action in ('concept_is_fair_value', 'concept_is_cost', 'concept_is_term_fact')
 )
 , facts as (
     select distinct fi.cik, f.accession, f.concept_namespace, f.concept_local
