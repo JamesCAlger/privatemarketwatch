@@ -459,3 +459,32 @@ Parked for the opening of the slice 4 plan:
 - The 2 dollar principals moved by the correction check share the `not_yet_explained` ceiling (16)
   with the 14 others; they have no ceiling of their own.
 - A tie-break whose only losing rule is undecidable is not checked (0 rows today).
+
+## RESUME HERE (session closed 2026-11-22)
+
+Slice 3 is closed at aa6fcc48; this file's last commit follows it. 12 commits are local, NOT
+pushed. Nothing is running. The owner was given the slice 3 report and the list of 18 rulings
+(ledger: `.superpowers/sdd/2026-11-22-slice3-amounts-plan/progress.md`, every `Ruling:` line) and
+had not answered when the session closed. Do not push and do not start slice 4 without the owner's
+go.
+
+Questions put to the owner, unanswered:
+
+1. Push the 12 commits (the only way CI runs on slice 3).
+2. Confirm or overturn the rulings, above all the tie-break (a rule naming a filing outranks one
+   naming a row feature at equal priority; guarded by a ceiling-0 test).
+3. The 166 principals that are unit counts in the samples read: empty them as production does, or
+   keep them.
+4. Refresh the currency rate file (ends 2026-09-11; 129 principals at 2026-09-30 have no dollar
+   value). Needs a download.
+5. `docs/agent_changelog.md`: the slice 3 entry is appended but uncommitted, because the file holds
+   other agents' uncommitted lines. Commit the whole file or leave it.
+
+Still deferred by the owner until after reproduction: commitment and zero-value lines in the
+position set; the findings ledger on dbt.
+
+Next work, once the owner says go: write the slice 4 (rates) plan. It opens with the five parked
+minors in the section above. Then slice 5 (corrections; 716 rows wait on it), then slice 6.
+
+Agreement with production is not correctness. Unverified: 671 principal currencies taken as USD;
+2,303 published principals on rows with no debt term fact.
