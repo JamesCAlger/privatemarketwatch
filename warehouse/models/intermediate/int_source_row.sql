@@ -137,6 +137,17 @@ select
     -- money-market fund. A cash row names its source: cash_rule_id (a fund rule), cash_pattern_id, or role_rule 8
     -- (the filed cash and cash equivalents axis); tested by cash_row_names_its_source.
     , case when is_cash_row then cash_pattern_id end as cash_pattern_id
+    -- What flagged a cash row, one word (slice 3 Task 1, item a): fund_rule (cash_rule_id), else seed_pattern
+    -- (cash_pattern_id), else filed_cash_axis (the filed cash and cash equivalents axis). A row matched by both a fund
+    -- rule and a seed pattern names the fund rule, as cmp_row_set does. Null on a row that is not cash.
+    , case
+        when not coalesce(is_cash_row, false) then null
+        when cash_rule_id is not null then 'fund_rule'
+        when cash_pattern_id is not null then 'seed_pattern'
+        when is_cash_axis then 'filed_cash_axis'
+      end as cash_source
+    -- held unresolved because two different scopes name the row (rule 7), not for want of a term fact
+    , role_rule = 7 and scope_count > 1 as held_for_two_scopes
     -- The fund concept rule a role was decided through: the fair value that let the row past
     -- rule 3, else the only term fact the cross-check read (on a row that reached rules 4 to 9).
     , case
@@ -162,6 +173,8 @@ select
     , cross_check_agrees
     , cash_rule_id
     , cash_pattern_id
+    , cash_source
+    , coalesce(held_for_two_scopes, false) as held_for_two_scopes
     , concept_rule_id
     , position_rule_id
 from decided

@@ -72,12 +72,15 @@ with prod as (
 )
 
 , rate_facts as (
-    -- matched on namespace and local name (us-gaap or the FASB supplement, as int_context_feature reads term facts)
+    -- a fact of a rate, spread or PIK rate concept, matched on local name and namespace pattern from the seed
+    -- concept_map (us-gaap or the FASB supplement, as int_context_feature reads term facts). Field rate includes the
+    -- cash-pay rate concept, which the slice 2 list left out; measured 2026-11-22, no row moved.
     select distinct f.accession, f.context_id
     from {{ ref('stg_filed_fact') }} f
     semi join one_sided o on o.accession = f.accession and o.context_id = f.context_id
-    where f.concept_local in ('InvestmentInterestRate', 'InvestmentBasisSpreadVariableRate', 'InvestmentInterestRatePaidInKind')
-      and (f.concept_namespace like 'http://fasb.org/us-gaap/%' or f.concept_namespace like 'http://fasb.org/us-gaap-sup/%')
+    join {{ ref('concept_map') }} m
+        on m.field in ('rate', 'spread', 'pik_rate') and m.concept_local = f.concept_local
+        and f.concept_namespace glob m.namespace_pattern
 )
 
 , value_correction as (
@@ -115,6 +118,7 @@ with prod as (
         , coalesce(r.is_cash, false) as is_cash
         , r.cash_rule_id
         , r.cash_pattern_id
+        , coalesce(r.held_for_two_scopes, false) as held_for_two_scopes
         , cf.identifier_label
         , cf.fair_value_fact_count
         , cf.has_term_fact
@@ -153,10 +157,11 @@ with prod as (
     -- rules that do not need the fund total
     -- needs_correction fires only where the correction's field is what this side lacks (final fix wave F2): a fair-value
     -- correction on a row rule 3 left out for no fair-value fact, or a term-field correction on a row held unresolved
-    -- for want of a term fact (rule 7 or 9). A correction on any other field, or on a row decided another way, falls
-    -- through. The cash convention (D7) fires only for a cash row flagged by a named source, which the detail names: a
-    -- fund cash rule (cash_rule_id) or a seed cash pattern (cash_pattern_id). A cash row flagged another way (rule 8,
-    -- the filed cash axis) falls through.
+    -- for want of a term fact (rule 7 or 9). A row held because it carries two scopes (rule 7) is not held for want of a
+    -- term fact, so a term correction does not explain it (slice 3 Task 1, item d). A correction on any other field, or
+    -- on a row decided another way, falls through. The cash convention (D7) fires only for a cash row flagged by a
+    -- named source, which the detail names: a fund cash rule (cash_rule_id) or a seed cash pattern (cash_pattern_id).
+    -- A cash row flagged another way (rule 8, the filed cash axis) falls through.
     select
         *
         , case
@@ -168,7 +173,7 @@ with prod as (
                  and role = 'not_schedule' and role_rule = 3 and fair_value_fact_count = 0
                 then 'needs_correction|correction_supplies_value_or_term'
             when side = 'production_only' and has_term_correction
-                 and role = 'unresolved' and role_rule in (7, 9) and not has_term_fact
+                 and role = 'unresolved' and role_rule in (7, 9) and not has_term_fact and not held_for_two_scopes
                 then 'needs_correction|correction_supplies_value_or_term'
             when side = 'new_only' and is_cash and cash_rule_id is not null
                 then 'convention|cash_published_d7_fund_rule'

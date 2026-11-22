@@ -73,13 +73,15 @@ with fair_value_only_rule as (
     select
         f.accession
         , f.context_id
-        , min(try_cast(f.decimals as integer)) filter (where f.concept_local = 'InvestmentOwnedAtFairValue') as fv_decimals
-        , min(try_cast(f.decimals as integer)) filter (where f.concept_local = 'InvestmentOwnedAtCost') as cost_decimals
+        , min(try_cast(f.decimals as integer)) filter (where m.field = 'fair_value') as fv_decimals
+        , min(try_cast(f.decimals as integer)) filter (where m.field = 'cost') as cost_decimals
     from {{ ref('stg_filed_fact') }} f
     semi join pool p on p.accession = f.accession and p.context_id = f.context_id
-    where f.concept_local in ('InvestmentOwnedAtFairValue', 'InvestmentOwnedAtCost')
-      and f.concept_namespace like 'http://fasb.org/us-gaap/%'
-      and not coalesce(f.is_nil, false)
+    -- the fair-value and cost concepts, by local name and namespace pattern from the seed concept_map
+    join {{ ref('concept_map') }} m
+        on m.field in ('fair_value', 'cost') and m.concept_local = f.concept_local
+        and f.concept_namespace glob m.namespace_pattern
+    where not coalesce(f.is_nil, false)
     group by 1, 2
 )
 

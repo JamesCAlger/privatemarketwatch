@@ -18,6 +18,31 @@ seeds:
         data_tests:
           - unique
           - not_null
+  - name: concept_map
+    description: >
+      The standard XBRL concepts, defined once (slice 3 Task 1). One row per (field, concept, namespace): a filed fact
+      belongs to the field when its local name equals concept_local and its namespace matches namespace_pattern (a
+      DuckDB glob), never on the prefix (filed_layer.md section 7 ruling 12). Every model that reads a standard concept
+      reads it here; no model writes a concept name (pytests/test_no_concept_literals.py). A filer's own concept is a
+      fund rule in its wrapper copy, not a row here. concept_map_id is the rule a standard value names (spec section 7).
+    columns:
+      - name: concept_map_id
+        data_tests:
+          - unique
+          - not_null
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets', 'rate', 'spread',
+                         'pik_rate', 'maturity', 'ownership_percent']
+      - name: concept_local
+        data_tests:
+          - not_null
+      - name: namespace_pattern
+        data_tests:
+          - not_null
   - name: role_pattern
     description: >
       The global part of the rule table for row roles (spec intermediate_spine.md 6.2): rules 4 and 5 (text) and the

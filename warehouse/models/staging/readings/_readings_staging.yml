@@ -70,3 +70,17 @@ models:
         data_tests: [not_null]
       - name: copy_changed
         data_tests: [not_null]
+
+  - name: stg_row_store_drift
+    description: >
+      One row per row-correction store the readings loader reads (var row_store_files), with the store file hashed
+      when the view is read (build or test time), against the SHA-256 the loader recorded in its manifest. changed:
+      the loaded corrections are stale, run load_readings.ps1 again (tests/baseline_row_store_changed_since_load.sql).
+      The store is matched to its manifest entry by file name, because the loader records the path it was given.
+    columns:
+      - name: store
+        data_tests: [unique, not_null]
+      - name: current_sha256
+        data_tests: [not_null]
+      - name: changed
+        data_tests: [not_null]

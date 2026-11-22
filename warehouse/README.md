@@ -56,7 +56,7 @@ A passing build means the tables are internally consistent and their row counts 
 How each filer is read, and the fixes made to single rows, as two tables. A loader
 (`warehouse/readings_loader/`) copies them from the new pipeline's wrappers (`warehouse/wrappers/<cik>.json`) and
 the two row-correction files into `warehouse/data/readings/`. dbt reads them as source `readings` (staging views
-`stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`, `stg_wrapper_drift`). Spec:
+`stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`, `stg_wrapper_drift`, `stg_row_store_drift`). Spec:
 `docs/intermediate_spine.md`.
 
 **Where fund rules are edited.** Owner decision 2026-11-19: the new pipeline keeps its own copy of each v0.5
@@ -70,7 +70,14 @@ not seen here and must be carried into the copy by hand. dbt hashes the wrapper 
 (`stg_wrapper_drift`, paths from the vars `wrappers_dir` and `production_wrappers_dir`):
 `baseline_production_wrapper_changed` (ceiling 0) fails the build until the copy is brought up to date and
 `_source.json` updated, and `baseline_wrapper_copy_changed_since_load` (ceiling 0) fails it when a copy was
-edited after the last load (run `load_readings.ps1` again).
+edited after the last load (run `load_readings.ps1` again). The two row-correction stores are checked the same
+way (`stg_row_store_drift`, var `row_store_files`): `baseline_row_store_changed_since_load` (ceiling 0) fails the
+build when a store changed after the last load.
+
+**Standard concepts.** The XBRL concepts every filer uses (fair value, cost, principal, shares, share of net
+assets, rate, spread, PIK rate, maturity, ownership percent) are defined once, in `seeds/concept_map.csv`: local
+name plus namespace pattern, never the prefix. Models read the seed; `pytests/test_no_concept_literals.py` fails
+if a SQL file writes one of those names. A filer's own concept is a fund rule in its wrapper copy.
 
     .\warehouse\load_readings.ps1    # rewrites the folder; same inputs give the same manifest
     .\warehouse\dbt.ps1 build

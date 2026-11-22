@@ -1,7 +1,7 @@
 -- Decides nothing: one row per parsed filing with the two counts filing selection reads (pilot instance_select.py, measure_instance).
 --
 -- report_date          : the filing's dei DocumentPeriodEndDate.
--- position_fact_count  : InvestmentOwnedAtFairValue facts (us-gaap namespace) on instant contexts dated at report_date
+-- position_fact_count  : fair-value facts (the seed concept_map, field fair_value) on instant contexts dated at report_date
 --                        that carry an investment-identifier member.
 -- numeric_fact_count   : facts with a unit, outside the dei namespace, on contexts whose instant or end date is report_date.
 -- is_amendment         : the filing's own dei DocumentType ends in /A. dei AmendmentFlag is carried as evidence and never
@@ -17,21 +17,23 @@ with fact_counts as (
               and coalesce(c.instant_date, c.end_date) = fi.document_period_end_date
         ) as numeric_fact_count
         , count(*) filter (
-            where f.concept_local = 'InvestmentOwnedAtFairValue'
-              and f.concept_namespace like 'http://fasb.org/us-gaap/%'
+            where fv.concept_map_id is not null
               and cf.period_type = 'instant'
               and cf.is_filing_period_end
               and cf.has_identifier_member
         ) as position_fact_count
         , max(cf.instant_date) filter (
-            where f.concept_local = 'InvestmentOwnedAtFairValue'
-              and f.concept_namespace like 'http://fasb.org/us-gaap/%'
+            where fv.concept_map_id is not null
               and cf.has_identifier_member
         ) as schedule_max_date
     from {{ ref('stg_filed_fact') }} f
     join {{ ref('stg_filed_filing') }} fi on fi.accession = f.accession
     join {{ ref('stg_filed_context') }} c on c.accession = f.accession and c.context_id = f.context_id
     join {{ ref('int_context_feature') }} cf on cf.accession = f.accession and cf.context_id = f.context_id
+    -- a fact of the fair-value concept (local name and namespace pattern from the seed); at most one seed row matches
+    -- a fact (tests/concept_map_one_row_per_fact.sql), so the join adds no rows
+    left join {{ ref('concept_map') }} fv
+        on fv.field = 'fair_value' and fv.concept_local = f.concept_local and f.concept_namespace glob fv.namespace_pattern
     group by 1
 )
 

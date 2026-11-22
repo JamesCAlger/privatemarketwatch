@@ -24,6 +24,11 @@ models:
       - name: has_term_fact
         data_tests:
           - not_null
+      - name: fair_value_rule_id
+        description: >
+          The rule the fair value was read under: a concept_map row (seeds/concept_map.csv) for the standard concept,
+          else the fund rule (stg_reading_rule) for a filer concept. Filled wherever a fair-value fact was read
+          (tests/int_context_feature_fair_value_names_rule.sql).
 
   - name: int_filing_candidate
     description: One row per parsed filing of a fund in scope, with the counts filing selection reads.
@@ -187,6 +192,22 @@ models:
               arguments:
                 to: ref('role_pattern')
                 field: pattern_id
+      - name: cash_source
+        description: >
+          What flagged a cash row: fund_rule (cash_rule_id), seed_pattern (cash_pattern_id) or filed_cash_axis (the
+          filed cash and cash equivalents axis). A fund rule is named first when a seed pattern also matches. Filled on
+          every cash row; null on every other row (tests/int_source_row_cash_source_only_on_cash.sql).
+        data_tests:
+          - not_null:
+              config:
+                where: "is_cash"
+          - accepted_values:
+              arguments:
+                values: ['fund_rule', 'seed_pattern', 'filed_cash_axis']
+      - name: held_for_two_scopes
+        description: True on a row held unresolved because two different scopes name it (rule 7).
+        data_tests:
+          - not_null
 
   - name: cmp_row_set
     description: >
@@ -314,6 +335,9 @@ unit_tests:
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A1, context_id: p1, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2025"}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_rate, field: rate, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
       - input: ref('stg_correction')
         rows:
           - {accession: A9, context_id: q9, kind: value, field: fair_value}
@@ -347,6 +371,10 @@ unit_tests:
       has an unloaded rate_only_contexts declaration). The pair q3 / q4 is the same except that q3's rate fact is in the
       filer's namespace, which is not a rate fact (F5), so both fall through. Cash convention: k1 (seed cash pattern) and
       k2 (fund cash rule) get it, the detail naming the source; k3 (cash on rule 8, no named source) does not.
+      Slice 3 Task 1: k4 (a cash row matched by both a fund cash rule and a seed pattern) names the fund rule (item e);
+      t2 (a principal correction on a row held unresolved at rule 7 for two scopes, no term fact) is not
+      needs_correction, because it is held for its scopes, not for want of a term fact; it falls through to owner_review
+      (item d).
     model: cmp_row_set
     given:
       - input: ref('stg_holdings')
@@ -359,21 +387,24 @@ unit_tests:
           - {cik: "2", report_date: 2026-03-31, accession_number: B1, src_context_id: a1, accounting_record_class: parent_schedule, fair_value: 15, corrected_fields: "_row:added"}
           - {cik: "2", report_date: 2026-03-31, accession_number: B1, src_context_id: q1, accounting_record_class: parent_schedule, fair_value: 16, corrected_fields: null}
           - {cik: "2", report_date: 2026-03-31, accession_number: B1, src_context_id: q3, accounting_record_class: parent_schedule, fair_value: 17, corrected_fields: null}
+          - {cik: "2", report_date: 2026-03-31, accession_number: B1, src_context_id: t2, accounting_record_class: parent_schedule, fair_value: 18, corrected_fields: "principal_amount"}
       - input: ref('int_source_row')
         rows:
-          - {accession: B1, context_id: p0, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: f1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: t1, cik: "2", report_date: 2026-03-31, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: w1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: w2, cik: "2", report_date: 2026-03-31, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: a1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 1, reason: "no investment identifier member", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: q1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: q2, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: q3, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: q4, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true, cash_rule_id: null, cash_pattern_id: null}
-          - {accession: B1, context_id: k1, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; label names a money-market fund", is_cash: true, is_published: true, cash_rule_id: null, cash_pattern_id: r5_money_market}
-          - {accession: B1, context_id: k2, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; cash identifier from the rule table", is_cash: true, is_published: true, cash_rule_id: cr2, cash_pattern_id: null}
-          - {accession: B1, context_id: k3, cik: "2", report_date: 2026-03-31, role: position, role_rule: 8, reason: "fair value on the cash and cash equivalents axis", is_cash: true, is_published: true, cash_rule_id: null, cash_pattern_id: null}
+          - {accession: B1, context_id: p0, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: f1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: t1, cik: "2", report_date: 2026-03-31, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: w1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: w2, cik: "2", report_date: 2026-03-31, role: unresolved, role_rule: 9, reason: "no rule removes it, but no term fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: a1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 1, reason: "no investment identifier member", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: q1, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: q2, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: q3, cik: "2", report_date: 2026-03-31, role: not_schedule, role_rule: 3, reason: "no fair value fact", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: q4, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: position, is_cash: false, is_published: true, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: k1, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; label names a money-market fund", is_cash: true, is_published: true, cash_rule_id: null, cash_pattern_id: r5_money_market, held_for_two_scopes: false}
+          - {accession: B1, context_id: k2, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; cash identifier from the rule table", is_cash: true, is_published: true, cash_rule_id: cr2, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: k3, cik: "2", report_date: 2026-03-31, role: position, role_rule: 8, reason: "fair value on the cash and cash equivalents axis", is_cash: true, is_published: true, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: false}
+          - {accession: B1, context_id: k4, cik: "2", report_date: 2026-03-31, role: position, role_rule: 9, reason: "position; cash identifier from the rule table", is_cash: true, is_published: true, cash_rule_id: cr2, cash_pattern_id: r5_money_market, held_for_two_scopes: false}
+          - {accession: B1, context_id: t2, cik: "2", report_date: 2026-03-31, role: unresolved, role_rule: 7, reason: "two scopes: JV One; JV Two", is_cash: false, is_published: false, cash_rule_id: null, cash_pattern_id: null, held_for_two_scopes: true}
       - input: ref('int_context_feature')
         rows:
           - {accession: B1, context_id: p0, identifier_label: "Alpha | Loan", fair_value: 10, fair_value_fact_count: 1, has_term_fact: true}
@@ -389,6 +420,8 @@ unit_tests:
           - {accession: B1, context_id: k1, identifier_label: "Some Money Market Fund", fair_value: 5, fair_value_fact_count: 1, has_term_fact: false}
           - {accession: B1, context_id: k2, identifier_label: "Cash Sweep Account", fair_value: 6, fair_value_fact_count: 1, has_term_fact: false}
           - {accession: B1, context_id: k3, identifier_label: null, fair_value: 7, fair_value_fact_count: 1, has_term_fact: false}
+          - {accession: B1, context_id: k4, identifier_label: "Sweep Money Market Fund", fair_value: 8, fair_value_fact_count: 1, has_term_fact: false}
+          - {accession: B1, context_id: t2, identifier_label: "Two Scope Co | Loan", fair_value: 18, fair_value_fact_count: 1, has_term_fact: false}
       - input: ref('stg_fund_financials')
         rows:
           - {cik: "9", report_date: 2026-03-31, investments_at_fair_value: 1}
@@ -396,10 +429,15 @@ unit_tests:
         rows:
           - {accession: B1, context_id: q1, concept_local: InvestmentInterestRate, concept_namespace: "http://fasb.org/us-gaap/2025"}
           - {accession: B1, context_id: q3, concept_local: InvestmentInterestRate, concept_namespace: "http://filer.example/2025"}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_rate, field: rate, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_rate_sup, field: rate, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap-sup/*"}
       - input: ref('stg_correction')
         rows:
           - {accession: B1, context_id: f1, kind: value, field: fair_value}
           - {accession: B1, context_id: t1, kind: value, field: principal_amount}
+          - {accession: B1, context_id: t2, kind: value, field: principal_amount}
           - {accession: B1, context_id: w1, kind: value, field: principal_amount}
           - {accession: B1, context_id: w2, kind: value, field: fair_value}
       - input: ref('stg_reading_not_loaded')
@@ -420,6 +458,8 @@ unit_tests:
         - {basis: published, context_id: k1, side: new_only, cause: convention, cause_detail: cash_published_d7_seed_pattern}
         - {basis: published, context_id: k2, side: new_only, cause: convention, cause_detail: cash_published_d7_fund_rule}
         - {basis: published, context_id: k3, side: new_only, cause: not_yet_explained, cause_detail: none}
+        - {basis: published, context_id: k4, side: new_only, cause: convention, cause_detail: cash_published_d7_fund_rule}
+        - {basis: published, context_id: t2, side: production_only, cause: owner_review, cause_detail: held_unresolved_d5}
 
   - name: cmp_excluded_quarter_lists_quarters_production_lacks
     description: >
@@ -494,6 +534,10 @@ unit_tests:
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A, context_id: c11, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_fair_value, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
     expect:
       rows:
         - {accession: A, context_id: c1, child_count: 2, is_subtotal: false, near_miss_reason: cost_not_comparable}
@@ -532,6 +576,10 @@ unit_tests:
       - input: ref('stg_filed_fact')
         rows:
           - {accession: Z, context_id: z, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_fair_value, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
     expect:
       rows:
         - {accession: A, context_id: g1, child_count: 2, is_subtotal: true, near_miss_reason: null}
@@ -586,6 +634,10 @@ unit_tests:
       - input: ref('stg_filed_fact')
         rows:
           - {accession: Z, context_id: z, concept_local: InvestmentOwnedAtFairValue, concept_namespace: "http://fasb.org/us-gaap/2024", decimals: "0", is_nil: false}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_fair_value, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
     expect:
       rows:
         - {accession: A, context_id: p1, is_subtotal: true, subtotal_rule_id: fv7, near_miss_reason: cost_differs}
@@ -675,7 +727,10 @@ unit_tests:
       value beside a filer value keeps the us-gaap side (no number, source standard); two disagreeing us-gaap values
       beside a filer value give null (source standard); the same fund's concept in a namespace outside the rule's
       domain is not read, while another dated namespace inside it is (I1); one concept mapped to both fair value and
-      term fact gives the value and the term fact, each naming its rule (I2).
+      term fact gives the value and the term fact, each naming its rule (I2). Slice 3 Task 1: the standard concepts come
+      from the seed concept_map (given here as three rows); fair_value_rule_id names the concept_map row for a standard
+      fair value and the fund rule for a filer one; a4's filer-namespace ownership percent sets has_ownership_percent
+      through the fund rule, matched to the seed's local name.
     model: int_context_feature
     given:
       - input: ref('stg_filed_filing')
@@ -733,18 +788,23 @@ unit_tests:
           - {rule_id: t3_fv, cik: "3", action: concept_is_fair_value, sel_concept_namespace: "http://three.example/*", sel_concept_local: BothConcept, sel_accession: null, valid_from: null, valid_to: null}
           - {rule_id: t3_term, cik: "3", action: concept_is_term_fact, sel_concept_namespace: "http://three.example/*", sel_concept_local: BothConcept, sel_accession: null, valid_from: null, valid_to: null}
           - {rule_id: other, cik: "1", action: set_scope, sel_concept_namespace: null, sel_concept_local: null, sel_accession: null, valid_from: null, valid_to: null}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_fair_value, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_ownership, field: ownership_percent, concept_local: InvestmentOwnedBalancePercentOfShares, namespace_pattern: "http://fasb.org/us-gaap/*"}
     expect:
       rows:
-        - {context_id: a1, fair_value: 7, fair_value_source: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
-        - {context_id: a2, fair_value: 10, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
-        - {context_id: a3, fair_value: null, fair_value_source: fc_fv, fair_value_fact_count: 2, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
-        - {context_id: a4, fair_value: 5, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: fc_pct}
-        - {context_id: a5, fair_value: null, fair_value_source: standard, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
-        - {context_id: a6, fair_value: null, fair_value_source: standard, fair_value_fact_count: 2, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null}
-        - {context_id: b1, fair_value: null, fair_value_source: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
-        - {context_id: c1, fair_value: null, fair_value_source: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
-        - {context_id: c2, fair_value: 6, fair_value_source: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null}
-        - {context_id: d1, fair_value: -4, fair_value_source: t3_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: t3_term}
+        - {context_id: a1, fair_value: 7, fair_value_source: fc_fv, fair_value_rule_id: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: a2, fair_value: 10, fair_value_source: standard, fair_value_rule_id: cm_fair_value, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: a3, fair_value: null, fair_value_source: fc_fv, fair_value_rule_id: fc_fv, fair_value_fact_count: 2, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: a4, fair_value: 5, fair_value_source: standard, fair_value_rule_id: cm_fair_value, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: fc_pct, has_ownership_percent: true}
+        - {context_id: a5, fair_value: null, fair_value_source: standard, fair_value_rule_id: cm_fair_value, fair_value_fact_count: 1, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: a6, fair_value: null, fair_value_source: standard, fair_value_rule_id: cm_fair_value, fair_value_fact_count: 2, fair_value_filer_concept_also_present: true, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: b1, fair_value: null, fair_value_source: null, fair_value_rule_id: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: c1, fair_value: null, fair_value_source: null, fair_value_rule_id: null, fair_value_fact_count: 0, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: c2, fair_value: 6, fair_value_source: fc_fv, fair_value_rule_id: fc_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: false, term_fact_source: null, has_ownership_percent: false}
+        - {context_id: d1, fair_value: -4, fair_value_source: t3_fv, fair_value_rule_id: t3_fv, fair_value_fact_count: 1, fair_value_filer_concept_also_present: false, has_term_fact: true, term_fact_source: t3_term, has_ownership_percent: false}
 
   - name: int_role_structure_filer_fair_value_passes_rule_3
     description: >
@@ -781,7 +841,9 @@ unit_tests:
     description: >
       Hand-made rows. First match decides; an aggregate by rules 4 to 6 that carries a term fact, or a position
       without one, is unresolved; cash rows are exempt; a JV scope is a position not published; two scopes are
-      unresolved; the cash axis alone is rule 8.
+      unresolved (held_for_two_scopes); the cash axis alone is rule 8. Slice 3 Task 1: cash_source names what flagged a
+      cash row (s7 seed_pattern, s10 filed_cash_axis, s11 fund_rule); s12, a cash row matched by both a fund cash rule
+      and a seed pattern, names the fund rule and keeps the pattern id (item e).
     model: int_source_row
     given:
       - input: ref('int_role_structure')
@@ -797,6 +859,7 @@ unit_tests:
           - {accession: A, context_id: s9, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
           - {accession: A, context_id: s10, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: true}
           - {accession: A, context_id: s11, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
+          - {accession: A, context_id: s12, cik: "1", role: null, role_rule: null, reason: null, is_cash_axis: false}
       - input: ref('int_context_feature')
         rows:
           - {accession: A, context_id: s1, has_term_fact: true}
@@ -810,11 +873,13 @@ unit_tests:
           - {accession: A, context_id: s9, has_term_fact: true}
           - {accession: A, context_id: s10, has_term_fact: false}
           - {accession: A, context_id: s11, has_term_fact: false}
+          - {accession: A, context_id: s12, has_term_fact: false}
       - input: ref('int_role_text')
         rows:
           - {accession: A, context_id: s2, text_rule: 4, pattern_id: r4_total, cash_pattern_id: null}
           - {accession: A, context_id: s3, text_rule: 4, pattern_id: r4_total, cash_pattern_id: null}
           - {accession: A, context_id: s7, text_rule: null, pattern_id: null, cash_pattern_id: r5_money_market}
+          - {accession: A, context_id: s12, text_rule: null, pattern_id: null, cash_pattern_id: r5_money_market}
       - input: ref('int_role_subtotal')
         rows:
           - {accession: A, context_id: s4, is_subtotal: true, child_count: 3}
@@ -824,22 +889,24 @@ unit_tests:
           - {accession: A, context_id: s8, scope_count: 1, scope: "JV One", scopes: "JV One", scope_rule_id: r1, scope_how: set_scope, cash_rule_id: null}
           - {accession: A, context_id: s9, scope_count: 2, scope: null, scopes: "JV One; JV Two", scope_rule_id: r1, scope_how: set_scope, cash_rule_id: null}
           - {accession: A, context_id: s11, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: r9}
+          - {accession: A, context_id: s12, scope_count: 0, scope: null, scopes: null, scope_rule_id: null, scope_how: null, cash_rule_id: r9}
       - input: ref('int_role_fund_position')
         rows:
           - {accession: Z, context_id: z, position_rule_id: none, match_count: 1}
     expect:
       rows:
-        - {context_id: s1, role: superseded, role_rule: 0, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: null, cash_pattern_id: null}
-        - {context_id: s2, role: aggregate, role_rule: 4, rule_id: r4_total, scope: fund, is_cash: false, is_published: false, cross_check_agrees: true, cash_pattern_id: null}
-        - {context_id: s3, role: unresolved, role_rule: 4, rule_id: r4_total, scope: fund, is_cash: false, is_published: false, cross_check_agrees: false, cash_pattern_id: null}
-        - {context_id: s4, role: aggregate, role_rule: 6, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: true, cash_pattern_id: null}
-        - {context_id: s5, role: position, role_rule: 9, rule_id: null, scope: fund, is_cash: false, is_published: true, cross_check_agrees: true, cash_pattern_id: null}
-        - {context_id: s6, role: unresolved, role_rule: 9, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: false, cash_pattern_id: null}
-        - {context_id: s7, role: position, role_rule: 9, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: r5_money_market}
-        - {context_id: s8, role: position, role_rule: 7, rule_id: r1, scope: "JV One", is_cash: false, is_published: false, cross_check_agrees: true, cash_pattern_id: null}
-        - {context_id: s9, role: unresolved, role_rule: 7, rule_id: r1, scope: "JV One; JV Two", is_cash: false, is_published: false, cross_check_agrees: null, cash_pattern_id: null}
-        - {context_id: s10, role: position, role_rule: 8, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: null}
-        - {context_id: s11, role: position, role_rule: 9, rule_id: r9, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: null}
+        - {context_id: s1, role: superseded, role_rule: 0, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: null, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s2, role: aggregate, role_rule: 4, rule_id: r4_total, scope: fund, is_cash: false, is_published: false, cross_check_agrees: true, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s3, role: unresolved, role_rule: 4, rule_id: r4_total, scope: fund, is_cash: false, is_published: false, cross_check_agrees: false, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s4, role: aggregate, role_rule: 6, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: true, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s5, role: position, role_rule: 9, rule_id: null, scope: fund, is_cash: false, is_published: true, cross_check_agrees: true, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s6, role: unresolved, role_rule: 9, rule_id: null, scope: fund, is_cash: false, is_published: false, cross_check_agrees: false, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s7, role: position, role_rule: 9, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: r5_money_market, cash_source: seed_pattern, held_for_two_scopes: false}
+        - {context_id: s8, role: position, role_rule: 7, rule_id: r1, scope: "JV One", is_cash: false, is_published: false, cross_check_agrees: true, cash_pattern_id: null, cash_source: null, held_for_two_scopes: false}
+        - {context_id: s9, role: unresolved, role_rule: 7, rule_id: r1, scope: "JV One; JV Two", is_cash: false, is_published: false, cross_check_agrees: null, cash_pattern_id: null, cash_source: null, held_for_two_scopes: true}
+        - {context_id: s10, role: position, role_rule: 8, rule_id: null, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: null, cash_source: filed_cash_axis, held_for_two_scopes: false}
+        - {context_id: s11, role: position, role_rule: 9, rule_id: r9, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: null, cash_source: fund_rule, held_for_two_scopes: false}
+        - {context_id: s12, role: position, role_rule: 9, rule_id: r9, scope: fund, is_cash: true, is_published: true, cross_check_agrees: true, cash_pattern_id: r5_money_market, cash_source: fund_rule, held_for_two_scopes: false}
 
   - name: int_source_row_fund_position_rule
     description: >

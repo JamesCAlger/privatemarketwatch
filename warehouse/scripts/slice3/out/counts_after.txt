@@ -1,0 +1,218 @@
+﻿what	cik	k1	k2	k3	k4	n
+cmp	0001287750	published	both			19767
+cmp	0001287750	published	new_only	needs_store_not_loaded	rate_only_context_pair	2
+cmp	0001287750	published	production_only	needs_correction	correction_supplies_value_or_term	2
+cmp	0001287750	published	production_only	needs_store_not_loaded	production_row_added	8
+cmp	0001287750	published	production_only	needs_store_not_loaded	rate_only_context_pair	2
+cmp	0001803498	published	both			15499
+cmp	0001803498	published	new_only	convention	cash_published_d7_seed_pattern	31
+cmp	0001803498	published	new_only	not_yet_explained	none	1
+cmp	0001803498	unpublished	both			9173
+cmp	0001803498	unpublished	new_only	convention	cash_published_d7_fund_rule	2
+cmp	0001803498	unpublished	new_only	convention	cash_published_d7_seed_pattern	28
+cmp	0001812554	published	both			9719
+cmp	0001812554	published	new_only	not_yet_explained	relabel_loaded	1
+cmp	0001812554	unpublished	both			1416
+cmp	0001837532	published	both			7248
+cmp	0001837532	published	production_only	needs_correction	correction_supplies_value_or_term	50
+cmp	0001838126	published	both			8442
+cmp	0001838126	unpublished	both			151
+cmp_role	0001287750	published	both	position	9	19767
+cmp_role	0001287750	published	new_only	position	9	2
+cmp_role	0001287750	published	production_only	not_schedule	1	8
+cmp_role	0001287750	published	production_only	not_schedule	3	2
+cmp_role	0001287750	published	production_only	unresolved	9	2
+cmp_role	0001803498	published	both	position	9	15499
+cmp_role	0001803498	published	new_only	position	9	32
+cmp_role	0001803498	unpublished	both	position	7	9173
+cmp_role	0001803498	unpublished	new_only	position	7	30
+cmp_role	0001812554	published	both	position	9	9719
+cmp_role	0001812554	published	new_only	position	9	1
+cmp_role	0001812554	unpublished	both	position	7	1416
+cmp_role	0001837532	published	both	position	8	8
+cmp_role	0001837532	published	both	position	9	7240
+cmp_role	0001837532	published	production_only	not_schedule	3	44
+cmp_role	0001837532	published	production_only	unresolved	9	6
+cmp_role	0001838126	published	both	position	9	8442
+cmp_role	0001838126	unpublished	both	position	7	151
+filing_candidate	0001287750	2022-09-30	0001287750-22-000052	1024		1
+filing_candidate	0001287750	2022-12-31	0001287750-23-000010	1054		1
+filing_candidate	0001287750	2022-12-31	0001628280-23-010219	0		1
+filing_candidate	0001287750	2023-03-31	0001287750-23-000021	1061		1
+filing_candidate	0001287750	2023-06-30	0001287750-23-000036	1192		1
+filing_candidate	0001287750	2023-09-30	0001287750-23-000045	1151		1
+filing_candidate	0001287750	2023-12-31	0001287750-24-000011	1191		1
+filing_candidate	0001287750	2023-12-31	0001287750-24-000014	0		1
+filing_candidate	0001287750	2024-03-31	0001287750-24-000028	1217		1
+filing_candidate	0001287750	2024-06-30	0001287750-24-000039	1270		1
+filing_candidate	0001287750	2024-09-30	0001287750-24-000054	1286		1
+filing_candidate	0001287750	2024-12-31	0001287750-25-000007	1337		1
+filing_candidate	0001287750	2024-12-31	0001287750-25-000012	0		1
+filing_candidate	0001287750	2025-03-31	0001287750-25-000020	1353		1
+filing_candidate	0001287750	2025-06-30	0001287750-25-000038	1386		1
+filing_candidate	0001287750	2025-09-30	0001287750-25-000046	1420		1
+filing_candidate	0001287750	2025-12-31	0001287750-26-000006	1447		1
+filing_candidate	0001287750	2025-12-31	0001628280-26-020560	0		1
+filing_candidate	0001287750	2026-03-31	0001628280-26-027688	1457		1
+filing_candidate	0001287750	2026-06-30	0001628280-26-050307	1478		1
+filing_candidate	0001287750	2026-09-30	0001628280-26-067383	1462		1
+filing_candidate	0001803498	2022-06-30	0001803498-22-000017	0		1
+filing_candidate	0001803498	2022-09-30	0001803498-22-000021	1088		1
+filing_candidate	0001803498	2022-12-31	0001803498-23-000008	1338		1
+filing_candidate	0001803498	2023-03-31	0001803498-23-000012	1289		1
+filing_candidate	0001803498	2023-06-30	0001803498-23-000017	1270		1
+filing_candidate	0001803498	2023-09-30	0001803498-23-000021	1290		1
+filing_candidate	0001803498	2023-12-31	0001803498-24-000007	1312		1
+filing_candidate	0001803498	2024-03-31	0001803498-24-000022	1294		1
+filing_candidate	0001803498	2024-06-30	0001803498-24-000044	1394		1
+filing_candidate	0001803498	2024-09-30	0001803498-24-000062	1498		1
+filing_candidate	0001803498	2024-12-31	0001803498-25-000021	1662		1
+filing_candidate	0001803498	2025-03-31	0001803498-25-000038	1713		1
+filing_candidate	0001803498	2025-06-30	0001803498-25-000062	1807		1
+filing_candidate	0001803498	2025-09-30	0001803498-25-000081	1891		1
+filing_candidate	0001803498	2025-12-31	0001803498-26-000014	2016		1
+filing_candidate	0001803498	2026-03-31	0001803498-26-000031	2016		1
+filing_candidate	0001803498	2026-06-30	0001803498-26-000048	1905		1
+filing_candidate	0001812554	2023-03-31	0001812554-23-000014	580		1
+filing_candidate	0001812554	2023-06-30	0001812554-23-000022	651		1
+filing_candidate	0001812554	2023-09-30	0001812554-23-000030	729		1
+filing_candidate	0001812554	2023-12-31	0001812554-24-000014	783		1
+filing_candidate	0001812554	2024-03-31	0001812554-24-000027	874		1
+filing_candidate	0001812554	2024-06-30	0001812554-24-000043	977		1
+filing_candidate	0001812554	2024-09-30	0001812554-24-000062	978		1
+filing_candidate	0001812554	2024-12-31	0001812554-25-000009	503		1
+filing_candidate	0001812554	2025-03-31	0001812554-25-000030	520		1
+filing_candidate	0001812554	2025-06-30	0001812554-25-000052	547		1
+filing_candidate	0001812554	2025-09-30	0001812554-25-000081	526		1
+filing_candidate	0001812554	2025-12-31	0001812554-26-000011	556		1
+filing_candidate	0001812554	2026-03-31	0001812554-26-000027	541		1
+filing_candidate	0001812554	2026-06-30	0001812554-26-000047	531		1
+filing_candidate	0001812554	2026-09-30	0001812554-26-000060	511		1
+filing_candidate	0001837532	2023-03-31	0000950170-23-021206	278		1
+filing_candidate	0001837532	2023-06-30	0000950170-23-041830	316		1
+filing_candidate	0001837532	2023-09-30	0000950170-23-061985	347		1
+filing_candidate	0001837532	2023-12-31	0000950170-24-031479	408		1
+filing_candidate	0001837532	2023-12-31	0001193125-24-271593	0		1
+filing_candidate	0001837532	2024-03-31	0000950170-24-058684	491		1
+filing_candidate	0001837532	2024-03-31	0001193125-24-271601	0		1
+filing_candidate	0001837532	2024-06-30	0000950170-24-094137	654		1
+filing_candidate	0001837532	2024-06-30	0001193125-24-271605	0		1
+filing_candidate	0001837532	2024-09-30	0000950170-24-124223	734		1
+filing_candidate	0001837532	2024-12-31	0000950170-25-038785	797		1
+filing_candidate	0001837532	2025-03-31	0000950170-25-068013	893		1
+filing_candidate	0001837532	2025-06-30	0000950170-25-105984	676		1
+filing_candidate	0001837532	2025-09-30	0001193125-25-277723	738		1
+filing_candidate	0001837532	2025-12-31	0001193125-26-102386	753		1
+filing_candidate	0001837532	2026-03-31	0001193125-26-215667	774		1
+filing_candidate	0001837532	2026-06-30	0001193125-26-341358	800		1
+filing_candidate	0001837532	2026-09-30	0001193125-26-449955	786		1
+filing_candidate	0001838126	2022-12-31	0001838126-23-000024	0		1
+filing_candidate	0001838126	2023-03-31	0001838126-23-000040	364		1
+filing_candidate	0001838126	2023-06-30	0001838126-23-000056	377		1
+filing_candidate	0001838126	2023-09-30	0001838126-23-000080	401		1
+filing_candidate	0001838126	2023-12-31	0001838126-24-000022	444		1
+filing_candidate	0001838126	2024-03-31	0001838126-24-000038	458		1
+filing_candidate	0001838126	2024-06-30	0001838126-24-000061	505		1
+filing_candidate	0001838126	2024-09-30	0001838126-24-000079	560		1
+filing_candidate	0001838126	2024-12-31	0001838126-25-000017	654		1
+filing_candidate	0001838126	2025-03-31	0001838126-25-000031	728		1
+filing_candidate	0001838126	2025-06-30	0001838126-25-000055	785		1
+filing_candidate	0001838126	2025-09-30	0001838126-25-000073	821		1
+filing_candidate	0001838126	2025-12-31	0001628280-26-020206	848		1
+filing_candidate	0001838126	2026-03-31	0001628280-26-033248	835		1
+filing_candidate	0001838126	2026-06-30	0001628280-26-056772	818		1
+is_cash	0001803498	true	false			30
+is_cash	0001803498	true	true			31
+is_cash	0001837532	true	true			20
+role	0001287750	aggregate	6			404
+role	0001287750	comparative	2			27200
+role	0001287750	not_schedule	1			23342
+role	0001287750	not_schedule	3			6057
+role	0001287750	position	9			21191
+role	0001287750	superseded	0			12
+role	0001287750	unresolved	9			190
+role	0001803498	aggregate	5			47
+role	0001803498	comparative	2			27702
+role	0001803498	not_schedule	1			29834
+role	0001803498	not_schedule	3			6016
+role	0001803498	position	7			9203
+role	0001803498	position	9			15531
+role	0001803498	superseded	0			4
+role	0001803498	unresolved	7			1
+role	0001803498	unresolved	9			1
+role	0001812554	aggregate	6			62
+role	0001812554	comparative	2			11583
+role	0001812554	not_schedule	1			20871
+role	0001812554	not_schedule	3			281
+role	0001812554	position	7			1416
+role	0001812554	position	9			10527
+role	0001812554	unresolved	3			5
+role	0001812554	unresolved	4			39
+role	0001812554	unresolved	9			72
+role	0001837532	aggregate	4			2
+role	0001837532	aggregate	6			1251
+role	0001837532	comparative	2			8688
+role	0001837532	not_schedule	1			21423
+role	0001837532	not_schedule	3			1229
+role	0001837532	position	8			10
+role	0001837532	position	9			8024
+role	0001837532	superseded	0			16
+role	0001837532	unresolved	9			162
+role	0001838126	comparative	2			9559
+role	0001838126	not_schedule	1			16198
+role	0001838126	not_schedule	3			2183
+role	0001838126	position	7			151
+role	0001838126	position	9			8442
+role	0001838126	superseded	0			6
+role_rule_id	0001287750	aggregate	6			404
+role_rule_id	0001287750	comparative	2			27200
+role_rule_id	0001287750	not_schedule	1			23342
+role_rule_id	0001287750	not_schedule	3			6057
+role_rule_id	0001287750	position	9			21191
+role_rule_id	0001287750	superseded	0			12
+role_rule_id	0001287750	unresolved	9			190
+role_rule_id	0001803498	aggregate	5	r5_cash_bucket		47
+role_rule_id	0001803498	comparative	2			27702
+role_rule_id	0001803498	not_schedule	1			29834
+role_rule_id	0001803498	not_schedule	3			6016
+role_rule_id	0001803498	position	7	220244af2ad6c5b8		864
+role_rule_id	0001803498	position	7	36f0506137de5695		3685
+role_rule_id	0001803498	position	7	4fd9de6d874731e3		1218
+role_rule_id	0001803498	position	7	701b62b4065936e9		133
+role_rule_id	0001803498	position	7	97744aa45bfa44a4		2403
+role_rule_id	0001803498	position	7	f908b77d4f5144ae		900
+role_rule_id	0001803498	position	9			15531
+role_rule_id	0001803498	superseded	0			4
+role_rule_id	0001803498	unresolved	7	36f0506137de5695		1
+role_rule_id	0001803498	unresolved	9			1
+role_rule_id	0001812554	aggregate	6			62
+role_rule_id	0001812554	comparative	2			11583
+role_rule_id	0001812554	not_schedule	1			20871
+role_rule_id	0001812554	not_schedule	3			281
+role_rule_id	0001812554	position	7	r7_subsidiary_axis		1416
+role_rule_id	0001812554	position	9			10527
+role_rule_id	0001812554	unresolved	3			5
+role_rule_id	0001812554	unresolved	4	r4_total		39
+role_rule_id	0001812554	unresolved	9			72
+role_rule_id	0001837532	aggregate	4	r4_total		2
+role_rule_id	0001837532	aggregate	6			1111
+role_rule_id	0001837532	aggregate	6	ab843cbba35c7d11		140
+role_rule_id	0001837532	comparative	2			8688
+role_rule_id	0001837532	not_schedule	1			21423
+role_rule_id	0001837532	not_schedule	3			1229
+role_rule_id	0001837532	position	8			10
+role_rule_id	0001837532	position	9			8023
+role_rule_id	0001837532	position	9	a0bd61e1abdb8816		1
+role_rule_id	0001837532	superseded	0			16
+role_rule_id	0001837532	unresolved	9			162
+role_rule_id	0001838126	comparative	2			9559
+role_rule_id	0001838126	not_schedule	1			16198
+role_rule_id	0001838126	not_schedule	3			2183
+role_rule_id	0001838126	position	7	e65d57e040be97ec		151
+role_rule_id	0001838126	position	9			8442
+role_rule_id	0001838126	superseded	0			6
+subtotal		false	fair_value_differs			158
+subtotal		true				1577
+subtotal		true	cost_differs	ab843cbba35c7d11		120
+subtotal		true	cost_not_comparable	ab843cbba35c7d11		20
+-- rows shown: 216

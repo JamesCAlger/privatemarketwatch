@@ -31,6 +31,11 @@ vars:
   # production's wrappers, hashed at build time. Relative to warehouse/.
   wrappers_dir: "wrappers"
   production_wrappers_dir: "../data/overrides/bdc_xbrl_wrappers"
+  # Row-correction store drift (stg_row_store_drift, slice 3 Task 1): the stores the readings loader reads, hashed at
+  # build time against the loader's manifest. Same files as readings_loader/cli.py ROW_STORES. Relative to warehouse/.
+  row_store_files:
+    row_corrections: "../data/overrides/row_corrections.csv"
+    row_corrections_by_context: "../data/overrides/row_corrections_by_context.csv"
   # Filing selection (int_filing_selected): a candidate filing is full when it has at least this percent of the
   # position facts of the fullest candidate for the same fund and date. A placeholder from the pilot: every
   # amendment seen so far was empty or at least 98 pct full (spec intermediate_spine.md 6.1).
@@ -98,6 +103,12 @@ vars:
     production_wrapper_changed: 0
     # Final fix wave F1: a wrapper copy changed since the readings loader read it (the loaded rules are stale).
     wrapper_copy_changed_since_load: 0
+    # Slice 3 Task 1, item b: a row-correction store changed since the readings loader read it (the loaded
+    # corrections are stale). A rule, not a measurement.
+    row_store_changed_since_load: 0
+    # Slice 3 Task 1, item c: rows a fund rule position_without_term_fact made positions in a fund-quarter production
+    # lacks (cmp_excluded_quarter). Measured 2026-11-22: 0.
+    fund_rule_release_in_excluded_quarter: 0
     # Slice 2 Task 6 (D15): rows a fund rule position_without_term_fact made positions that production has no row for
     # on the same basis. The rules were written to release none; any such row fails the build.
     fund_rule_release_not_in_production: 0

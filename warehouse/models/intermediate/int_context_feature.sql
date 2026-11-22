@@ -1,18 +1,12 @@
 -- Decides nothing: one row per filed context with the structural features later rules read (members, dates, which facts it carries).
 --
--- Concepts read (matched on local name plus namespace, never on the prefix; filed_layer.md section 7 ruling 12):
---   fair value : InvestmentOwnedAtFairValue                      namespace http://fasb.org/us-gaap/*
---   cost       : InvestmentOwnedAtCost                           namespace http://fasb.org/us-gaap/*
---   principal  : InvestmentOwnedBalancePrincipalAmount           us-gaap or us-gaap-sup
---   shares     : InvestmentOwnedBalanceShares                    us-gaap or us-gaap-sup
---   rate       : InvestmentInterestRate, InvestmentInterestRatePaidInCash   us-gaap or us-gaap-sup
---   spread     : InvestmentBasisSpreadVariableRate               us-gaap or us-gaap-sup
---   PIK rate   : InvestmentInterestRatePaidInKind                us-gaap or us-gaap-sup
---   maturity   : InvestmentMaturityDate                          us-gaap or us-gaap-sup
---   ownership  : InvestmentOwnedBalancePercentOfShares            us-gaap or us-gaap-sup (fix round 2); a filer namespace
---                only through a fund rule (below).
--- The term facts also accept the FASB supplement namespace (http://fasb.org/us-gaap-sup/2022q3): nine filings
--- with period ends 2022-09-30 to 2023-03-31 tag spread, PIK rate and floor there and nowhere else.
+-- Standard concepts: read from the seed concept_map (one definition, slice 3 Task 1). A fact belongs to a field when
+-- its local name equals the row's concept_local and its namespace matches the row's namespace_pattern (a glob), never
+-- on the prefix (filed_layer.md section 7 ruling 12). Fair value and cost: us-gaap only. The term facts (principal,
+-- shares, rate, spread, PIK rate, maturity, ownership percent) also accept the FASB supplement namespace; the seed
+-- says so row by row. Share of net assets is in the seed but is not read here.
+-- fair_value_rule_id: the rule the fair value was read under, the concept_map row for the standard concept or the
+-- fund rule for a filer concept (spec section 7: every value names its rule).
 -- Investment identifier: a member on an axis whose local name is InvestmentIdentifierAxis (any prefix).
 -- Filer concepts: a concept a filer files in its own namespace, read through a fund rule in the rule table
 -- (stg_reading_rule, from the wrapper's reading_rules; slice 2 Task 5). Matched on the filer's cik, the namespace
@@ -37,41 +31,41 @@ with filing as (
     group by 1, 2
 )
 
+, concept_map as (
+    select concept_map_id, field, concept_local, namespace_pattern from {{ ref('concept_map') }}
+)
+
 , facts as (
+    -- the facts of a standard concept, each with the field and the concept_map row it was read under
     select
-        accession
-        , context_id
-        , concept_local
-        , concept_namespace like 'http://fasb.org/us-gaap/%' as is_us_gaap
-        , concept_namespace like 'http://fasb.org/us-gaap/%' or concept_namespace like 'http://fasb.org/us-gaap-sup/%' as is_fasb
-        , value_numeric
-    from {{ ref('stg_filed_fact') }}
-    where concept_local in (
-        'InvestmentOwnedAtFairValue', 'InvestmentOwnedAtCost', 'InvestmentOwnedBalancePrincipalAmount'
-        , 'InvestmentOwnedBalanceShares', 'InvestmentInterestRate', 'InvestmentInterestRatePaidInCash'
-        , 'InvestmentBasisSpreadVariableRate', 'InvestmentInterestRatePaidInKind', 'InvestmentMaturityDate'
-        , 'InvestmentOwnedBalancePercentOfShares'
-    )
+        f.accession
+        , f.context_id
+        , m.field
+        , m.concept_map_id
+        , f.value_numeric
+    from {{ ref('stg_filed_fact') }} f
+    join concept_map m on m.concept_local = f.concept_local and f.concept_namespace glob m.namespace_pattern
 )
 
 , fact_features as (
     select
         accession
         , context_id
-        , count(*) filter (where concept_local = 'InvestmentOwnedAtFairValue' and is_us_gaap) as fair_value_fact_count
-        , count(distinct value_numeric) filter (where concept_local = 'InvestmentOwnedAtFairValue' and is_us_gaap) as fair_value_distinct
-        , min(value_numeric) filter (where concept_local = 'InvestmentOwnedAtFairValue' and is_us_gaap) as fair_value_any
-        , count(*) filter (where concept_local = 'InvestmentOwnedAtCost' and is_us_gaap) as cost_fact_count
-        , count(distinct value_numeric) filter (where concept_local = 'InvestmentOwnedAtCost' and is_us_gaap) as cost_distinct
-        , min(value_numeric) filter (where concept_local = 'InvestmentOwnedAtCost' and is_us_gaap) as cost_any
+        , count(*) filter (where field = 'fair_value') as fair_value_fact_count
+        , count(distinct value_numeric) filter (where field = 'fair_value') as fair_value_distinct
+        , min(value_numeric) filter (where field = 'fair_value') as fair_value_any
+        , min(concept_map_id) filter (where field = 'fair_value') as fair_value_map_id
+        , count(*) filter (where field = 'cost') as cost_fact_count
+        , count(distinct value_numeric) filter (where field = 'cost') as cost_distinct
+        , min(value_numeric) filter (where field = 'cost') as cost_any
         -- has_* flags: a nil fact counts as present (the filer tagged the term on the row); row roles rely on this.
-        , bool_or(concept_local = 'InvestmentOwnedBalancePrincipalAmount' and is_fasb) as has_principal
-        , bool_or(concept_local = 'InvestmentOwnedBalanceShares' and is_fasb) as has_shares
-        , bool_or(concept_local in ('InvestmentInterestRate', 'InvestmentInterestRatePaidInCash') and is_fasb) as has_rate
-        , bool_or(concept_local = 'InvestmentBasisSpreadVariableRate' and is_fasb) as has_spread
-        , bool_or(concept_local = 'InvestmentInterestRatePaidInKind' and is_fasb) as has_pik_rate
-        , bool_or(concept_local = 'InvestmentMaturityDate' and is_fasb) as has_maturity
-        , bool_or(concept_local = 'InvestmentOwnedBalancePercentOfShares' and is_fasb) as has_ownership_percent
+        , bool_or(field = 'principal_amount') as has_principal
+        , bool_or(field = 'shares') as has_shares
+        , bool_or(field = 'rate') as has_rate
+        , bool_or(field = 'spread') as has_spread
+        , bool_or(field = 'pik_rate') as has_pik_rate
+        , bool_or(field = 'maturity') as has_maturity
+        , bool_or(field = 'ownership_percent') as has_ownership_percent
     from facts
     group by 1, 2
 )
@@ -119,7 +113,10 @@ with filing as (
         , min(value_numeric) filter (where maps_to = 'fair_value') as filer_fair_value_any
         , min(rule_id) filter (where maps_to = 'fair_value') as fair_value_rule_id
         , bool_or(maps_to = 'term_fact') as has_filer_term_fact
-        , bool_or(maps_to = 'term_fact' and concept_local = 'InvestmentOwnedBalancePercentOfShares') as has_filer_ownership_percent
+        -- a fund rule that reads the ownership-percent concept (by its local name in the seed) in the filer's namespace
+        , bool_or(maps_to = 'term_fact' and concept_local in (
+            select concept_local from concept_map where field = 'ownership_percent'
+          )) as has_filer_ownership_percent
         , min(rule_id) filter (where maps_to = 'term_fact') as term_fact_rule_id
     from filer_facts
     group by 1, 2
@@ -158,6 +155,11 @@ select
         when coalesce(ff.fair_value_fact_count, 0) > 0 then 'standard'
         when coalesce(fl.filer_fair_value_fact_count, 0) > 0 then fl.fair_value_rule_id
       end as fair_value_source
+    -- the rule the fair value was read under: the concept_map row (standard) or the fund rule (filer concept)
+    , case
+        when coalesce(ff.fair_value_fact_count, 0) > 0 then ff.fair_value_map_id
+        when coalesce(fl.filer_fair_value_fact_count, 0) > 0 then fl.fair_value_rule_id
+      end as fair_value_rule_id
     , coalesce(ff.fair_value_fact_count, 0) > 0 and coalesce(fl.filer_fair_value_fact_count, 0) > 0
         as fair_value_filer_concept_also_present
     , case when ff.cost_distinct = 1 then ff.cost_any end as cost
