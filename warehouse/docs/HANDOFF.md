@@ -94,8 +94,12 @@ Where rules live (D10): fund rules in the new pipeline's wrapper copies `warehou
 unchanged; `baseline_production_wrapper_changed` fails the build when a production wrapper changes);
 general rules in `seeds/role_pattern.csv`. The seed `filer_concept.csv` and the sidecar idea are gone.
 
-Nothing is pushed: the branch is 103 commits ahead of `origin/ensemble-fp-experiment`, so the `warehouse`
-CI job has never run on GitHub.
+Pushed 2026-11-22 at ab299286. First CI run (45015590307): the `warehouse` job PASSED. The other two
+jobs failed for reasons outside `warehouse/`, both failing since before this work: `frontend-build`
+(`npm ci`: package-lock.json out of sync, missing react-is@16.13.1) and `python-tests` (collection
+errors: `scripts.build_jev_bundles` not in the repo, `psutil` not installed in CI). Not fixed.
+
+Slice 3 plan: `docs/2026-11-22-slice3-amounts-plan.md` (written 2026-11-22, not started, uncommitted).
 
 ### How to run
 
@@ -159,11 +163,13 @@ Wrapper drift is checked at build time in SQL for both the production wrappers a
    (Chemicals Heubach, Media Material+): an untagged position may sit beneath.
 4. The two not_yet_explained rows (c-1259, c-1013): why production omits them was not established.
 5. Whether the findings ledger moves onto dbt (from step 1; no decision).
-6. Pushing the branch, which is also the only way the CI job runs.
+6. DONE 2026-11-22: branch pushed to `origin/ensemble-fp-experiment` at ab299286 (owner's go). Items 1
+   to 4 stay deferred until after reproduction; item 5 deferred (owner agreed 2026-11-22).
 
-### Controller rulings awaiting the owner's confirmation
+### Controller rulings: CONFIRMED by the owner 2026-11-22
 
-From the slice 2 ledger and the baseline document. Superseded or owner-confirmed rulings are left out.
+All rulings below were confirmed by the owner in session on 2026-11-22 ("push and confirm rulings").
+From the slice 2 ledger and the baseline document.
 
 - The global rule 7 branch: a member on the us-gaap subsidiary or equity-method investee axis sets the
   scope (moves 1,416 Blue Owl rows to the JV basis; both sides agree on them).
