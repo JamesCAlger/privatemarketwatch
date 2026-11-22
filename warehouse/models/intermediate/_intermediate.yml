@@ -264,8 +264,9 @@ models:
           - not_null
       - name: read_rule_id
         description: >
-          The concept_map row, or for fair value the fund rule concept_is_fair_value, the facts were read under. Filled on
-          read and unresolved rows (tests/int_field_read_rule_resolves.sql).
+          The concept_map row, or the fund rule that reads the filer's own concept (concept_is_fair_value for fair value,
+          concept_is_cost for cost), the facts were read under. Filled on read and unresolved rows
+          (tests/int_field_read_rule_resolves.sql).
 
   - name: int_field_rule
     description: >
@@ -1318,7 +1319,9 @@ unit_tests:
       principal beside a nil fact is read; one cost number in two units is unresolved; a hidden share of net assets
       takes the text of the cell that shows it. p3: the fund rule starts after the report date, so fair value is
       absent; principal in the FASB supplement namespace is read under its own seed row; a shares fact with no number
-      is unresolved. The aggregate n1 gets no rows. Fund 9's rule does not reach fund 1.
+      is unresolved. The aggregate n1 gets no rows. Fund 9's rule does not reach fund 1. Task 4 fix round 2,
+      concept_is_cost: p4 carries only the fund's own cost concept, read as cost under the fund rule fc1; p1 carries it
+      beside the standard cost, and the standard cost (50) still wins (its own concept's 777 is NOT read).
     model: int_field_read
     given:
       - input: ref('int_source_row')
@@ -1326,6 +1329,7 @@ unit_tests:
           - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, role: position}
           - {accession: A, context_id: p2, cik: "1", report_date: 2026-03-31, role: position}
           - {accession: A, context_id: p3, cik: "1", report_date: 2026-03-31, role: position}
+          - {accession: A, context_id: p4, cik: "1", report_date: 2026-03-31, role: position}
           - {accession: A, context_id: n1, cik: "1", report_date: 2026-03-31, role: aggregate}
       - input: ref('stg_filed_filing')
         rows:
@@ -1344,8 +1348,11 @@ unit_tests:
           - {rule_id: fr1, cik: "1", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: OwnFairValue, sel_accession: null, valid_from: null, valid_to: null}
           - {rule_id: fr2, cik: "1", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: LateFairValue, sel_accession: null, valid_from: 2027-01-01, valid_to: null}
           - {rule_id: fr9, cik: "9", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: OwnFairValue, sel_accession: null, valid_from: null, valid_to: null}
+          - {rule_id: fc1, cik: "1", action: concept_is_cost, sel_concept_namespace: "http://fund.example/*", sel_concept_local: OwnCost, sel_accession: null, valid_from: null, valid_to: null}
       - input: ref('stg_filed_fact')
         rows:
+          - {accession: A, fact_id: f09, fact_index: 9, context_id: p1, concept_namespace: "http://fund.example/2025", concept_local: OwnCost, unit_id: usd, value_numeric: 777, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f41, fact_index: 41, context_id: p4, concept_namespace: "http://fund.example/2025", concept_local: OwnCost, unit_id: usd, value_numeric: 40, decimals: "-3", is_nil: false}
           - {accession: A, fact_id: f01, fact_index: 1, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, unit_id: usd, value_numeric: 100, decimals: "-3", is_nil: false}
           - {accession: A, fact_id: f02, fact_index: 2, context_id: p1, concept_namespace: "http://fund.example/2025", concept_local: OwnFairValue, unit_id: usd, value_numeric: 999, decimals: "-3", is_nil: false}
           - {accession: A, fact_id: f03, fact_index: 3, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 50, decimals: "-3", is_nil: false}
@@ -1399,6 +1406,11 @@ unit_tests:
         - {context_id: p3, field: principal_amount, status: read, reason: one_fact, value_filed: 6, unit: "iso4217:USD", fact_id: f22, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_principal_sup}
         - {context_id: p3, field: shares, status: unresolved, reason: fact_without_number, value_filed: null, unit: null, fact_id: null, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_shares}
         - {context_id: p3, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: fair_value, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: cost, status: read, reason: one_fact, value_filed: 40, unit: "iso4217:USD", fact_id: f41, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: fc1}
+        - {context_id: p4, field: principal_amount, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: shares, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
 
   - name: int_field_rule_defaults_and_units
     description: >
@@ -2000,7 +2012,16 @@ unit_tests:
       empty in production -> owner_review units_tagged. x11 a count principal on both sides, currency blank in
       production -> convention count_principal_currency_blank (principal and dollar principal equal). x12 share of net
       assets 0.526 kept by production, 52.6 here -> old_wrong. x13 sits in a quarter cmp_excluded_quarter lists and x14
-      is new only: no rows.
+      is new only: no rows. Fix round 2, each row reaching the rule's branch with no earlier rule taking it: x15 a cost
+      correction loaded that production does not name -> needs_correction correction_loaded. Filing B has a
+      units_tagged_as_par rule: x16 no shares here, production's shares equal this layer's principal -> owner_review
+      units_tagged (second branch); x17 the same but production's shares differ from the principal -> NOT (refused by
+      both branches). x18 shares taken from the principal here (units_tagged_as_par) while production also has shares
+      -> NOT (first branch needs production empty). x19 share of net assets 0.3 kept unscaled by production -> NOT
+      old_wrong (the rule needs a filed value above 0.50). x20 a principal read as filed in EUR, production's currency
+      blank -> NOT count_principal_currency_blank (the rule needs a count principal written as USD). x21 a count moved
+      to principal here whose filed count (2000) differs from production's shares (2500) -> NOT the par_tagged shares
+      rule; its currency still takes count_principal_currency_blank (positive).
     model: cmp_amount
     given:
       - input: ref('cmp_row_set')
@@ -2019,6 +2040,13 @@ unit_tests:
           - {basis: published, accession: A, context_id: x12, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: Z, context_id: x13, cik: "1", report_date: 2026-09-30, side: both}
           - {basis: published, accession: A, context_id: x14, cik: "1", report_date: 2026-03-31, side: new_only}
+          - {basis: published, accession: A, context_id: x15, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: B, context_id: x16, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: B, context_id: x17, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x18, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x19, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x20, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x21, cik: "1", report_date: 2026-03-31, side: both}
       - input: ref('cmp_excluded_quarter')
         rows:
           - {cik: "1", report_date: 2026-09-30}
@@ -2037,6 +2065,13 @@ unit_tests:
           - {accession_number: A, src_context_id: x11, principal_amount: 3000, principal_amount_usd: 3000, principal_amount_currency: null}
           - {accession_number: A, src_context_id: x12, pct_of_net_assets: 0.526}
           - {accession_number: Z, src_context_id: x13, fair_value: 1}
+          - {accession_number: A, src_context_id: x15, cost_reported: 400, cost: 400, corrected_fields: null}
+          - {accession_number: B, src_context_id: x16, principal_amount: 700, principal_amount_usd: 700, principal_amount_currency: USD, shares_held: 700}
+          - {accession_number: B, src_context_id: x17, principal_amount: 700, principal_amount_usd: 700, principal_amount_currency: USD, shares_held: 800}
+          - {accession_number: A, src_context_id: x18, shares_held: 60}
+          - {accession_number: A, src_context_id: x19, pct_of_net_assets: 0.3}
+          - {accession_number: A, src_context_id: x20, principal_amount: 3000, principal_amount_usd: 3300, principal_amount_currency: null}
+          - {accession_number: A, src_context_id: x21, principal_amount: 2000, principal_amount_usd: 2000, principal_amount_currency: null, shares_held: 2500}
       - input: ref('int_field_normalised')
         rows:
           - {accession: A, context_id: x1, field: fair_value, value: 282, value_filed: -282, action: bracketed_unsigned, status: normalised, reason: applied}
@@ -2060,10 +2095,25 @@ unit_tests:
           - {accession: A, context_id: x11, field: shares, value: null, value_filed: 3000, action: par_tagged_as_units, status: normalised, reason: moved_to_principal}
           - {accession: A, context_id: x12, field: pct_of_net_assets, value: 52.6, value_filed: 0.526, action: fraction_to_percent, status: normalised, reason: applied}
           - {accession: Z, context_id: x13, field: fair_value, value: 5, value_filed: 5, action: as_filed, status: normalised, reason: applied}
+          - {accession: A, context_id: x15, field: cost, value: null, status: absent, reason: no_fact}
+          - {accession: B, context_id: x16, field: principal_amount, value: 700, currency: USD, value_filed: 700, action: as_filed, status: normalised, reason: applied}
+          - {accession: B, context_id: x16, field: principal_amount_usd, value: 700, value_filed: 700, action: as_filed, status: normalised, reason: applied}
+          - {accession: B, context_id: x16, field: shares, value: null, status: absent, reason: no_fact}
+          - {accession: B, context_id: x17, field: principal_amount, value: 700, currency: USD, value_filed: 700, action: as_filed, status: normalised, reason: applied}
+          - {accession: B, context_id: x17, field: principal_amount_usd, value: 700, value_filed: 700, action: as_filed, status: normalised, reason: applied}
+          - {accession: B, context_id: x17, field: shares, value: null, status: absent, reason: no_fact}
+          - {accession: A, context_id: x18, field: shares, value: 50, action: units_tagged_as_par, status: normalised, reason: applied}
+          - {accession: A, context_id: x19, field: pct_of_net_assets, value: 30, value_filed: 0.3, action: fraction_to_percent, status: normalised, reason: applied}
+          - {accession: A, context_id: x20, field: principal_amount, value: 3000, currency: EUR, value_filed: 3000, action: as_filed, status: normalised, reason: applied}
+          - {accession: A, context_id: x20, field: principal_amount_usd, value: 3300, value_filed: 3000, action: to_usd, status: normalised, reason: applied}
+          - {accession: A, context_id: x21, field: principal_amount, value: 2000, currency: USD, action: par_tagged_as_units, status: normalised, reason: applied}
+          - {accession: A, context_id: x21, field: principal_amount_usd, value: 2000, value_filed: 2000, action: as_filed, status: normalised, reason: applied}
+          - {accession: A, context_id: x21, field: shares, value: null, value_filed: 2000, action: par_tagged_as_units, status: normalised, reason: moved_to_principal}
       - input: ref('stg_correction')
         rows:
           - {kind: value, field: index_classification, accession: A, context_id: x7, identifier: null}
           - {kind: value, field: shares_held, accession: A, context_id: null, identifier: "X8 Co"}
+          - {kind: value, field: cost, accession: A, context_id: x15, identifier: null}
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A, context_id: x3, concept_namespace: "http://filer.example/2026", concept_local: CostConceptCredit, value_numeric: 500}
@@ -2074,6 +2124,7 @@ unit_tests:
       - input: ref('stg_reading_rule')
         rows:
           - {rule_id: sign1, cik: "1", action: bracketed_unsigned, sel_accession: A}
+          - {rule_id: units1, cik: "1", action: units_tagged_as_par, sel_accession: B}
       - input: ref('int_field_read')
         rows:
           - {accession: A, context_id: x1, field: fair_value, fact_id: f1}
@@ -2174,3 +2225,52 @@ unit_tests:
         - {context_id: x12, field: principal_amount_usd, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x12, field: shares, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x12, field: pct_of_net_assets, outcome: differs, cause: old_wrong, cause_detail: pct_size_bound_keeps_fraction}
+        - {context_id: x15, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x15, field: cost, outcome: new_empty, cause: needs_correction, cause_detail: correction_loaded}
+        - {context_id: x15, field: principal_amount, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x15, field: principal_amount_currency, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x15, field: principal_amount_usd, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x15, field: shares, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x15, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x16, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x16, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x16, field: principal_amount, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x16, field: principal_amount_currency, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x16, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x16, field: shares, outcome: new_empty, cause: owner_review, cause_detail: units_tagged_equity_test_stand_in}
+        - {context_id: x16, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x17, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x17, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x17, field: principal_amount, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x17, field: principal_amount_currency, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x17, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x17, field: shares, outcome: new_empty, cause: not_yet_explained, cause_detail: none}
+        - {context_id: x17, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x18, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x18, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x18, field: principal_amount, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x18, field: principal_amount_currency, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x18, field: principal_amount_usd, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x18, field: shares, outcome: differs, cause: not_yet_explained, cause_detail: none}
+        - {context_id: x18, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: principal_amount, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: principal_amount_currency, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: principal_amount_usd, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: shares, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x19, field: pct_of_net_assets, outcome: differs, cause: not_yet_explained, cause_detail: none}
+        - {context_id: x20, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x20, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x20, field: principal_amount, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x20, field: principal_amount_currency, outcome: production_empty, cause: not_yet_explained, cause_detail: none}
+        - {context_id: x20, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x20, field: shares, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x20, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x21, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x21, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x21, field: principal_amount, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x21, field: principal_amount_currency, outcome: production_empty, cause: convention, cause_detail: count_principal_currency_blank_in_production}
+        - {context_id: x21, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x21, field: shares, outcome: new_empty, cause: not_yet_explained, cause_detail: none}
+        - {context_id: x21, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
