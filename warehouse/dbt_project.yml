@@ -116,6 +116,14 @@ vars:
     # production row on the same basis in the compared quarters (macro concept_release_unmatched). Final fix wave F3:
     # the one measured row is pinned by key (concept_rule_release_pinned below), so the ceiling is 0.
     concept_rule_release_not_in_production: 0
+    # Slice 3 Task 2 (int_field_read): position rows whose amount field could not be decided, one ceiling per field,
+    # measured 2026-11-22. All four are one fund's rows that tag one amount twice in two currencies with two numbers: cost
+    # in EUR and in USD (3), principal in GBP and in EUR (1). Task 3's conversion rules may settle them.
+    int_field_read_unresolved_fair_value: 0
+    int_field_read_unresolved_cost: 3
+    int_field_read_unresolved_principal_amount: 1
+    int_field_read_unresolved_shares: 0
+    int_field_read_unresolved_pct_of_net_assets: 0
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as

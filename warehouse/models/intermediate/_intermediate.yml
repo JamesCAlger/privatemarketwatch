@@ -209,6 +209,64 @@ models:
         data_tests:
           - not_null
 
+  - name: int_field_read
+    description: >
+      One row per position row of int_source_row (published or not) and amount field (fair_value, cost,
+      principal_amount, shares, pct_of_net_assets): the filed fact that is the field's value, as filed (after the tag's
+      own scale and sign, nothing else), its unit, fact id, printed text and the rule it was read under (spec
+      intermediate_spine.md 6.3). Key, five rows per position and the columns per status are tested in
+      tests/int_field_read_*.sql; unresolved fields per field have baseline ceilings.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets']
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['read', 'absent', 'unresolved']
+      - name: reason
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['one_fact', 'same_value_repeated', 'value_beside_nil', 'nil', 'no_fact', 'values_differ',
+                         'units_differ', 'fact_without_number']
+      - name: value_filed
+        description: The instance value of the fact (scale and sign of the printed number already applied). Null unless read.
+      - name: unit
+        description: The fact's unit measure as written in the filing (numerator, or numerator/denominator). Null unless read.
+      - name: fact_count
+        description: Facts of the concepts read for the field on the context (one tier only; see the model comment).
+        data_tests:
+          - not_null
+      - name: printed_text
+        description: The text of the same fact where the filed layer placed it (its table cell, or the cell that shows a hidden fact).
+      - name: is_nil
+        description: True only on a read row whose facts are all nil. Kept apart from absent.
+        data_tests:
+          - not_null
+      - name: read_rule_id
+        description: >
+          The concept_map row, or for fair value the fund rule concept_is_fair_value, the facts were read under. Filled on
+          read and unresolved rows (tests/int_field_read_rule_resolves.sql).
+
   - name: cmp_row_set
     description: >
       This layer's position rows against production's, joined on accession and context id, on two bases: published
@@ -1011,3 +1069,94 @@ unit_tests:
         - {accession: A, context_id: k1, position_rule_id: fz, match_count: 1}
         - {accession: A, context_id: k5, position_rule_id: dt, match_count: 1}
         - {accession: A, context_id: k9, position_rule_id: b1, match_count: 2}
+
+  - name: int_field_read_statuses_and_tiers
+    description: >
+      Slice 3 Task 2. Invented rows, fund 1 at 2026-03-31, three positions and one aggregate. p1: the standard
+      fair-value fact wins over the fund's own concept; cost tagged twice with one number is read once, naming the
+      printed fact; principal in two currencies with two numbers is unresolved; shares absent; share of net assets
+      nil-only is read with is_nil; a rate fact is not an amount and is ignored. p2: fair value from the fund rule alone;
+      principal beside a nil fact is read; one cost number in two units is unresolved; a hidden share of net assets
+      takes the text of the cell that shows it. p3: the fund rule starts after the report date, so fair value is
+      absent; principal in the FASB supplement namespace is read under its own seed row; a shares fact with no number
+      is unresolved. The aggregate n1 gets no rows. Fund 9's rule does not reach fund 1.
+    model: int_field_read
+    given:
+      - input: ref('int_source_row')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, role: position}
+          - {accession: A, context_id: p2, cik: "1", report_date: 2026-03-31, role: position}
+          - {accession: A, context_id: p3, cik: "1", report_date: 2026-03-31, role: position}
+          - {accession: A, context_id: n1, cik: "1", report_date: 2026-03-31, role: aggregate}
+      - input: ref('stg_filed_filing')
+        rows:
+          - {accession: A, cik: "1", document_period_end_date: 2026-03-31}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_fair_value, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_principal, field: principal_amount, concept_local: InvestmentOwnedBalancePrincipalAmount, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_principal_sup, field: principal_amount, concept_local: InvestmentOwnedBalancePrincipalAmount, namespace_pattern: "http://fasb.org/us-gaap-sup/*"}
+          - {concept_map_id: cm_shares, field: shares, concept_local: InvestmentOwnedBalanceShares, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_pct_net_assets, field: pct_of_net_assets, concept_local: InvestmentOwnedPercentOfNetAssets, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_rate, field: rate, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: fr1, cik: "1", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: OwnFairValue, sel_accession: null, valid_from: null, valid_to: null}
+          - {rule_id: fr2, cik: "1", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: LateFairValue, sel_accession: null, valid_from: 2027-01-01, valid_to: null}
+          - {rule_id: fr9, cik: "9", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: OwnFairValue, sel_accession: null, valid_from: null, valid_to: null}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: A, fact_id: f01, fact_index: 1, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, unit_id: usd, value_numeric: 100, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f02, fact_index: 2, context_id: p1, concept_namespace: "http://fund.example/2025", concept_local: OwnFairValue, unit_id: usd, value_numeric: 999, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f03, fact_index: 3, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 50, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f04, fact_index: 4, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 50, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f05, fact_index: 5, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedBalancePrincipalAmount, unit_id: eur, value_numeric: 10, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f06, fact_index: 6, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedBalancePrincipalAmount, unit_id: usd, value_numeric: 12, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f07, fact_index: 7, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedPercentOfNetAssets, unit_id: pure, value_numeric: null, decimals: null, is_nil: true}
+          - {accession: A, fact_id: f08, fact_index: 8, context_id: p1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRate, unit_id: pure, value_numeric: 0.08, decimals: "4", is_nil: false}
+          - {accession: A, fact_id: f11, fact_index: 11, context_id: p2, concept_namespace: "http://fund.example/2025", concept_local: OwnFairValue, unit_id: usd, value_numeric: 7, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f12, fact_index: 12, context_id: p2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedBalancePrincipalAmount, unit_id: usd, value_numeric: null, decimals: null, is_nil: true}
+          - {accession: A, fact_id: f13, fact_index: 13, context_id: p2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedBalancePrincipalAmount, unit_id: usd, value_numeric: 5, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f14, fact_index: 14, context_id: p2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 3, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f15, fact_index: 15, context_id: p2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: eur, value_numeric: 3, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f16, fact_index: 16, context_id: p2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedPercentOfNetAssets, unit_id: pure, value_numeric: 0.05, decimals: "4", is_nil: false}
+          - {accession: A, fact_id: f21, fact_index: 21, context_id: p3, concept_namespace: "http://fund.example/2025", concept_local: LateFairValue, unit_id: usd, value_numeric: 8, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f22, fact_index: 22, context_id: p3, concept_namespace: "http://fasb.org/us-gaap-sup/2023", concept_local: InvestmentOwnedBalancePrincipalAmount, unit_id: usd, value_numeric: 6, decimals: "-3", is_nil: false}
+          - {accession: A, fact_id: f23, fact_index: 23, context_id: p3, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedBalanceShares, unit_id: shares, value_numeric: null, decimals: "0", is_nil: false}
+          - {accession: A, fact_id: f31, fact_index: 31, context_id: n1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtFairValue, unit_id: usd, value_numeric: 200, decimals: "-3", is_nil: false}
+      - input: ref('stg_filed_unit')
+        rows:
+          - {accession: A, unit_id: usd, numerator: "iso4217:USD", denominator: null}
+          - {accession: A, unit_id: eur, numerator: "iso4217:EUR", denominator: null}
+          - {accession: A, unit_id: pure, numerator: "xbrli:pure", denominator: null}
+          - {accession: A, unit_id: shares, numerator: "xbrli:shares", denominator: null}
+      - input: ref('stg_filed_fact_placement')
+        rows:
+          - {accession: A, fact_id: f01, row_index: 0, cell_index: 1, displayed_text: "100", in_hidden: false, shown_row_index: null, shown_cell_index: null}
+          - {accession: A, fact_id: f04, row_index: 0, cell_index: 2, displayed_text: "50", in_hidden: false, shown_row_index: null, shown_cell_index: null}
+          - {accession: A, fact_id: f07, row_index: 0, cell_index: 3, displayed_text: "-", in_hidden: false, shown_row_index: null, shown_cell_index: null}
+          - {accession: A, fact_id: f16, row_index: null, cell_index: null, displayed_text: "0.05", in_hidden: true, shown_row_index: 1, shown_cell_index: 2}
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select 'A' as accession, 1 as row_index, 0 as table_index, 1 as row_in_table, 3 as cell_count,
+                 ['Beta Co', 'Loan', '5.0%'] as cells, [1, 1, 1] as cell_colspans, [1, 1, 1] as cell_rowspans,
+                 0 as fact_count
+    expect:
+      rows:
+        - {context_id: p1, field: fair_value, status: read, reason: one_fact, value_filed: 100, unit: "iso4217:USD", fact_id: f01, fact_count: 1, printed_text: "100", is_nil: false, read_rule_id: cm_fair_value}
+        - {context_id: p1, field: cost, status: read, reason: same_value_repeated, value_filed: 50, unit: "iso4217:USD", fact_id: f04, fact_count: 2, printed_text: "50", is_nil: false, read_rule_id: cm_cost}
+        - {context_id: p1, field: principal_amount, status: unresolved, reason: values_differ, value_filed: null, unit: null, fact_id: null, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_principal}
+        - {context_id: p1, field: shares, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p1, field: pct_of_net_assets, status: read, reason: nil, value_filed: null, unit: "xbrli:pure", fact_id: f07, fact_count: 1, printed_text: "-", is_nil: true, read_rule_id: cm_pct_net_assets}
+        - {context_id: p2, field: fair_value, status: read, reason: one_fact, value_filed: 7, unit: "iso4217:USD", fact_id: f11, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: fr1}
+        - {context_id: p2, field: cost, status: unresolved, reason: units_differ, value_filed: null, unit: null, fact_id: null, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_cost}
+        - {context_id: p2, field: principal_amount, status: read, reason: value_beside_nil, value_filed: 5, unit: "iso4217:USD", fact_id: f13, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_principal}
+        - {context_id: p2, field: shares, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p2, field: pct_of_net_assets, status: read, reason: one_fact, value_filed: 0.05, unit: "xbrli:pure", fact_id: f16, fact_count: 1, printed_text: "5.0%", is_nil: false, read_rule_id: cm_pct_net_assets}
+        - {context_id: p3, field: fair_value, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: cost, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: principal_amount, status: read, reason: one_fact, value_filed: 6, unit: "iso4217:USD", fact_id: f22, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_principal_sup}
+        - {context_id: p3, field: shares, status: unresolved, reason: fact_without_number, value_filed: null, unit: null, fact_id: null, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_shares}
+        - {context_id: p3, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
