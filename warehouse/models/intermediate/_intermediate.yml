@@ -319,7 +319,11 @@ models:
         data_tests:
           - not_null
       - name: tie_break_same_effect
-        description: True when every rule beaten by step 2 would have given the same action and scale; null when none.
+        description: >
+          True when every rule beaten by step 2 that can be decided would have given the same action and scale. A loser
+          that cannot be decided (a feature it needs is missing) is left out, not counted as a different effect (final
+          fix wave F3). Null when there is no loser, or none that can be decided. False fails
+          tests/int_field_rule_tie_break_same_effect.sql (ceiling 0).
 
   - name: int_field_normalised
     description: >
@@ -489,8 +493,8 @@ models:
               arguments:
                 values: ['old_wrong', 'new_wrong', 'convention', 'needs_correction', 'needs_store_not_loaded',
                          'production_stale', 'owner_review', 'not_yet_explained']
-    # One baseline per basis, field and cause for fair value, cost and the three principal fields; not_yet_explained
-    # only for shares and share of net assets. Ceilings var cmp_amount_max in dbt_project.yml.
+    # One baseline per basis, field and cause for all seven fields (shares and share of net assets since final fix wave
+    # F1). Ceilings var cmp_amount_max in dbt_project.yml.
     data_tests:
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: old_wrong}, name: baseline_cmp_amount_published_fair_value_old_wrong}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: new_wrong}, name: baseline_cmp_amount_published_fair_value_new_wrong}
@@ -532,7 +536,21 @@ models:
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: production_stale}, name: baseline_cmp_amount_published_principal_amount_usd_production_stale}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: owner_review}, name: baseline_cmp_amount_published_principal_amount_usd_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: not_yet_explained}, name: baseline_cmp_amount_published_principal_amount_usd_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: old_wrong}, name: baseline_cmp_amount_published_shares_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: new_wrong}, name: baseline_cmp_amount_published_shares_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: convention}, name: baseline_cmp_amount_published_shares_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: needs_correction}, name: baseline_cmp_amount_published_shares_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_shares_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: production_stale}, name: baseline_cmp_amount_published_shares_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: owner_review}, name: baseline_cmp_amount_published_shares_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: not_yet_explained}, name: baseline_cmp_amount_published_shares_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: old_wrong}, name: baseline_cmp_amount_published_pct_of_net_assets_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: new_wrong}, name: baseline_cmp_amount_published_pct_of_net_assets_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: convention}, name: baseline_cmp_amount_published_pct_of_net_assets_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: needs_correction}, name: baseline_cmp_amount_published_pct_of_net_assets_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_pct_of_net_assets_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: production_stale}, name: baseline_cmp_amount_published_pct_of_net_assets_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: owner_review}, name: baseline_cmp_amount_published_pct_of_net_assets_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: not_yet_explained}, name: baseline_cmp_amount_published_pct_of_net_assets_not_yet_explained}
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: old_wrong}, name: baseline_cmp_amount_unpublished_fair_value_old_wrong}
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: new_wrong}, name: baseline_cmp_amount_unpublished_fair_value_new_wrong}
@@ -574,7 +592,21 @@ models:
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: production_stale}, name: baseline_cmp_amount_unpublished_principal_amount_usd_production_stale}
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: owner_review}, name: baseline_cmp_amount_unpublished_principal_amount_usd_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_principal_amount_usd_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: old_wrong}, name: baseline_cmp_amount_unpublished_shares_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: new_wrong}, name: baseline_cmp_amount_unpublished_shares_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: convention}, name: baseline_cmp_amount_unpublished_shares_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: needs_correction}, name: baseline_cmp_amount_unpublished_shares_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_shares_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: production_stale}, name: baseline_cmp_amount_unpublished_shares_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: owner_review}, name: baseline_cmp_amount_unpublished_shares_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_shares_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: old_wrong}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: new_wrong}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: convention}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: needs_correction}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: production_stale}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: owner_review}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_not_yet_explained}
 
 unit_tests:
@@ -1907,7 +1939,9 @@ unit_tests:
       (different effect). Still a conflict after step 2: fund 8 has two whole_filing rules naming the same filing (y1),
       fund 9 two rows_near_cost rules (z1). A missing row feature is an error, never "no match" (spec section 5 rule
       2): fund 10's rows_near_cost meets m1 with no label and m2 with no read cost, both feature_missing; fund 7's
-      bracketed_unsigned meets s5, a fair value with no printed placement, feature_missing.
+      bracketed_unsigned meets s5, a fair value with no printed placement, feature_missing. Final fix wave F3: on t3 (no
+      label) the filing rule wins and the beaten rows_near_cost cannot be decided: it is left out of the comparison, so
+      tie_break_same_effect is null, not false.
     model: int_field_rule
     given:
       - input: ref('int_field_read')
@@ -1918,6 +1952,9 @@ unit_tests:
           - {accession: W, context_id: t2, field: principal_amount, cik: "4", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
           - {accession: W, context_id: t2, field: shares, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 5, unit: "shares", is_nil: false, fact_id: a3}
           - {accession: W, context_id: t2, field: cost, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 5000, unit: "iso4217:USD", is_nil: false, fact_id: a4}
+          - {accession: W, context_id: t3, field: principal_amount, cik: "4", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: W, context_id: t3, field: shares, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "shares", is_nil: false, fact_id: c1}
+          - {accession: W, context_id: t3, field: cost, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "iso4217:USD", is_nil: false, fact_id: c2}
           - {accession: Y, context_id: y1, field: principal_amount, cik: "8", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
           - {accession: Y, context_id: y1, field: shares, cik: "8", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 70, unit: "shares", is_nil: false, fact_id: a5}
           - {accession: Z, context_id: z1, field: principal_amount, cik: "9", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
@@ -1933,6 +1970,7 @@ unit_tests:
         rows:
           - {accession: W, context_id: t1, identifier_label: "Tee Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
           - {accession: W, context_id: t2, identifier_label: "Tee Co | Loan B", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: W, context_id: t3, identifier_label: null, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
           - {accession: Y, context_id: y1, identifier_label: "Why Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
           - {accession: Z, context_id: z1, identifier_label: "Zed Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
           - {accession: M, context_id: m1, identifier_label: null, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
@@ -1979,6 +2017,10 @@ unit_tests:
         - {context_id: t2, field: shares, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: false}
         - {context_id: t2, field: cost, rule_id: gd_cost_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
         - {context_id: t2, field: principal_amount_usd, rule_id: gd_principal_usd_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: t3, field: principal_amount, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: null}
+        - {context_id: t3, field: shares, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: null}
+        - {context_id: t3, field: cost, rule_id: gd_cost_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: t3, field: principal_amount_usd, rule_id: gd_principal_usd_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
         - {context_id: y1, field: principal_amount, rule_id: null, resolution: rule_conflict, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
         - {context_id: y1, field: shares, rule_id: null, resolution: rule_conflict, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
         - {context_id: y1, field: principal_amount_usd, rule_id: null, resolution: no_rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
@@ -2021,7 +2063,13 @@ unit_tests:
       old_wrong (the rule needs a filed value above 0.50). x20 a principal read as filed in EUR, production's currency
       blank -> NOT count_principal_currency_blank (the rule needs a count principal written as USD). x21 a count moved
       to principal here whose filed count (2000) differs from production's shares (2500) -> NOT the par_tagged shares
-      rule; its currency still takes count_principal_currency_blank (positive).
+      rule; its currency still takes count_principal_currency_blank (positive). Final fix wave F2 and F7: x5 is
+      owner_review unverified_unit_count_read_as_principal (was convention). x15's correction carries production's cost
+      (400) -> needs_correction. x22 a cost correction carrying 999 while production holds 400 and does not name the
+      field -> NOT needs_correction (not_yet_explained correction_loaded_value_not_matched). x23 a principal correction
+      of 1000 EUR: the principal (same value) and its currency (the correction's unit equals production's EUR) ->
+      needs_correction; the dollar principal (production 1100; a EUR correction is not converted) -> NOT
+      (not_yet_explained correction_loaded_value_not_matched).
     model: cmp_amount
     given:
       - input: ref('cmp_row_set')
@@ -2047,6 +2095,8 @@ unit_tests:
           - {basis: published, accession: A, context_id: x19, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: x20, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: x21, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x22, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x23, cik: "1", report_date: 2026-03-31, side: both}
       - input: ref('cmp_excluded_quarter')
         rows:
           - {cik: "1", report_date: 2026-09-30}
@@ -2072,6 +2122,8 @@ unit_tests:
           - {accession_number: A, src_context_id: x19, pct_of_net_assets: 0.3}
           - {accession_number: A, src_context_id: x20, principal_amount: 3000, principal_amount_usd: 3300, principal_amount_currency: null}
           - {accession_number: A, src_context_id: x21, principal_amount: 2000, principal_amount_usd: 2000, principal_amount_currency: null, shares_held: 2500}
+          - {accession_number: A, src_context_id: x22, cost_reported: 400, cost: 400, corrected_fields: null}
+          - {accession_number: A, src_context_id: x23, principal_amount: 1000, principal_amount_usd: 1100, principal_amount_currency: EUR, corrected_fields: null}
       - input: ref('int_field_normalised')
         rows:
           - {accession: A, context_id: x1, field: fair_value, value: 282, value_filed: -282, action: bracketed_unsigned, status: normalised, reason: applied}
@@ -2109,11 +2161,14 @@ unit_tests:
           - {accession: A, context_id: x21, field: principal_amount, value: 2000, currency: USD, action: par_tagged_as_units, status: normalised, reason: applied}
           - {accession: A, context_id: x21, field: principal_amount_usd, value: 2000, value_filed: 2000, action: as_filed, status: normalised, reason: applied}
           - {accession: A, context_id: x21, field: shares, value: null, value_filed: 2000, action: par_tagged_as_units, status: normalised, reason: moved_to_principal}
+          - {accession: A, context_id: x22, field: cost, value: null, status: absent, reason: no_fact}
       - input: ref('stg_correction')
         rows:
           - {kind: value, field: index_classification, accession: A, context_id: x7, identifier: null}
           - {kind: value, field: shares_held, accession: A, context_id: null, identifier: "X8 Co"}
-          - {kind: value, field: cost, accession: A, context_id: x15, identifier: null}
+          - {kind: value, field: cost, accession: A, context_id: x15, identifier: null, value: "400"}
+          - {kind: value, field: cost, accession: A, context_id: x22, identifier: null, value: "999"}
+          - {kind: value, field: principal_amount, accession: A, context_id: x23, identifier: null, value: "1000", value_unit: EUR}
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A, context_id: x3, concept_namespace: "http://filer.example/2026", concept_local: CostConceptCredit, value_numeric: 500}
@@ -2171,9 +2226,9 @@ unit_tests:
         - {context_id: x4, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x5, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x5, field: cost, outcome: both_empty, cause: null, cause_detail: null}
-        - {context_id: x5, field: principal_amount, outcome: production_empty, cause: convention, cause_detail: production_empties_principal_on_equity_class}
+        - {context_id: x5, field: principal_amount, outcome: production_empty, cause: owner_review, cause_detail: unverified_unit_count_read_as_principal}
         - {context_id: x5, field: principal_amount_currency, outcome: equal, cause: null, cause_detail: null}
-        - {context_id: x5, field: principal_amount_usd, outcome: production_empty, cause: convention, cause_detail: production_empties_principal_on_equity_class}
+        - {context_id: x5, field: principal_amount_usd, outcome: production_empty, cause: owner_review, cause_detail: unverified_unit_count_read_as_principal}
         - {context_id: x5, field: shares, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x5, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x6, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
@@ -2274,3 +2329,17 @@ unit_tests:
         - {context_id: x21, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
         - {context_id: x21, field: shares, outcome: new_empty, cause: not_yet_explained, cause_detail: none}
         - {context_id: x21, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x22, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x22, field: cost, outcome: new_empty, cause: not_yet_explained, cause_detail: correction_loaded_value_not_matched}
+        - {context_id: x22, field: principal_amount, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x22, field: principal_amount_currency, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x22, field: principal_amount_usd, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x22, field: shares, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x22, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x23, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x23, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x23, field: principal_amount, outcome: new_empty, cause: needs_correction, cause_detail: correction_loaded}
+        - {context_id: x23, field: principal_amount_currency, outcome: new_empty, cause: needs_correction, cause_detail: correction_loaded}
+        - {context_id: x23, field: principal_amount_usd, outcome: new_empty, cause: not_yet_explained, cause_detail: correction_loaded_value_not_matched}
+        - {context_id: x23, field: shares, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x23, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}

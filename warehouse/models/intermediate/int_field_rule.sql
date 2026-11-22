@@ -15,7 +15,9 @@
 --      modes (pipeline/staging_bdc.py). Controller ruling, slice 3 Task 3 fix round 1.
 -- Two rules still equal after both steps (two filing rules, or two feature rules) are a conflict: no rule is chosen
 -- (rule_id null, resolution rule_conflict). tie_break_losers counts the rules a row's winner beat by step 2 alone, and
--- tie_break_same_effect says whether every one of them would have given the same action and scale.
+-- tie_break_same_effect says whether every one of them that can be decided would have given the same action and scale
+-- (an undecidable loser is left out; null when none can be decided). tests/int_field_rule_tie_break_same_effect.sql
+-- fails when a tie-break is decided between rules of different effect (ceiling 0).
 -- A row no rule matches has resolution no_rule.
 -- Spec section 5 rule 2, a missing row feature is an error, never "no match": where a rule's other tests let a row
 -- through but a feature it needs is null (the label for the equity-word tests, the read cost for a band, a printed
@@ -352,7 +354,10 @@ with read as (
         , t.context_id
         , t.field
         , count(*) as tie_break_losers
-        , bool_and(l.action = t.action and l.value_scale is not distinct from t.value_scale) as tie_break_same_effect
+        -- final fix wave F3: a loser that cannot be decided (a feature it needs is missing, so no scale) is left out
+        -- of the comparison, not counted as a different effect; null when no loser can be decided
+        , bool_and(l.action = t.action and l.value_scale is not distinct from t.value_scale)
+            filter (where not l.is_undecidable) as tie_break_same_effect
     from top t
     join ranked l
         on l.accession = t.accession and l.context_id = t.context_id and l.field = t.field

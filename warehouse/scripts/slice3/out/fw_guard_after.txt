@@ -1,0 +1,29 @@
+﻿model	what	n
+int_source_row	rows before	288935
+int_source_row	rows now	288935
+int_source_row	before not now	0
+int_source_row	now not before	0
+cmp_row_set	rows before	71542
+cmp_row_set	rows now	71542
+cmp_row_set	before not now	0
+cmp_row_set	now not before	0
+int_field_read	rows before	372475
+int_field_read	rows now	372475
+int_field_read	before not now	0
+int_field_read	now not before	0
+int_field_normalised	rows before	446970
+int_field_normalised	rows now	446970
+int_field_normalised	before not now	0
+int_field_normalised	now not before	0
+int_field_rule (without tie_break_same_effect)	rows before	446970
+int_field_rule (without tie_break_same_effect)	rows now	446970
+int_field_rule (without tie_break_same_effect)	before not now	0
+int_field_rule (without tie_break_same_effect)	now not before	0
+cmp_amount (without cause, cause_detail)	rows before	499905
+cmp_amount (without cause, cause_detail)	rows now	499905
+cmp_amount (without cause, cause_detail)	before not now	0
+cmp_amount (without cause, cause_detail)	now not before	0
+cmp_amount cause moved	published principal_amount_usd: needs_correction|correction_loaded -> not_yet_explained|correction_loaded_value_not_matched	2
+cmp_amount cause moved	published principal_amount: convention|production_empties_principal_on_equity_class -> owner_review|unverified_unit_count_read_as_principal	107
+cmp_amount cause moved	published principal_amount_usd: convention|production_empties_principal_on_equity_class -> owner_review|unverified_unit_count_read_as_principal	107
+-- rows shown: 27

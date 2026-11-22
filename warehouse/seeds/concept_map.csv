@@ -5,7 +5,7 @@ cm_principal,principal_amount,InvestmentOwnedBalancePrincipalAmount,http://fasb.
 cm_principal_sup,principal_amount,InvestmentOwnedBalancePrincipalAmount,http://fasb.org/us-gaap-sup/*,"The FASB supplement namespace, accepted for the term facts as in slice 2."
 cm_shares,shares,InvestmentOwnedBalanceShares,http://fasb.org/us-gaap/*,"Shares or units held. Also a term fact for the cross-check."
 cm_shares_sup,shares,InvestmentOwnedBalanceShares,http://fasb.org/us-gaap-sup/*,"The FASB supplement namespace, accepted for the term facts as in slice 2."
-cm_pct_net_assets,pct_of_net_assets,InvestmentOwnedPercentOfNetAssets,http://fasb.org/us-gaap/*,"Share of net assets. Measured 2026-11-22 on the five funds' parsed filings: the only candidate on published positions; two of the five funds tag it, three tag none (counts per fund: scripts/slice3/q_pct_candidates.sql). Not a term fact. Not read by any model yet."
+cm_pct_net_assets,pct_of_net_assets,InvestmentOwnedPercentOfNetAssets,http://fasb.org/us-gaap/*,"Share of net assets. Measured 2026-11-22 on the five funds' parsed filings: the only candidate on published positions; two of the five funds tag it, three tag none (counts per fund: scripts/slice3/q_pct_candidates.sql). Not a term fact. Read by int_field_read since slice 3 and converted by int_field_normalised (fraction_to_percent by default)."
 cm_rate,rate,InvestmentInterestRate,http://fasb.org/us-gaap/*,"Interest rate as tagged. Which leg it holds is a fund rule (slice 4). A term fact."
 cm_rate_sup,rate,InvestmentInterestRate,http://fasb.org/us-gaap-sup/*,"The FASB supplement namespace, accepted for the term facts as in slice 2."
 cm_rate_cash,rate,InvestmentInterestRatePaidInCash,http://fasb.org/us-gaap/*,"Cash-pay interest rate. A term fact."

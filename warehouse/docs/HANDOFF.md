@@ -1,5 +1,7 @@
 # Handoff: data-model redesign in `warehouse/`
 
+**Current state: read "State after slice 3 (amounts), 2026-11-22" further down (with its final fix wave). The sections before it are history.**
+
 Written 2026-11-18 at the end of the session that built steps 1 and 2. Read this first, then the documents it points to.
 
 ## State
@@ -234,7 +236,8 @@ the same way counts as equal, and no test sees a field whose meaning changed.
 | Task 2 | `int_field_read`: the five amount fields as filed, with unit, fact id and printed text | 8ba34a8b |
 | Task 3 | `stg_fx_rate`, `int_field_rule` (which rule converts each field), `int_field_normalised` (the value after the rule); seeds `field_rule_default`, `action_field`; `reading_action` gained `built_early_for_field` | 12c5eb55, 7caf2b9b |
 | Task 4 | `cmp_amount`: amounts against production, every difference with a cause; action `concept_is_cost`; split-bracket sign fix | 3c6e361c, 622833e3, 2e64f76e |
-| Task 5 | CI fixture amounts and `tests/ci_fixture_expected_amounts.sql`; these records | the Task 5 commit |
+| Task 5 | CI fixture amounts and `tests/ci_fixture_expected_amounts.sql`; these records | a4189da1 |
+| Final fix wave | F1 to F8 of the whole-branch review (below) | see "Final fix wave" |
 
 Plain-language guide: `README.md`, "Amounts: reading and converting a field". Counts and causes:
 `docs/baseline_amounts_2026-11-22.md`. Value-size rules for review:
@@ -248,7 +251,7 @@ for filing 0001812554-23-000022 (the filer tags the percent itself); Apollo two 
 
 ### Not pushed
 
-The slice 3 commits (81a17da6 to the Task 5 commit) are local only. They have NOT run on GitHub. The
+The slice 3 commits (81a17da6 to a4189da1, and the final fix wave after it) are local only. They have NOT run on GitHub. The
 last push (ab299286, run 45015590307) ran slice 2: `warehouse` job passed; `frontend-build` and
 `python-tests` failed for the reasons outside `warehouse/` given above (checked again 2026-11-22 with
 `gh run view`, no change).
@@ -259,9 +262,9 @@ From the repository root, in PowerShell.
 
 | Command | Last result |
 |---|---|
-| `.\warehouse\dbt.ps1 build` | `PASS=503 WARN=43 ERROR=0 TOTAL=546` (slice 2 ended at 319 / 19 / 338) |
+| `.\warehouse\dbt.ps1 build` | `PASS=534 WARN=46 ERROR=0 TOTAL=580` after the final fix wave (Task 5: 503 / 43 / 546; slice 2 ended at 319 / 19 / 338) |
 | `.\warehouse\.venv\Scripts\python.exe -m pytest -c warehouse\pytest.ini warehouse\pytests -q` | 144 passed |
-| `.\warehouse\.venv\Scripts\python.exe warehouse\ci\run_fixture_build.py --work <empty folder>` | build `PASS=278 WARN=0 ERROR=0 TOTAL=278`; empty run of the two comparison models `PASS=2`; unit-test and drift step `PASS=24` |
+| `.\warehouse\.venv\Scripts\python.exe warehouse\ci\run_fixture_build.py --work <empty folder>` | build `PASS=281 WARN=0 ERROR=0 TOTAL=281`; empty run of the two comparison models `PASS=2`; unit-test and drift step `PASS=24` |
 
 The warnings are baseline tests above zero and within their ceilings. A changed seed column needs
 `.\warehouse\dbt.ps1 seed --full-refresh --select <seed>` once in an existing database (a new database
@@ -286,13 +289,13 @@ JV schedules (10,740 rows): fair value and cost equal on every row with a value.
 
 | Cause group | Rows | What it means |
 |---|---:|---|
-| needs_correction | 718 field rows | a loaded correction sets the field; corrections are applied in slice 5 |
-| convention, equity class | 107 principal, 107 dollar principal | production empties principal on equity and fund classes |
-| convention, count currency | 671 currency | principal taken from a share count: production leaves the currency blank, this layer writes USD |
+| needs_correction | 716 field rows (718 before the final fix wave) | a loaded correction sets the field and either production names the field or the correction carries production's value; corrections are applied in slice 5 |
+| owner_review, unverified unit count read as principal | 107 principal, 107 dollar principal | production empties principal on equity and fund classes; this layer stores the tag, a unit count in the samples read, as a dollar principal (was "convention" until the final fix wave) |
+| convention, count currency | 671 currency | principal taken from a share count: production leaves the currency blank, this layer writes USD. That the count is a dollar par is unverified |
 | owner_review, "is a loan" stand-in | 59 per principal field, 34 shares (plus 15 JV each) | see open items |
 | owner_review, "is equity" stand-in | 14 shares | same |
 | old_wrong | 2 share of net assets, 2 principal, 2 dollar principal (all BCRED JV schedule) | production keeps 0.526 where 52.60 is printed; production empties a par a correction reclassed to loan |
-| not_yet_explained | 14 principal, 14 dollar principal | BCRED STRUCTURED_CREDIT units whose principal production empties; step not found |
+| not_yet_explained | 14 principal, 16 dollar principal | 14 each: BCRED STRUCTURED_CREDIT units whose principal production empties, step not found. 2 dollar principal: an Apollo EUR / GBP principal correction production converted; this layer does not convert a correction, so the match is not shown |
 | new_wrong | 0 | 85 sign and 196 cost rows found in Task 4, fixed, now equal |
 
 Fields left empty in this layer, each with a ceiling: share of net assets none (was 30,759 before
@@ -307,6 +310,28 @@ proxy: it cannot see which row carries which value, or offsetting errors.
 
 `int_source_row` (288,935 rows) and `cmp_row_set` (71,542) did not change in this slice (checked by
 row snapshots in Tasks 1 and 4).
+
+### Final fix wave (2026-11-22, after a4189da1)
+
+The whole-branch review's findings F1 to F8, fixed in one dispatch. Report:
+`.superpowers/sdd/2026-11-22-slice3-amounts-plan/final-fix-report.md` (git-ignored).
+
+| Item | What changed |
+|---|---|
+| F1 | Every cause on shares and share of net assets has a ceiling, both bases (28 new baseline tests) |
+| F2 | `needs_correction` only where production names the field or a covering correction carries production's value; 2 Apollo dollar principals moved to `not_yet_explained`, `correction_loaded_value_not_matched` (a EUR / GBP correction this layer does not convert); unit rows x22, x23 |
+| F3 | `tie_break_same_effect` leaves out a loser that cannot be decided; new test fails on a tie-break between rules of different effect (ceiling 0; measured 0 of 462 per field; no value moved) |
+| F4 | Cost read in two places pinned: equal on every position row except the 196 read under `concept_is_cost` (ceiling 196). Measured, not built: giving the subtotal rule the filer cost on those rows moves no subtotal decision |
+| F5 | The 25 non-tying fund-quarters pinned by key (`sum_not_tied_pinned`); the sum check is now macro `sum_not_tied_rows` |
+| F6 | `action_field` key test; every fund rule of a slice 3 amount action must reach an `action_field` row, with target `amount` or one of its fields (all pass; no wrapper changed) |
+| F7 | The 107 equity-class principals are `owner_review`, `unverified_unit_count_read_as_principal`, not a convention; unverified items listed above |
+| F8 | concept_map note; "normalised without a value" test; this file; CI README context counts |
+
+Guard: `int_source_row`, `cmp_row_set`, `int_field_read`, `int_field_normalised` and `int_field_rule`
+(all columns but `tie_break_same_effect`, which also did not move) are row-for-row unchanged;
+`cmp_amount` changed only in cause and detail on 216 rows (107 + 107 + 2)
+(`scripts/slice3/out/fw_guard_after.txt`). A passing build and agreement with production do not show
+the data is correct.
 
 ### Owner decisions open
 
@@ -328,6 +353,17 @@ row snapshots in Tasks 1 and 4).
 7. Refreshing the currency rate file (ends 2026-09-11). Needs a download: owner's call.
 8. Whether the findings ledger moves onto dbt (open since step 1).
 9. Pushing the slice 3 commits.
+10. The 107 equity-class principals (Blue Owl, Apollo, HPS; 3,615m fair value): this layer stores the
+    principal tag as a dollar principal; in the samples read it holds a unit count. Now `owner_review`
+    (final fix wave F7). Keep as principal, move to shares, or leave empty?
+
+### Unverified (not errors found; values nobody has shown to be right)
+
+| What | Rows | Why unverified |
+|---|---:|---|
+| Equity-class principals read from the principal tag | 107 principal, 107 dollar principal | a unit count in the samples read, stored as dollars (`owner_review`) |
+| Principal currency USD on principals taken from a share count | 671 | production leaves it blank and converts as dollars; both agree on the amount; that the count is a dollar par is assumed, not checked |
+| Published principals read as filed on rows with no debt term fact | 2,303: Ares 758, BCRED 43, Blue Owl 104, Apollo 20, HPS 1,378 | an upper bound on unit counts stored as principal, not a count of wrong rows; not measured (`scripts/slice3/q_final_checks.sql`) |
 
 ### Rulings made without the owner (slice 3), with the cost if wrong
 
@@ -369,20 +405,23 @@ fixture writes its share of net assets in the unit `pure`, as the five funds do 
   does not query.
 - `int_field_rule`: the resolution block is duplicated (macro); `listed_rows_without_instrument` ignores
   the whole-filing rule's dates; `par_tagged_as_units` silently beats `cost_foreign_is_par` on one
-  context; `tie_break_same_effect` may over-report.
-- Seeds: no uniqueness test on `action_field (action, field)`; a fund rule naming `as_filed` for a field
-  other than share of net assets needs a row there or is ignored; `column_types` config takes effect
-  only on full refresh.
+  context. (`tie_break_same_effect` over-report: fixed in the final fix wave, F3.)
+- Seeds: `column_types` config takes effect only on full refresh. (The `action_field` uniqueness test
+  and the check that a fund rule's action and target reach a field: added in the final fix wave, F6.)
 - `int_field_normalised`: `value_filed` on dollar-principal rows is the normalised principal, not a
   filed value; the 7-day rate boundary is not unit-tested; the model does not check the rate file's
   hash as production does; no test finds another filing that tags share of net assets as a percent.
 - Unit units: unit tests and the CI fixture's older facts write `xbrli:pure` / `xbrli:shares`; real
   filings of the five funds write `pure` / `shares`. A filer writing the prefix gets no unit kind and
   no rule (unresolved, visible, counted).
-- `cmp_amount`: `correction_cover` counts a principal correction as covering currency and dollar
-  principal (6 rows covered indirectly); `filer_concept_not_read` does not compare values; shares and
-  share of net assets causes other than not_yet_explained have no ceiling; unit row x20 is refused by
-  two conditions at once.
+- `cmp_amount`: `filer_concept_not_read` does not compare values; unit row x20 is refused by two
+  conditions at once. (Indirect correction cover and the missing shares / share of net assets ceilings:
+  fixed in the final fix wave, F2 and F1.)
+- Copies of logic noted by the final review (final fix wave: deferred): the split-bracket test is
+  written twice (`int_field_rule` `sign_placement` and `cmp_amount` `split_bracket`); "a principal
+  taken from a share count is in USD" is written in SQL in two places (`int_field_rule`
+  `principal_usd_row` and `int_field_normalised`); the step 1 basis rule (fact_fund_period's A04) is
+  copied into the sum check (now macro `sum_not_tied_rows`).
 - Process: one implementer sent inline Python once in Task 3 (stopped, no effect); commit 3c6e361c has
   the session attribution footer; two reviewer query files `scripts/slice3/q_review_t4_*.sql` are left
   uncommitted.

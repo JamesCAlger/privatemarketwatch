@@ -153,35 +153,46 @@ vars:
     # (fact_fund_period's A04 rule): Ares 3, BCRED 14 (it ties without cash rows, but its filed cash equivalents are
     # empty, so A04 keeps the published basis), Apollo 6; plus the three 2026-09-30 quarters with no filed total yet.
     # 25 (slice 3 Task 4 fix round 1): the split-bracket fix makes Apollo 2023-12-31 tie (ex cash 14.628m -> 0).
+    # Final fix wave F5: the 25 are pinned by key in sum_not_tied_pinned below (tests/int_field_normalised_sum_not_tied_set.sql).
     int_field_normalised_sum_not_tied: 25
+    # Final fix wave F3: tie-breaks (int_field_rule step 2) decided between rules of different effect. Measured 0 of 462
+    # tie-broken rows per field (principal, shares). A rule, not a measurement.
+    int_field_rule_tie_break_different_effect: 0
+    # Final fix wave F4: position rows whose cost is read from a filer concept (fund rule concept_is_cost) and so
+    # differs from int_context_feature.cost, which the subtotal rule reads. Measured 2026-11-22: 196. Any other
+    # difference fails tests/int_field_read_cost_equals_feature.sql (ceiling 0).
+    int_field_read_cost_filer_concept: 196
     # Slice 3 Task 4: cost pairs where production's cost differs from cost_reported (a donor proxy). Measured 0.
     cmp_amount_cost_columns_differ: 0
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
-  # bases are never summed. Fair value, cost and the three principal fields carry every cause; shares and share of net
-  # assets carry not_yet_explained only (their other causes are counted in the doc, not tested).
+  # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).
   #   new_wrong 0 since fix round 1 (the 85 bracket rows and 196 filer-cost rows now equal production). principal
-  #   owner_review 59 / 15: par_tagged_loan_test_stand_in. principal convention 107: production_empties_principal_on_
-  #   equity_class; not_yet_explained 14: principal_empty_class_not_equity (BCRED STRUCTURED_CREDIT units, step not
-  #   traced); JV old_wrong 2: principal_emptied_then_reclassified. currency convention 671: count_principal_currency_
-  #   blank_in_production.
+  #   owner_review 166 = 59 par_tagged_loan_test_stand_in + 107 unverified_unit_count_read_as_principal (was convention
+  #   until final fix wave F7); unpublished 15 par_tagged. principal not_yet_explained 14: principal_empty_class_not_
+  #   equity (BCRED STRUCTURED_CREDIT units, step not traced); dollar principal not_yet_explained 16: those 14 plus 2
+  #   correction_loaded_value_not_matched (F2: a EUR / GBP principal correction, production converted it, this layer
+  #   does not convert a correction). JV old_wrong 2: principal_emptied_then_reclassified. currency convention 671:
+  #   count_principal_currency_blank_in_production. shares needs_correction 219 (production names shares_held);
+  #   shares owner_review 48 = 34 par_tagged + 14 units_tagged (unpublished 15 par_tagged). Share of net assets
+  #   old_wrong 2 (unpublished): pct_size_bound_keeps_fraction.
   cmp_amount_max:
     published:
       fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 14, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 107, needs_correction: 5, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 14}
+      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 5, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 14}
       principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 671, needs_correction: 282, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
-      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 107, needs_correction: 196, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 14}
-      shares: {not_yet_explained: 0}
-      pct_of_net_assets: {not_yet_explained: 0}
+      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 194, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 16}
+      shares: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 219, needs_store_not_loaded: 0, production_stale: 0, owner_review: 48, not_yet_explained: 0}
+      pct_of_net_assets: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
     unpublished:
       fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       principal_amount: {old_wrong: 2, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
       principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
       principal_amount_usd: {old_wrong: 2, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
-      shares: {not_yet_explained: 0}
-      pct_of_net_assets: {not_yet_explained: 0}
+      shares: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
+      pct_of_net_assets: {old_wrong: 2, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as
@@ -201,6 +212,36 @@ vars:
     - "0001287750|2026-09-30|0001628280-26-067383"
     - "0001812554|2026-09-30|0001812554-26-000060"
     - "0001837532|2026-09-30|0001193125-26-449955"
+  # Final fix wave F5: the fund-quarters the sum check may list (macro sum_not_tied_rows), as cik|report_date, measured
+  # 2026-11-22. The count ceiling int_field_normalised_sum_not_tied does not see a swap; tests/int_field_normalised_sum_
+  # not_tied_set.sql fails on any non-tying quarter not listed here. The list may shrink freely. Ares 3, BCRED 14,
+  # Apollo 5, and the three 2026-09-30 quarters with no filed total yet (Ares, Blue Owl, Apollo).
+  sum_not_tied_pinned:
+    - "0001287750|2022-09-30"
+    - "0001287750|2025-03-31"
+    - "0001287750|2025-06-30"
+    - "0001287750|2026-09-30"
+    - "0001803498|2022-09-30"
+    - "0001803498|2023-06-30"
+    - "0001803498|2023-09-30"
+    - "0001803498|2023-12-31"
+    - "0001803498|2024-03-31"
+    - "0001803498|2024-06-30"
+    - "0001803498|2024-09-30"
+    - "0001803498|2024-12-31"
+    - "0001803498|2025-03-31"
+    - "0001803498|2025-06-30"
+    - "0001803498|2025-09-30"
+    - "0001803498|2025-12-31"
+    - "0001803498|2026-03-31"
+    - "0001803498|2026-06-30"
+    - "0001812554|2026-09-30"
+    - "0001837532|2023-09-30"
+    - "0001837532|2024-06-30"
+    - "0001837532|2024-09-30"
+    - "0001837532|2025-03-31"
+    - "0001837532|2026-03-31"
+    - "0001837532|2026-09-30"
 
 models:
   warehouse:

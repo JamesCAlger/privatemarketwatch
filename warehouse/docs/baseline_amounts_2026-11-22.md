@@ -4,14 +4,33 @@ This layer's amounts compared with production's. Spec: `intermediate_spine.md` s
 Model: `cmp_amount`. Production: `stg_holdings`, build of record b1116a. Plan:
 `2026-11-22-slice3-amounts-plan.md`, Task 4. State: after Task 4 fix round 1 (the two defects the
 first comparison found are fixed; the equity-class convention is narrowed; a unit test covers the
-cause rules).
+cause rules), then the final fix wave (F1 to F8, below: every cause on every field has a ceiling;
+`needs_correction` now checks the correction's value; the 107 equity-class principals are
+`owner_review`, not a convention).
+
+### Final fix wave (2026-11-22): what moved in `cmp_amount`
+
+Only `cause` and `cause_detail` moved. No value, outcome or row moved
+(`scripts/slice3/out/fw_*`; the guard is in the fix report).
+
+| Field (published) | Rows | Before | After |
+|---|---:|---|---|
+| principal_amount | 107 | convention, production_empties_principal_on_equity_class | owner_review, unverified_unit_count_read_as_principal |
+| principal_amount_usd | 107 | the same | the same |
+| principal_amount_usd | 2 | needs_correction, correction_loaded | not_yet_explained, correction_loaded_value_not_matched |
+
+New published counts: principal owner_review 166 (was 59), convention 0 (was 107);
+dollar principal owner_review 166, convention 0, needs_correction 194 (was 196),
+not_yet_explained 16 (was 14). Everything else is unchanged.
 
 Agreement with production shows the two agree. It does not show either is right. This comparison
 cannot see a value both pipelines read wrongly in the same way: such a row counts as `equal`. Nor can
 it see a field whose meaning changed, or offsetting errors that leave totals intact.
 
-Build line: `PASS=503 WARN=43 ERROR=0 TOTAL=546` (first comparison: 502 / 43 / 545). Python tests 144. CI fixture
-build: build `PASS=277`, empty run of the two comparison models `PASS=2`, unit-test and drift step `PASS=24`.
+Build line after the final fix wave: `PASS=534 WARN=46 ERROR=0 TOTAL=580` (Task 5: 503 / 43 / 546;
+first comparison: 502 / 43 / 545). Python tests 144. CI fixture build: build `PASS=281`, empty run of
+the two comparison models `PASS=2`, unit-test and drift step `PASS=24`. A passing build and agreement
+with production do not show the data is correct.
 
 ## How the sides are joined
 
@@ -129,10 +148,11 @@ ids. Each count has its own ceiling per basis and field (`cmp_amount_max` in `db
 
 | Cause and detail | Field: rows (published / JV) | FV affected | Funds | Opened |
 |---|---|---:|---|---:|
-| needs_correction, correction_loaded(_applied) | fair value 2, cost 14, principal 5, currency 282, dollar principal 196, shares 219 | see below | all five | 6 |
+| needs_correction, correction_loaded(_applied) | fair value 2, cost 14, principal 5, currency 282, dollar principal 194, shares 219 | see below | all five | 6 |
+| not_yet_explained, correction_loaded_value_not_matched (final fix wave F2) | dollar principal 2 | | Apollo | 2 |
 | owner_review, par_tagged_loan_test_stand_in | principal, currency, dollar principal 59 / 15 each; shares 34 / 15 | 1,892.2 / 19.1 | BCRED, Blue Owl, HPS | 3 |
 | owner_review, units_tagged_equity_test_stand_in | shares 14 | 586.2 | Blue Owl | 4 |
-| convention, production_empties_principal_on_equity_class | principal 107, dollar principal 107 | 3,614.7 | Blue Owl, Apollo, HPS | 3 |
+| owner_review, unverified_unit_count_read_as_principal (was convention until F7) | principal 107, dollar principal 107 | 3,614.7 | Blue Owl, Apollo, HPS | 3 |
 | convention, count_principal_currency_blank_in_production | currency 671 | 22,045.9 | Ares, Blue Owl, HPS | 1 |
 | old_wrong, pct_size_bound_keeps_fraction | share of net assets 0 / 2 | 2,165.5 | BCRED | 2 |
 | old_wrong, principal_emptied_then_reclassified | principal 0 / 2, dollar principal 0 / 2 | 3.9 | BCRED | 2 |
@@ -189,11 +209,36 @@ other filer concept production reads that lacks a fund rule. Opened 3 rows.
 - All 196 now equal production (one of them is in a foreign unit and is read as dollars by Apollo's
   `reported_in_usd` declaration, as production does).
 
-### needs_correction (718 field rows)
+### needs_correction (716 field rows; 718 before the final fix wave)
 
 - Rule: a loaded value correction (`stg_correction`, kind `value`) names a field that sets this one,
   keyed by context id, or by accession and production's identifier (label-keyed rows of
   `row_corrections.csv`). Detail `_applied` when production's `corrected_fields` also names it.
+- Final fix wave F2: the label now needs evidence that the correction explains the difference.
+  Either production's `corrected_fields` names the field (`_applied`), or a covering correction
+  carries production's value:
+
+| Correction | Compared with | Match |
+|---|---|---|
+| same field, number | production's value | within 1 (dollar fields) or 0.000001 (shares, share of net assets) |
+| same field, empty | production's value | production is empty too |
+| same field, currency | production's currency | same text |
+| principal, for the currency field | production's currency | the correction's unit equals it |
+| principal in dollars (unit USD or blank), for the dollar principal | production's dollar principal | within 1 |
+
+  A covering correction with no match, and no `_applied`, is
+  `not_yet_explained|correction_loaded_value_not_matched`. A foreign principal correction is not
+  converted here (that would copy the currency step into the comparison).
+- What the F2 check found (`scripts/slice3/q_final_needs_correction_value.sql`,
+  `q_fw_nc_entries.sql`; every entry opened):
+
+| Rows | What the corrections are | Result |
+|---:|---|---|
+| 698 | a same-field correction whose value equals production's | stay needs_correction |
+| 14 shares (Ares) | `row_corrections` that empty shares_held ("Printed ownership percentage, no share or unit count", e.g. Centric Brands Class A LP interests 6.27 %); production names shares_held and is empty | stay (production names it; the empty value matches) |
+| 2 currency (Apollo, SumUp 2024-06-30, Version 1 Bidco 2025-12-31) | `wrapper:untagged_values` principal 40,000,000 EUR and 6,559,000 GBP; production's currency EUR and GBP | stay (the unit matches) |
+| 2 dollar principal (Ares Neptune Bidco 2022-12-31; BCRED New Mountain CLO 6 2024-12-31) | `wrapper:untagged_values` principal 52,800,000 and 1,875,000, no unit (BCRED also a currency correction USD); production's dollar principal equal | stay (dollar principal matches) |
+| 2 dollar principal (the same two Apollo rows) | the EUR and GBP principal corrections; production converted them (42,844,000 and 8,819,887.30) | now not_yet_explained: the correction very likely explains them, but this layer does not convert a correction, so the match is not shown |
 - Which correction fields set which compared field is a fixed list in the model
   (`correction_cover`): a principal or its currency also sets the dollar principal.
 - Stores (`scripts/slice3/q_t4_correction_rows.sql`):
@@ -247,15 +292,16 @@ keeps the currency. Fix round 1 (review item 1) splits the signature by producti
 
 | Group | Rows | Production class | Cause |
 |---|---:|---|---|
-| Equity or fund class | 107 | COMMON_EQUITY 60, PREFERRED_EQUITY 26, PRIVATE_CREDIT_FUND 6, PRIVATE_EQUITY_FUND 15 | convention, production_empties_principal_on_equity_class |
+| Equity or fund class | 107 | COMMON_EQUITY 60, PREFERRED_EQUITY 26, PRIVATE_CREDIT_FUND 6, PRIVATE_EQUITY_FUND 15 | owner_review, unverified_unit_count_read_as_principal (convention until final fix wave F7) |
 | BCRED JV bonds re-classed by a correction | 2 | DIRECT_LENDING | old_wrong, principal_emptied_then_reclassified |
 | BCRED warehouse and CLO-equity units | 14 | STRUCTURED_CREDIT | not_yet_explained, principal_empty_class_not_equity |
 
-- **convention (107).** Opened 3 (Blue Owl CD&R "LP Interest | 36,993"; Apollo Ishtar "Common Equity
-  - Stock | 38,889 Shares"; HPS Picard "Preferred Shares | 827"). This layer reads the tag and has no
-  index class (text fields are the second spec). In at least the Apollo and Blue Owl samples the
-  principal tag holds a unit count, not a dollar par: keeping it as principal is not obviously right
-  either.
+- **owner_review (107; convention until the final fix wave).** Opened 3 (Blue Owl CD&R "LP Interest |
+  36,993"; Apollo Ishtar "Common Equity - Stock | 38,889 Shares"; HPS Picard "Preferred Shares |
+  827"). This layer reads the tag and has no index class (text fields are the second spec). In at
+  least the Apollo and Blue Owl samples the principal tag holds a unit count, not a dollar par, and
+  this layer stores it as a dollar principal. That is not a convention: it is an unverified value.
+  Controller ruling F7: `owner_review`, detail `unverified_unit_count_read_as_principal`.
 - **old_wrong (2).** Huntington Bancshares (2022-12-31, i4089ebdb...) and GTCR Investors LP A-1 Units
   (2023-09-30, c-4549), both in BCRED's JV schedule. Production's raw extraction carries the
   principal. Its class step empties it; afterwards `_apply_row_corrections` (unified_holdings.py line
@@ -419,14 +465,24 @@ fair-value fact of any concept this layer reads.
 | Test | Kind | Measured |
 |---|---|---:|
 | `cmp_amount_key_and_cause` (one row per key; seven fields per both-sides row; outcome list; cause from the closed list on every open row and only there; numbers and currency in their own columns; is_published equals the basis) | singular | 0 |
-| `baseline_cmp_amount_<basis>_<field>_<cause>`: fair value, cost, principal, currency, dollar principal, eight causes each, both bases | baseline, 80 tests | at ceiling (see `cmp_amount_max`); every new_wrong is 0 |
-| `baseline_cmp_amount_<basis>_shares_not_yet_explained`, `..._pct_of_net_assets_not_yet_explained` | baseline, 4 tests | 0 |
+| `baseline_cmp_amount_<basis>_<field>_<cause>`: all seven fields, eight causes each, both bases (shares and share of net assets carried not_yet_explained only until final fix wave F1) | baseline, 112 tests | at ceiling (see `cmp_amount_max`); every new_wrong is 0 |
 | `baseline_cmp_amount_cost_columns_differ` | baseline | 0 |
 | yml: not_null on keys and outcome; accepted values on basis, outcome, cause | generic | pass |
 | unit test `cmp_amount_cause_rules`: invented rows for every cause rule, with a row each rule must not take (split brackets with the same sign; an unrelated filer fact; the equity signature with a non-equity class, with and without a class correction); a quarter in `cmp_excluded_quarter` and a new-only row give no rows | unit | pass |
 | unit test `int_field_rule_two_unit_cost_and_sign`, new cases s5 to s8: the split layout flips (s5); NOT: the same layout already negative (s8), a ")" cell after a number with no "(" (s6), a ")" not in the next cell (s7) | unit | pass |
 
-18 of the baselines are above zero and warn; each sits at its ceiling.
+Added in the final fix wave: the unit test `cmp_amount_cause_rules` has x22 (a cost correction whose
+value differs from production's: NOT needs_correction) and x23 (a EUR principal correction: principal
+and currency match, the dollar principal does not); `int_field_rule_tie_break_and_missing_feature`
+has t3 (an undecidable loser: `tie_break_same_effect` null, not false);
+`baseline_int_field_rule_tie_break_different_effect` (ceiling 0, measured 0);
+`int_field_read_cost_equals_feature` (0) and `baseline_int_field_read_cost_filer_concept` (196);
+`int_field_normalised_sum_not_tied_set` (the 25 pinned by key); `action_field_key_unique` and
+`reading_rule_amount_action_has_field` (0 each); a "normalised without a value" branch in
+`int_field_normalised_names_rule` (0).
+
+20 of the `cmp_amount` baselines are above zero and warn (18 before; F1 adds four for shares and
+share of net assets, F7 empties the two principal convention baselines); each sits at its ceiling.
 
 CI: the fixture build now runs `dbt run --empty` on `cmp_row_set` and `cmp_excluded_quarter`
 before the unit-test step, so the `cmp_amount` unit test can read their column types, as the
@@ -436,9 +492,21 @@ empty run 2, unit-test and drift step 24 (was 23).
 ## Not checked
 
 - Fields beyond the seven. Rates, spreads, PIK and maturity are slice 4.
-- Whether either side is right where they agree. In particular: the 671 currency rows taken as USD;
-  the 3,615m of equity principals that are unit counts in the samples read; the Blue Owl zero-value
-  commitment lines.
+- Whether either side is right where they agree. In particular the Blue Owl zero-value commitment
+  lines.
+- The 107 equity-class principals (3,615m of fair value; Blue Owl, Apollo, HPS). This layer stores
+  the principal tag as a dollar principal; in the samples read it is a unit count. Unverified:
+  `owner_review` (final fix wave F7).
+- The 671 principal currencies taken as USD on principals moved from a share count. Production leaves
+  them blank and converts them as dollars; this layer writes USD. Both sides agree on the amount, but
+  that the count is a dollar par is not verified: this is an unverified assumption, not only a
+  convention.
+- 2,303 published principals read as filed on rows with no debt term fact (no rate, spread, PIK rate
+  or maturity): Ares 758, BCRED 43, Blue Owl 104, Apollo 20, HPS 1,378
+  (`scripts/slice3/q_final_checks.sql`, re-run 2026-11-22). Some of these may be unit counts stored as
+  principal. This is an unmeasured upper bound, not a verified count of wrong rows.
+- Since final fix wave F1 every cause on shares and share of net assets has its own ceiling; before
+  it, their causes other than not_yet_explained were counted here but not tested.
 - Rows on one side only: they are slice 2's comparison (`baseline_roles_2026-11-19.md`).
 - Which production step empties the principal of the 14 BCRED STRUCTURED_CREDIT units.
 - Why production's HPS wrapper comment says 696 rows where production converts 660.

@@ -1,0 +1,9 @@
+=> published	principal_amount	owner_review	unverified_unit_count_read_as_principal	107
+=> published	principal_amount_usd	needs_correction	correction_loaded	2
+=> published	principal_amount_usd	not_yet_explained	correction_loaded_value_not_matched	2
+=> published	principal_amount_usd	owner_review	unverified_unit_count_read_as_principal	107
+=> -- rows shown: 28
+<= published	principal_amount	convention	production_empties_principal_on_equity_class	107
+<= published	principal_amount_usd	convention	production_empties_principal_on_equity_class	107
+<= published	principal_amount_usd	needs_correction	correction_loaded	4
+<= -- rows shown: 27

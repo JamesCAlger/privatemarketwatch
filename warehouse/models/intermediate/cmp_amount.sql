@@ -21,9 +21,14 @@
 -- cause is set by rules on row features, first match wins, never by a list of ids. Closed list: old_wrong, new_wrong,
 -- convention, needs_correction, needs_store_not_loaded, production_stale, owner_review, not_yet_explained. Null on
 -- equal and both_empty rows. The evidence behind each rule is in docs/baseline_amounts_2026-11-22.md.
---   needs_correction|correction_loaded(_applied)  a loaded value correction (stg_correction, keyed by context id, or by
---        accession and production's identifier) names a field that sets this one (correction_cover); _applied when
---        production's corrected_fields names the field too.
+--   needs_correction|correction_loaded_applied  a loaded value correction (stg_correction, keyed by context id, or by
+--        accession and production's identifier) names a field that sets this one (correction_cover), and production's
+--        corrected_fields names the field.
+--   needs_correction|correction_loaded  the same, production does not name the field, but a covering correction
+--        carries production's value (loaded_correction says how a value is matched; final fix wave F2).
+--   not_yet_explained|correction_loaded_value_not_matched  a covering correction is loaded, production does not name
+--        the field and no covering correction carries production's value: the correction is not shown to explain the
+--        difference, so a real error of this layer on a corrected row stays visible.
 --   needs_store_not_loaded|production_corrected_no_loaded_store  production's corrected_fields names the field, no
 --        loaded correction covers it.
 --   new_wrong|filer_concept_not_read  this layer read no fact; the context carries a numeric fact whose local name
@@ -37,9 +42,11 @@
 --   owner_review|units_tagged_equity_test_stand_in  units_tagged_as_par: this layer took shares from the principal
 --        where production did not, or production took them where this layer did not (its "is equity" test is "no
 --        debt term fact", production's is a text class).
---   convention|production_empties_principal_on_equity_class  production holds no principal or dollar principal but
+--   owner_review|unverified_unit_count_read_as_principal  production holds no principal or dollar principal but
 --        kept the principal's currency, and its index class is one pipeline/unified_holdings.py empties principal on
---        (common or preferred equity or a fund; lines 1346-1360). This layer reads the tag and has no index class.
+--        (common or preferred equity or a fund; lines 1346-1360). This layer reads the principal tag as filed and
+--        stores it as a dollar principal; in the samples read the tag holds a unit count, not a par. Not verified, so
+--        not a convention (controller ruling, final fix wave F7).
 --   old_wrong|principal_emptied_then_reclassified  the same signature on a row whose production class is not one of
 --        those, where a loaded correction sets the row's index class or asset category: production emptied the
 --        principal under its first class (the class step comes before row corrections in unified_holdings.py) and the
@@ -209,11 +216,35 @@ with both_rows as (
 )
 
 , loaded_correction as (
+    -- every loaded correction that covers the field, and whether one of them carries production's value (final fix
+    -- wave F2): the same field with the field's tolerance (an empty correction matches an empty production value); a
+    -- principal correction's currency unit against production's currency; a principal correction in dollars (unit
+    -- USD or blank) against production's dollar principal. A foreign principal correction is not converted here.
     select
         o.accession
         , o.context_id
         , o.field
         , true as has_loaded_correction
+        , coalesce(bool_or(
+            case
+                when cc.correction_field = o.production_field and o.tolerance_class = 'text' then
+                    coalesce(nullif(trim(c.value), '') = o.currency_production,
+                             nullif(trim(c.value), '') is null and o.currency_production is null)
+                when cc.correction_field = o.production_field then
+                    case
+                        when nullif(trim(c.value), '') is null then o.value_production is null
+                        when o.tolerance_class = 'dollar' then
+                            abs(try_cast(c.value as double) - o.value_production)
+                                < {{ var('cmp_amount_tolerance')['dollar'] }}
+                        else abs(try_cast(c.value as double) - o.value_production)
+                                <= {{ var('cmp_amount_tolerance')['measured'] }}
+                    end
+                when o.field = 'principal_amount_currency' and cc.correction_field = 'principal_amount' then
+                    nullif(trim(c.value_unit), '') = o.currency_production
+                when o.field = 'principal_amount_usd' and cc.correction_field = 'principal_amount'
+                     and coalesce(nullif(trim(c.value_unit), ''), 'USD') = 'USD' then
+                    abs(try_cast(c.value as double) - o.value_production) < {{ var('cmp_amount_tolerance')['dollar'] }}
+            end), false) as correction_value_matches
     from open_pairs o
     join correction_cover cc on cc.field = o.field
     join {{ ref('stg_correction') }} c
@@ -278,6 +309,7 @@ with both_rows as (
     select
         o.*
         , coalesce(lc.has_loaded_correction, false) as has_loaded_correction
+        , coalesce(lc.correction_value_matches, false) as correction_value_matches
         , coalesce(regexp_matches(coalesce(o.corrected_fields, ''), '(^|;)' || o.production_field || '([;:=]|$)'), false)
             as production_corrected
         , fc.accession is not null as has_filer_concept
@@ -299,7 +331,8 @@ with both_rows as (
         , field
         , case
             when has_loaded_correction and production_corrected then 'needs_correction|correction_loaded_applied'
-            when has_loaded_correction then 'needs_correction|correction_loaded'
+            when has_loaded_correction and correction_value_matches then 'needs_correction|correction_loaded'
+            when has_loaded_correction then 'not_yet_explained|correction_loaded_value_not_matched'
             when production_corrected then 'needs_store_not_loaded|production_corrected_no_loaded_store'
             when has_filer_concept then 'new_wrong|filer_concept_not_read'
             when has_split_bracket and value_new is not null and value_production is not null
@@ -321,7 +354,7 @@ with both_rows as (
             when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
                  and production_principal is null and production_currency is not null
                  and new_principal_action = 'as_filed' and production_class_empties_principal
-                then 'convention|production_empties_principal_on_equity_class'
+                then 'owner_review|unverified_unit_count_read_as_principal'
             when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
                  and production_principal is null and production_currency is not null
                  and new_principal_action = 'as_filed' and has_class_correction
