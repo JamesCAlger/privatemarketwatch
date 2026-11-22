@@ -51,6 +51,13 @@ vars:
   # from pipeline/source_encodings.py DETACHED_MIN_CONTEXT_GAP (HPS: largest gap inside the main schedule 4, gap to
   # the JV schedule 1,353 to 2,761 across the parsed filings).
   detached_min_context_gap: 200
+  # Comparison of amounts with production (cmp_amount, slice 3 Task 4). dollar: fair value, cost, principal and dollar
+  # principal agree when they differ by less than this (D1, to the dollar). measured: shares and share of net assets
+  # agree when they differ by no more than this; both are read from one tag, and the largest difference on agreeing
+  # rows is float rounding of the times-100 (below 2e-15, scripts/slice3/q_t4_tolerance.sql).
+  cmp_amount_tolerance:
+    dollar: 1
+    measured: 0.000001
   # Baseline ceilings. Each baseline test warns while its count is above zero and FAILS the build if
   # the count rises above the ceiling. A count may fall freely. Raising a ceiling is a deliberate edit.
   baseline_max:
@@ -146,6 +153,33 @@ vars:
     # (fact_fund_period's A04 rule): Ares 3, BCRED 14 (it ties without cash rows, but its filed cash equivalents are
     # empty, so A04 keeps the published basis), Apollo 6; plus the three 2026-09-30 quarters with no filed total yet.
     int_field_normalised_sum_not_tied: 26
+    # Slice 3 Task 4: cost pairs where production's cost differs from cost_reported (a donor proxy). Measured 0.
+    cmp_amount_cost_columns_differ: 0
+  # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
+  # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
+  # bases are never summed. Fair value, cost and the three principal fields carry every cause; shares and share of net
+  # assets carry not_yet_explained only (their other causes are counted in the doc, not tested).
+  #   fair value new_wrong 43: Apollo 2023-12-31 bracket_split_across_cells. cost new_wrong 238: 42 the same, 196 Apollo
+  #   filer cost concepts not read (filer_concept_not_read). principal owner_review 59 / 15: par_tagged_loan_test_stand_in.
+  #   principal convention 121 / 2: production_empties_principal_on_equity_class; currency convention 671:
+  #   count_principal_currency_blank_in_production.
+  cmp_amount_max:
+    published:
+      fair_value: {old_wrong: 0, new_wrong: 43, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      cost: {old_wrong: 0, new_wrong: 238, convention: 0, needs_correction: 14, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 121, needs_correction: 5, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
+      principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 671, needs_correction: 282, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
+      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 121, needs_correction: 196, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
+      shares: {not_yet_explained: 0}
+      pct_of_net_assets: {not_yet_explained: 0}
+    unpublished:
+      fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 2, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
+      principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
+      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 2, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 15, not_yet_explained: 0}
+      shares: {not_yet_explained: 0}
+      pct_of_net_assets: {not_yet_explained: 0}
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as

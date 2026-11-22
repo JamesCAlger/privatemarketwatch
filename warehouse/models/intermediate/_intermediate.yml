@@ -445,6 +445,137 @@ models:
         data_tests:
           - not_null
 
+  - name: cmp_amount
+    description: >
+      This layer's amounts against production's on the position rows both sides have (cmp_row_set side both, both
+      bases, the excluded quarters left out), joined on accession and context id. One row per (accession, context_id,
+      field) for seven fields: fair value, cost (against production's cost_reported; its cost column is kept as
+      value_production_cost), principal, its currency, the dollar principal, shares and share of net assets. Outcome
+      equal / differs / new_empty / production_empty / both_empty under var cmp_amount_tolerance; every other outcome
+      has a cause from the closed list with a detail. Key and cause are tested in tests/cmp_amount_key_and_cause.sql.
+      Agreement shows the two agree, not that either is right.
+    columns:
+      - name: basis
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['published', 'unpublished']
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: field
+        data_tests:
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
+      - name: outcome
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['equal', 'differs', 'new_empty', 'production_empty', 'both_empty']
+      - name: cause
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['old_wrong', 'new_wrong', 'convention', 'needs_correction', 'needs_store_not_loaded',
+                         'production_stale', 'owner_review', 'not_yet_explained']
+    # One baseline per basis, field and cause for fair value, cost and the three principal fields; not_yet_explained
+    # only for shares and share of net assets. Ceilings var cmp_amount_max in dbt_project.yml.
+    data_tests:
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: old_wrong}, name: baseline_cmp_amount_published_fair_value_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: new_wrong}, name: baseline_cmp_amount_published_fair_value_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: convention}, name: baseline_cmp_amount_published_fair_value_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: needs_correction}, name: baseline_cmp_amount_published_fair_value_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_fair_value_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: production_stale}, name: baseline_cmp_amount_published_fair_value_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: owner_review}, name: baseline_cmp_amount_published_fair_value_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: fair_value, cause: not_yet_explained}, name: baseline_cmp_amount_published_fair_value_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: old_wrong}, name: baseline_cmp_amount_published_cost_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: new_wrong}, name: baseline_cmp_amount_published_cost_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: convention}, name: baseline_cmp_amount_published_cost_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: needs_correction}, name: baseline_cmp_amount_published_cost_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_cost_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: production_stale}, name: baseline_cmp_amount_published_cost_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: owner_review}, name: baseline_cmp_amount_published_cost_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: not_yet_explained}, name: baseline_cmp_amount_published_cost_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: old_wrong}, name: baseline_cmp_amount_published_principal_amount_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: new_wrong}, name: baseline_cmp_amount_published_principal_amount_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: convention}, name: baseline_cmp_amount_published_principal_amount_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: needs_correction}, name: baseline_cmp_amount_published_principal_amount_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_principal_amount_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: production_stale}, name: baseline_cmp_amount_published_principal_amount_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: owner_review}, name: baseline_cmp_amount_published_principal_amount_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: not_yet_explained}, name: baseline_cmp_amount_published_principal_amount_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: old_wrong}, name: baseline_cmp_amount_published_principal_amount_currency_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: new_wrong}, name: baseline_cmp_amount_published_principal_amount_currency_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: convention}, name: baseline_cmp_amount_published_principal_amount_currency_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: needs_correction}, name: baseline_cmp_amount_published_principal_amount_currency_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_principal_amount_currency_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: production_stale}, name: baseline_cmp_amount_published_principal_amount_currency_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: owner_review}, name: baseline_cmp_amount_published_principal_amount_currency_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: not_yet_explained}, name: baseline_cmp_amount_published_principal_amount_currency_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: old_wrong}, name: baseline_cmp_amount_published_principal_amount_usd_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: new_wrong}, name: baseline_cmp_amount_published_principal_amount_usd_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: convention}, name: baseline_cmp_amount_published_principal_amount_usd_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: needs_correction}, name: baseline_cmp_amount_published_principal_amount_usd_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: needs_store_not_loaded}, name: baseline_cmp_amount_published_principal_amount_usd_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: production_stale}, name: baseline_cmp_amount_published_principal_amount_usd_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: owner_review}, name: baseline_cmp_amount_published_principal_amount_usd_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: not_yet_explained}, name: baseline_cmp_amount_published_principal_amount_usd_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: not_yet_explained}, name: baseline_cmp_amount_published_shares_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: pct_of_net_assets, cause: not_yet_explained}, name: baseline_cmp_amount_published_pct_of_net_assets_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: old_wrong}, name: baseline_cmp_amount_unpublished_fair_value_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: new_wrong}, name: baseline_cmp_amount_unpublished_fair_value_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: convention}, name: baseline_cmp_amount_unpublished_fair_value_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: needs_correction}, name: baseline_cmp_amount_unpublished_fair_value_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_fair_value_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: production_stale}, name: baseline_cmp_amount_unpublished_fair_value_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: owner_review}, name: baseline_cmp_amount_unpublished_fair_value_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: fair_value, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_fair_value_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: old_wrong}, name: baseline_cmp_amount_unpublished_cost_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: new_wrong}, name: baseline_cmp_amount_unpublished_cost_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: convention}, name: baseline_cmp_amount_unpublished_cost_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: needs_correction}, name: baseline_cmp_amount_unpublished_cost_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_cost_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: production_stale}, name: baseline_cmp_amount_unpublished_cost_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: owner_review}, name: baseline_cmp_amount_unpublished_cost_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: cost, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_cost_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: old_wrong}, name: baseline_cmp_amount_unpublished_principal_amount_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: new_wrong}, name: baseline_cmp_amount_unpublished_principal_amount_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: convention}, name: baseline_cmp_amount_unpublished_principal_amount_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: needs_correction}, name: baseline_cmp_amount_unpublished_principal_amount_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_principal_amount_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: production_stale}, name: baseline_cmp_amount_unpublished_principal_amount_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: owner_review}, name: baseline_cmp_amount_unpublished_principal_amount_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_principal_amount_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: old_wrong}, name: baseline_cmp_amount_unpublished_principal_amount_currency_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: new_wrong}, name: baseline_cmp_amount_unpublished_principal_amount_currency_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: convention}, name: baseline_cmp_amount_unpublished_principal_amount_currency_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: needs_correction}, name: baseline_cmp_amount_unpublished_principal_amount_currency_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_principal_amount_currency_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: production_stale}, name: baseline_cmp_amount_unpublished_principal_amount_currency_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: owner_review}, name: baseline_cmp_amount_unpublished_principal_amount_currency_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_currency, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_principal_amount_currency_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: old_wrong}, name: baseline_cmp_amount_unpublished_principal_amount_usd_old_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: new_wrong}, name: baseline_cmp_amount_unpublished_principal_amount_usd_new_wrong}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: convention}, name: baseline_cmp_amount_unpublished_principal_amount_usd_convention}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: needs_correction}, name: baseline_cmp_amount_unpublished_principal_amount_usd_needs_correction}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: needs_store_not_loaded}, name: baseline_cmp_amount_unpublished_principal_amount_usd_needs_store_not_loaded}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: production_stale}, name: baseline_cmp_amount_unpublished_principal_amount_usd_production_stale}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: owner_review}, name: baseline_cmp_amount_unpublished_principal_amount_usd_owner_review}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: principal_amount_usd, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_principal_amount_usd_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: shares, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_shares_not_yet_explained}
+      - baseline_cmp_amount_cause: {arguments: {basis: unpublished, field: pct_of_net_assets, cause: not_yet_explained}, name: baseline_cmp_amount_unpublished_pct_of_net_assets_not_yet_explained}
+
 unit_tests:
   - name: cmp_row_set_catch_all_causes
     description: >

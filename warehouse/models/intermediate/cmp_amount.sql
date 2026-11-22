@@ -1,0 +1,328 @@
+-- Decides, for every position row both this layer and production have, whether each amount agrees with production and,
+-- where it does not, why (spec intermediate_spine.md section 8, D1). One row per (accession, context_id, field).
+--
+-- Rows: cmp_row_set side = 'both', both bases, quarters in cmp_excluded_quarter left out. Joined on accession and
+-- context id, as cmp_row_set is. Production is the comparison side only: nothing here changes a value of this layer.
+-- Field pairs (this layer -> production column):
+--   fair_value                -> fair_value
+--   cost                      -> cost_reported (the filed cost; production's cost column equals it unless a donor
+--                                proxy fills it, pipeline/financial_conventions.py cost_proxies. value_production_cost
+--                                carries production's cost column as the second measure.)
+--   principal_amount          -> principal_amount (in the filed currency on both sides)
+--   principal_amount_currency -> principal_amount_currency (text; compared in currency_new / currency_production)
+--   principal_amount_usd      -> principal_amount_usd
+--   shares                    -> shares_held
+--   pct_of_net_assets         -> pct_of_net_assets (a percent on both sides)
+-- Equal: |difference| < var('cmp_amount_tolerance')['dollar'] (1) for the four dollar fields (D1, to the dollar);
+-- <= var('cmp_amount_tolerance')['measured'] for shares and share of net assets (both read from one tag; the only
+-- difference measured on equal rows is float rounding of the times-100, below 2e-15); text equality for the currency.
+-- Outcome: equal, differs, new_empty (production has a value, this layer none), production_empty, both_empty.
+--
+-- cause is set by rules on row features, first match wins, never by a list of ids. Closed list: old_wrong, new_wrong,
+-- convention, needs_correction, needs_store_not_loaded, production_stale, owner_review, not_yet_explained. Null on
+-- equal and both_empty rows. The evidence behind each rule is in docs/baseline_amounts_2026-11-22.md.
+--   needs_correction|correction_loaded(_applied)  a loaded value correction (stg_correction, keyed by context id, or by
+--        accession and production's identifier) names a field that sets this one (correction_cover); _applied when
+--        production's corrected_fields names the field too.
+--   needs_store_not_loaded|production_corrected_no_loaded_store  production's corrected_fields names the field, no
+--        loaded correction covers it.
+--   new_wrong|filer_concept_not_read  this layer read no fact; the context carries a numeric fact whose local name
+--        contains a concept_map local name of the field, in a namespace no concept_map row of the field matches
+--        (production matches concept names as substrings in any namespace, pipeline/bdc_filings.py CONCEPT_MAP).
+--   new_wrong|bracket_split_across_cells  fair value or cost of a filing with a bracketed_unsigned rule, the two sides
+--        opposite in sign, and the fact printed as "(123" with ")" in the next cell: a layout int_field_rule's bracket
+--        test does not read as brackets.
+--   owner_review|par_tagged_loan_test_stand_in  this layer moved a share count to principal (par_tagged_as_units,
+--        whose "is a loan" test is a debt term fact) where production kept it as shares.
+--   owner_review|units_tagged_equity_test_stand_in  units_tagged_as_par: this layer took shares from the principal
+--        where production did not, or production took them where this layer did not (its "is equity" test is "no
+--        debt term fact", production's is a text class).
+--   convention|production_empties_principal_on_equity_class  production holds no principal or dollar principal but
+--        kept the principal's currency: the signature of pipeline/unified_holdings.py, which empties principal on
+--        equity and fund index classes. This layer reads the tag and has no index class.
+--   convention|count_principal_currency_blank_in_production  a principal taken from a share count: production leaves
+--        its currency blank (and converts it as dollars), this layer writes USD.
+--   old_wrong|pct_size_bound_keeps_fraction  share of net assets: production stores the filed fraction unscaled (its
+--        size bound keeps values above 0.50), this layer stores it times 100.
+--   not_yet_explained|none  anything else.
+-- Agreement between the two sides shows they agree. It does not show either is right: a value both pipelines read
+-- wrongly in the same way is equal here.
+with both_rows as (
+    select c.basis, c.accession, c.context_id, c.cik, c.report_date
+    from {{ ref('cmp_row_set') }} c
+    where c.side = 'both'
+      and not exists (
+          select 1 from {{ ref('cmp_excluded_quarter') }} x where x.cik = c.cik and x.report_date = c.report_date
+      )
+)
+
+, prod as (
+    select
+        accession_number as accession
+        , src_context_id as context_id
+        , fair_value
+        , cost_reported
+        , cost
+        , principal_amount
+        , principal_amount_currency
+        , principal_amount_usd
+        , shares_held
+        , pct_of_net_assets
+        , corrected_fields
+        , bdc_investment_identifier
+    from {{ ref('stg_holdings') }}
+    where src_context_id is not null
+)
+
+, field_list as (
+    -- the field, production's name for it in corrected_fields and stg_correction, and its tolerance class
+    select * from (values
+        ('fair_value', 'fair_value', 'dollar'),
+        ('cost', 'cost', 'dollar'),
+        ('principal_amount', 'principal_amount', 'dollar'),
+        ('principal_amount_currency', 'principal_amount_currency', 'text'),
+        ('principal_amount_usd', 'principal_amount_usd', 'dollar'),
+        ('shares', 'shares_held', 'measured'),
+        ('pct_of_net_assets', 'pct_of_net_assets', 'measured')
+    ) v(field, production_field, tolerance_class)
+)
+
+, correction_cover as (
+    -- which correction fields set which compared field (a principal or its currency also sets the dollar principal)
+    select * from (values
+        ('fair_value', 'fair_value'),
+        ('cost', 'cost'), ('cost', 'cost_currency'),
+        ('principal_amount', 'principal_amount'),
+        ('principal_amount_currency', 'principal_amount_currency'), ('principal_amount_currency', 'principal_amount'),
+        ('principal_amount_usd', 'principal_amount_usd'), ('principal_amount_usd', 'principal_amount'),
+        ('principal_amount_usd', 'principal_amount_currency'), ('principal_amount_usd', 'principal_fx_rate_to_usd'),
+        ('principal_amount_usd', 'principal_fx_status'),
+        ('shares', 'shares_held'),
+        ('pct_of_net_assets', 'pct_of_net_assets')
+    ) v(field, correction_field)
+)
+
+, norm as (
+    select accession, context_id, field, value, currency, value_filed, action, rule_id, status, reason
+    from {{ ref('int_field_normalised') }}
+)
+
+, principal_norm as (
+    select accession, context_id, value, currency, action from norm where field = 'principal_amount'
+)
+
+, shares_norm as (
+    select accession, context_id, value, value_filed, action, reason from norm where field = 'shares'
+)
+
+, pairs as (
+    select
+        b.basis
+        , b.accession
+        , b.context_id
+        , fl.field
+        , fl.production_field
+        , fl.tolerance_class
+        , b.cik
+        , b.report_date
+        , case when fl.field = 'principal_amount_currency' then null else n.value end as value_new
+        , case fl.field
+            when 'fair_value' then p.fair_value
+            when 'cost' then p.cost_reported
+            when 'principal_amount' then p.principal_amount
+            when 'principal_amount_usd' then p.principal_amount_usd
+            when 'shares' then p.shares_held
+            when 'pct_of_net_assets' then p.pct_of_net_assets
+          end as value_production
+        , case when fl.field = 'cost' then p.cost end as value_production_cost
+        , case when fl.field = 'principal_amount_currency' then pn.currency end as currency_new
+        , case when fl.field = 'principal_amount_currency' then p.principal_amount_currency end as currency_production
+        , coalesce(n.action, case when fl.field = 'principal_amount_currency' then pn.action end) as new_action
+        , n.rule_id as new_rule_id
+        , n.status as new_status
+        , n.reason as new_reason
+        , n.value_filed as new_value_filed
+        , pn.value as new_principal
+        , pn.action as new_principal_action
+        , sn.value_filed as new_shares_filed
+        , sn.action as new_shares_action
+        , sn.reason as new_shares_reason
+        , p.principal_amount as production_principal
+        , p.principal_amount_currency as production_currency
+        , p.shares_held as production_shares
+        , p.corrected_fields
+        , p.bdc_investment_identifier
+    from both_rows b
+    cross join field_list fl
+    join prod p on p.accession = b.accession and p.context_id = b.context_id
+    left join norm n
+        on n.accession = b.accession and n.context_id = b.context_id
+        and n.field = case when fl.field = 'principal_amount_currency' then 'principal_amount' else fl.field end
+    left join principal_norm pn on pn.accession = b.accession and pn.context_id = b.context_id
+    left join shares_norm sn on sn.accession = b.accession and sn.context_id = b.context_id
+)
+
+, outcomes as (
+    select
+        *
+        , case
+            when tolerance_class = 'text' then
+                case
+                    when currency_new is null and currency_production is null then 'both_empty'
+                    when currency_new is null then 'new_empty'
+                    when currency_production is null then 'production_empty'
+                    when currency_new = currency_production then 'equal'
+                    else 'differs'
+                end
+            when value_new is null and value_production is null then 'both_empty'
+            when value_new is null then 'new_empty'
+            when value_production is null then 'production_empty'
+            when tolerance_class = 'dollar'
+                 and abs(value_new - value_production) < {{ var('cmp_amount_tolerance')['dollar'] }} then 'equal'
+            when tolerance_class = 'measured'
+                 and abs(value_new - value_production) <= {{ var('cmp_amount_tolerance')['measured'] }} then 'equal'
+            else 'differs'
+          end as outcome
+    from pairs
+)
+
+, open_pairs as (
+    select * from outcomes where outcome in ('differs', 'new_empty', 'production_empty')
+)
+
+, loaded_correction as (
+    select
+        o.accession
+        , o.context_id
+        , o.field
+        , true as has_loaded_correction
+    from open_pairs o
+    join correction_cover cc on cc.field = o.field
+    join {{ ref('stg_correction') }} c
+        on c.kind = 'value' and c.field = cc.correction_field and c.accession = o.accession
+        and (c.context_id = o.context_id
+             or (c.context_id is null and c.identifier = o.bdc_investment_identifier))
+    group by 1, 2, 3
+)
+
+, filer_concept as (
+    -- a numeric fact on the context whose local name contains a concept_map local name of the field, in a namespace
+    -- that no concept_map row of the field matches
+    select distinct o.accession, o.context_id, o.field
+    from open_pairs o
+    join {{ ref('stg_filed_fact') }} f on f.accession = o.accession and f.context_id = o.context_id
+    join {{ ref('concept_map') }} m on m.field = o.field and contains(f.concept_local, m.concept_local)
+    where o.outcome = 'new_empty'
+      and f.value_numeric is not null
+      and not exists (
+          select 1 from {{ ref('concept_map') }} m2
+          where m2.field = o.field and m2.concept_local = f.concept_local and f.concept_namespace glob m2.namespace_pattern
+      )
+)
+
+, sign_rule_filing as (
+    select distinct cik, sel_accession as accession
+    from {{ ref('stg_reading_rule') }}
+    where action = 'bracketed_unsigned' and sel_accession is not null
+)
+
+, units_rule_filing as (
+    select distinct cik, sel_accession as accession
+    from {{ ref('stg_reading_rule') }}
+    where action = 'units_tagged_as_par' and sel_accession is not null
+)
+
+, split_bracket as (
+    -- the read fact printed as "(123" with ")" opening the next cell
+    select distinct o.accession, o.context_id, o.field
+    from open_pairs o
+    semi join sign_rule_filing s on s.cik = o.cik and s.accession = o.accession
+    join {{ ref('int_field_read') }} r on r.accession = o.accession and r.context_id = o.context_id and r.field = o.field
+    join {{ ref('stg_filed_fact_placement') }} pl on pl.accession = r.accession and pl.fact_id = r.fact_id
+    join {{ ref('stg_filed_document_row') }} dr
+        on dr.accession = pl.accession and dr.row_index = coalesce(pl.row_index, pl.shown_row_index)
+    where o.field in ('fair_value', 'cost')
+      and regexp_full_match(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index) + 1], ''), '\s*\$?\s*\([^)]*')
+      and ltrim(coalesce(dr.cells[coalesce(pl.cell_index, pl.shown_cell_index) + 2], '')) like ')%'
+)
+
+, featured as (
+    select
+        o.*
+        , coalesce(lc.has_loaded_correction, false) as has_loaded_correction
+        , coalesce(regexp_matches(coalesce(o.corrected_fields, ''), '(^|;)' || o.production_field || '([;:=]|$)'), false)
+            as production_corrected
+        , fc.accession is not null as has_filer_concept
+        , sb.accession is not null as has_split_bracket
+        , ur.accession is not null as filing_has_units_rule
+    from open_pairs o
+    left join loaded_correction lc on lc.accession = o.accession and lc.context_id = o.context_id and lc.field = o.field
+    left join filer_concept fc on fc.accession = o.accession and fc.context_id = o.context_id and fc.field = o.field
+    left join split_bracket sb on sb.accession = o.accession and sb.context_id = o.context_id and sb.field = o.field
+    left join units_rule_filing ur on ur.cik = o.cik and ur.accession = o.accession
+)
+
+, caused as (
+    select
+        accession
+        , context_id
+        , field
+        , case
+            when has_loaded_correction and production_corrected then 'needs_correction|correction_loaded_applied'
+            when has_loaded_correction then 'needs_correction|correction_loaded'
+            when production_corrected then 'needs_store_not_loaded|production_corrected_no_loaded_store'
+            when has_filer_concept then 'new_wrong|filer_concept_not_read'
+            when has_split_bracket and value_new is not null and value_production is not null
+                 and abs(value_new + value_production) < {{ var('cmp_amount_tolerance')['dollar'] }}
+                then 'new_wrong|bracket_split_across_cells'
+            -- par_tagged_as_units: this layer moved the count to principal, production kept it as shares
+            when field in ('principal_amount', 'principal_amount_usd', 'principal_amount_currency')
+                 and new_principal_action = 'par_tagged_as_units' and production_principal is null
+                 and production_shares is not null
+                then 'owner_review|par_tagged_loan_test_stand_in'
+            when field = 'shares' and new_shares_action = 'par_tagged_as_units' and value_new is null
+                 and value_production = new_shares_filed
+                then 'owner_review|par_tagged_loan_test_stand_in'
+            -- units_tagged_as_par: one side took shares from the principal tag, the other did not
+            when field = 'shares' and new_shares_action = 'units_tagged_as_par' and value_production is null
+                then 'owner_review|units_tagged_equity_test_stand_in'
+            when field = 'shares' and value_new is null and filing_has_units_rule and value_production = new_principal
+                then 'owner_review|units_tagged_equity_test_stand_in'
+            when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
+                 and production_principal is null and production_currency is not null
+                 and new_principal_action = 'as_filed'
+                then 'convention|production_empties_principal_on_equity_class'
+            when field = 'principal_amount_currency' and outcome = 'production_empty'
+                 and new_principal_action = 'par_tagged_as_units' and currency_new = 'USD'
+                then 'convention|count_principal_currency_blank_in_production'
+            when field = 'pct_of_net_assets' and new_action = 'fraction_to_percent' and new_value_filed > 0.5
+                 and abs(value_production - new_value_filed) <= {{ var('cmp_amount_tolerance')['measured'] }}
+                then 'old_wrong|pct_size_bound_keeps_fraction'
+            else 'not_yet_explained|none'
+          end as cause_key
+    from featured
+)
+
+select
+    o.basis
+    , o.accession
+    , o.context_id
+    , o.field
+    , o.cik
+    , o.report_date
+    , o.basis = 'published' as is_published
+    , o.value_new
+    , o.value_production
+    , o.value_new - o.value_production as difference
+    , o.currency_new
+    , o.currency_production
+    , o.value_production_cost
+    , o.outcome
+    , split_part(c.cause_key, '|', 1) as cause
+    , nullif(split_part(c.cause_key, '|', 2), '') as cause_detail
+    , o.new_action
+    , o.new_rule_id
+    , o.new_status
+    , o.new_reason
+from outcomes o
+left join caused c on c.accession = o.accession and c.context_id = o.context_id and c.field = o.field
