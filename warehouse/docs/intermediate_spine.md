@@ -1,6 +1,10 @@
 # Intermediate layer, part 1 (the spine): spec
 
-Status: DRAFT written 2026-11-19 for the owner's review. Nothing here is built.
+Status: written 2026-11-19. Built so far: slice 1 (readings loader), slice 2 (filing selection,
+row roles, comparison of the row set with production) and slice 3 (amounts: field read, conversion,
+comparison of amounts with production; 2026-11-22). Not built: rates, corrections, observations.
+Counts: `baseline_readings_2026-11-19.md`, `baseline_roles_2026-11-19.md`,
+`baseline_amounts_2026-11-22.md`.
 Step 3 of the data-model redesign (`design.md`). Follows `filed_layer.md` (step 2).
 
 Passing every test in this spec shows the layer is consistent, repeatable and agrees with the old
@@ -62,10 +66,10 @@ folders, more than five funds, N-PORT, any change to AGENTS.md or the acceptance
 | Input | Where | State |
 |---|---|---|
 | Filed layer | `warehouse/data/filed/` | Built |
-| Reading rules and vocabulary | `warehouse/data/readings/` (git-ignored), written by the loader from `data/overrides/bdc_xbrl_wrappers/` | To build |
+| Reading rules and vocabulary | `warehouse/data/readings/` (git-ignored), written by the loader from the wrapper copies `warehouse/wrappers/<cik>.json` (D10) | Built |
 | Corrections | same folder, written by the loader from the wrappers' row-level entries and the existing correction stores for the five funds | To build |
 | Position and borrower ids | Today's holdings, joined on accession and context id | Exists |
-| Currency rates | The reference file the old pipeline uses for `fred_h10` | Exists; path to confirm in the plan |
+| Currency rates | The reference file the old pipeline uses for `fred_h10`: `data/reference/monetary_conversion/fred_h10_usd_per_unit.csv` (var `fx_rate_file`, read by `stg_fx_rate`). It is the retained source of production's admitted `quotes.json` in the same folder; same currencies, dates and rate text (checked in slice 3). It ends 2026-09-11 (slice 3, 2026-11-22) | Built |
 | Production holdings and fund totals | The step 1 staging models | Built |
 
 Ids (D3): in this spec the ids are taken from today's holdings by accession and context. A position
@@ -92,6 +96,12 @@ One row per rule.
 Rules of use:
 
 1. The most specific matching rule wins. Two equally specific matches are an error, not a tie-break.
+   As built (slice 3, 2026-11-22): higher priority wins first. At equal priority, a rule that names
+   a filing outranks a rule that names only a row feature (a filing is the narrower scope;
+   production's `par_scale` gives the listed filing precedence). Two rules still equal after that
+   are an error: no rule is chosen and the field is unresolved (`rule_conflict`). Controller ruling
+   in slice 3 Task 3, not yet confirmed by the owner; on today's data it decides 462 HPS rows per
+   field (principal, shares), and the beaten rule gives the same result on all of them.
 2. A missing row feature is an error, never "no match".
 3. A rule is never edited. It is ended (`valid_to`) and a new one written.
 4. Existing wrapper declarations carry no dates. They load as `assumed_all_quarters`.
@@ -120,7 +130,8 @@ All under `warehouse/models/intermediate/`. One decision each.
 Ported from the pilot (`instance_select.py` on branch `filer-profile-pilot`): count position facts
 per candidate filing; the latest filing at least 90 pct as full as the fullest wins; an amendment
 with no numeric facts is skipped; anything in between, two originals, or a period-end mismatch is
-refused and listed. The 90 pct figure is a placeholder: amendments seen so far were empty or at
+refused and listed. A period-end mismatch includes a filing whose schedule holds a fair-value fact
+dated after the report date (added in slice 2). The 90 pct figure is a placeholder: amendments seen so far were empty or at
 least 98 pct full.
 
 ### 6.2 Row roles
@@ -149,9 +160,11 @@ Rules in order; the first match decides.
 - Cross-check: a position should carry at least one term fact (principal, shares, rate, spread, PIK
   rate, maturity). On Apollo this alone split 8,643 of 8,655 contexts as production does. Where the
   cross-check and rules 4 to 6 disagree, the row is `unresolved`.
-- The text patterns of rules 4, 5 and 7 are rows in the rule table, not SQL.
-- Open: rule 6 repeats level by level. If that is awkward in SQL it becomes a small Python step whose
-  output dbt reads.
+- The text patterns of rules 4, 5 and 7 and the axis of rule 8 are data, not SQL. Patterns that
+  apply to every fund are rows of the seed `seeds/role_pattern.csv`, which is the general part of
+  the rule table and names no fund. Patterns for one fund are `reading_rules` in that fund's wrapper
+  copy (D10).
+- Rule 6 is built in SQL (`int_role_subtotal`).
 
 ### 6.3 Field read
 
@@ -175,6 +188,25 @@ Canonical rate fields: all-in rate, cash leg, PIK rate, each stored. Measured on
 the rate is marked unresolved on most rows of Blue Owl (854 of 863) and Apollo (733 of 778).
 AGENTS.md was corrected to say so on 2026-11-19 (b2f06350).
 Unresolved here includes rows with no rate at all, such as equity; the split was not measured.
+
+Actions as built in slice 3 (slice 3, 2026-11-22). The closed list is `seeds/reading_action.csv`;
+which field each fund-rule action acts on, and on which rows, is `seeds/action_field.csv`; the global
+defaults are rows of `seeds/field_rule_default.csv`.
+
+| Action | Field | Effect as built |
+|---|---|---|
+| `as_filed` | fair value, cost, principal, shares; share of net assets by filer rule only | No change. Global default for dollar amounts, shares and a foreign principal (kept in its currency). A filer rule naming it keeps a share of net assets the filer already tags as a percent |
+| `to_usd` | dollar principal | Principal times US dollars per unit, at the report date or the latest earlier quote at most 7 days old; none: unresolved `no_fx_rate`. Filer rule (`principal_usd_reference`) |
+| `reported_in_usd` | fair value, cost | Amount in a foreign unit taken as dollars. Filer rule |
+| `cost_foreign_is_par` | cost, principal | Cost tagged once in dollars and once in another currency: the dollar fact is the cost, the foreign fact the principal. Filer rule |
+| `par_tagged_as_units` | principal, shares | A share count on a debt row becomes the principal; shares left empty. Filer rule, row modes decide from the size of the number |
+| `units_tagged_as_par` | shares | In a listed filing, an equity row's principal fact is its unit count. Filer rule |
+| `bracketed_unsigned` | fair value, cost | In a listed filing, the printed brackets set the sign. Filer rule |
+| `fraction_to_percent` | share of net assets only | Times 100. Global default for a pure share of net assets. Built early for this field only (`built_early_for_field`); for rates it is slice 4 |
+| `concept_is_cost` | cost | Read side, like `concept_is_fair_value`: the filer's own cost concept is read where the context has no standard cost fact. Filer rule |
+
+Rates (`rate_is_all_in`, `rate_is_cash_leg`, `pik_only_is_coupon`, `pik_only_is_margin`,
+`printed_margin_cash_plus_pik`, and `fraction_to_percent` on rates) are slice 4.
 
 The value-size readings in the wrappers (`par_tagged_as_units` row modes) are loaded as they are and
 listed for review. They decide from the size of a number.
@@ -271,15 +303,15 @@ SOFR rows within 0.25 of base plus spread. A test with a ceiling on the miss rat
 | Other benchmarks (SONIA, EURIBOR, CORRA and others) | No table in the repo. Rows stay unresolved |
 | Tenor and reset date | The 90-day average is a proxy. A few pct of rows sit up to 0.2 above it |
 | Other quarters | Only 2026-03-31 measured |
-| Why production does not already do this | Not checked. May be deliberate |
+| What production does with this today | It has the same sum (`pipeline/sofr_reference.py`) but uses it to settle conflicting rate readings, not to fill an empty rate. Why it stops there: not checked |
 | Effect on income and returns | Not measured. `index_returns` reads the all-in rate, so derived rates would enter income unless excluded by kind. Owner decision before any consumer reads them |
 
 ## 11. Open points
 
 | Point | State |
 |---|---|
-| Subtotal rule in SQL or Python | Decide in slice 2 |
+| Subtotal rule in SQL or Python | Closed in slice 2: SQL |
 | Identical labels within a filing (19 pairs in holdings) | Ids come from production in this spec, so not hit yet |
 | Which existing correction stores hold entries for the five funds | List in the plan |
 | The Ares position (Expereo / Ristretto) whose fair value matches no filed fact | Unexplained |
-| Step 2 rulings (`filed_layer.md` section 7) | Explained to the owner 2026-11-19; not yet confirmed |
+| Step 2 rulings (`filed_layer.md` section 7) | Confirmed by the owner 2026-11-19 (D14) |

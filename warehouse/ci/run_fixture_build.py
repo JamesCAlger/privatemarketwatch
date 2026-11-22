@@ -144,7 +144,8 @@ def main(argv=None):
                             "row_corrections_by_context": (FIXTURE / "row_corrections_by_context.csv").as_posix()},
         # stg_fx_rate reads this small committed rate file (same columns as the FRED H.10 file production uses)
         "fx_rate_file": (FIXTURE / "fx_rates.csv").as_posix(),
-        # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get)
+        # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get) and
+        # tests/ci_fixture_expected_amounts.sql (the amount each fixture position field must get)
         "ci_fixture": True,
     })
     common = ["--profiles-dir", ".", "--target", "ci", "--target-path", work / "target", "--log-path", work / "logs",

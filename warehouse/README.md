@@ -18,7 +18,7 @@ Do not run it while a batch build or rebuild is running.
 - **Model**: one SQL `select` in one `.sql` file. dbt turns it into a view or a table and works out the build order from the `ref()` and `source()` calls inside it.
 - **Staging model** (`stg_`): a thin view over one source. It renames, types and filters. It holds no business rule. Later steps swap what a staging model reads without touching the marts.
 - **Mart**: a table meant to be queried: a fact table (`fact_`, the measurements) or a dimension (`dim_`, the things being measured).
-- **Seed**: a small CSV kept in the project and loaded as a table. Ours is `seeds/manager_brand.csv`.
+- **Seed**: a small CSV kept in the project and loaded as a table. Ours are in `seeds/` (for example `manager_brand.csv`, `concept_map.csv`, `reading_action.csv`).
 - **Test**: a query that must return no rows. Generic tests (`unique`, `not_null`, `relationships`) are declared in the `.yml` files; hand-written ones are the `.sql` files in `tests/`.
 - **Baseline test** (`tests/baseline_*.sql`): measures a condition that is true of today's data and should not be. It warns while its count is above zero and fails the build if the count rises above its ceiling in `dbt_project.yml` (`baseline_max`). A count may fall. Raising a ceiling is a deliberate edit.
 - **Partial parsing**: dbt can reuse a cached parse and leave tests out of a run. It is switched off in `dbt_project.yml` so that no test is silently left out.
@@ -134,5 +134,58 @@ After editing a wrapper copy:
 A new fund rule needs `evidence` (the loader stops without it), and a `label_pattern` needs at least one
 `label_examples_no_match` (the build fails without it); every listed example is tested against the pattern. A row moving between roles shows in the comparison
 counts and the unresolved count, and fails the build if a ceiling is passed.
+
+## Amounts: reading and converting a field (slice 3)
+
+For every position row, five amounts are read from the tagged facts: fair value, cost, principal (and
+its currency), shares, and share of net assets. A sixth, the principal in US dollars, is worked out
+from the principal. Spec: `docs/intermediate_spine.md` sections 5 and 6.3 to 6.4. Counts and the
+comparison with production: `docs/baseline_amounts_2026-11-22.md`.
+
+Three models, one decision each, built in this order (dbt works the order out from `ref()`):
+
+| Model | What it decides | One row per |
+|---|---|---|
+| `int_field_read` | Which filed fact is the field's value, unchanged: the number as tagged, its unit, the printed text | position row and field (five) |
+| `int_field_rule` | Which rule converts the field | position row and field (six) |
+| `int_field_normalised` | The value after that rule's action, with the filed value beside it | position row and field (six) |
+
+**Reading uses a seed.** `seeds/concept_map.csv` says which standard XBRL concept holds each field
+(local name and namespace pattern). A seed is a small CSV that dbt loads as a table, so changing it is
+a data edit, not a code edit. A filer that uses its own concept gets a fund rule in its wrapper copy
+(`concept_is_fair_value`, `concept_is_cost`). Two different numbers for one field on one row make the
+field `unresolved`; nothing is picked.
+
+**Each value names the rule that decided it.** Rules come from two places, and both are rows:
+
+- global defaults, the seed `seeds/field_rule_default.csv` (priority 10). Example: a fair value tagged
+  in US dollars is taken as filed (`as_filed`); a share of net assets tagged as a fraction is turned
+  into a percent (`fraction_to_percent`);
+- fund rules in the wrapper copies (priority 20, or 30 when they name a filing or a row feature).
+  Example: `principal_usd_reference` makes a foreign principal's dollar value `to_usd` at the report
+  date's currency rate. `seeds/action_field.csv` says which fields each action acts on, and on which rows.
+
+**Rule resolution** (`int_field_rule`): every rule that matches the row is a candidate. The highest
+priority wins. At equal priority a rule that names a filing beats one that names only a row feature.
+Two rules still equal are an error: the field is left empty with reason `rule_conflict`, and a
+ceiling-0 test fails the build. A rule that needs a row feature the row lacks makes the field
+`feature_missing`, never "no match". The action must be in `seeds/reading_action.csv` and built for
+that field, or the field is `action_not_built`.
+
+**Currency rates** come from `data/reference/monetary_conversion/fred_h10_usd_per_unit.csv` (var
+`fx_rate_file`, view `stg_fx_rate`), the file behind production's rates. A quote more than 7 days
+before the report date is not used: the dollar principal stays empty (`no_fx_rate`). The file ends
+2026-09-11, so 2026-09-30 principals in a foreign currency are not converted until it is refreshed.
+
+**The comparison with production** (`cmp_amount`): this layer's amounts against production's, on the
+rows both sides have (`cmp_row_set`), joined on filing and context. Fair value, cost and principal must
+agree to the dollar (owner decision D1). Every difference gets a cause from a closed list, set by a rule
+on row features, and each cause count has a ceiling per field in `dbt_project.yml` (`cmp_amount_max`).
+Agreement shows the two pipelines agree. It does not show either is right: a value both read wrongly
+in the same way counts as equal.
+
+Every field that is empty for a reason is counted by a baseline test with a ceiling (for example 130
+dollar principals with no currency rate). A passing build means the counts did not grow, not that the
+values are correct.
 
 CI runs a build on an invented fund, without the repository's data: `ci/README.md`.

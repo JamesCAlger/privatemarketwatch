@@ -15,6 +15,10 @@
     <link:schemaRef xlink:href="ffx-20260331.xsd" xlink:type="simple"/>
     <unit id="usd"><measure>iso4217:USD</measure></unit>
     <unit id="pure"><measure>xbrli:pure</measure></unit>
+    <!-- slice 3 amounts: a foreign currency for one principal, and pure written without a prefix, as the five funds
+         write it, for one share of net assets (ci_fixture_expected_amounts.sql) -->
+    <unit id="eur"><measure>iso4217:EUR</measure></unit>
+    <unit id="pct"><measure>pure</measure></unit>
     <!-- duration for dei: no member, rule 1 not_schedule -->
     <context id="c-1"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier></entity>
         <period><startDate>2026-01-01</startDate><endDate>2026-03-31</endDate></period></context>
@@ -169,4 +173,8 @@
     <us-gaap:InvestmentInterestRate contextRef="c-25" unitRef="pure" decimals="4" id="f-44">0.0700</us-gaap:InvestmentInterestRate>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-26" unitRef="usd" decimals="0" id="f-45">20</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-26" unitRef="usd" decimals="0" id="f-46">20</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <!-- slice 3 amounts: c-7 principal in euros (kept in euros; its dollar value by the fund rule to_usd, from
+         principal_usd_reference in the wrapper copy); c-3 share of net assets as a fraction (default fraction_to_percent) -->
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-7" unitRef="eur" decimals="0" id="f-47">180</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <us-gaap:InvestmentOwnedPercentOfNetAssets contextRef="c-3" unitRef="pct" decimals="4" id="f-48">0.1000</us-gaap:InvestmentOwnedPercentOfNetAssets>
 </xbrl>

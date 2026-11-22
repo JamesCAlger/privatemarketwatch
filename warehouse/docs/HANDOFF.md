@@ -218,3 +218,180 @@ are applied in slice 5, rates in slice 4.
 A separate draft spec, `docs/text_fields_spec.md`, covers reading printed and label text into fields.
 It is not part of this slice or of slice 3; it starts after the spine reproduces production. (The file
 is untracked in this checkout.)
+
+## State after slice 3 (amounts), 2026-11-22 (supersedes "Next: slice 3" above)
+
+A passing build and agreement with production show the layer is consistent and agrees with the old
+pipeline where stated. They do not show the data is correct: a value both pipelines read wrongly in
+the same way counts as equal, and no test sees a field whose meaning changed.
+
+### What is built
+
+| Piece | What | Commits |
+|---|---|---|
+| Plan | `docs/2026-11-22-slice3-amounts-plan.md` | 81a17da6 |
+| Task 1 | seed `concept_map` (every standard concept named once; no SQL names one), `cash_source`, row-store drift check, two slice 2 parked items | 43ab947e, fbb6cf65 |
+| Task 2 | `int_field_read`: the five amount fields as filed, with unit, fact id and printed text | 8ba34a8b |
+| Task 3 | `stg_fx_rate`, `int_field_rule` (which rule converts each field), `int_field_normalised` (the value after the rule); seeds `field_rule_default`, `action_field`; `reading_action` gained `built_early_for_field` | 12c5eb55, 7caf2b9b |
+| Task 4 | `cmp_amount`: amounts against production, every difference with a cause; action `concept_is_cost`; split-bracket sign fix | 3c6e361c, 622833e3, 2e64f76e |
+| Task 5 | CI fixture amounts and `tests/ci_fixture_expected_amounts.sql`; these records | the Task 5 commit |
+
+Plain-language guide: `README.md`, "Amounts: reading and converting a field". Counts and causes:
+`docs/baseline_amounts_2026-11-22.md`. Value-size rules for review:
+`docs/owner_review_value_size_rules_2026-11-22.md`. Ledger and task reports:
+`.superpowers/sdd/2026-11-22-slice3-amounts-plan/` (git-ignored).
+
+Fund rules added to the wrapper copies in this slice (each with its evidence in the rule): Blue Owl
+`reported_in_usd` for one cost (filing 0001812554-26-000047); Blue Owl `as_filed` share of net assets
+for filing 0001812554-23-000022 (the filer tags the percent itself); Apollo two `concept_is_cost` rules
+(its own cost concepts, 196 rows). Production's wrappers are unchanged.
+
+### Not pushed
+
+The slice 3 commits (81a17da6 to the Task 5 commit) are local only. They have NOT run on GitHub. The
+last push (ab299286, run 45015590307) ran slice 2: `warehouse` job passed; `frontend-build` and
+`python-tests` failed for the reasons outside `warehouse/` given above (checked again 2026-11-22 with
+`gh run view`, no change).
+
+### How to run, and the last results
+
+From the repository root, in PowerShell.
+
+| Command | Last result |
+|---|---|
+| `.\warehouse\dbt.ps1 build` | `PASS=503 WARN=43 ERROR=0 TOTAL=546` (slice 2 ended at 319 / 19 / 338) |
+| `.\warehouse\.venv\Scripts\python.exe -m pytest -c warehouse\pytest.ini warehouse\pytests -q` | 144 passed |
+| `.\warehouse\.venv\Scripts\python.exe warehouse\ci\run_fixture_build.py --work <empty folder>` | build `PASS=278 WARN=0 ERROR=0 TOTAL=278`; empty run of the two comparison models `PASS=2`; unit-test and drift step `PASS=24` |
+
+The warnings are baseline tests above zero and within their ceilings. A changed seed column needs
+`.\warehouse\dbt.ps1 seed --full-refresh --select <seed>` once in an existing database (a new database
+needs nothing).
+
+### Counts
+
+Comparison with production, published basis, rows on both sides (60,675), compared quarters (the
+three 2026-09-30 quarters are left out):
+
+| Field | Equal | Differs | Empty here | Empty in production | Both empty | Not yet explained |
+|---|---:|---:|---:|---:|---:|---:|
+| fair_value | 60,673 | 2 | 0 | 0 | 0 | 0 |
+| cost | 58,646 | 13 | 1 | 0 | 2,015 | 0 |
+| principal_amount | 49,554 | 0 | 5 | 180 | 10,936 | 14 |
+| principal_amount_currency | 48,803 | 201 | 81 | 730 | 10,860 | 0 |
+| principal_amount_usd | 49,362 | 191 | 5 | 180 | 10,937 | 14 |
+| shares | 7,496 | 157 | 91 | 19 | 52,912 | 0 |
+| pct_of_net_assets | 20,112 | 0 | 0 | 0 | 40,563 | 0 |
+
+JV schedules (10,740 rows): fair value and cost equal on every row with a value.
+
+| Cause group | Rows | What it means |
+|---|---:|---|
+| needs_correction | 718 field rows | a loaded correction sets the field; corrections are applied in slice 5 |
+| convention, equity class | 107 principal, 107 dollar principal | production empties principal on equity and fund classes |
+| convention, count currency | 671 currency | principal taken from a share count: production leaves the currency blank, this layer writes USD |
+| owner_review, "is a loan" stand-in | 59 per principal field, 34 shares (plus 15 JV each) | see open items |
+| owner_review, "is equity" stand-in | 14 shares | same |
+| old_wrong | 2 share of net assets, 2 principal, 2 dollar principal (all BCRED JV schedule) | production keeps 0.526 where 52.60 is printed; production empties a par a correction reclassed to loan |
+| not_yet_explained | 14 principal, 14 dollar principal | BCRED STRUCTURED_CREDIT units whose principal production empties; step not found |
+| new_wrong | 0 | 85 sign and 196 cost rows found in Task 4, fixed, now equal |
+
+Fields left empty in this layer, each with a ceiling: share of net assets none (was 30,759 before
+`fraction_to_percent` was built early); principal `values_differ` 1 (Apollo, GBP and EUR); its dollar
+principal 1; dollar principal `no_fx_rate` 130 (129 at 2026-09-30, the rate file ends 2026-09-11; 1
+Apollo principal tagged KPW). `int_field_read` unresolved: cost 3, principal 1.
+
+Sum check (positions against the filed total, step 1 basis): 25 fund-quarters do not tie, every one
+explained by a named group within 6,000 dollars: BCRED 14 (cash rows, D13), Ares 3 and Apollo 5 (rows
+production adds from corrections and stores), 3 with no filed total (2026-09-30). A tie of sums is a
+proxy: it cannot see which row carries which value, or offsetting errors.
+
+`int_source_row` (288,935 rows) and `cmp_row_set` (71,542) did not change in this slice (checked by
+row snapshots in Tasks 1 and 4).
+
+### Owner decisions open
+
+1. Unfunded-commitment and zero-value lines in the position set (D11, D15): still deferred until after
+   reproduction.
+2. HPS JV commitment lines: the fair value is that of the undrawn delayed-draw tranche, printed again
+   in the JV schedule. Both pipelines carry it twice on 24 of 35 lines. Headline unaffected (JV rows
+   are not published). Keep, drop or flag?
+3. The two Apollo rollups (Chemicals Heubach, Media Material+): beneath each sits a position tagged
+   except for a zero fair value printed as a dash; its cost equals the gap. This layer drops it,
+   production publishes it at 0 from a correction. Which?
+4. The 14 not_yet_explained principals (BCRED STRUCTURED_CREDIT units): trace production further, or
+   accept as production's error?
+5. The tie-break ruling (spec section 5 rule 1, amended): at equal priority a filing-named rule beats a
+   feature-named one. Confirm, or make it a conflict (462 HPS rows per field would become unresolved).
+6. The "is a loan" stand-in in the value-size rules (a debt term fact instead of production's text
+   class), and keep / narrow / retire each `par_tagged_as_units` row mode
+   (`docs/owner_review_value_size_rules_2026-11-22.md`).
+7. Refreshing the currency rate file (ends 2026-09-11). Needs a download: owner's call.
+8. Whether the findings ledger moves onto dbt (open since step 1).
+9. Pushing the slice 3 commits.
+
+### Rulings made without the owner (slice 3), with the cost if wrong
+
+| Ruling | Cost if wrong |
+|---|---|
+| Work in the main checkout, no worktree, as in slice 2 | A concurrent batch build would see `warehouse/` changes; it does not read them |
+| Subagent commits carry "Co-Authored-By: Claude" rather than the session's model line | Trailer wording on a few commits |
+| Task 1 (d) may move rows between causes if each is listed; counts by side must not move (0 moved) | A ceiling changes by a few rows |
+| `cmp_row_set` rate check reads the seed's field `rate`, which now includes the cash-pay rate concept (0 rows moved) | A future rate-only row with only the cash-pay tag changes cause; visible in the cause ceilings |
+| Fund rules for amounts tagged in a foreign unit only where the filing is the evidence or production's wrapper declares it; never from production's values | Some values stay empty until a cause is named |
+| The sum check uses the step 1 basis only (fact_fund_period's A04 rule) | None: the stricter reading |
+| At equal priority a filing-named rule outranks a feature-named rule; two still equal are a conflict | On the 462 HPS rows the other rule would be right (it gives the same value today) |
+| `fraction_to_percent` built early for share of net assets only (production stores a percent: schema doc and code, not values) | A factor of 100 on one field |
+| A missing row feature is an error (`feature_missing`, ceiling 0), not "no match" | One extra test |
+| Blue Owl filing-scoped `as_filed` for share of net assets (filing prints 4.0 and tags 4.0) | 646 values off by 100 in one filing |
+| Fix the split-bracket sign test now (85 rows, one filing) | A sign flipped on a row with an unrelated ")" cell; the unit case and the sum check guard it |
+| Add `concept_is_cost` now for the filer that tags cost in its own namespace (196 rows) | 196 costs read from the wrong concept; today they equal production |
+| Task 5 amends spec section 5 rule 1 and section 6.4 to match the build, and commits the slice 2 status edits | Owner reverts wording |
+
+Implementer decisions with a cost, also not seen by the owner: production's `cost_reported` is the
+compared cost column (identical to `cost` on all 71,477 rows; test ceiling 0); a principal taken from a
+share count is given currency USD (671 rows differ from production's blank); the Port Arthur share of
+net assets (printed 52.60) and the two BCRED JV principals are `old_wrong`; production's equity-class
+list is copied into `cmp_amount`; Apollo's first cost concept rule is dated to 2023-03-31 only; the CI
+fixture writes its share of net assets in the unit `pure`, as the five funds do (see Deferred).
+
+### Deferred (minor, from the slice 3 ledger)
+
+- Concept map: `test_no_concept_literals` asserts exactly 11 concepts; one FASB namespace literal stays
+  in the `concept_rule_gaps` macro.
+- `stg_row_store_drift` JSON path lookup breaks on keys with a quote or backslash (fails safe, unclear
+  message); a missing store file is untested.
+- `int_context_feature_fair_value_names_rule` uses NOT IN (null-unsafe).
+- The `fv` CTE is repeated in five `baseline_filed_fair_value_*` tests; `cmp_row_set` derives the cash
+  source itself instead of reading `int_source_row.cash_source`.
+- `int_field_read`: one number in two units is unresolved while `int_context_feature` takes it (0 rows);
+  `read_rule_id` is the min of two seed ids on a principal spanning two namespaces (0 rows); the
+  status-columns test comment promises more than it checks; a diagnostic header mentions negatives it
+  does not query.
+- `int_field_rule`: the resolution block is duplicated (macro); `listed_rows_without_instrument` ignores
+  the whole-filing rule's dates; `par_tagged_as_units` silently beats `cost_foreign_is_par` on one
+  context; `tie_break_same_effect` may over-report.
+- Seeds: no uniqueness test on `action_field (action, field)`; a fund rule naming `as_filed` for a field
+  other than share of net assets needs a row there or is ignored; `column_types` config takes effect
+  only on full refresh.
+- `int_field_normalised`: `value_filed` on dollar-principal rows is the normalised principal, not a
+  filed value; the 7-day rate boundary is not unit-tested; the model does not check the rate file's
+  hash as production does; no test finds another filing that tags share of net assets as a percent.
+- Unit units: unit tests and the CI fixture's older facts write `xbrli:pure` / `xbrli:shares`; real
+  filings of the five funds write `pure` / `shares`. A filer writing the prefix gets no unit kind and
+  no rule (unresolved, visible, counted).
+- `cmp_amount`: `correction_cover` counts a principal correction as covering currency and dollar
+  principal (6 rows covered indirectly); `filer_concept_not_read` does not compare values; shares and
+  share of net assets causes other than not_yet_explained have no ceiling; unit row x20 is refused by
+  two conditions at once.
+- Process: one implementer sent inline Python once in Task 3 (stopped, no effect); commit 3c6e361c has
+  the session attribution footer; two reviewer query files `scripts/slice3/q_review_t4_*.sql` are left
+  uncommitted.
+
+### Next: slice 4, rates
+
+`int_field_read` and `int_field_normalised` extended to interest rate, PIK rate, spread and maturity.
+Actions to build: `fraction_to_percent` (for rates), `rate_is_all_in`, `rate_is_cash_leg`,
+`pik_only_is_coupon`, `pik_only_is_margin`, `printed_margin_cash_plus_pik`. The check "cash leg plus PIK
+equals all-in" (spec section 7). Comparison with production as measured differences with causes (D1:
+rates are "other fields", not to the dollar). Corrections are slice 5; `int_observation` and findings
+are slice 6.
