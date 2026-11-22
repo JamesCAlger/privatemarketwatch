@@ -434,3 +434,28 @@ Actions to build: `fraction_to_percent` (for rates), `rate_is_all_in`, `rate_is_
 equals all-in" (spec section 7). Comparison with production as measured differences with causes (D1:
 rates are "other fields", not to the dollar). Corrections are slice 5; `int_observation` and findings
 are slice 6.
+
+### After the final re-review (2026-11-22, slice 3 closed at aa6fcc48)
+
+The final re-review (Opus) found every fix-wave item addressed and no new blocking issue. A passing
+build and agreement with production do not show the data is correct.
+
+Rulings made after the list above, each with its cost if wrong:
+
+| Ruling | Cost if wrong |
+|---|---|
+| Cost defined in two models is held by a pinned equality test (ceiling 196), not by making the subtotal rule read the filer-concept cost. Measured: it would change 0 subtotal decisions | The subtotal check ignores cost on those rows until a later slice |
+| The 107 equity-class principals are `owner_review` (a unit count read as principal, unverified), not `convention` | A label; the owner decides whether this layer should empty them as production does |
+| Final-review findings triaged "later" or "drop" stay deferred; one fix wave only | Small defects carried into slice 4 |
+| The four residual minors below are parked for the opening of slice 4 | A misleading comment; a test that could miss a null-reason row (0 today) |
+| The slice 3 workspace (`.superpowers/sdd/2026-11-22-slice3-amounts-plan/`) is kept | Git-ignored clutter |
+
+Parked for the opening of the slice 4 plan:
+
+- `int_field_rule.sql:19` and `_intermediate.yml:326` name a test file that does not exist; the real
+  one is `tests/baseline_int_field_rule_tie_break_different_effect.sql`.
+- `scripts/slice3/q_fw_f4_subtotal_with_filer_cost.sql` has two fund names in SQL comments.
+- `tests/int_field_normalised_names_rule.sql:22` is null-unsafe: a null value with a null reason passes.
+- The 2 dollar principals moved by the correction check share the `not_yet_explained` ceiling (16)
+  with the 14 others; they have no ceiling of their own.
+- A tie-break whose only losing rule is undecidable is not checked (0 rows today).
