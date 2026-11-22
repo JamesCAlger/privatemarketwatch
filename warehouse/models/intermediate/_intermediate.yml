@@ -267,6 +267,107 @@ models:
           The concept_map row, or for fair value the fund rule concept_is_fair_value, the facts were read under. Filled on
           read and unresolved rows (tests/int_field_read_rule_resolves.sql).
 
+  - name: int_field_rule
+    description: >
+      One row per position row and amount field (the five of int_field_read plus principal_amount_usd): the rule that
+      converts it, chosen from the global defaults (seeds/field_rule_default.csv) and the fund rules of the slice 3
+      actions (stg_reading_rule, seeds/action_field.csv). Resolution only, no value. The most specific match wins; two
+      at the top are a conflict (resolution rule_conflict, tests/int_field_rule_no_conflict.sql, ceiling 0). Key in
+      tests/int_field_rule_key_unique.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+      - name: rule_id
+        description: The chosen rule (stg_reading_rule or field_rule_default); null when no rule or a conflict.
+      - name: action
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('reading_action')
+                field: action
+      - name: origin
+        description: global_default, or the wrapper key the fund rule was loaded from.
+      - name: priority
+        description: The chosen rule's priority (10 global default, 20 fund rule, 30 a rule naming a filing or row feature).
+      - name: candidate_count
+        description: How many rules matched the row, at any priority.
+        data_tests:
+          - not_null
+      - name: resolution
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['rule', 'no_rule', 'rule_conflict']
+      - name: value_scale
+        description: For par_tagged_as_units, the power of a thousand the share count is multiplied by; null otherwise.
+
+  - name: int_field_normalised
+    description: >
+      One row per position row and amount field: the canonical value after the chosen rule's action (spec 6.4), with
+      value_filed beside it, the rule, a status (normalised, absent, unresolved) and a reason. principal_amount stays
+      in its filed currency (currency column); principal_amount_usd is in dollars, with fx_rate and fx_rate_date where
+      to_usd applied. Key in tests/int_field_normalised_key_unique.sql; every normalised value names a rule
+      (tests/int_field_normalised_names_rule.sql). Unresolved fields have one baseline per field and reason.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+      - name: cik
+        data_tests:
+          - not_null
+      - name: report_date
+        data_tests:
+          - not_null
+      - name: value
+        description: The canonical value. Null unless normalised (and null on shares moved to the principal).
+      - name: currency
+        description: ISO code of principal_amount (USD for a principal taken from the share count). Null on other fields.
+      - name: value_filed
+        description: The filed value (int_field_read). For principal_amount_usd, the normalised principal.
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['normalised', 'absent', 'unresolved']
+      - name: reason
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['applied', 'moved_to_principal', 'no_fact', 'nil', 'values_differ', 'units_differ',
+                         'fact_without_number', 'no_rule', 'rule_conflict', 'action_not_built', 'no_fx_rate',
+                         'principal_unresolved']
+      - name: fx_rate
+        description: US dollars per unit of the principal's currency, where to_usd applied.
+      - name: fx_rate_date
+        description: The date of that quote (the report date or up to 7 days before it).
+    data_tests:
+      - baseline_normalised_unresolved: {arguments: {field: pct_of_net_assets, reason: action_not_built}, name: baseline_int_field_normalised_unresolved_pct_of_net_assets_action_not_built}
+      - baseline_normalised_unresolved: {arguments: {field: principal_amount, reason: values_differ}, name: baseline_int_field_normalised_unresolved_principal_amount_values_differ}
+      - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: principal_unresolved}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_principal_unresolved}
+      - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: no_fx_rate}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_no_fx_rate}
+
   - name: cmp_row_set
     description: >
       This layer's position rows against production's, joined on accession and context id, on two bases: published
@@ -1160,3 +1261,452 @@ unit_tests:
         - {context_id: p3, field: principal_amount, status: read, reason: one_fact, value_filed: 6, unit: "iso4217:USD", fact_id: f22, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_principal_sup}
         - {context_id: p3, field: shares, status: unresolved, reason: fact_without_number, value_filed: null, unit: null, fact_id: null, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_shares}
         - {context_id: p3, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+
+  - name: int_field_rule_defaults_and_units
+    description: >
+      Slice 3 Task 3. Invented rows at 2026-03-31. Global defaults are rules: a dollar fair value, cost, principal and
+      shares take as_filed from seeds/field_rule_default.csv, a pure share of net assets takes fraction_to_percent.
+      reported_in_usd: fund 1's euro fair value f1 takes it; fund 2's euro fair value f2 (no rule) is NOT touched and has
+      no rule. Fund 1's second reported_in_usd rule starts in 2027, so it does not compete. to_usd: the euro principal
+      p1's dollar field takes it; the dollar principal p2 is NOT touched (default as_filed). Fund 3 has two equally
+      specific reported_in_usd rules: rule_conflict, no rule chosen. An absent cost has no rule.
+    model: int_field_rule
+    given:
+      - input: ref('int_field_read')
+        rows:
+          - {accession: A, context_id: u1, field: fair_value, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 100, unit: "iso4217:USD", is_nil: false, fact_id: x1}
+          - {accession: A, context_id: f1, field: fair_value, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 50, unit: "iso4217:EUR", is_nil: false, fact_id: x2}
+          - {accession: B, context_id: f2, field: fair_value, cik: "2", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 50, unit: "iso4217:EUR", is_nil: false, fact_id: x3}
+          - {accession: A, context_id: p1, field: principal_amount, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 10, unit: "iso4217:EUR", is_nil: false, fact_id: x4}
+          - {accession: A, context_id: p2, field: principal_amount, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 10, unit: "iso4217:USD", is_nil: false, fact_id: x5}
+          - {accession: A, context_id: s1, field: shares, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 5, unit: "shares", is_nil: false, fact_id: x6}
+          - {accession: A, context_id: q1, field: pct_of_net_assets, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 0.01, unit: "pure", is_nil: false, fact_id: x7}
+          - {accession: A, context_id: a1, field: cost, cik: "1", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: C, context_id: k1, field: fair_value, cik: "3", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 9, unit: "iso4217:GBP", is_nil: false, fact_id: x8}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: u1, identifier_label: "U Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: f1, identifier_label: "F Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: B, context_id: f2, identifier_label: "F Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p1, identifier_label: "P Co", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: p2, identifier_label: "P Co", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: s1, identifier_label: "S Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: q1, identifier_label: "Q Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: a1, identifier_label: "A Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: C, context_id: k1, identifier_label: "K Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: fr_usd, cik: "1", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:foreign_unit_values"}
+          - {rule_id: fr_late, cik: "1", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: 2027-01-01, valid_to: null, priority: 20, origin: "wrapper:reading_rules"}
+          - {rule_id: fr_fx, cik: "1", action: to_usd, parameter: fred_h10, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:principal_usd_reference"}
+          - {rule_id: fr_c1, cik: "3", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:foreign_unit_values"}
+          - {rule_id: fr_c2, cik: "3", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:reading_rules"}
+          - {rule_id: fr_9, cik: "9", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:foreign_unit_values"}
+      - input: ref('action_field')
+        rows:
+          - {action: to_usd, field: principal_amount_usd, applies_to: principal_foreign}
+          - {action: reported_in_usd, field: fair_value, applies_to: unit_foreign}
+          - {action: reported_in_usd, field: cost, applies_to: unit_foreign}
+      - input: ref('field_rule_default')
+        rows:
+          - {rule_id: gd_fair_value_usd, field: fair_value, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_cost_usd, field: cost, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd, field: principal_amount, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_foreign, field: principal_amount, applies_to: unit_foreign, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd_usd, field: principal_amount_usd, applies_to: principal_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_shares, field: shares, applies_to: unit_shares, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_pct_of_net_assets, field: pct_of_net_assets, applies_to: unit_pure, action: fraction_to_percent, parameter: null, priority: 10}
+      - input: ref('stg_filed_fact')
+        rows: []
+      - input: ref('concept_map')
+        rows: []
+      - input: ref('stg_filed_unit')
+        rows: []
+      - input: ref('stg_filed_fact_placement')
+        rows: []
+      - input: ref('stg_filed_document_row')
+        rows: []
+    expect:
+      rows:
+        - {context_id: u1, field: fair_value, rule_id: gd_fair_value_usd, action: as_filed, resolution: rule}
+        - {context_id: f1, field: fair_value, rule_id: fr_usd, action: reported_in_usd, resolution: rule}
+        - {context_id: f2, field: fair_value, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: p1, field: principal_amount, rule_id: gd_principal_foreign, action: as_filed, resolution: rule}
+        - {context_id: p1, field: principal_amount_usd, rule_id: fr_fx, action: to_usd, resolution: rule}
+        - {context_id: p2, field: principal_amount, rule_id: gd_principal_usd, action: as_filed, resolution: rule}
+        - {context_id: p2, field: principal_amount_usd, rule_id: gd_principal_usd_usd, action: as_filed, resolution: rule}
+        - {context_id: s1, field: shares, rule_id: gd_shares, action: as_filed, resolution: rule}
+        - {context_id: q1, field: pct_of_net_assets, rule_id: gd_pct_of_net_assets, action: fraction_to_percent, resolution: rule}
+        - {context_id: a1, field: cost, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: k1, field: fair_value, rule_id: null, action: null, resolution: rule_conflict}
+
+  - name: int_field_rule_par_tagged_as_units
+    description: >
+      Slice 3 Task 3. Invented rows: every par_tagged_as_units row mode, each with a row it must NOT touch. Fund 3
+      rows_near_cost: n1 (debt row, count equal to cost) takes it at scale 1, principal and shares both; n3 at scale 1000
+      (count 5, cost 5,000); n2 is NOT touched (label names units); n5 is NOT touched (no debt term fact). Fund 4 lists
+      filing W (whole_filing) and also has rows_near_cost and listed_rows_without_instrument: w4 matches both
+      whole_filing and rows_near_cost, and whole_filing wins (it names the filing); w2 (no debt term, no equity word)
+      takes listed_rows_without_instrument; w3 (label names an LP interest) is NOT touched. Fund 6
+      rated_rows_near_cost: r2 (spread) takes it, r1 (maturity only) is NOT touched. Fund 7 rows_within_twice_cost: v1
+      (count 0.6 of cost) takes it, v2 (0.4 of cost) is NOT touched.
+    model: int_field_rule
+    given:
+      - input: ref('int_field_read')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, field, cik, date '2026-03-31' as report_date,
+                 case when value_filed is null then 'absent' else 'read' end as status,
+                 case when value_filed is null then 'no_fact' else 'one_fact' end as reason,
+                 value_filed, case when value_filed is null then null when field = 'shares' then 'shares' else 'iso4217:USD' end as unit,
+                 false as is_nil, null as fact_id
+          from (values
+            ('C', 'n1', '3', 1000.0, 1000.0), ('C', 'n2', '3', 1000.0, 1000.0), ('C', 'n3', '3', 5.0, 5000.0),
+            ('C', 'n5', '3', 1000.0, 1000.0), ('W', 'w4', '4', 1000.0, 1000.0), ('W', 'w2', '4', 50.0, 999999.0),
+            ('W', 'w3', '4', 50.0, 999999.0), ('R', 'r1', '6', 1000.0, 1000.0), ('R', 'r2', '6', 1000.0, 1000.0),
+            ('V', 'v1', '7', 600.0, 1000.0), ('V', 'v2', '7', 400.0, 1000.0)
+          ) t(acc, ctx, cik, sh, co)
+          cross join lateral (values ('principal_amount', null::double), ('shares', sh), ('cost', co)) f(field, value_filed)
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: C, context_id: n1, identifier_label: "Alpha Co | Term Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: C, context_id: n2, identifier_label: "Alpha Co | Class A Units", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: C, context_id: n3, identifier_label: "Gamma Co | Term Loan", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: true}
+          - {accession: C, context_id: n5, identifier_label: "Delta Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: W, context_id: w4, identifier_label: "Wide Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: W, context_id: w2, identifier_label: "Beta Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: W, context_id: w3, identifier_label: "Beta Co | LP Interest", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: R, context_id: r1, identifier_label: "Rho Co | Loan", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: true}
+          - {accession: R, context_id: r2, identifier_label: "Rho Co | Loan B", has_rate: false, has_spread: true, has_pik_rate: false, has_maturity: false}
+          - {accession: V, context_id: v1, identifier_label: "Vee Co | Notes", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: V, context_id: v2, identifier_label: "Vee Co | Notes B", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: par3, cik: "3", action: par_tagged_as_units, parameter: rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par4w, cik: "4", action: par_tagged_as_units, parameter: whole_filing, sel_accession: W, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par4n, cik: "4", action: par_tagged_as_units, parameter: rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par4l, cik: "4", action: par_tagged_as_units, parameter: listed_rows_without_instrument, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par6, cik: "6", action: par_tagged_as_units, parameter: rated_rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par7, cik: "7", action: par_tagged_as_units, parameter: rows_within_twice_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+      - input: ref('action_field')
+        rows:
+          - {action: par_tagged_as_units, field: principal_amount, applies_to: shares_as_par}
+          - {action: par_tagged_as_units, field: shares, applies_to: shares_as_par}
+      - input: ref('field_rule_default')
+        rows:
+          - {rule_id: gd_cost_usd, field: cost, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd_usd, field: principal_amount_usd, applies_to: principal_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_shares, field: shares, applies_to: unit_shares, action: as_filed, parameter: null, priority: 10}
+      - input: ref('stg_filed_fact')
+        rows: []
+      - input: ref('concept_map')
+        rows: []
+      - input: ref('stg_filed_unit')
+        rows: []
+      - input: ref('stg_filed_fact_placement')
+        rows: []
+      - input: ref('stg_filed_document_row')
+        rows: []
+    expect:
+      rows:
+        - {context_id: n1, field: principal_amount, rule_id: par3, value_scale: 1.0, resolution: rule}
+        - {context_id: n1, field: shares, rule_id: par3, value_scale: 1.0, resolution: rule}
+        - {context_id: n1, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: n1, field: principal_amount_usd, rule_id: gd_principal_usd_usd, value_scale: null, resolution: rule}
+        - {context_id: n2, field: principal_amount, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: n2, field: shares, rule_id: gd_shares, value_scale: null, resolution: rule}
+        - {context_id: n2, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: n2, field: principal_amount_usd, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: n3, field: principal_amount, rule_id: par3, value_scale: 1000.0, resolution: rule}
+        - {context_id: n3, field: shares, rule_id: par3, value_scale: 1000.0, resolution: rule}
+        - {context_id: n3, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: n3, field: principal_amount_usd, rule_id: gd_principal_usd_usd, value_scale: null, resolution: rule}
+        - {context_id: n5, field: principal_amount, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: n5, field: shares, rule_id: gd_shares, value_scale: null, resolution: rule}
+        - {context_id: n5, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: n5, field: principal_amount_usd, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: w4, field: principal_amount, rule_id: par4w, value_scale: 1.0, resolution: rule}
+        - {context_id: w4, field: shares, rule_id: par4w, value_scale: 1.0, resolution: rule}
+        - {context_id: w4, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: w4, field: principal_amount_usd, rule_id: gd_principal_usd_usd, value_scale: null, resolution: rule}
+        - {context_id: w2, field: principal_amount, rule_id: par4l, value_scale: 1.0, resolution: rule}
+        - {context_id: w2, field: shares, rule_id: par4l, value_scale: 1.0, resolution: rule}
+        - {context_id: w2, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: w2, field: principal_amount_usd, rule_id: gd_principal_usd_usd, value_scale: null, resolution: rule}
+        - {context_id: w3, field: principal_amount, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: w3, field: shares, rule_id: gd_shares, value_scale: null, resolution: rule}
+        - {context_id: w3, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: w3, field: principal_amount_usd, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: r1, field: principal_amount, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: r1, field: shares, rule_id: gd_shares, value_scale: null, resolution: rule}
+        - {context_id: r1, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: r1, field: principal_amount_usd, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: r2, field: principal_amount, rule_id: par6, value_scale: 1.0, resolution: rule}
+        - {context_id: r2, field: shares, rule_id: par6, value_scale: 1.0, resolution: rule}
+        - {context_id: r2, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: r2, field: principal_amount_usd, rule_id: gd_principal_usd_usd, value_scale: null, resolution: rule}
+        - {context_id: v1, field: principal_amount, rule_id: par7, value_scale: 1.0, resolution: rule}
+        - {context_id: v1, field: shares, rule_id: par7, value_scale: 1.0, resolution: rule}
+        - {context_id: v1, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: v1, field: principal_amount_usd, rule_id: gd_principal_usd_usd, value_scale: null, resolution: rule}
+        - {context_id: v2, field: principal_amount, rule_id: null, value_scale: null, resolution: no_rule}
+        - {context_id: v2, field: shares, rule_id: gd_shares, value_scale: null, resolution: rule}
+        - {context_id: v2, field: cost, rule_id: gd_cost_usd, value_scale: null, resolution: rule}
+        - {context_id: v2, field: principal_amount_usd, rule_id: null, value_scale: null, resolution: no_rule}
+
+  - name: int_field_rule_units_tagged_as_par
+    description: >
+      Slice 3 Task 3. Invented rows. Fund 5 lists filing U: e1 (no share count, a principal, no debt term fact) has its
+      shares taken from the principal, and the principal keeps the default as_filed. NOT touched: e2 in the same
+      filing (it carries a maturity, so it reads as debt) and e3 in another filing of the same fund.
+    model: int_field_rule
+    given:
+      - input: ref('int_field_read')
+        rows:
+          - {accession: U, context_id: e1, field: principal_amount, cik: "5", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 100000, unit: "iso4217:USD", is_nil: false, fact_id: y1}
+          - {accession: U, context_id: e1, field: shares, cik: "5", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: U, context_id: e2, field: principal_amount, cik: "5", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 100000, unit: "iso4217:USD", is_nil: false, fact_id: y2}
+          - {accession: U, context_id: e2, field: shares, cik: "5", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: X, context_id: e3, field: principal_amount, cik: "5", report_date: 2026-06-30, status: read, reason: one_fact, value_filed: 100000, unit: "iso4217:USD", is_nil: false, fact_id: y3}
+          - {accession: X, context_id: e3, field: shares, cik: "5", report_date: 2026-06-30, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: U, context_id: e1, identifier_label: "Eq Co | Series A Preferred", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: U, context_id: e2, identifier_label: "Eq Co | Notes", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: true}
+          - {accession: X, context_id: e3, identifier_label: "Eq Co | Series A Preferred", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: ut5, cik: "5", action: units_tagged_as_par, parameter: null, sel_accession: U, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:units_tagged_as_par"}
+      - input: ref('action_field')
+        rows:
+          - {action: units_tagged_as_par, field: shares, applies_to: principal_as_units}
+      - input: ref('field_rule_default')
+        rows:
+          - {rule_id: gd_principal_usd, field: principal_amount, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd_usd, field: principal_amount_usd, applies_to: principal_usd, action: as_filed, parameter: null, priority: 10}
+      - input: ref('stg_filed_fact')
+        rows: []
+      - input: ref('concept_map')
+        rows: []
+      - input: ref('stg_filed_unit')
+        rows: []
+      - input: ref('stg_filed_fact_placement')
+        rows: []
+      - input: ref('stg_filed_document_row')
+        rows: []
+    expect:
+      rows:
+        - {context_id: e1, field: shares, rule_id: ut5, action: units_tagged_as_par, resolution: rule}
+        - {context_id: e1, field: principal_amount, rule_id: gd_principal_usd, action: as_filed, resolution: rule}
+        - {context_id: e1, field: principal_amount_usd, rule_id: gd_principal_usd_usd, action: as_filed, resolution: rule}
+        - {context_id: e2, field: shares, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: e2, field: principal_amount, rule_id: gd_principal_usd, action: as_filed, resolution: rule}
+        - {context_id: e2, field: principal_amount_usd, rule_id: gd_principal_usd_usd, action: as_filed, resolution: rule}
+        - {context_id: e3, field: shares, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: e3, field: principal_amount, rule_id: gd_principal_usd, action: as_filed, resolution: rule}
+        - {context_id: e3, field: principal_amount_usd, rule_id: gd_principal_usd_usd, action: as_filed, resolution: rule}
+
+  - name: int_field_rule_two_unit_cost_and_sign
+    description: >
+      Slice 3 Task 3. Invented rows. cost_foreign_is_par, fund 6: c1's cost is tagged once in USD and once in EUR with
+      two numbers and it has no principal, so cost and principal take the rule and the principal's dollar field takes
+      to_usd; c3 the same but with a principal of its own, which keeps the default; c2's two cost facts are both in USD,
+      so it is NOT touched. bracketed_unsigned, fund 7, filing S: s1 is printed (2) and tagged without a sign, s4 is
+      printed with the brackets in the cells either side; both take it. NOT touched: s2 (printed (5), tagged negative)
+      and s3 (printed (2), but in filing T, which the rule does not list).
+    model: int_field_rule
+    given:
+      - input: ref('int_field_read')
+        rows:
+          - {accession: K, context_id: c1, field: cost, cik: "6", report_date: 2026-03-31, status: unresolved, reason: values_differ, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: K, context_id: c1, field: principal_amount, cik: "6", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: K, context_id: c2, field: cost, cik: "6", report_date: 2026-03-31, status: unresolved, reason: values_differ, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: K, context_id: c2, field: principal_amount, cik: "6", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: K, context_id: c3, field: cost, cik: "6", report_date: 2026-03-31, status: unresolved, reason: values_differ, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: K, context_id: c3, field: principal_amount, cik: "6", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 50, unit: "iso4217:USD", is_nil: false, fact_id: k9}
+          - {accession: S, context_id: s1, field: fair_value, cik: "7", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 2000, unit: "iso4217:USD", is_nil: false, fact_id: g1}
+          - {accession: S, context_id: s2, field: fair_value, cik: "7", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: -5000, unit: "iso4217:USD", is_nil: false, fact_id: g2}
+          - {accession: S, context_id: s4, field: fair_value, cik: "7", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 3000, unit: "iso4217:USD", is_nil: false, fact_id: g4}
+          - {accession: T, context_id: s3, field: fair_value, cik: "7", report_date: 2026-06-30, status: read, reason: one_fact, value_filed: 2000, unit: "iso4217:USD", is_nil: false, fact_id: g3}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: K, context_id: c1, identifier_label: "C Co", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: K, context_id: c2, identifier_label: "C Co", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: K, context_id: c3, identifier_label: "C Co", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: S, context_id: s1, identifier_label: "S Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: S, context_id: s2, identifier_label: "S Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: S, context_id: s4, identifier_label: "S Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: T, context_id: s3, identifier_label: "S Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: two6, cik: "6", action: cost_foreign_is_par, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:cost_in_two_units"}
+          - {rule_id: fx6, cik: "6", action: to_usd, parameter: fred_h10, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:principal_usd_reference"}
+          - {rule_id: sign7, cik: "7", action: bracketed_unsigned, parameter: null, sel_accession: S, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:bracketed_unsigned_values"}
+      - input: ref('action_field')
+        rows:
+          - {action: to_usd, field: principal_amount_usd, applies_to: principal_foreign}
+          - {action: cost_foreign_is_par, field: cost, applies_to: two_unit_cost}
+          - {action: cost_foreign_is_par, field: principal_amount, applies_to: two_unit_cost_principal_absent}
+          - {action: bracketed_unsigned, field: fair_value, applies_to: sign_differs_from_print}
+          - {action: bracketed_unsigned, field: cost, applies_to: sign_differs_from_print}
+      - input: ref('field_rule_default')
+        rows:
+          - {rule_id: gd_fair_value_usd, field: fair_value, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd, field: principal_amount, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd_usd, field: principal_amount_usd, applies_to: principal_usd, action: as_filed, parameter: null, priority: 10}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: K, fact_id: h1, context_id: c1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 132, is_nil: false}
+          - {accession: K, fact_id: h2, context_id: c1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: eur, value_numeric: 126, is_nil: false}
+          - {accession: K, fact_id: h3, context_id: c2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 132, is_nil: false}
+          - {accession: K, fact_id: h4, context_id: c2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 133, is_nil: false}
+          - {accession: K, fact_id: h5, context_id: c3, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 60, is_nil: false}
+          - {accession: K, fact_id: h6, context_id: c3, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: eur, value_numeric: 55, is_nil: false}
+      - input: ref('stg_filed_unit')
+        rows:
+          - {accession: K, unit_id: usd, numerator: "iso4217:USD", denominator: null}
+          - {accession: K, unit_id: eur, numerator: "iso4217:EUR", denominator: null}
+      - input: ref('stg_filed_fact_placement')
+        rows:
+          - {accession: S, fact_id: g1, row_index: 1, cell_index: 1, shown_row_index: null, shown_cell_index: null}
+          - {accession: S, fact_id: g2, row_index: 2, cell_index: 1, shown_row_index: null, shown_cell_index: null}
+          - {accession: S, fact_id: g4, row_index: 4, cell_index: 2, shown_row_index: null, shown_cell_index: null}
+          - {accession: T, fact_id: g3, row_index: 1, cell_index: 1, shown_row_index: null, shown_cell_index: null}
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select * from (values
+            ('S', 1, ['S Co', '(2)', '']), ('S', 2, ['S Co', '(5)', '']), ('S', 4, ['S Co', '(', '3', ')']),
+            ('T', 1, ['S Co', '(2)', ''])
+          ) t(accession, row_index, cells)
+    expect:
+      rows:
+        - {context_id: c1, field: cost, rule_id: two6, action: cost_foreign_is_par, resolution: rule}
+        - {context_id: c1, field: principal_amount, rule_id: two6, action: cost_foreign_is_par, resolution: rule}
+        - {context_id: c1, field: principal_amount_usd, rule_id: fx6, action: to_usd, resolution: rule}
+        - {context_id: c2, field: cost, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: c2, field: principal_amount, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: c2, field: principal_amount_usd, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: c3, field: cost, rule_id: two6, action: cost_foreign_is_par, resolution: rule}
+        - {context_id: c3, field: principal_amount, rule_id: gd_principal_usd, action: as_filed, resolution: rule}
+        - {context_id: c3, field: principal_amount_usd, rule_id: gd_principal_usd_usd, action: as_filed, resolution: rule}
+        - {context_id: s1, field: fair_value, rule_id: sign7, action: bracketed_unsigned, resolution: rule}
+        - {context_id: s2, field: fair_value, rule_id: gd_fair_value_usd, action: as_filed, resolution: rule}
+        - {context_id: s4, field: fair_value, rule_id: sign7, action: bracketed_unsigned, resolution: rule}
+        - {context_id: s3, field: fair_value, rule_id: gd_fair_value_usd, action: as_filed, resolution: rule}
+
+  - name: int_field_normalised_actions
+    description: >
+      Slice 3 Task 3. Invented rows: the value each action gives. as_filed and reported_in_usd keep the number;
+      bracketed_unsigned flips the sign; to_usd uses the report date's quote or the latest earlier one within 7 days
+      (p1: quote 4 days before, EUR 1.25) and leaves p2 unresolved (no_fx_rate) when the latest GBP quote is 11 days
+      old; a dollar principal (p3) keeps its value under as_filed; cost_foreign_is_par takes the dollar fact as cost
+      and the euro fact as the principal; par_tagged_as_units multiplies the count by the scale and empties shares;
+      units_tagged_as_par copies the principal into shares; an action built in a later slice, a conflict, no rule, an
+      absent field and an unresolved read each give their status and reason.
+    model: int_field_normalised
+    given:
+      - input: ref('int_field_rule')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, field, '1' as cik, date '2026-03-31' as report_date, rule_id,
+                 action, resolution, value_scale
+          from (values
+            ('A', 'a1', 'fair_value', 'gd', 'as_filed', 'rule', null::double),
+            ('A', 'a2', 'fair_value', 'fr_usd', 'reported_in_usd', 'rule', null),
+            ('A', 'a3', 'fair_value', 'sign', 'bracketed_unsigned', 'rule', null),
+            ('A', 'p1', 'principal_amount', 'gdf', 'as_filed', 'rule', null),
+            ('A', 'p1', 'principal_amount_usd', 'fx', 'to_usd', 'rule', null),
+            ('A', 'p2', 'principal_amount', 'gdf', 'as_filed', 'rule', null),
+            ('A', 'p2', 'principal_amount_usd', 'fx', 'to_usd', 'rule', null),
+            ('A', 'p3', 'principal_amount', 'gdp', 'as_filed', 'rule', null),
+            ('A', 'p3', 'principal_amount_usd', 'gdu', 'as_filed', 'rule', null),
+            ('A', 'c1', 'cost', 'two', 'cost_foreign_is_par', 'rule', null),
+            ('A', 'c1', 'principal_amount', 'two', 'cost_foreign_is_par', 'rule', null),
+            ('A', 'c1', 'principal_amount_usd', 'fx', 'to_usd', 'rule', null),
+            ('A', 'n1', 'principal_amount', 'par', 'par_tagged_as_units', 'rule', 1000.0),
+            ('A', 'n1', 'shares', 'par', 'par_tagged_as_units', 'rule', 1000.0),
+            ('A', 'n1', 'principal_amount_usd', 'gdu', 'as_filed', 'rule', null),
+            ('A', 'e1', 'shares', 'ut', 'units_tagged_as_par', 'rule', null),
+            ('A', 'q1', 'pct_of_net_assets', 'gdq', 'fraction_to_percent', 'rule', null),
+            ('A', 'k1', 'fair_value', null, null, 'rule_conflict', null),
+            ('A', 'x1', 'cost', null, null, 'no_rule', null),
+            ('A', 'x2', 'cost', null, null, 'no_rule', null),
+            ('A', 'x3', 'fair_value', null, null, 'no_rule', null)
+          ) t(acc, ctx, field, rule_id, action, resolution, value_scale)
+      - input: ref('int_field_read')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, field, status, reason, value_filed, unit, is_nil
+          from (values
+            ('A', 'a1', 'fair_value', 'read', 'one_fact', 100.0, 'iso4217:USD', false),
+            ('A', 'a2', 'fair_value', 'read', 'one_fact', 50.0, 'iso4217:EUR', false),
+            ('A', 'a3', 'fair_value', 'read', 'one_fact', 2000.0, 'iso4217:USD', false),
+            ('A', 'p1', 'principal_amount', 'read', 'one_fact', 10.0, 'iso4217:EUR', false),
+            ('A', 'p2', 'principal_amount', 'read', 'one_fact', 10.0, 'iso4217:GBP', false),
+            ('A', 'p3', 'principal_amount', 'read', 'one_fact', 7.0, 'iso4217:USD', false),
+            ('A', 'c1', 'cost', 'unresolved', 'values_differ', null, null, false),
+            ('A', 'c1', 'principal_amount', 'absent', 'no_fact', null, null, false),
+            ('A', 'n1', 'principal_amount', 'absent', 'no_fact', null, null, false),
+            ('A', 'n1', 'shares', 'read', 'one_fact', 5.0, 'shares', false),
+            ('A', 'e1', 'shares', 'absent', 'no_fact', null, null, false),
+            ('A', 'e1', 'principal_amount', 'read', 'one_fact', 100000.0, 'iso4217:USD', false),
+            ('A', 'q1', 'pct_of_net_assets', 'read', 'one_fact', 0.01, 'pure', false),
+            ('A', 'k1', 'fair_value', 'read', 'one_fact', 9.0, 'iso4217:GBP', false),
+            ('A', 'x1', 'cost', 'absent', 'no_fact', null, null, false),
+            ('A', 'x2', 'cost', 'unresolved', 'values_differ', null, null, false),
+            ('A', 'x3', 'fair_value', 'read', 'one_fact', 4.0, 'other', false)
+          ) t(acc, ctx, field, status, reason, value_filed, unit, is_nil)
+      - input: ref('reading_action')
+        rows:
+          - {action: as_filed, built_in_slice: "3"}
+          - {action: reported_in_usd, built_in_slice: "3"}
+          - {action: bracketed_unsigned, built_in_slice: "3"}
+          - {action: to_usd, built_in_slice: "3"}
+          - {action: cost_foreign_is_par, built_in_slice: "3"}
+          - {action: par_tagged_as_units, built_in_slice: "3"}
+          - {action: units_tagged_as_par, built_in_slice: "3"}
+          - {action: fraction_to_percent, built_in_slice: "4"}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: A, fact_id: h1, context_id: c1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: usd, value_numeric: 132, is_nil: false}
+          - {accession: A, fact_id: h2, context_id: c1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedAtCost, unit_id: eur, value_numeric: 126, is_nil: false}
+      - input: ref('stg_filed_unit')
+        rows:
+          - {accession: A, unit_id: usd, numerator: "iso4217:USD", denominator: null}
+          - {accession: A, unit_id: eur, numerator: "iso4217:EUR", denominator: null}
+      - input: ref('stg_fx_rate')
+        rows:
+          - {currency: EUR, rate_date: 2026-03-20, usd_per_unit: 1.5}
+          - {currency: EUR, rate_date: 2026-03-27, usd_per_unit: 1.25}
+          - {currency: EUR, rate_date: 2026-04-01, usd_per_unit: 9.0}
+          - {currency: GBP, rate_date: 2026-03-20, usd_per_unit: 1.3}
+    expect:
+      rows:
+        - {context_id: a1, field: fair_value, value: 100.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: a2, field: fair_value, value: 50.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: a3, field: fair_value, value: -2000.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: p1, field: principal_amount, value: 10.0, currency: EUR, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: p1, field: principal_amount_usd, value: 12.5, currency: null, status: normalised, reason: applied, fx_rate: 1.25, fx_rate_date: 2026-03-27}
+        - {context_id: p2, field: principal_amount, value: 10.0, currency: GBP, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: p2, field: principal_amount_usd, value: null, currency: null, status: unresolved, reason: no_fx_rate, fx_rate: null, fx_rate_date: null}
+        - {context_id: p3, field: principal_amount, value: 7.0, currency: USD, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: p3, field: principal_amount_usd, value: 7.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: c1, field: cost, value: 132.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: c1, field: principal_amount, value: 126.0, currency: EUR, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: c1, field: principal_amount_usd, value: 157.5, currency: null, status: normalised, reason: applied, fx_rate: 1.25, fx_rate_date: 2026-03-27}
+        - {context_id: n1, field: principal_amount, value: 5000.0, currency: USD, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: n1, field: shares, value: null, currency: null, status: normalised, reason: moved_to_principal, fx_rate: null, fx_rate_date: null}
+        - {context_id: n1, field: principal_amount_usd, value: 5000.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: e1, field: shares, value: 100000.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: q1, field: pct_of_net_assets, value: null, currency: null, status: unresolved, reason: action_not_built, fx_rate: null, fx_rate_date: null}
+        - {context_id: k1, field: fair_value, value: null, currency: null, status: unresolved, reason: rule_conflict, fx_rate: null, fx_rate_date: null}
+        - {context_id: x1, field: cost, value: null, currency: null, status: absent, reason: no_fact, fx_rate: null, fx_rate_date: null}
+        - {context_id: x2, field: cost, value: null, currency: null, status: unresolved, reason: values_differ, fx_rate: null, fx_rate_date: null}
+        - {context_id: x3, field: fair_value, value: null, currency: null, status: unresolved, reason: no_rule, fx_rate: null, fx_rate_date: null}

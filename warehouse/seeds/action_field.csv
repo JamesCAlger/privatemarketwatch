@@ -1,0 +1,11 @@
+action,field,applies_to,note
+to_usd,principal_amount_usd,principal_foreign,"A principal in a currency other than US dollars, converted at the report date (spec 6.4). A dollar principal is not touched; the default rule gd_principal_usd_usd covers it."
+reported_in_usd,fair_value,unit_foreign,"A fair value tagged in a foreign unit is taken as dollars (pipeline/monetary_units.py resolve_bdc_units: fair value and cost only, not principal)."
+reported_in_usd,cost,unit_foreign,"A cost tagged in a foreign unit is taken as dollars (same source)."
+cost_foreign_is_par,cost,two_unit_cost,"A cost tagged twice, once in US dollars and once in another currency, with two numbers: the dollar fact is the cost (pipeline/cost_in_two_units.py)."
+cost_foreign_is_par,principal_amount,two_unit_cost_principal_absent,"Same context, no principal fact: the foreign cost fact is the principal in that currency (pipeline/cost_in_two_units.py)."
+par_tagged_as_units,principal_amount,shares_as_par,"No principal, a share count on a debt row: the count times a power of a thousand is the principal (pipeline/staging_bdc.py par_scale). Which rows depends on the rule's parameter (row mode or whole filing)."
+par_tagged_as_units,shares,shares_as_par,"Same rows: the count moves to the principal, so shares is left empty (production sets shares to null)."
+units_tagged_as_par,shares,principal_as_units,"In a listed filing, an equity row with no share count and a principal fact: the principal is the unit count (pipeline/staging_bdc.py units_from_principal). The principal is kept as filed, as production does."
+bracketed_unsigned,fair_value,sign_differs_from_print,"In a listed filing, a fair value whose printed brackets disagree with its tagged sign takes the printed sign (pipeline/printed_sign.py)."
+bracketed_unsigned,cost,sign_differs_from_print,"Same for cost."

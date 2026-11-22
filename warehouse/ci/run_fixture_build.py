@@ -39,7 +39,7 @@ UNIT_TEST_INPUTS = ["stg_v05_scope", "stg_holdings", "stg_fund_financials"]
 #    1 staging views other than the unit-test inputs, the marts, cmp_row_set, cmp_excluded_quarter).
 BUILD_SELECT = [
     "path:models/staging/filed", "path:models/staging/readings", "path:models/staging/stg_v05_scope.sql",
-    "resource_type:seed", "path:models/intermediate/int_*.sql",
+    "resource_type:seed", "path:models/staging/stg_fx_rate.sql", "path:models/intermediate/int_*.sql",
     "path:tests/int_source_row_text_patterns.sql", "path:tests/concept_release_unmatched_fixture.sql",
     "path:tests/concept_rule_namespace_gaps_fixture.sql", "path:tests/filed_one_filing_row_per_folder.sql",
 ]
@@ -139,6 +139,8 @@ def main(argv=None):
         # the row-store drift view hashes these files at build time (stg_row_store_drift); the same files step (b) loads
         "row_store_files": {"row_corrections": (FIXTURE / "row_corrections.csv").as_posix(),
                             "row_corrections_by_context": (FIXTURE / "row_corrections_by_context.csv").as_posix()},
+        # stg_fx_rate reads this small committed rate file (same columns as the FRED H.10 file production uses)
+        "fx_rate_file": (FIXTURE / "fx_rates.csv").as_posix(),
         # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get)
         "ci_fixture": True,
     })

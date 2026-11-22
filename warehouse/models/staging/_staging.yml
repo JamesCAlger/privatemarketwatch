@@ -59,6 +59,21 @@ models:
           - unique
           - not_null
 
+  - name: stg_fx_rate
+    description: >
+      FRED H.10 rates, one row per currency and quote date: usd_per_unit is US dollars for one unit of the currency
+      (direction tested on a known rate in tests/stg_fx_rate_known_rate.sql). Path from var fx_rate_file.
+    columns:
+      - name: currency
+        data_tests:
+          - not_null
+      - name: rate_date
+        data_tests:
+          - not_null
+      - name: usd_per_unit
+        data_tests:
+          - not_null
+
   - name: stg_fund_financials
     columns:
       - name: cik

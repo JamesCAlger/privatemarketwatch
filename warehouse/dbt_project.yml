@@ -31,6 +31,12 @@ vars:
   # production's wrappers, hashed at build time. Relative to warehouse/.
   wrappers_dir: "wrappers"
   production_wrappers_dir: "../data/overrides/bdc_xbrl_wrappers"
+  # Currency rates (stg_fx_rate, slice 3 Task 3): the FRED H.10 file production's principal conversion reads, US
+  # dollars per unit of each currency, one row per date and currency. Relative to warehouse/.
+  fx_rate_file: "../data/reference/monetary_conversion/fred_h10_usd_per_unit.csv"
+  # A rate older than this many days before the report date is not used (scripts/programme_closeout/fx.py convert,
+  # max_age_days=7: FX_stale).
+  fx_max_age_days: 7
   # Row-correction store drift (stg_row_store_drift, slice 3 Task 1): the stores the readings loader reads, hashed at
   # build time against the loader's manifest. Same files as readings_loader/cli.py ROW_STORES. Relative to warehouse/.
   row_store_files:
@@ -124,6 +130,21 @@ vars:
     int_field_read_unresolved_principal_amount: 1
     int_field_read_unresolved_shares: 0
     int_field_read_unresolved_pct_of_net_assets: 0
+    # Slice 3 Task 3 (int_field_normalised): unresolved amount fields per field and reason, measured 2026-11-22.
+    # 30759: every share of net assets tagged as a pure number (two funds); its default action fraction_to_percent is
+    # built in slice 4. 1: one principal tagged in two currencies with two numbers. 1: its principal_amount_usd.
+    # 130: principal_amount_usd with no FRED H.10 quote within 7 days: 129 at 2026-09-30 (the rate file ends
+    # 2026-09-11; production has no rows for that quarter) and 1 principal tagged KPW (no rate; looks mistyped, a
+    # correction for slice 5). other: any unresolved (field, reason) pair not listed in normalised_unresolved_declared.
+    int_field_normalised_unresolved_pct_of_net_assets_action_not_built: 30759
+    int_field_normalised_unresolved_principal_amount_values_differ: 1
+    int_field_normalised_unresolved_principal_amount_usd_principal_unresolved: 1
+    int_field_normalised_unresolved_principal_amount_usd_no_fx_rate: 130
+    int_field_normalised_unresolved_other: 0
+    # The sum check (tests/baseline_int_field_normalised_sum_not_tied.sql), measured 2026-11-22: fund-quarters whose
+    # published normalised fair value ties to the filed total investments on neither the published nor the ex-cash
+    # basis (9: Ares 3, Apollo 6), plus the three 2026-09-30 quarters with no filed total yet (Ares, Blue Owl, Apollo).
+    int_field_normalised_sum_not_tied: 12
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as
@@ -132,6 +153,14 @@ vars:
   # that no longer matches a release fails tests/concept_rule_release_pin_live.sql.
   concept_rule_release_pinned:
     - "0001812554-26-000027|c-1013"
+  # The (field, reason) pairs of unresolved amount fields that have their own baseline test (one generic test
+  # baseline_normalised_unresolved each, in models/intermediate/_intermediate.yml). Any other pair is counted by
+  # tests/baseline_int_field_normalised_unresolved_other.sql, ceiling 0.
+  normalised_unresolved_declared:
+    - "pct_of_net_assets|action_not_built"
+    - "principal_amount|values_differ"
+    - "principal_amount_usd|principal_unresolved"
+    - "principal_amount_usd|no_fx_rate"
   cmp_excluded_quarters_pinned:
     - "0001287750|2026-09-30|0001628280-26-067383"
     - "0001812554|2026-09-30|0001812554-26-000060"

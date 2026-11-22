@@ -81,3 +81,70 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['aggregate', 'position']
+  - name: field_rule_default
+    description: >
+      The global defaults of the amount conversion (slice 3 Task 3, spec intermediate_spine.md 5 and 6.4). One row per
+      default rule: the field, the rows it applies to (applies_to, see int_field_rule), the action and priority 10,
+      below every fund rule (20, 30). int_field_rule reads these as rules with origin global_default; nothing in SQL
+      stands in for them. The action must be in seeds/reading_action.csv. No fund appears here.
+    config:
+      column_types:
+        parameter: varchar
+        priority: integer
+    columns:
+      - name: rule_id
+        data_tests:
+          - unique
+          - not_null
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+      - name: applies_to
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['unit_usd', 'unit_foreign', 'unit_shares', 'unit_pure', 'principal_usd']
+      - name: action
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('reading_action')
+                field: action
+      - name: priority
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [10]
+                quote: false
+  - name: action_field
+    description: >
+      For each slice 3 action a fund rule may name, the amount fields it governs and the rows it can act on
+      (applies_to; the tests are in int_field_rule). A fund rule whose action is listed here takes part in the amount
+      conversion. The action must be in seeds/reading_action.csv. No fund appears here.
+    columns:
+      - name: action
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('reading_action')
+                field: action
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+      - name: applies_to
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['unit_foreign', 'two_unit_cost', 'two_unit_cost_principal_absent', 'shares_as_par',
+                         'principal_as_units', 'sign_differs_from_print', 'principal_foreign']

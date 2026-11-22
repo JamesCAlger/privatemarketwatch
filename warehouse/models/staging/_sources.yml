@@ -26,3 +26,14 @@ sources:
         description: Filing metadata. CSV, all text. Has duplicate rows per accession.
         meta:
           external_location: "read_csv('{{ var('output_dir') }}/bdc_filings_index.csv', header=true, all_varchar=true)"
+
+  - name: reference
+    description: Reference files outside data/output that production reads. Read-only.
+    tables:
+      - name: fx_rate
+        description: >
+          FRED H.10 exchange rates, as production uses them for principal_usd_reference fred_h10
+          (pipeline/monetary_fx.py principal_reference_table; built by scripts/build_fx_quotes.py). Columns date,
+          currency, series, usd_per_unit. CSV, all text. Path from the variable fx_rate_file.
+        meta:
+          external_location: "read_csv('{{ var('fx_rate_file') }}', header=true, all_varchar=true)"

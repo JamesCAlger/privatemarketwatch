@@ -1,0 +1,8 @@
+rule_id,field,applies_to,action,parameter,priority,note
+gd_fair_value_usd,fair_value,unit_usd,as_filed,,10,"Fair value tagged in US dollars is taken as filed (spec 6.4: as_filed is the global default for amounts in dollars)."
+gd_cost_usd,cost,unit_usd,as_filed,,10,"Cost tagged in US dollars is taken as filed."
+gd_principal_usd,principal_amount,unit_usd,as_filed,,10,"Principal tagged in US dollars is taken as filed."
+gd_principal_foreign,principal_amount,unit_foreign,as_filed,,10,"Principal tagged in another currency is kept as filed, in its own currency (the currency column says which). Its dollar value is the separate field principal_amount_usd. Production does the same: principal_amount stays in the filed currency."
+gd_principal_usd_usd,principal_amount_usd,principal_usd,as_filed,,10,"A principal already in dollars: principal_amount_usd equals principal_amount (brief, slice 3 Task 3)."
+gd_shares,shares,unit_shares,as_filed,,10,"Shares or units tagged with the shares unit are taken as filed."
+gd_pct_of_net_assets,pct_of_net_assets,unit_pure,fraction_to_percent,,10,"Share of net assets tagged as a pure number. Spec 6.4 names fraction_to_percent the default for a pure number. The action is built in slice 4, so until then the field is unresolved with reason action_not_built (brief: an action not built in this slice is unresolved)."

@@ -597,6 +597,12 @@
         "Fifth Season Investments LLC (fka Chapford SMA Partnership, L.P.)"
       ],
       "evidence": "An LP interest in a blocker with no units tagged: 0001812554-23-000014 (2023-03-31), cost and fair value 987,000 and percent of net assets only. Production publishes it, and the fund's published total misses the filed total investments by exactly its value without it. Named in full: no feature of the row separates it from the issuer-level lines of this fund that production leaves out (Pluralsight, LLC; Fifth Season Investments LLC; the fund's own JV interests), so the rule is as narrow as one position. Owner decision D15, 2026-11-19. Slice 2 Task 6."
+    },
+    {
+      "target": "amount",
+      "action": "reported_in_usd",
+      "accession": "0001812554-26-000047",
+      "evidence": "10-Q for 2026-06-30, schedule table 18 (printed row 631), KWOR Intermediate I, Inc. (dba Alacrity Solutions), first lien senior secured loan, context c-362: printed 'S+ 8.00% 2/2030 6,721 ... 6,675 ... 6,402' under the header 'Par / Amortized Cost / Fair Value', with no currency on the row. The par 6,721,000 and fair value 6,402,000 on the same context are tagged iso4217:USD; only the cost 6,675,000 is tagged iso4217:EUR. The cost sits in the dollar cost column and between the dollar par and fair value, so it is read as dollars. The only fair value or cost of this fund tagged in a foreign unit across its parsed filings (slice 3 Task 2). Filing-scoped: it applies to this filing only. Slice 3 Task 3."
     }
   ]
 }
