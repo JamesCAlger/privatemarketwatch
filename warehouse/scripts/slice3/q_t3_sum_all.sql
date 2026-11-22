@@ -1,11 +1,6 @@
--- Slice 3 Task 3: the sum check for every fund-quarter (generated from tests/baseline_int_field_normalised_sum_not_tied.sql, tolerance 500000, no filter).
--- Baseline (spec section 7, the sum check): per fund and report date, the published positions' normalised fair value
--- against the filed total investments (stg_fund_financials), on the published basis (cash rows in) and without the cash
--- rows. The basis is chosen as fact_fund_period chooses it (step 1; owner ruling 2026-11-04, check A04): without cash
--- when the total with cash misses, the total without cash ties, and the cash rows equal the filed cash equivalents
--- within 0.5 pct of the filed investments. A fund-quarter does not tie when the difference on that basis is above
--- var reconcile_tolerance. A published fair value that is not normalised counts as missing (and fails its own test).
--- Fund-quarters with no filed total are listed too (filed null). Ceiling int_field_normalised_sum_not_tied.
+-- Slice 3 Task 3: the sum check for every fund-quarter, generated from tests/baseline_int_field_normalised_sum_not_tied.sql
+-- (tolerance 500000). A fund-quarter does not tie when abs(difference_on_basis) is above the tolerance, the basis
+-- chosen by the step 1 rule (filed_total_excludes_cash). does_not_tie is the test's condition; all rows are shown.
 with published as (
     select
         s.cik
@@ -32,6 +27,7 @@ with published as (
 )
 
 , based as (
+    -- the basis rule of fact_fund_period.sql (step 1), applied to this layer's figures
     select
         *
         , coalesce(
@@ -45,19 +41,26 @@ with published as (
     from compared
 )
 
+, on_basis as (
+    select
+        *
+        , case when filed_total_excludes_cash then difference_ex_cash else difference end as difference_on_basis
+    from based
+)
+
 select
     cik
     , report_date
     , filed_total
     , published_fair_value
     , cash_fair_value
+    , cash_equivalents_filed
     , difference
     , difference_ex_cash
     , filed_total_excludes_cash
-    , case when filed_total_excludes_cash then difference_ex_cash else difference end as difference_on_basis
+    , difference_on_basis
     , fair_value_not_normalised
-from based
-where true or filed_total is null
-   or abs(case when filed_total_excludes_cash then difference_ex_cash else difference end) > 500000
-   or fair_value_not_normalised > 0
-order by 1, 2 limit 200
+    , filed_total is null or abs(difference_on_basis) > 500000 or fair_value_not_normalised > 0 as does_not_tie
+from on_basis
+order by 1, 2
+limit 200

@@ -603,6 +603,12 @@
       "action": "reported_in_usd",
       "accession": "0001812554-26-000047",
       "evidence": "10-Q for 2026-06-30, schedule table 18 (printed row 631), KWOR Intermediate I, Inc. (dba Alacrity Solutions), first lien senior secured loan, context c-362: printed 'S+ 8.00% 2/2030 6,721 ... 6,675 ... 6,402' under the header 'Par / Amortized Cost / Fair Value', with no currency on the row. The par 6,721,000 and fair value 6,402,000 on the same context are tagged iso4217:USD; only the cost 6,675,000 is tagged iso4217:EUR. The cost sits in the dollar cost column and between the dollar par and fair value, so it is read as dollars. The only fair value or cost of this fund tagged in a foreign unit across its parsed filings (slice 3 Task 2). Filing-scoped: it applies to this filing only. Slice 3 Task 3."
+    },
+    {
+      "target": "amount",
+      "action": "as_filed",
+      "accession": "0001812554-23-000022",
+      "evidence": "10-Q for 2023-06-30: the share of net assets is tagged as a percent, not a fraction. Context c-206 prints '4.0' and the pure fact is 4.0 (decimals 3); c-522 prints '3.5', tagged 3.5. The 646 tagged values sum to 196.8. The next filing, 0001812554-23-000030 (2023-09-30), prints '4.0' on c-1432 and tags 0.04. Without this rule the default fraction_to_percent would store 400 pct. Same reading as production's filing-level test (pipeline/staging_bdc.py _pct_in_percent: 20 or more values summing past 20). Filing-scoped. Slice 3 Task 3 fix round 1."
     }
   ]
 }

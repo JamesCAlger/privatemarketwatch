@@ -131,20 +131,21 @@ vars:
     int_field_read_unresolved_shares: 0
     int_field_read_unresolved_pct_of_net_assets: 0
     # Slice 3 Task 3 (int_field_normalised): unresolved amount fields per field and reason, measured 2026-11-22.
-    # 30759: every share of net assets tagged as a pure number (two funds); its default action fraction_to_percent is
-    # built in slice 4. 1: one principal tagged in two currencies with two numbers. 1: its principal_amount_usd.
+    # Share of net assets is no longer here: fraction_to_percent is built for it (fix round 1, was 30759 action_not_built).
+    # 1: one principal tagged in two currencies with two numbers. 1: its principal_amount_usd.
     # 130: principal_amount_usd with no FRED H.10 quote within 7 days: 129 at 2026-09-30 (the rate file ends
     # 2026-09-11; production has no rows for that quarter) and 1 principal tagged KPW (no rate; looks mistyped, a
-    # correction for slice 5). other: any unresolved (field, reason) pair not listed in normalised_unresolved_declared.
-    int_field_normalised_unresolved_pct_of_net_assets_action_not_built: 30759
+    # correction for slice 5). other: any unresolved (field, reason) pair not listed in normalised_unresolved_declared,
+    # including feature_missing (a rule that needs a null row feature, spec section 5 rule 2): ceiling 0.
     int_field_normalised_unresolved_principal_amount_values_differ: 1
     int_field_normalised_unresolved_principal_amount_usd_principal_unresolved: 1
     int_field_normalised_unresolved_principal_amount_usd_no_fx_rate: 130
     int_field_normalised_unresolved_other: 0
-    # The sum check (tests/baseline_int_field_normalised_sum_not_tied.sql), measured 2026-11-22: fund-quarters whose
-    # published normalised fair value ties to the filed total investments on neither the published nor the ex-cash
-    # basis (9: Ares 3, Apollo 6), plus the three 2026-09-30 quarters with no filed total yet (Ares, Blue Owl, Apollo).
-    int_field_normalised_sum_not_tied: 12
+    # The sum check (tests/baseline_int_field_normalised_sum_not_tied.sql), measured 2026-11-22 (fix round 1): fund-
+    # quarters whose published normalised fair value misses the filed total investments on the step 1 basis
+    # (fact_fund_period's A04 rule): Ares 3, BCRED 14 (it ties without cash rows, but its filed cash equivalents are
+    # empty, so A04 keeps the published basis), Apollo 6; plus the three 2026-09-30 quarters with no filed total yet.
+    int_field_normalised_sum_not_tied: 26
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as
@@ -157,7 +158,6 @@ vars:
   # baseline_normalised_unresolved each, in models/intermediate/_intermediate.yml). Any other pair is counted by
   # tests/baseline_int_field_normalised_unresolved_other.sql, ceiling 0.
   normalised_unresolved_declared:
-    - "pct_of_net_assets|action_not_built"
     - "principal_amount|values_differ"
     - "principal_amount_usd|principal_unresolved"
     - "principal_amount_usd|no_fx_rate"

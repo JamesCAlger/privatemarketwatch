@@ -308,9 +308,17 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['rule', 'no_rule', 'rule_conflict']
+                values: ['rule', 'no_rule', 'rule_conflict', 'feature_missing']
       - name: value_scale
         description: For par_tagged_as_units, the power of a thousand the share count is multiplied by; null otherwise.
+      - name: tie_break_losers
+        description: >
+          Rules the winner beat only by step 2 of the ranking (same priority; the winner names a filing, they name
+          only a row feature). 0 when none.
+        data_tests:
+          - not_null
+      - name: tie_break_same_effect
+        description: True when every rule beaten by step 2 would have given the same action and scale; null when none.
 
   - name: int_field_normalised
     description: >
@@ -356,14 +364,13 @@ models:
           - accepted_values:
               arguments:
                 values: ['applied', 'moved_to_principal', 'no_fact', 'nil', 'values_differ', 'units_differ',
-                         'fact_without_number', 'no_rule', 'rule_conflict', 'action_not_built', 'no_fx_rate',
+                         'fact_without_number', 'no_rule', 'rule_conflict', 'feature_missing', 'action_not_built', 'no_fx_rate',
                          'principal_unresolved']
       - name: fx_rate
         description: US dollars per unit of the principal's currency, where to_usd applied.
       - name: fx_rate_date
         description: The date of that quote (the report date or up to 7 days before it).
     data_tests:
-      - baseline_normalised_unresolved: {arguments: {field: pct_of_net_assets, reason: action_not_built}, name: baseline_int_field_normalised_unresolved_pct_of_net_assets_action_not_built}
       - baseline_normalised_unresolved: {arguments: {field: principal_amount, reason: values_differ}, name: baseline_int_field_normalised_unresolved_principal_amount_values_differ}
       - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: principal_unresolved}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_principal_unresolved}
       - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: no_fx_rate}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_no_fx_rate}
@@ -1269,7 +1276,9 @@ unit_tests:
       reported_in_usd: fund 1's euro fair value f1 takes it; fund 2's euro fair value f2 (no rule) is NOT touched and has
       no rule. Fund 1's second reported_in_usd rule starts in 2027, so it does not compete. to_usd: the euro principal
       p1's dollar field takes it; the dollar principal p2 is NOT touched (default as_filed). Fund 3 has two equally
-      specific reported_in_usd rules: rule_conflict, no rule chosen. An absent cost has no rule.
+      specific reported_in_usd rules: rule_conflict, no rule chosen. An absent cost has no rule. Fix round 1: a pure
+      share of net assets takes fraction_to_percent (q1); a fund rule as_filed naming filing A2 beats it (q2, a filing
+      that tags the percent itself); a share of net assets in another unit (q3) is NOT touched.
     model: int_field_rule
     given:
       - input: ref('int_field_read')
@@ -1283,6 +1292,8 @@ unit_tests:
           - {accession: A, context_id: q1, field: pct_of_net_assets, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 0.01, unit: "pure", is_nil: false, fact_id: x7}
           - {accession: A, context_id: a1, field: cost, cik: "1", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
           - {accession: C, context_id: k1, field: fair_value, cik: "3", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 9, unit: "iso4217:GBP", is_nil: false, fact_id: x8}
+          - {accession: A2, context_id: q2, field: pct_of_net_assets, cik: "1", report_date: 2026-06-30, status: read, reason: one_fact, value_filed: 4.0, unit: "pure", is_nil: false, fact_id: x9}
+          - {accession: A, context_id: q3, field: pct_of_net_assets, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 0.02, unit: "shares", is_nil: false, fact_id: x10}
       - input: ref('int_context_feature')
         rows:
           - {accession: A, context_id: u1, identifier_label: "U Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
@@ -1294,6 +1305,8 @@ unit_tests:
           - {accession: A, context_id: q1, identifier_label: "Q Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
           - {accession: A, context_id: a1, identifier_label: "A Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
           - {accession: C, context_id: k1, identifier_label: "K Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A2, context_id: q2, identifier_label: "Q Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: A, context_id: q3, identifier_label: "Q Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
       - input: ref('stg_reading_rule')
         rows:
           - {rule_id: fr_usd, cik: "1", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:foreign_unit_values"}
@@ -1302,11 +1315,13 @@ unit_tests:
           - {rule_id: fr_c1, cik: "3", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:foreign_unit_values"}
           - {rule_id: fr_c2, cik: "3", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:reading_rules"}
           - {rule_id: fr_9, cik: "9", action: reported_in_usd, parameter: null, sel_accession: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:foreign_unit_values"}
+          - {rule_id: fr_pct, cik: "1", action: as_filed, parameter: null, sel_accession: A2, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:reading_rules"}
       - input: ref('action_field')
         rows:
           - {action: to_usd, field: principal_amount_usd, applies_to: principal_foreign}
           - {action: reported_in_usd, field: fair_value, applies_to: unit_foreign}
           - {action: reported_in_usd, field: cost, applies_to: unit_foreign}
+          - {action: as_filed, field: pct_of_net_assets, applies_to: unit_pure}
       - input: ref('field_rule_default')
         rows:
           - {rule_id: gd_fair_value_usd, field: fair_value, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
@@ -1339,6 +1354,8 @@ unit_tests:
         - {context_id: q1, field: pct_of_net_assets, rule_id: gd_pct_of_net_assets, action: fraction_to_percent, resolution: rule}
         - {context_id: a1, field: cost, rule_id: null, action: null, resolution: no_rule}
         - {context_id: k1, field: fair_value, rule_id: null, action: null, resolution: rule_conflict}
+        - {context_id: q2, field: pct_of_net_assets, rule_id: fr_pct, action: as_filed, resolution: rule}
+        - {context_id: q3, field: pct_of_net_assets, rule_id: null, action: null, resolution: no_rule}
 
   - name: int_field_rule_par_tagged_as_units
     description: >
@@ -1606,7 +1623,9 @@ unit_tests:
       old; a dollar principal (p3) keeps its value under as_filed; cost_foreign_is_par takes the dollar fact as cost
       and the euro fact as the principal; par_tagged_as_units multiplies the count by the scale and empties shares;
       units_tagged_as_par copies the principal into shares; an action built in a later slice, a conflict, no rule, an
-      absent field and an unresolved read each give their status and reason.
+      absent field and an unresolved read each give their status and reason. Fix round 1: fraction_to_percent is built
+      for share of net assets only (q1 0.01 becomes 1.0); named on shares it is not built (q2, NOT touched,
+      action_not_built); feature_missing from the rule model gives unresolved feature_missing (m1).
     model: int_field_normalised
     given:
       - input: ref('int_field_rule')
@@ -1633,6 +1652,8 @@ unit_tests:
             ('A', 'e1', 'shares', 'ut', 'units_tagged_as_par', 'rule', null),
             ('A', 'q1', 'pct_of_net_assets', 'gdq', 'fraction_to_percent', 'rule', null),
             ('A', 'k1', 'fair_value', null, null, 'rule_conflict', null),
+            ('A', 'q2', 'shares', 'gdx', 'fraction_to_percent', 'rule', null),
+            ('A', 'm1', 'fair_value', null, null, 'feature_missing', null),
             ('A', 'x1', 'cost', null, null, 'no_rule', null),
             ('A', 'x2', 'cost', null, null, 'no_rule', null),
             ('A', 'x3', 'fair_value', null, null, 'no_rule', null)
@@ -1656,6 +1677,8 @@ unit_tests:
             ('A', 'e1', 'principal_amount', 'read', 'one_fact', 100000.0, 'iso4217:USD', false),
             ('A', 'q1', 'pct_of_net_assets', 'read', 'one_fact', 0.01, 'pure', false),
             ('A', 'k1', 'fair_value', 'read', 'one_fact', 9.0, 'iso4217:GBP', false),
+            ('A', 'q2', 'shares', 'read', 'one_fact', 0.5, 'shares', false),
+            ('A', 'm1', 'fair_value', 'read', 'one_fact', 5.0, 'iso4217:USD', false),
             ('A', 'x1', 'cost', 'absent', 'no_fact', null, null, false),
             ('A', 'x2', 'cost', 'unresolved', 'values_differ', null, null, false),
             ('A', 'x3', 'fair_value', 'read', 'one_fact', 4.0, 'other', false)
@@ -1669,7 +1692,7 @@ unit_tests:
           - {action: cost_foreign_is_par, built_in_slice: "3"}
           - {action: par_tagged_as_units, built_in_slice: "3"}
           - {action: units_tagged_as_par, built_in_slice: "3"}
-          - {action: fraction_to_percent, built_in_slice: "4"}
+          - {action: fraction_to_percent, built_in_slice: "4", built_early_for_field: pct_of_net_assets}
       - input: ref('concept_map')
         rows:
           - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
@@ -1705,8 +1728,106 @@ unit_tests:
         - {context_id: n1, field: shares, value: null, currency: null, status: normalised, reason: moved_to_principal, fx_rate: null, fx_rate_date: null}
         - {context_id: n1, field: principal_amount_usd, value: 5000.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
         - {context_id: e1, field: shares, value: 100000.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
-        - {context_id: q1, field: pct_of_net_assets, value: null, currency: null, status: unresolved, reason: action_not_built, fx_rate: null, fx_rate_date: null}
+        - {context_id: q1, field: pct_of_net_assets, value: 1.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
+        - {context_id: q2, field: shares, value: null, currency: null, status: unresolved, reason: action_not_built, fx_rate: null, fx_rate_date: null}
+        - {context_id: m1, field: fair_value, value: null, currency: null, status: unresolved, reason: feature_missing, fx_rate: null, fx_rate_date: null}
         - {context_id: k1, field: fair_value, value: null, currency: null, status: unresolved, reason: rule_conflict, fx_rate: null, fx_rate_date: null}
         - {context_id: x1, field: cost, value: null, currency: null, status: absent, reason: no_fact, fx_rate: null, fx_rate_date: null}
         - {context_id: x2, field: cost, value: null, currency: null, status: unresolved, reason: values_differ, fx_rate: null, fx_rate_date: null}
         - {context_id: x3, field: fair_value, value: null, currency: null, status: unresolved, reason: no_rule, fx_rate: null, fx_rate_date: null}
+
+  - name: int_field_rule_tie_break_and_missing_feature
+    description: >
+      Slice 3 Task 3 fix round 1. The tie-break (step 2): fund 4 lists filing W under whole_filing and also has the
+      row-feature rule rows_near_cost; both match t1 and t2 at priority 30, and the rule naming the filing wins
+      (tie_break_losers 1). On t1 both rules give scale 1 (same effect); on t2 rows_near_cost would give scale 1,000
+      (different effect). Still a conflict after step 2: fund 8 has two whole_filing rules naming the same filing (y1),
+      fund 9 two rows_near_cost rules (z1). A missing row feature is an error, never "no match" (spec section 5 rule
+      2): fund 10's rows_near_cost meets m1 with no label and m2 with no read cost, both feature_missing; fund 7's
+      bracketed_unsigned meets s5, a fair value with no printed placement, feature_missing.
+    model: int_field_rule
+    given:
+      - input: ref('int_field_read')
+        rows:
+          - {accession: W, context_id: t1, field: principal_amount, cik: "4", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: W, context_id: t1, field: shares, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "shares", is_nil: false, fact_id: a1}
+          - {accession: W, context_id: t1, field: cost, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "iso4217:USD", is_nil: false, fact_id: a2}
+          - {accession: W, context_id: t2, field: principal_amount, cik: "4", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: W, context_id: t2, field: shares, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 5, unit: "shares", is_nil: false, fact_id: a3}
+          - {accession: W, context_id: t2, field: cost, cik: "4", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 5000, unit: "iso4217:USD", is_nil: false, fact_id: a4}
+          - {accession: Y, context_id: y1, field: principal_amount, cik: "8", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: Y, context_id: y1, field: shares, cik: "8", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 70, unit: "shares", is_nil: false, fact_id: a5}
+          - {accession: Z, context_id: z1, field: principal_amount, cik: "9", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: Z, context_id: z1, field: shares, cik: "9", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "shares", is_nil: false, fact_id: a6}
+          - {accession: Z, context_id: z1, field: cost, cik: "9", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "iso4217:USD", is_nil: false, fact_id: a7}
+          - {accession: M, context_id: m1, field: principal_amount, cik: "10", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: M, context_id: m1, field: shares, cik: "10", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "shares", is_nil: false, fact_id: a8}
+          - {accession: M, context_id: m1, field: cost, cik: "10", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "iso4217:USD", is_nil: false, fact_id: a9}
+          - {accession: M, context_id: m2, field: principal_amount, cik: "10", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
+          - {accession: M, context_id: m2, field: shares, cik: "10", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 1000, unit: "shares", is_nil: false, fact_id: b1}
+          - {accession: S, context_id: s5, field: fair_value, cik: "7", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 2000, unit: "iso4217:USD", is_nil: false, fact_id: g5}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: W, context_id: t1, identifier_label: "Tee Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: W, context_id: t2, identifier_label: "Tee Co | Loan B", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: Y, context_id: y1, identifier_label: "Why Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: Z, context_id: z1, identifier_label: "Zed Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: M, context_id: m1, identifier_label: null, has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: M, context_id: m2, identifier_label: "Em Co | Loan", has_rate: true, has_spread: false, has_pik_rate: false, has_maturity: false}
+          - {accession: S, context_id: s5, identifier_label: "S Co", has_rate: false, has_spread: false, has_pik_rate: false, has_maturity: false}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: par4w, cik: "4", action: par_tagged_as_units, parameter: whole_filing, sel_accession: W, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par4n, cik: "4", action: par_tagged_as_units, parameter: rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par8a, cik: "8", action: par_tagged_as_units, parameter: whole_filing, sel_accession: Y, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par8b, cik: "8", action: par_tagged_as_units, parameter: whole_filing, sel_accession: Y, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:reading_rules"}
+          - {rule_id: par9a, cik: "9", action: par_tagged_as_units, parameter: rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: par9b, cik: "9", action: par_tagged_as_units, parameter: rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:reading_rules"}
+          - {rule_id: par10, cik: "10", action: par_tagged_as_units, parameter: rows_near_cost, sel_accession: null, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:par_tagged_as_units"}
+          - {rule_id: sign7, cik: "7", action: bracketed_unsigned, parameter: null, sel_accession: S, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:bracketed_unsigned_values"}
+      - input: ref('action_field')
+        rows:
+          - {action: par_tagged_as_units, field: principal_amount, applies_to: shares_as_par}
+          - {action: par_tagged_as_units, field: shares, applies_to: shares_as_par}
+          - {action: bracketed_unsigned, field: fair_value, applies_to: sign_differs_from_print}
+      - input: ref('field_rule_default')
+        rows:
+          - {rule_id: gd_fair_value_usd, field: fair_value, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_cost_usd, field: cost, applies_to: unit_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_principal_usd_usd, field: principal_amount_usd, applies_to: principal_usd, action: as_filed, parameter: null, priority: 10}
+          - {rule_id: gd_shares, field: shares, applies_to: unit_shares, action: as_filed, parameter: null, priority: 10}
+      - input: ref('stg_filed_fact')
+        rows: []
+      - input: ref('concept_map')
+        rows: []
+      - input: ref('stg_filed_unit')
+        rows: []
+      - input: ref('stg_filed_fact_placement')
+        rows: []
+      - input: ref('stg_filed_document_row')
+        rows: []
+    expect:
+      rows:
+        - {context_id: t1, field: principal_amount, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: true}
+        - {context_id: t1, field: shares, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: true}
+        - {context_id: t1, field: cost, rule_id: gd_cost_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: t1, field: principal_amount_usd, rule_id: gd_principal_usd_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: t2, field: principal_amount, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: false}
+        - {context_id: t2, field: shares, rule_id: par4w, resolution: rule, value_scale: 1.0, tie_break_losers: 1, tie_break_same_effect: false}
+        - {context_id: t2, field: cost, rule_id: gd_cost_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: t2, field: principal_amount_usd, rule_id: gd_principal_usd_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: y1, field: principal_amount, rule_id: null, resolution: rule_conflict, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: y1, field: shares, rule_id: null, resolution: rule_conflict, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: y1, field: principal_amount_usd, rule_id: null, resolution: no_rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: z1, field: principal_amount, rule_id: null, resolution: rule_conflict, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: z1, field: shares, rule_id: null, resolution: rule_conflict, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: z1, field: cost, rule_id: gd_cost_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: z1, field: principal_amount_usd, rule_id: null, resolution: no_rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m1, field: principal_amount, rule_id: null, resolution: feature_missing, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m1, field: shares, rule_id: null, resolution: feature_missing, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m1, field: cost, rule_id: gd_cost_usd, resolution: rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m1, field: principal_amount_usd, rule_id: null, resolution: no_rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m2, field: principal_amount, rule_id: null, resolution: feature_missing, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m2, field: shares, rule_id: null, resolution: feature_missing, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: m2, field: principal_amount_usd, rule_id: null, resolution: no_rule, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}
+        - {context_id: s5, field: fair_value, rule_id: null, resolution: feature_missing, value_scale: null, tie_break_losers: 0, tie_break_same_effect: null}

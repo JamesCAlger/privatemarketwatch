@@ -14,11 +14,17 @@
 --                         principal unit as USD); shares left empty (status normalised, reason moved_to_principal).
 --   units_tagged_as_par   shares = the principal fact's number. The principal is kept as filed (as production).
 --   bracketed_unsigned    value = minus value_filed (the printed sign).
+--   fraction_to_percent   value = value_filed times 100. Built here for pct_of_net_assets only (production stores a
+--                         percent: docs/reference/schemas.md line 25, pipeline/staging_bdc.py lines 2945-2949); for
+--                         rates it stays slice 4 (seeds/reading_action.csv built_early_for_field).
+-- An action counts as built for a field when reading_action.built_in_slice is 3 or built_early_for_field names the
+-- field; otherwise the field is unresolved, action_not_built.
 -- Status:
 --   normalised  a rule applied (reason applied, or moved_to_principal on shares)
 --   absent      no fact (reason no_fact), only nil facts (nil), or for principal_amount_usd a principal that is absent
 --   unresolved  reason: values_differ / units_differ / fact_without_number (as read, no rule settled it), no_rule,
---               rule_conflict, action_not_built (the action is built in a later slice), no_fx_rate,
+--               rule_conflict, feature_missing (a top-ranked rule needs a row feature that is null),
+--               action_not_built (the action is not built for this field yet), no_fx_rate,
 --               principal_unresolved (principal_amount_usd of an unresolved principal)
 with rule as (
     select * from {{ ref('int_field_rule') }}
@@ -29,7 +35,7 @@ with rule as (
 )
 
 , action as (
-    select action, built_in_slice from {{ ref('reading_action') }}
+    select action, built_in_slice, built_early_for_field from {{ ref('reading_action') }}
 )
 
 , two_unit_context as (
@@ -64,9 +70,10 @@ with rule as (
         , ru.rule_id
         , ru.action
         , ru.resolution
-        , a.built_in_slice
+        , coalesce(a.built_in_slice = '3' or a.built_early_for_field = ru.field, false) as is_built
         , case
             when ru.action in ('as_filed', 'reported_in_usd') then rd.value_filed
+            when ru.action = 'fraction_to_percent' then rd.value_filed * 100
             when ru.action = 'bracketed_unsigned' then - rd.value_filed
             when ru.action = 'cost_foreign_is_par' and ru.field = 'cost' then t.usd_value
             when ru.action = 'cost_foreign_is_par' and ru.field = 'principal_amount' then t.foreign_value
@@ -92,15 +99,15 @@ with rule as (
     select
         *
         , case
-            when resolution = 'rule_conflict' then 'unresolved'
-            when resolution = 'rule' and built_in_slice <> '3' then 'unresolved'
+            when resolution in ('rule_conflict', 'feature_missing') then 'unresolved'
+            when resolution = 'rule' and not is_built then 'unresolved'
             when resolution = 'rule' then 'normalised'
             when read_status = 'absent' or is_nil then 'absent'
             else 'unresolved'
           end as status
         , case
-            when resolution = 'rule_conflict' then 'rule_conflict'
-            when resolution = 'rule' and built_in_slice <> '3' then 'action_not_built'
+            when resolution in ('rule_conflict', 'feature_missing') then resolution
+            when resolution = 'rule' and not is_built then 'action_not_built'
             when resolution = 'rule' and action = 'par_tagged_as_units' and field = 'shares' then 'moved_to_principal'
             when resolution = 'rule' then 'applied'
             when read_status = 'absent' then 'no_fact'
@@ -144,7 +151,7 @@ with rule as (
         , u.rule_id
         , u.action
         , u.resolution
-        , a.built_in_slice
+        , coalesce(a.built_in_slice = '3' or a.built_early_for_field = 'principal_amount_usd', false) as is_built
         , p.status as principal_status
         , p.reason as principal_reason
         , case
@@ -171,8 +178,8 @@ with rule as (
         , case
             when principal_status = 'absent' then 'absent'
             when principal_status = 'unresolved' then 'unresolved'
-            when resolution = 'rule_conflict' then 'unresolved'
-            when resolution = 'rule' and built_in_slice <> '3' then 'unresolved'
+            when resolution in ('rule_conflict', 'feature_missing') then 'unresolved'
+            when resolution = 'rule' and not is_built then 'unresolved'
             when resolution = 'rule' and action = 'to_usd' and fx_rate is null then 'unresolved'
             when resolution = 'rule' then 'normalised'
             else 'unresolved'
@@ -180,8 +187,8 @@ with rule as (
         , case
             when principal_status = 'absent' then principal_reason
             when principal_status = 'unresolved' then 'principal_unresolved'
-            when resolution = 'rule_conflict' then 'rule_conflict'
-            when resolution = 'rule' and built_in_slice <> '3' then 'action_not_built'
+            when resolution in ('rule_conflict', 'feature_missing') then resolution
+            when resolution = 'rule' and not is_built then 'action_not_built'
             when resolution = 'rule' and action = 'to_usd' and fx_rate is null then 'no_fx_rate'
             when resolution = 'rule' then 'applied'
             else 'no_rule'

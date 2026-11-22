@@ -12,7 +12,16 @@ seeds:
         data_tests:
           - not_null
   - name: reading_action
-    description: The closed list of actions a reading rule may name, and the slice of the intermediate layer that builds each ('text' is the second spec). A rule naming an action not listed here fails the build.
+    description: >
+      The closed list of actions a reading rule may name, and the slice of the intermediate layer that builds each
+      ('text' is the second spec). A rule naming an action not listed here fails the build. built_early_for_field: a
+      field for which the action is already built before its slice (fraction_to_percent is built in slice 3 for
+      pct_of_net_assets only, controller ruling slice 3 Task 3 fix round 1; for rates it stays slice 4). An action is
+      built for a field when built_in_slice is 3 or built_early_for_field names that field.
+    config:
+      column_types:
+        built_in_slice: varchar
+        built_early_for_field: varchar
     columns:
       - name: action
         data_tests:
@@ -146,5 +155,5 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['unit_foreign', 'two_unit_cost', 'two_unit_cost_principal_absent', 'shares_as_par',
+                values: ['unit_foreign', 'unit_pure', 'two_unit_cost', 'two_unit_cost_principal_absent', 'shares_as_par',
                          'principal_as_units', 'sign_differs_from_print', 'principal_foreign']

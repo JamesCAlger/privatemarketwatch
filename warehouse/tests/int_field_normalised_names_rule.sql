@@ -1,11 +1,13 @@
 -- Spec section 7: every normalised value names the rule it was read under, a fund rule (stg_reading_rule) or a global
 -- default (seeds/field_rule_default.csv), and that rule's action is in the closed list (seeds/reading_action.csv) and
--- built in slice 3. A row that is not normalised carries no value and no rate.
+-- built for the field (built_in_slice 3, or built_early_for_field names the field). A row that is not normalised
+-- carries no value and no rate.
 select n.accession, n.context_id, n.field, n.rule_id, n.action, 'normalised without a known rule or built action' as problem
 from {{ ref('int_field_normalised') }} n
 left join {{ ref('reading_action') }} a on a.action = n.action
 where n.status = 'normalised'
-  and (n.rule_id is null or a.action is null or a.built_in_slice <> '3'
+  and (n.rule_id is null or a.action is null
+       or not coalesce(a.built_in_slice = '3' or a.built_early_for_field = n.field, false)
        or (n.rule_id not in (select rule_id from {{ ref('stg_reading_rule') }})
            and n.rule_id not in (select rule_id from {{ ref('field_rule_default') }})))
 union all

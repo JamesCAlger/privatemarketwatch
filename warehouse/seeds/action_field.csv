@@ -9,3 +9,4 @@ par_tagged_as_units,shares,shares_as_par,"Same rows: the count moves to the prin
 units_tagged_as_par,shares,principal_as_units,"In a listed filing, an equity row with no share count and a principal fact: the principal is the unit count (pipeline/staging_bdc.py units_from_principal). The principal is kept as filed, as production does."
 bracketed_unsigned,fair_value,sign_differs_from_print,"In a listed filing, a fair value whose printed brackets disagree with its tagged sign takes the printed sign (pipeline/printed_sign.py)."
 bracketed_unsigned,cost,sign_differs_from_print,"Same for cost."
+as_filed,pct_of_net_assets,unit_pure,"A fund rule naming as_filed acts on share of net assets only: a filing whose pure share of net assets is already a percent (printed 4.0, tagged 4.0) keeps the number instead of the default fraction_to_percent. Slice 3 Task 3 fix round 1."

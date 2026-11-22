@@ -1,12 +1,11 @@
 -- Baseline (spec section 7, the sum check): per fund and report date, the published positions' normalised fair value
--- against the filed total investments (stg_fund_financials), on the published basis (cash rows in) and without the cash
--- rows. Both differences are listed, with the basis fact_fund_period would choose (step 1; owner ruling 2026-11-04,
--- check A04: without cash when the total with cash misses, the total without cash ties, and the cash rows equal the
--- filed cash equivalents within 0.5 pct of the filed investments). A fund-quarter does not tie when it ties on neither
--- basis (both differences above var reconcile_tolerance). Slice 3 Task 3 decision: the A04 cash test is not required,
--- because one fund publishes money-market rows that are only part of its filed cash-equivalents line (D13), so it ties
--- without cash but fails the A04 cash test. A published fair value that is not normalised counts as missing (and fails
--- its own test). Fund-quarters with no filed total are listed too (filed null). Ceiling int_field_normalised_sum_not_tied.
+-- against the filed total investments (stg_fund_financials), on the basis step 1 uses (fact_fund_period.sql): the
+-- published basis (cash rows in), or without the cash rows when the A04 evidence holds (owner ruling 2026-11-04): the
+-- total with cash misses, the total without cash ties, and the cash rows equal the filed cash equivalents within 0.5
+-- pct of the filed investments. A fund-quarter does not tie when the difference on that basis (difference_on_basis)
+-- is above var reconcile_tolerance. Both differences are listed. A published fair value that is not normalised counts
+-- as missing (and fails its own test). Fund-quarters with no filed total are listed too (filed null). Controller
+-- ruling, slice 3 Task 3 fix round 1. Ceiling int_field_normalised_sum_not_tied.
 {{ config(severity='error', warn_if='>0', error_if='>' ~ var('baseline_max')['int_field_normalised_sum_not_tied']) }}
 with published as (
     select
@@ -34,6 +33,7 @@ with published as (
 )
 
 , based as (
+    -- the basis rule of fact_fund_period.sql (step 1), applied to this layer's figures
     select
         *
         , coalesce(
@@ -47,18 +47,26 @@ with published as (
     from compared
 )
 
+, on_basis as (
+    select
+        *
+        , case when filed_total_excludes_cash then difference_ex_cash else difference end as difference_on_basis
+    from based
+)
+
 select
     cik
     , report_date
     , filed_total
     , published_fair_value
     , cash_fair_value
+    , cash_equivalents_filed
     , difference
     , difference_ex_cash
     , filed_total_excludes_cash
-    , case when filed_total_excludes_cash then difference_ex_cash else difference end as difference_on_basis
+    , difference_on_basis
     , fair_value_not_normalised
-from based
+from on_basis
 where filed_total is null
-   or (abs(difference) > {{ var('reconcile_tolerance') }} and abs(difference_ex_cash) > {{ var('reconcile_tolerance') }})
+   or abs(difference_on_basis) > {{ var('reconcile_tolerance') }}
    or fair_value_not_normalised > 0

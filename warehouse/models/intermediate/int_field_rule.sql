@@ -8,9 +8,19 @@
 --   fund rules       stg_reading_rule (the wrapper copies), for the slice 3 actions listed in seeds/action_field.csv,
 --                    which says which fields each action governs and on which rows (applies_to).
 -- A rule matches a row when its fund, accession (if it names one), dates (against the report date) and applies_to
--- all hold. The most specific match wins: higher priority first; at equal priority a rule that names the filing is
--- more specific than one that does not. Two matches left at the top are a conflict: no rule is chosen (rule_id null,
--- resolution rule_conflict). A row no rule matches has resolution no_rule.
+-- all hold. The most specific match wins, in two steps:
+--   1. higher priority wins (10 global default, 20 fund rule, 30 a rule naming a filing or a row feature);
+--   2. at the same priority, a rule that names a filing (sel_accession) outranks one that names only a row feature:
+--      a filing is the narrower scope, and production's par_scale gives the listed filing precedence over the row
+--      modes (pipeline/staging_bdc.py). Controller ruling, slice 3 Task 3 fix round 1.
+-- Two rules still equal after both steps (two filing rules, or two feature rules) are a conflict: no rule is chosen
+-- (rule_id null, resolution rule_conflict). tie_break_losers counts the rules a row's winner beat by step 2 alone, and
+-- tie_break_same_effect says whether every one of them would have given the same action and scale.
+-- A row no rule matches has resolution no_rule.
+-- Spec section 5 rule 2, a missing row feature is an error, never "no match": where a rule's other tests let a row
+-- through but a feature it needs is null (the label for the equity-word tests, the read cost for a band, a printed
+-- placement for the sign test), the rule counts as a candidate it cannot decide. If such a candidate is among the
+-- top-ranked, the field gets resolution feature_missing and no rule.
 --
 -- applies_to, the rows each kind of rule can act on (unit kind is read from the unit as filed: iso4217:USD is usd,
 -- another iso4217 code is foreign, shares, pure, anything else other):
@@ -89,6 +99,16 @@ with read as (
     having count(distinct is_bracketed) = 1 and bool_and(is_bracketed <> (value_filed < 0))
 )
 
+, sign_unplaced as (
+    -- fair value or cost of a listed filing that the sign test would read but that has no printed placement: the
+    -- feature (its printed brackets) is missing
+    select r.accession, r.context_id, r.field
+    from read r
+    semi join listed_sign_filing l on l.accession = r.accession and l.cik = r.cik
+    anti join sign_placement p on p.accession = r.accession and p.context_id = r.context_id and p.field = r.field
+    where r.field in ('fair_value', 'cost') and r.unit_kind is not null and r.value_filed <> 0
+)
+
 , whole_filing as (
     select distinct cik, sel_accession as accession
     from {{ ref('stg_reading_rule') }}
@@ -117,11 +137,14 @@ with read as (
         rf.*
         , cf.has_rate or cf.has_spread or cf.has_pik_rate or cf.has_maturity as has_debt_term
         , cf.has_rate or cf.has_spread as is_rated
-        , regexp_matches(lower(coalesce(cf.identifier_label, '')),
+        -- null when the label is null: the feature is missing, not "names no equity word"
+        , regexp_matches(lower(cf.identifier_label),
                          '(^|[^a-z])(units?|shares?|stock|membership|warrants?)([^a-z]|$)') as names_equity
-        , regexp_matches(lower(coalesce(cf.identifier_label, '')),
+        , regexp_matches(lower(cf.identifier_label),
                          '(^|[^a-z])(units?|shares?|stock|membership|warrants?|interests?|preferred|equity)([^a-z]|$)')
           as names_equity_wide
+        , cf.identifier_label is null as label_missing
+        , rf.cost_value is null as cost_missing
         , wf.accession is not null as in_whole_filing
         , rf.no_principal and rf.shares_value > 0 as par_candidate
         , case
@@ -160,12 +183,16 @@ with read as (
         , p.in_whole_filing
         , p.near_scale
         , p.wide_scale
+        , p.label_missing
+        , p.cost_missing
         , p.no_shares and p.principal_positive and not p.has_debt_term as principal_as_units
         , s.context_id is not null as sign_differs
+        , su.context_id is not null as sign_unplaced
     from read r
     join par_feature p on p.accession = r.accession and p.context_id = r.context_id
     left join two_unit_cost t on t.accession = r.accession and t.context_id = r.context_id
     left join sign_differs s on s.accession = r.accession and s.context_id = r.context_id and s.field = r.field
+    left join sign_unplaced su on su.accession = r.accession and su.context_id = r.context_id and su.field = r.field
 )
 
 , fund_rule as (
@@ -220,6 +247,7 @@ with read as (
         , r.parameter
         , r.origin
         , r.priority
+        -- step 2 of the ranking: at the same priority a rule naming a filing outranks one naming only a row feature
         , r.priority + case when r.sel_accession is not null then 1 else 0 end as specificity
         , case when r.applies_to = 'shares_as_par' then
             case r.parameter
@@ -231,6 +259,18 @@ with read as (
                 when 'rows_within_twice_cost' then case when f.has_debt_term and not f.names_equity then f.wide_scale end
             end
           end as value_scale
+        -- the rule's other tests let the row through, but a feature it needs is null (spec section 5 rule 2)
+        , coalesce(case r.applies_to
+            when 'shares_as_par' then f.par_candidate and case r.parameter
+                when 'listed_rows_without_instrument' then f.in_whole_filing and not f.has_debt_term and f.label_missing
+                when 'rows_near_cost' then f.has_debt_term and (f.label_missing or f.cost_missing)
+                when 'rated_rows_near_cost' then f.is_rated and (f.label_missing or f.cost_missing)
+                when 'rows_within_twice_cost' then f.has_debt_term and (f.label_missing or f.cost_missing)
+                else false
+              end
+            when 'sign_differs_from_print' then f.sign_unplaced
+            else false
+          end, false) as is_undecidable
         , r.applies_to
         , f.par_candidate
         , f.unit_kind
@@ -250,18 +290,19 @@ with read as (
 , applicable as (
     select *
     from matched
-    where case applies_to
-        when 'unit_usd' then unit_kind = 'usd'
-        when 'unit_foreign' then unit_kind = 'foreign'
-        when 'unit_shares' then unit_kind = 'shares'
-        when 'unit_pure' then unit_kind = 'pure'
-        when 'two_unit_cost' then is_two_unit_cost
-        when 'two_unit_cost_principal_absent' then is_two_unit_cost and no_principal
-        when 'shares_as_par' then par_candidate and value_scale is not null
-        when 'principal_as_units' then principal_as_units
-        when 'sign_differs_from_print' then sign_differs
-        else false
-      end
+    where is_undecidable
+       or case applies_to
+            when 'unit_usd' then unit_kind = 'usd'
+            when 'unit_foreign' then unit_kind = 'foreign'
+            when 'unit_shares' then unit_kind = 'shares'
+            when 'unit_pure' then unit_kind = 'pure'
+            when 'two_unit_cost' then is_two_unit_cost
+            when 'two_unit_cost_principal_absent' then is_two_unit_cost and no_principal
+            when 'shares_as_par' then par_candidate and value_scale is not null
+            when 'principal_as_units' then principal_as_units
+            when 'sign_differs_from_print' then sign_differs
+            else false
+          end
 )
 
 , ranked as (
@@ -269,27 +310,49 @@ with read as (
         *
         , count(*) over (partition by accession, context_id, field) as candidate_count
         , count(*) over (partition by accession, context_id, field, specificity) as same_rank_count
+        , bool_or(is_undecidable) over (partition by accession, context_id, field, specificity) as rank_undecidable
         , rank() over (partition by accession, context_id, field order by specificity desc) as rank_at
     from applicable
 )
 
 , top as (
-    -- the winning rule, or a conflict when two remain at the top
+    -- the winning rule; a conflict when two remain at the top; feature_missing when a top candidate cannot be decided
     select
         accession
         , context_id
         , field
-        , case when same_rank_count = 1 then rule_id end as rule_id
-        , case when same_rank_count = 1 then action end as action
-        , case when same_rank_count = 1 then parameter end as parameter
-        , case when same_rank_count = 1 then origin end as origin
+        , case
+            when rank_undecidable then 'feature_missing'
+            when same_rank_count = 1 then 'rule'
+            else 'rule_conflict'
+          end as resolution
+        , rule_id
+        , action
+        , parameter
+        , origin
         , priority
-        , case when same_rank_count = 1 then value_scale end as value_scale
+        , specificity
+        , value_scale
         , candidate_count
-        , case when same_rank_count = 1 then 'rule' else 'rule_conflict' end as resolution
     from ranked
     where rank_at = 1
     qualify row_number() over (partition by accession, context_id, field order by rule_id) = 1
+)
+
+, tie_break as (
+    -- rules the winner beat only by step 2 (same priority, it names a filing and they do not)
+    select
+        t.accession
+        , t.context_id
+        , t.field
+        , count(*) as tie_break_losers
+        , bool_and(l.action = t.action and l.value_scale is not distinct from t.value_scale) as tie_break_same_effect
+    from top t
+    join ranked l
+        on l.accession = t.accession and l.context_id = t.context_id and l.field = t.field
+        and l.priority = t.priority and l.specificity < t.specificity
+    where t.resolution = 'rule'
+    group by 1, 2, 3
 )
 
 , five as (
@@ -299,16 +362,19 @@ with read as (
         , r.field
         , r.cik
         , r.report_date
-        , t.rule_id
-        , t.action
-        , t.parameter
-        , t.origin
+        , case when t.resolution = 'rule' then t.rule_id end as rule_id
+        , case when t.resolution = 'rule' then t.action end as action
+        , case when t.resolution = 'rule' then t.parameter end as parameter
+        , case when t.resolution = 'rule' then t.origin end as origin
         , t.priority
         , coalesce(t.candidate_count, 0) as candidate_count
         , coalesce(t.resolution, 'no_rule') as resolution
-        , t.value_scale
+        , case when t.resolution = 'rule' then t.value_scale end as value_scale
+        , coalesce(tb.tie_break_losers, 0) as tie_break_losers
+        , tb.tie_break_same_effect
     from read r
     left join top t on t.accession = r.accession and t.context_id = r.context_id and t.field = r.field
+    left join tie_break tb on tb.accession = r.accession and tb.context_id = r.context_id and tb.field = r.field
 )
 
 , principal_usd_row as (
@@ -390,5 +456,8 @@ select
     , coalesce(t.candidate_count, 0) as candidate_count
     , coalesce(t.resolution, 'no_rule') as resolution
     , cast(null as double) as value_scale
+    -- no rule for principal_amount_usd names a filing today; tests/int_field_rule_tie_break_usd.sql keeps it so
+    , 0 as tie_break_losers
+    , cast(null as boolean) as tie_break_same_effect
 from principal_usd_row u
 left join usd_top t on t.accession = u.accession and t.context_id = u.context_id
