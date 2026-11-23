@@ -2,7 +2,9 @@
 -- are all normalised, the cash leg plus the PIK rate must equal the all-in rate within var rate_legs_tolerance (float
 -- rounding only; slice 4 Task 3). One row per failing position; empty when the check holds.
 -- tests/int_field_normalised_rate_legs.sql fails the build on any row. A model, not only a test, so that a dbt unit
--- test can feed it a hand-made row that must fail.
+-- test can feed it a hand-made row that must fail. The check cannot fail on today's code (the cash leg is computed as
+-- all-in less PIK, so the sum holds by construction): it is a regression guard on the arithmetic, not evidence about
+-- the data.
 {{ config(materialized='view') }}
 with leg as (
     select

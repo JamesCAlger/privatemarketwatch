@@ -213,9 +213,11 @@ defaults are rows of `seeds/field_rule_default.csv`.
 | `fraction_to_percent` | share of net assets only | Times 100. Global default for a pure share of net assets. Built early for this field only (`built_early_for_field`); for rates it is slice 4 |
 | `concept_is_cost` | cost | Read side, like `concept_is_fair_value`: the filer's own cost concept is read where the context has no standard cost fact. Filer rule |
 
-Rate actions as built in slice 4 (2026-11-23). Source in production and per-reading detail:
-`.superpowers/sdd/2026-11-23-slice4-rates-plan/task-3-report.md` section 2 (git-ignored) and the notes in
-`seeds/action_field.csv`. An action whose `action_field.unread_input` is set needs printed text no model
+Rate actions as built in slice 4 (2026-11-23). The production source of each action is named in the notes of
+`seeds/action_field.csv` and by file and function: `pipeline/staging_bdc.py` `_prepare_bdc` (the x100 scaling,
+`pik_is_coupon`), `pipeline/financial_conventions.py` `prepare` (the rate reading and the PIK-only readings),
+`pipeline/bdc_xbrl_html_bridge.py` `apply_ixbrl_field_status_overlay` (printed margin, reference-rate column),
+`pipeline/source_encodings.py` `adopt_rate_only_contexts`, `whole_coupon_pik.py` `apply` / `parse`. An action whose `action_field.unread_input` is set needs printed text no model
 reads yet: every row it would decide is unresolved, reason `text_not_read`, under a ceiling.
 
 | Action | Field | Effect as built |

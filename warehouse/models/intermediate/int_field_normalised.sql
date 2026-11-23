@@ -311,6 +311,10 @@ with rule as (
     --   pik_only_is_coupon  all-in = the PIK rate; cash left empty (pik_only_coupon): production's code on this branch
     --                     sets the cash leg only from a filed rate
     --   pik_only_is_margin  the rate is not known: both unresolved (pik_is_margin)
+    --   Both PIK-only arithmetics cannot be reached in a build while action_field.unread_input is set on them
+    --   (controller ruling of 2026-11-23: every such row is text_not_read in int_field_rule and never gets here). They
+    --   are kept, and unit-tested, so that clearing unread_input (which needs a selector on the loan class and the
+    --   printed rate type, see the seed notes) does not need this code written again.
     -- An input that is unresolved (two values, a unit that is not a ratio, a scale not decided) leaves both unresolved
     -- with its reason. kind: all_in, cash or unresolved (production's interest_rate_kind).
     select

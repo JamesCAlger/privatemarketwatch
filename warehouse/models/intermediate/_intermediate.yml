@@ -450,7 +450,8 @@ models:
       - name: is_commitment_line
         description: >
           A position whose only term fact is a filer concept read through a fund rule concept_is_term_fact, not an
-          ownership percent, with no cost fact.
+          ownership percent, with no cost fact. A heuristic: true on many rows that are not repeated values (2,271 Blue
+          Owl rows); is_repeated_commitment_value is the narrower flag.
         data_tests:
           - not_null
       - name: twin_count
@@ -705,7 +706,9 @@ models:
       to interest_rate_kind). Production's interest_rate_reported is kept on the interest_rate row as
       value_production_reported, not compared. Outcome equal / differs / new_empty / production_empty / both_empty
       under var cmp_rate_tolerance; every other outcome has a cause from the closed list with a detail. Key and cause
-      are tested in tests/cmp_rate_key_and_cause.sql. Agreement shows the two agree, not that either is right.
+      are tested in tests/cmp_rate_key_and_cause.sql. A rate-field rule_conflict (0 rows since the ruling of 2026-11-23)
+      has no known cause and is not_yet_explained, detail rule_conflict. Agreement shows the two agree, not that either
+      is right.
     columns:
       - name: basis
         data_tests:
@@ -2423,7 +2426,7 @@ unit_tests:
       -> NOT (a rate correction does not cover the spread). r4 production names pik_rate corrected, nothing loaded ->
       needs_store_not_loaded production_corrected_no_loaded_store. r5 scale_not_decided here -> owner_review. r6 the
       rate from identifier text -> identifier_text_not_read. r7 a maturity read from the printed row ->
-      printed_maturity_not_read. r10 rule_conflict -> pik_only_reading_needs_printed_text. r11 text_not_read ->
+      printed_maturity_not_read. r10 rule_conflict -> not_yet_explained, detail rule_conflict. r11 text_not_read ->
       printed_total_margin_not_read (a spread read here). PIK-only rows (controller ruling 2026-11-23, text_not_read,
       no spread read here): r12 production read a coupon -> printed_rate_type_and_loan_class_not_read on rate and
       kind; r13 production read a margin -> the same on the spread; r14 production also left it empty -> no cause. r15
@@ -2558,7 +2561,7 @@ unit_tests:
         - {context_id: r10, field: interest_rate, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r10, field: interest_rate_cash, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r10, field: pik_rate, outcome: both_empty, cause: null, cause_detail: null}
-        - {context_id: r10, field: spread, outcome: new_empty, cause: needs_store_not_loaded, cause_detail: pik_only_reading_needs_printed_text}
+        - {context_id: r10, field: spread, outcome: new_empty, cause: not_yet_explained, cause_detail: rule_conflict}
         - {context_id: r10, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r10, field: rate_kind, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r11, field: interest_rate, outcome: both_empty, cause: null, cause_detail: null}

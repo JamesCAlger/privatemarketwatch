@@ -556,8 +556,11 @@ From `docs/owner_review_rate_readings_2026-11-23.md` section 6 and the plan:
 
 1. PIK-only rows carry no rate until printed text is read (1,885 rows). Wait for the text spec, or a
    dated filer-level rule with evidence.
-2. Cash leg where no PIK rate is read: empty (as production's code) or equal to the all-in rate.
-3. PIK-only coupons: cash leg empty or 0 (moot while item 1 stands).
+2. Cash leg where no PIK rate is read: empty (as production's code) or equal to the all-in rate. 40,410 cash-leg rows of 74,495
+   are empty for this reason (`no_pik_read`; 28,768 more have no fact). The PIK-only cash contract is carried by unmerged work:
+   branches `asif-identity-20261113` and `codex-wip-20261114` on GitHub (the 2026-11-13 changelog line "cash = 0 for
+   PIK-only coupons" refers to it).
+3. PIK-only coupons: cash leg empty or 0 (moot while item 1 stands). Same unmerged branches as item 2.
 4. Values filed above 1 in a ratio unit (767): production's size rule, a filer rule per filing, or
    leave unresolved.
 5. The two wrapper procedures: build each as a general mechanism, or leave the rows as a named
@@ -581,13 +584,14 @@ From the ledger (`progress.md`). Each was made by the controller.
 | Ruling | Cost if wrong |
 |---|---|
 | Task 1 (d) may change the cause or detail text of exactly the 2 correction-check principal rows of `cmp_amount` if a separate ceiling needs a separate label | 2 rows relabelled; visible in the snapshot diff; reversible |
-| Task 2: the rate tag is read in `xbrli:pure` only at read time; `utr:Rate` (28k Ares rate facts) gets the same unit kind as pure in Task 3, as data | Ares rates read on the wrong scale |
+| Task 2: the stop condition on the unit was read as covering the prefixed form `xbrli:pure` only (0 rows on the five funds). `utr:Rate` (28k Ares rate facts) was given the pure unit kind in Task 3 as one literal in the `unit_kind` macro (`macros/field_lists.sql`). The ruling asked for this as data; that was not done | Ares rates read on the wrong scale if the literal is wrong; a unit name sits in SQL |
+| Task 5 (controller): the unit-kind mapping stays a literal in the `unit_kind` macro for this slice | A unit name sits in SQL until slice 5; no number at risk. Moving it to a seed is proposed for slice 5, where owner decision 10 settles its content |
 | Task 3: a rate, PIK rate or spread filed above 1 in a ratio unit, with no filer rule for its scale, is unresolved `scale_not_decided`; never rescaled by size | A true rate above 100 pct is left empty (none expected); a percent tagged at or below 1 passes as a fraction, caught only outside 0 to 40 |
 | Task 3: the 628 Blue Owl / HPS PIK-only rows with both readings stay `rule_conflict`, no reading picked (since Task 4 they are `text_not_read`, below) | 628 rows with no rate that production has |
 | Task 3: a fund with one PIK-only rule gets it on every PIK-only row. REVERSED in Task 4 (next row) | was: 841 wrong rates; now none |
 | Task 3: the cash leg follows production's code: empty where no PIK rate is read | Cash empty where it logically equals all-in; derivable later |
 | Task 3: the 540 spread-with-PIK rows get their own reason `text_not_read` (ceiling 540); `feature_missing` stays an error at ceiling 0 | 540 spreads empty that production stores |
-| Task 4: both PIK-only readings need printed inputs not read (`unread_input`); every row they would decide is `text_not_read` | About 950 Ares and Apollo PIK-only rows where the old reading agreed with production now carry no rate (324 published rows that agreed now differ) |
+| Task 4: both PIK-only readings need printed inputs not read (`unread_input`); every row they would decide is `text_not_read` | 324 published rows (Ares 273, Apollo 51) where the old reading agreed with production now carry no rate; 90 more PIK-only rows in the excluded 2026-09-30 quarter were not compared; 841 wrong values were removed |
 | Task 4: `production_corrected_no_loaded_store` stays under `needs_store_not_loaded` (2 published rows) | 2 rows under one cause instead of another |
 
 Implementer decisions in Task 5, also not seen by the owner: the rate expectations are a new test file
@@ -612,6 +616,15 @@ are now 0 (every detail has its own); the loader version is 5 (wrapper hashes ch
 - `cmp_rate_cause_rules` misses two paths; the owner-review file gives ranges, not per-quarter counts,
   for two items; fund names remain in comments of `dbt_project.yml`.
 
+### Left for slice 5 (from the final review of slice 4)
+
+- Split `int_field_normalised` into `int_amount_normalised` and `int_rate_normalised` with a union view, as the first task of slice 5, done only on a 0/0 snapshot diff.
+- `int_field_rule` checks an unread input before a conflict at the same rank, so a tie between a text-needing rule and a decidable one would read `text_not_read`; return `rule_conflict` when the top rules are mixed.
+- A guard test that every key of `cmp_amount_detail_max` / `cmp_rate_detail_max` has a matching detail test.
+- `printed_margin_cash_plus_pik` is marked built in `seeds/reading_action.csv` while the spec says not built.
+- No CI fixture row exercises a rate tag with no rate reading declared.
+- Fund names remain in SQL comments of `int_filing_candidate.sql`, `int_role_structure.sql`, `marts/fact_fund_period.sql`, `tests/baseline_concept_rule_value_and_term.sql`.
+- Move the unit-kind mapping (a literal in the `unit_kind` macro) to a seed.
 ### Next: slice 5, corrections
 
 Slice 5 applies the loaded corrections (`stg_correction`: the two row stores and the wrapper

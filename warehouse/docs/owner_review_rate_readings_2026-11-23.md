@@ -169,7 +169,7 @@ filer rule with evidence from the filing.
 | HPS | spread | 2023-03-31 | pure | 5 | 5.00 to 8.25 |
 
 Totals unresolved `scale_not_decided` (normalised layer): interest rate 679 (and its cash leg 679; includes rows whose
-PIK rate is such a value), PIK rate 20, spread 68.
+PIK rate is such a value), PIK rate 20, spread 68. The table lists 69 spread rows (1 + 63 + 5); one of them is `text_not_read`, which takes precedence over `scale_not_decided`, so 68 are scale rows (checked by query, `scripts/slice4/q_ff_counts.sql`).
 
 Examples, printed text beside the tag:
 

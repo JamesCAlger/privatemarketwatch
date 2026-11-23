@@ -40,9 +40,10 @@
 --   needs_store_not_loaded|printed_reference_rate_column_not_read  src_transforms has interest_rate:from_spread_tag or
 --        basis_spread:fixed_coupon: production read 'no reference rate' in the printed reference-rate column and
 --        moved the spread tag to the rate or withdrew it (apply_ixbrl_field_status_overlay).
---   needs_store_not_loaded|pik_only_reading_needs_printed_text  this layer's reason is rule_conflict: two PIK-only
---        readings tie; production separates them by printed text. 0 rows since the ruling of 2026-11-23 (an unread
---        input is resolved before a conflict); kept for a conflict that does not need text.
+--   not_yet_explained|rule_conflict  this layer's reason is rule_conflict on a rate field. No cause is known for a
+--        conflict: it was labelled a PIK-only text gap while the two PIK-only readings tied, but since the ruling of
+--        2026-11-23 those rows are text_not_read and rate-field conflicts are 0 (guard at ceiling 0), so any such row
+--        is unexplained and fails the not_yet_explained ceiling.
 --   needs_store_not_loaded|printed_rate_type_and_loan_class_not_read  this layer's reason is text_not_read on a
 --        PIK-only row (no spread read here): pik_only_is_coupon and pik_only_is_margin need the printed rate type and
 --        the loan class (action_field.unread_input printed_rate_type_and_loan_class; controller ruling 2026-11-23).
@@ -269,7 +270,7 @@ with both_rows as (
                 then 'needs_store_not_loaded|printed_maturity_not_read'
             when reference_column_move and field in ('interest_rate', 'interest_rate_cash', 'spread', 'rate_kind')
                 then 'needs_store_not_loaded|printed_reference_rate_column_not_read'
-            when new_reason = 'rule_conflict' then 'needs_store_not_loaded|pik_only_reading_needs_printed_text'
+            when new_reason = 'rule_conflict' then 'not_yet_explained|rule_conflict'
             when new_reason = 'text_not_read' and spread_read
                 then 'needs_store_not_loaded|printed_total_margin_not_read'
             when new_reason = 'text_not_read'

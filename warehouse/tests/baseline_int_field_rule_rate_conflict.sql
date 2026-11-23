@@ -1,8 +1,8 @@
--- Baseline (slice 4 Task 3, controller ruling): positions whose rate reading is a rule conflict. Two funds declare both
--- PIK-only readings (pik_only_is_coupon and pik_only_is_margin, same priority, same row feature pik_tag_only);
--- production separates them by printed text (reference rate present: margin; printed Fixed with no reference rate:
--- coupon; loan rows only; pipeline/financial_conventions.py prepare), which waits for the text spec. One row per
--- position (interest_rate and spread both conflict on it), all rows published or not; is_published beside.
+-- Guard (ceiling 0): positions whose rate reading is a rule conflict. Before the controller ruling of 2026-11-23 the
+-- 628 PIK-only rows of the two funds that declare both PIK-only readings (same priority, same row feature
+-- pik_tag_only) were conflicts. Both actions now name unread_input, so those rows are text_not_read and this count is
+-- 0; the test stays to catch any new rate-field conflict. One row per position (interest_rate and spread both
+-- conflict on it), all rows published or not; is_published beside.
 -- Ceiling int_field_rule_rate_conflict.
 {{ config(severity='error', warn_if='>0', error_if='>' ~ var('baseline_max')['int_field_rule_rate_conflict']) }}
 select u.accession, u.context_id, u.cik, u.report_date, s.is_published, list(u.field order by u.field) as fields

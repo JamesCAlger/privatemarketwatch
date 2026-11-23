@@ -60,8 +60,10 @@
 --   pik_tag_only     a PIK rate above zero is read, and no rate tag (as above) and no spread (a value, or unresolved)
 --                    is carried. Production's PIK-only test (pipeline/financial_conventions.py prepare: PIK > 0, no
 --                    reported rate, no spread). Production also requires a loan row and, for a fund with both readings,
---                    the printed reference rate and coupon type (text, not read here): both pik_only rules of such a fund
---                    tie on this feature and the row is rule_conflict (controller ruling, slice 4 Task 3).
+--                    the printed reference rate and coupon type (text, not read here). Both pik_only actions name
+--                    unread_input (controller ruling of 2026-11-23), so every such row is text_not_read, for a fund
+--                    with one reading and for a fund with both. Rate-field conflicts are 0 (the baseline is a guard
+--                    at ceiling 0).
 --   spread_with_pik  a spread and a PIK rate above zero are read. printed_margin_cash_plus_pik decides from the printed
 --                    total margin (pipeline/bdc_xbrl_html_bridge.py), text no model reads yet (action_field.unread_input):
 --                    the rule is never decided here; resolution text_not_read (fix round 1; not feature_missing)
