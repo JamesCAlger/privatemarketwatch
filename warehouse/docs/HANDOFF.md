@@ -584,7 +584,7 @@ Recorded, not yet built unless stated. Item numbers are those of the list above.
 | Item | Owner ruling | Work it creates |
 |---|---|---|
 | 1 | Wait for printed text. No fund-level PIK-only rule now | None until the text spec |
-| 2 | Cash leg = all-in rate where no PIK rate is read | Model change, 40,410 rows gain a cash leg; residual risk: a PIK that exists but is not tagged overstates cash |
+| 2 | Cash leg = all-in rate where no PIK rate is read | BUILT 2026-11-23 (branch `warehouse-rate-rulings`): 40,410 cash legs set (reason `cash_equals_all_in`; Ares 11,775, BCRED 22,440, Apollo 305, HPS 5,890). `cmp_rate`: 30,573 published and 8,863 unpublished rows now `production_empty`, cause `convention` `cash_equals_all_in_owner_ruling` (own ceiling); 71 published rows moved from new_empty to differs under their old cause. Residual risk, measured: 68 of the rows print "PIK" in the rate cell, so their cash leg is probably too high (left as is until the text spec). Detail: addendum in `docs/baseline_rates_2026-11-23.md` |
 | 3 | PIK-only coupon: cash leg 0 | None while item 1 stands |
 | 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | Dated filer rules for the 767 values (657 in the Ares 2023-09-30 filing) |
 | 5 | Leave both procedures as named differences until slice 5 | None now |

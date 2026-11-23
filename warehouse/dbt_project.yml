@@ -302,6 +302,10 @@ vars:
   # 'cause|detail', measured 2026-11-23 (scripts/slice4/q_t4_mechanism_checks.sql). The text_not_read detail is set by
   # elimination in cmp_rate (a spread read on the row -> printed_total_margin_not_read, else
   # printed_rate_type_and_loan_class_not_read); a ceiling each keeps the two apart.
+  # convention|cash_equals_all_in_owner_ruling (owner ruling A, 2026-11-23, measured that day): cash legs this layer
+  # sets equal to the all-in rate where no PIK rate is read and production leaves empty. Published 30,573, unpublished
+  # 8,863 (40,410 such cash legs over all rows; the rest are in the excluded 2026-09-30 quarters or one side only). The
+  # convention cause ceiling in cmp_rate_max stays 0: any other convention detail fails the build.
   cmp_rate_detail_max:
     published:
       interest_rate:
@@ -312,6 +316,7 @@ vars:
         "needs_store_not_loaded|rate_only_context_not_adopted": 6
         "needs_store_not_loaded|whole_coupon_pik_not_read": 3
       interest_rate_cash:
+        "convention|cash_equals_all_in_owner_ruling": 30573
         "needs_store_not_loaded|identifier_text_not_read": 55
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 76
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
@@ -341,6 +346,7 @@ vars:
       interest_rate:
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 8
       interest_rate_cash:
+        "convention|cash_equals_all_in_owner_ruling": 8863
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 8
       spread:
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 23

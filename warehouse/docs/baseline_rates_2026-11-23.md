@@ -331,3 +331,48 @@ loans another way; not reconciled here.
 - The reference rate type and source, the floor, the coupon type (second spec).
 - Rates on rows on one side only (`cmp_row_set` handles those).
 - The 2026-09-30 quarters in `cmp_excluded_quarter`.
+
+## Addendum, 2026-11-23 (later): owner ruling A, cash leg = all-in where no PIK rate is read
+
+Added after the owner's rulings on the slice 4 decisions (`HANDOFF.md`, "Owner rulings", item 2). The
+sections above describe the build before this change and are left as they were.
+
+What changed: under `rate_is_all_in`, a row whose all-in rate is normalised and has no PIK rate read
+now gets `interest_rate_cash` = the all-in rate, status `normalised`, reason `cash_equals_all_in`.
+Before, the cash leg was empty, reason `no_pik_read` (production's code does the same). Rows where a
+PIK rate is read, PIK-only rows, `pik_above_rate` rows and rows whose all-in rate is unresolved did
+not change (an unresolved all-in rate keeps its reason on the cash leg too).
+
+Rows changed (all quarters, `int_field_normalised`): 40,410 cash legs, absent `no_pik_read` ->
+normalised `cash_equals_all_in`. Ares 11,775, BCRED 22,440, Apollo 305, HPS 5,890. No other row or
+field of `int_field_normalised` changed (snapshot of every table, `scripts/rate_rulings/snapshot_tables.py`
+and `scripts/slice4/compare_snapshots.py`; grouped by `scripts/rate_rulings/q_changed_rows.sql`).
+
+Comparison with production (`cmp_rate`), 39,507 rows changed, all on `interest_rate_cash`:
+
+| Before | After | Published | Unpublished |
+|---|---|---:|---:|
+| both_empty | production_empty, `convention` `cash_equals_all_in_owner_ruling` | 30,573 | 8,863 |
+| new_empty, needs_correction | differs, needs_correction (production's cash leg comes from a correction) | 68 | 0 |
+| new_empty, identifier_text_not_read | differs, identifier_text_not_read (production read the PIK rate from the identifier text) | 3 | 0 |
+
+The new cause `convention|cash_equals_all_in_owner_ruling` is the first rule in `cmp_rate`: where
+production's cash leg is empty and this layer's is `cash_equals_all_in`, production would leave it
+empty whatever else differs on the row. It has its own ceiling (`cmp_rate_detail_max`); the
+`convention` cause ceiling stays 0. `not_yet_explained` 0 and `new_wrong` 0 on every field.
+
+Published table, `interest_rate_cash` only (the other five fields did not change):
+
+| | Equal | Differs | New empty | Production empty | Both empty |
+|---|---:|---:|---:|---:|---:|
+| Before | 2,450 | 72 | 234 | 6 | 57,913 |
+| After ruling A | 2,450 | 143 | 163 | 30,579 | 27,340 |
+
+Residual risk, measured: a PIK that exists but is not tagged gives an overstated cash leg. Of the
+40,410 rows, 68 print "PIK" in the rate tag's own cell (Ares 36, BCRED 7, Apollo 3, HPS 22; for
+example "11.00% PIK", "12.74% (incl. 0.50% PIK)"; `scripts/rate_rulings/q_a_cash_rows.sql`). On those
+rows the cash leg is probably too high. They are not changed: reading the print is the text spec's
+job. The other 40,342 rows print no "PIK" in that cell, which is not proof that they pay no PIK.
+
+Build: `PASS=660 WARN=114 ERROR=0 TOTAL=774` (two new detail tests, both warn). Python tests 146.
+CI fixture 3 / 318 / 2 / 33; its rows c-7 and c-24 now expect a cash leg of 8.0 and 7.0.

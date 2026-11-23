@@ -387,7 +387,7 @@ models:
                 values: ['applied', 'moved_to_principal', 'no_fact', 'nil', 'values_differ', 'units_differ',
                          'fact_without_number', 'no_rule', 'rule_conflict', 'feature_missing', 'action_not_built', 'no_fx_rate',
                          'principal_unresolved', 'not_a_date', 'scale_not_decided', 'unit_not_pure', 'legs_do_not_add',
-                         'pik_above_rate', 'cash_leg_without_pik', 'no_pik_read', 'pik_only_coupon', 'pik_is_coupon',
+                         'pik_above_rate', 'cash_leg_without_pik', 'cash_equals_all_in', 'pik_only_coupon', 'pik_is_coupon',
                          'pik_is_margin', 'text_not_read']
       - name: fx_rate
         description: US dollars per unit of the principal's currency, where to_usd applied.
@@ -854,6 +854,7 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: production_corrected_no_loaded_store}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_production_corrected_no_loaded_store}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_rate_only_context_not_adopted}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_whole_coupon_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: convention, detail: cash_equals_all_in_owner_ruling}, name: baseline_cmp_rate_published_interest_rate_cash_convention_cash_equals_all_in_owner_ruling}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_identifier_text_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_pik_rate_nsnl_rate_only_context_not_adopted}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_whole_coupon_pik_not_read}
@@ -872,6 +873,7 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_rate_kind_nsnl_whole_coupon_pik_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_interest_rate_nsnl_printed_reference_rate_column_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate_cash, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_interest_rate_cash_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate_cash, cause: convention, detail: cash_equals_all_in_owner_ruling}, name: baseline_cmp_rate_unpublished_interest_rate_cash_convention_cash_equals_all_in_owner_ruling}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: spread, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_spread_nsnl_printed_reference_rate_column_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: maturity_date, cause: needs_store_not_loaded, detail: printed_maturity_not_read}, name: baseline_cmp_rate_unpublished_maturity_date_nsnl_printed_maturity_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_rate_kind_nsnl_printed_reference_rate_column_not_read}
@@ -2433,7 +2435,10 @@ unit_tests:
       production's whole-coupon transform -> whole_coupon_pik_not_read on the PIK rate, NOT on the spread. r16 the
       spread moved to the rate by the printed reference-rate column -> printed_reference_rate_column_not_read. r17
       production filled the rate from another context -> rate_only_context_not_adopted. r18 values_differ here ->
-      owner_review two_values_filed_production_keeps_first. x1 sits in an excluded quarter and x2 is new only: no rows.
+      owner_review two_values_filed_production_keeps_first. r3's cash leg is now cash_equals_all_in (owner ruling A,
+      2026-11-23), equal to production's 5.38. r19 cash = all-in with no PIK read here, production's cash leg empty ->
+      convention cash_equals_all_in_owner_ruling; r20 a cash leg from a read PIK rate with production's cash empty -> NOT
+      caused (the cause needs reason cash_equals_all_in). x1 sits in an excluded quarter and x2 is new only: no rows.
     model: cmp_rate
     given:
       - input: ref('cmp_row_set')
@@ -2454,6 +2459,8 @@ unit_tests:
           - {basis: published, accession: A, context_id: r16, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: r17, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: r18, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: r19, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: r20, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: Z, context_id: x1, cik: "1", report_date: 2026-09-30, side: both}
           - {basis: published, accession: A, context_id: x2, cik: "1", report_date: 2026-03-31, side: new_only}
       - input: ref('cmp_excluded_quarter')
@@ -2479,6 +2486,8 @@ unit_tests:
           - {accession_number: A, src_context_id: r18, interest_rate: 9.8, interest_rate_kind: all_in}
           - {accession_number: Z, src_context_id: x1, interest_rate: 5}
           - {accession_number: A, src_context_id: x2, interest_rate: 5}
+          - {accession_number: A, src_context_id: r19, interest_rate: 9, interest_rate_kind: all_in}
+          - {accession_number: A, src_context_id: r20, interest_rate: 9, interest_rate_kind: all_in, pik_rate: 2}
       - input: ref('int_field_normalised')
         rows:
           - {accession: A, context_id: r1, field: interest_rate, value: 9.63, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
@@ -2486,7 +2495,7 @@ unit_tests:
           - {accession: A, context_id: r2, field: interest_rate, value: 9.63, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
           - {accession: A, context_id: r2, field: maturity_date, value_date: 2028-01-01, action: as_filed, status: normalised, reason: applied}
           - {accession: A, context_id: r3, field: interest_rate, value: 5.38, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
-          - {accession: A, context_id: r3, field: interest_rate_cash, value: null, action: rate_is_all_in, status: absent, reason: no_pik_read}
+          - {accession: A, context_id: r3, field: interest_rate_cash, value: 5.38, action: rate_is_all_in, status: normalised, reason: cash_equals_all_in}
           - {accession: A, context_id: r3, field: spread, value: 5, action: fraction_to_percent, status: normalised, reason: applied}
           - {accession: A, context_id: r4, field: pik_rate, value: null, status: absent, reason: no_fact}
           - {accession: A, context_id: r5, field: interest_rate, value: null, rate_kind: unresolved, action: rate_is_all_in, status: unresolved, reason: scale_not_decided}
@@ -2506,6 +2515,11 @@ unit_tests:
           - {accession: A, context_id: r16, field: spread, value: 10, action: fraction_to_percent, status: normalised, reason: applied}
           - {accession: A, context_id: r17, field: interest_rate, value: null, rate_kind: unresolved, status: absent, reason: no_fact}
           - {accession: A, context_id: r18, field: interest_rate, value: null, rate_kind: unresolved, action: rate_is_all_in, status: unresolved, reason: values_differ}
+          - {accession: A, context_id: r19, field: interest_rate, value: 9, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r19, field: interest_rate_cash, value: 9, action: rate_is_all_in, status: normalised, reason: cash_equals_all_in}
+          - {accession: A, context_id: r20, field: interest_rate, value: 9, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r20, field: interest_rate_cash, value: 7, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r20, field: pik_rate, value: 2, action: fraction_to_percent, status: normalised, reason: applied}
           - {accession: Z, context_id: x1, field: interest_rate, value: 6, rate_kind: all_in, status: normalised, reason: applied}
       - input: ref('stg_correction')
         rows:
@@ -2529,7 +2543,7 @@ unit_tests:
         - {context_id: r2, field: maturity_date, outcome: differs, cause: not_yet_explained, cause_detail: none}
         - {context_id: r2, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
         - {context_id: r3, field: interest_rate, outcome: differs, cause: needs_correction, cause_detail: correction_loaded_applied}
-        - {context_id: r3, field: interest_rate_cash, outcome: new_empty, cause: needs_correction, cause_detail: correction_loaded_applied}
+        - {context_id: r3, field: interest_rate_cash, outcome: equal, cause: null, cause_detail: null}
         - {context_id: r3, field: pik_rate, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r3, field: spread, outcome: differs, cause: not_yet_explained, cause_detail: none}
         - {context_id: r3, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
@@ -2612,6 +2626,18 @@ unit_tests:
         - {context_id: r18, field: spread, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r18, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r18, field: rate_kind, outcome: differs, cause: owner_review, cause_detail: two_values_filed_production_keeps_first}
+        - {context_id: r19, field: interest_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r19, field: interest_rate_cash, outcome: production_empty, cause: convention, cause_detail: cash_equals_all_in_owner_ruling}
+        - {context_id: r19, field: pik_rate, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r19, field: spread, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r19, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r19, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r20, field: interest_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r20, field: interest_rate_cash, outcome: production_empty, cause: not_yet_explained, cause_detail: none}
+        - {context_id: r20, field: pik_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r20, field: spread, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r20, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r20, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
 
   - name: cmp_amount_cause_rules
     description: >
@@ -3205,7 +3231,7 @@ unit_tests:
   - name: int_field_normalised_rate_legs
     description: >
       Slice 4 Task 3. The interest_rate reading and its cash leg (binary fractions, so the percents are exact).
-      rate_is_all_in: n1 all-in 12.5, PIK 6.25, cash 6.25; n2 no PIK: cash left empty (no_pik_read, as production);
+      rate_is_all_in: n1 all-in 12.5, PIK 6.25, cash 6.25; n2 no PIK: cash = all-in (cash_equals_all_in, owner ruling A 2026-11-23; production leaves it empty);
       n3 PIK above the rate: both unresolved (pik_above_rate). rate_is_cash_leg: n4 cash 6.25 plus PIK 3.125 = 9.375;
       n5 no PIK: the all-in rate is not set (cash_leg_without_pik), kind cash. Both tags: n6 add up with the PIK rate
       (all-in 12.5, cash 6.25); n7 do not (legs_do_not_add). n8 a cash-pay tag only under rate_is_all_in is the cash
@@ -3276,7 +3302,7 @@ unit_tests:
         - {context_id: n1, field: interest_rate, value: 12.5, status: normalised, reason: applied, rate_kind: all_in}
         - {context_id: n1, field: interest_rate_cash, value: 6.25, status: normalised, reason: applied, rate_kind: null}
         - {context_id: n2, field: interest_rate, value: 12.5, status: normalised, reason: applied, rate_kind: all_in}
-        - {context_id: n2, field: interest_rate_cash, value: null, status: absent, reason: no_pik_read, rate_kind: null}
+        - {context_id: n2, field: interest_rate_cash, value: 12.5, status: normalised, reason: cash_equals_all_in, rate_kind: null}
         - {context_id: n3, field: interest_rate, value: null, status: unresolved, reason: pik_above_rate, rate_kind: unresolved}
         - {context_id: n3, field: interest_rate_cash, value: null, status: unresolved, reason: pik_above_rate, rate_kind: null}
         - {context_id: n4, field: interest_rate, value: 9.375, status: normalised, reason: applied, rate_kind: cash}

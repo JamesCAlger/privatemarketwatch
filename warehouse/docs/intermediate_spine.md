@@ -51,6 +51,7 @@ Added 2026-11-23, after slice 3:
 |---|---|
 | D16 | BCRED's wrapper declares that its filed total investments line leaves the schedule's cash rows out (fund rule `filed_total_excludes_cash`, all quarters). The sum check and `fact_fund_period` compare a declaring fund without its cash rows. Basis: the numbers of all 16 quarters; the printed schedules were not read. |
 | D17 | A principal that is a unit count (the 166 `owner_review` principals of slice 3: 107 on production's equity and fund classes, 59 moved from a share count by `par_tagged_as_units` where production kept shares) is to be empty, as in production. Not built: the test that separates these rows in production is its text class, which this layer does not read until the text spec. Measured 2026-11-23: no label or term-fact feature separates them (every one of the 166 has a term fact; the narrow equity-word test finds 57 of them and also 24 equal rows and the 14 BCRED structured-credit rows). They stay `owner_review` in `cmp_amount` until the text spec supplies the class; then the rule is general ("no principal on an equity or fund class"), not a list of rows. |
+| D18 | Owner ruling A, 2026-11-23 (slice 4 owner item 2): under `rate_is_all_in`, where no PIK rate is read, the cash leg equals the all-in rate (reason `cash_equals_all_in`). Production leaves it empty. Only where the all-in rate itself is normalised. Residual risk: a PIK that exists but is not tagged gives an overstated cash leg. |
 
 Earlier decisions that still apply: BDCs only, five funds first, per-fund build as the unit, Parquet
 and DuckDB, old pipeline keeps running (2026-11-18).
@@ -223,7 +224,7 @@ reads yet: every row it would decide is unresolved, reason `text_not_read`, unde
 | Action | Field | Effect as built |
 |---|---|---|
 | `fraction_to_percent` | PIK rate, spread (global default, ratio unit: `pure` or `utr:Rate`) | Times 100. A value filed above 1 is not rescaled by its size: unresolved `scale_not_decided` (controller ruling) |
-| `rate_is_all_in` | all-in rate, cash leg, kind | All-in = rate tag times 100, kind `all_in`; cash = all-in less PIK where a PIK rate is read, else empty (as production); PIK above the rate plus 0.01: both unresolved `pik_above_rate`. Filer rule |
+| `rate_is_all_in` | all-in rate, cash leg, kind | All-in = rate tag times 100, kind `all_in`; cash = all-in less PIK where a PIK rate is read, else cash = all-in (`cash_equals_all_in`, D18; production leaves it empty); PIK above the rate plus 0.01: both unresolved `pik_above_rate`. Filer rule |
 | `rate_is_cash_leg` | all-in rate, cash leg, kind | Cash = rate tag times 100, kind `cash`; all-in = cash plus PIK where a PIK rate is read, else unresolved `cash_leg_without_pik`. Filer rule; no fund of the five declares it |
 | `pik_only_is_coupon` | all-in rate, spread (row with only a PIK tag) | Built (all-in = PIK) but switched off: `unread_input` printed rate type and loan class (controller ruling 2026-11-23, after it gave 841 wrong rates). Rows are `text_not_read`; the PIK rate is still read. Filer rule |
 | `pik_only_is_margin` | all-in rate, spread (row with only a PIK tag) | Built (spread = PIK, rate unresolved) but switched off the same way. Filer rule |

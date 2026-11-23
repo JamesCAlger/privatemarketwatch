@@ -5,8 +5,10 @@
 -- and maturity_date (in value_date). value_filed stays beside the value. The rate part is at the end of the file
 -- (CTEs rate_read to scaled); where each rate action's meaning was read is in the slice 4 Task 3 report.
 -- Rate statuses add these reasons: scale_not_decided (a ratio-unit value above 1), unit_not_pure, legs_do_not_add,
--- pik_above_rate, cash_leg_without_pik, no_pik_read and pik_only_coupon (cash leg not set; status absent),
+-- pik_above_rate, cash_leg_without_pik, pik_only_coupon (cash leg not set; status absent),
 -- pik_is_coupon (spread not set under the coupon reading; status absent), pik_is_margin, not_a_date (as read).
+-- Status normalised with reason cash_equals_all_in: the cash leg under rate_is_all_in where no PIK rate is read (owner
+-- ruling A, 2026-11-23; it was absent, reason no_pik_read, as production's code).
 --
 -- What each action does (where its meaning was read is in the slice 3 Task 3 report):
 --   as_filed              value = value_filed. For principal_amount_usd: value = the principal, already in dollars.
@@ -298,9 +300,11 @@ with rule as (
 , interest as (
     -- the interest_rate reading: the all-in rate (ir_), the cash leg (cash_) and the kind, from the rule of
     -- interest_rate. Legs as production (pipeline/financial_conventions.py prepare, tables conventions and calculated):
-    --   rate_is_all_in    all-in = interest-rate tag; cash = all-in less PIK where a PIK rate is read, else empty
-    --                     (no_pik_read); a PIK rate above the tag plus var pik_above_rate_margin (0.01, production's
-    --                     margin) leaves both unresolved (pik_above_rate)
+    --   rate_is_all_in    all-in = interest-rate tag; cash = all-in less PIK where a PIK rate is read, else cash =
+    --                     all-in (reason cash_equals_all_in; owner ruling A, 2026-11-23: PIK absent counts as zero.
+    --                     Production leaves this cash leg empty. Residual risk: a PIK that exists but is not tagged
+    --                     gives an overstated cash leg); a PIK rate above the tag plus var pik_above_rate_margin (0.01,
+    --                     production's margin) leaves both unresolved (pik_above_rate)
     --   rate_is_cash_leg  cash = interest-rate tag; all-in = cash plus PIK where a PIK rate is read, else empty
     --                     (cash_leg_without_pik)
     --   a cash-pay tag    is the cash leg under either reading (production: the concept names its own kind)
@@ -379,7 +383,9 @@ with rule as (
             when 'coupon' then pk_pct
           end as ir_value
         , case outcome
-            when 'all_in' then case when pk_state = 'value' then it_pct - pk_pct end
+            -- owner ruling A, 2026-11-23: no PIK rate read (pk_state absent; an unresolved PIK rate never reaches
+            -- outcome all_in) means the cash leg is the all-in rate
+            when 'all_in' then case when pk_state = 'value' then it_pct - pk_pct else it_pct end
             when 'all_in_both' then ct_pct
             when 'cash' then coalesce(ct_pct, it_pct)
           end as cash_value
@@ -405,15 +411,14 @@ with rule as (
             else outcome
           end as ir_reason
         , case
-            when outcome in ('all_in_both', 'cash') then 'normalised'
-            when outcome = 'all_in' and pk_state = 'value' then 'normalised'
-            when outcome in ('all_in', 'coupon', 'absent') then 'absent'
+            when outcome in ('all_in_both', 'cash', 'all_in') then 'normalised'
+            when outcome in ('coupon', 'absent') then 'absent'
             else 'unresolved'
           end as cash_status
         , case
             when outcome in ('all_in_both', 'cash') then 'applied'
             when outcome = 'all_in' and pk_state = 'value' then 'applied'
-            when outcome = 'all_in' then 'no_pik_read'
+            when outcome = 'all_in' then 'cash_equals_all_in'
             when outcome = 'coupon' then 'pik_only_coupon'
             when outcome = 'input_unresolved' then coalesce(input_why, pk_why)
             when outcome = 'absent' then coalesce(ct_why, 'no_fact')

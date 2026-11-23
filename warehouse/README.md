@@ -211,7 +211,9 @@ Where all three rates are set, a test checks that cash plus PIK equals all-in.
 **How a tag becomes a rate.** Filers tag rates as fractions (0.095 for 9.5%). The default rule turns a
 fraction into a percent (`fraction_to_percent`, times 100). Which leg the filer's rate tag holds is a
 fund rule in its wrapper copy: `rate_is_all_in` (the tag is the all-in rate; cash = all-in less PIK) or
-`rate_is_cash_leg` (the tag is the cash leg). A rule is a row of data, not code: the global defaults are
+`rate_is_cash_leg` (the tag is the cash leg). Under `rate_is_all_in`, a row with no PIK rate read gets
+cash = all-in (owner ruling, 2026-11-23; reason `cash_equals_all_in`). Production leaves that cash leg
+empty. The risk: if a loan pays some PIK but the filer did not tag it, the cash leg is too high. A rule is a row of data, not code: the global defaults are
 rows of `seeds/field_rule_default.csv`, and `seeds/action_field.csv` says which fields and rows each
 fund-rule action acts on.
 

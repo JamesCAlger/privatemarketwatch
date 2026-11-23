@@ -11,8 +11,9 @@
 -- reading (pik_only_tag_reading coupon -> pik_only_is_coupon). What each row is there for:
 --   c-3   rate tag 9.00 and PIK tag 2.00: all-in 9.0, cash leg 7.0, PIK 2.0. The legs check
 --         (tests/int_field_normalised_rate_legs.sql) runs on this row.
---   c-7   rate 8.0 and spread 5.0 (default fraction_to_percent); no PIK, so the cash leg is empty (no_pik_read).
---   c-24  rate 7.0, cash leg empty (no_pik_read).
+--   c-7   rate 8.0 and spread 5.0 (default fraction_to_percent); no PIK read, so the cash leg equals the all-in rate
+--         (cash_equals_all_in, owner ruling A 2026-11-23; it was empty, no_pik_read, before).
+--   c-24  rate 7.0, cash leg 7.0 (cash_equals_all_in, owner ruling A).
 --   c-17  only a PIK tag, 12.50: pik_only_is_coupon needs printed text not read yet (action_field.unread_input), so the
 --         all-in rate, the cash leg and the spread are unresolved, text_not_read, kind unresolved; the PIK rate is still
 --         read (12.5). A missing rate here is not "no rate": the printed schedule shows 12.50 PIK.
@@ -29,10 +30,10 @@ with expected as (
         , ('c-3', 'interest_rate_cash', 'normalised', 'applied', 7.0, null, null, 'rate_is_all_in', 'fund:rate_is_all_in')
         , ('c-3', 'pik_rate', 'normalised', 'applied', 2.0, null, null, 'fraction_to_percent', 'gd_pik_rate_pure')
         , ('c-7', 'interest_rate', 'normalised', 'applied', 8.0, null, 'all_in', 'rate_is_all_in', 'fund:rate_is_all_in')
-        , ('c-7', 'interest_rate_cash', 'absent', 'no_pik_read', null, null, null, 'rate_is_all_in', 'fund:rate_is_all_in')
+        , ('c-7', 'interest_rate_cash', 'normalised', 'cash_equals_all_in', 8.0, null, null, 'rate_is_all_in', 'fund:rate_is_all_in')
         , ('c-7', 'spread', 'normalised', 'applied', 5.0, null, null, 'fraction_to_percent', 'gd_spread_pure')
         , ('c-24', 'interest_rate', 'normalised', 'applied', 7.0, null, 'all_in', 'rate_is_all_in', 'fund:rate_is_all_in')
-        , ('c-24', 'interest_rate_cash', 'absent', 'no_pik_read', null, null, null, 'rate_is_all_in', 'fund:rate_is_all_in')
+        , ('c-24', 'interest_rate_cash', 'normalised', 'cash_equals_all_in', 7.0, null, null, 'rate_is_all_in', 'fund:rate_is_all_in')
         , ('c-17', 'interest_rate', 'unresolved', 'text_not_read', null, null, 'unresolved', null, null)
         , ('c-17', 'interest_rate_cash', 'unresolved', 'text_not_read', null, null, null, null, null)
         , ('c-17', 'spread', 'unresolved', 'text_not_read', null, null, null, null, null)
