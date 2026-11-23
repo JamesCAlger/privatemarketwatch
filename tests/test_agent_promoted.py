@@ -14,6 +14,8 @@ import pytest
 
 from pipeline import agent_promoted as ap
 
+pytestmark = pytest.mark.usefixtures("isolated_companyfacts")
+
 
 # --------------------------------------------------------------------------- helpers
 
@@ -380,9 +382,22 @@ def test_fv_conservation_anchor_priority_and_bases():
     ]
 
 
+def _isolated_fund_financials(monkeypatch, tmp_path):
+    """Point the engine at a made-up fund_financials.csv (no row for any fund these tests use), so the
+    filed-cash anchor never reads the real data/output file: it is absent on a cacheless checkout and,
+    where present, carries real filed cash."""
+    import scripts.shadow_conservation_engine as sce
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text(
+        "cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+        "0000000999,2001-01-01,companyfacts,1,1\n", encoding="utf-8")
+    monkeypatch.setattr(sce, "FUND_FINANCIALS_FILE", ff)
+
+
 def test_engine_prefers_verified_override(monkeypatch, tmp_path):
     import scripts.shadow_conservation_engine as sce
     from pipeline import config as cfg
+    _isolated_fund_financials(monkeypatch, tmp_path)
 
     anchor_dir = tmp_path / "agent_anchor"
     _write_json(anchor_dir / "1715933" / "2025-06-30.json",
@@ -427,12 +442,13 @@ def test_engine_prefers_verified_override(monkeypatch, tmp_path):
     assert rows["0000000456"][1:] == (500.0, "schedule_total", "reconciles", "investments_ex_cash")
 
 
-def test_engine_conservation_sum_is_published_basis(monkeypatch):
+def test_engine_conservation_sum_is_published_basis(monkeypatch, tmp_path):
     """Spec 2026-09-07 s.1: the engine sums every row (CASH, is_subsidiary=1, NULL dims).
     Parent 600+400, subsidiary layer 400, cash 20 -> 1420 vs a 1000 schedule total = overshoot.
     The 5000 underlying_schedule (JV look-through) row is excluded (owner ruling 2026-09-30).
     That overshoot is the gate DOING ITS JOB (Bain Q1-26); Bain Q4-25 reconciles the same way."""
     import scripts.shadow_conservation_engine as sce
+    _isolated_fund_financials(monkeypatch, tmp_path)
 
     con = duckdb.connect()
     con.execute("CREATE TABLE wrapped(cik VARCHAR)")

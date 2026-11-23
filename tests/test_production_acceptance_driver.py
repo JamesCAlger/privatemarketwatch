@@ -27,6 +27,7 @@ def test_completed_collector_must_name_the_current_register(tmp_path, current):
             verify_registered_experiment(directory, register)
 
 
+@pytest.mark.usefixtures("isolated_companyfacts")
 def test_primary_driver_runs_existing_engine_in_isolated_files(tmp_path):
     frozen=tmp_path/"frozen"
     data=frozen/"data/output";data.mkdir(parents=True)

@@ -183,3 +183,44 @@ def _isolate_promoted_agent_stores(request, monkeypatch, tmp_path):
     monkeypatch.setattr(_config, "AGENT_ANCHOR_OVERRIDES_DIR",
                         tmp_path / "_promoted_anchor_overrides", raising=True)
     yield
+
+
+@pytest.fixture
+def isolated_companyfacts(monkeypatch, tmp_path):
+    """Replace the real companyfacts pin and snapshot store with a made-up one.
+
+    Why: check_gav_reconciliation calls source_encodings.cash_rows_filed_addends(), which
+    loads the REAL wrapper encodings. Every fund whose wrapper declares
+    cash_rows_include_concepts (0001646614, 0001715933) is then read through the real pin file
+    (tracked in git) to a snapshot under data/raw/ (not tracked), so a test built on made-up
+    holdings fails on a checkout without the cache and, with the cache, would read real
+    filed numbers. This fixture points PM_COMPANYFACTS_PIN at a tmp pin file and the snapshot
+    root at a tmp dir. Each declared fund gets a tiny snapshot: every declared concept filed
+    as 1.0 USD at the instant 2001-01-01, a date no test uses, so the addend path really
+    runs and contributes nothing to any made-up fund. The result is identical with or
+    without the local cache. Opt in with pytest.mark.usefixtures("isolated_companyfacts").
+    """
+    import json
+
+    from pipeline import companyfacts_store as store
+    from pipeline import config as _config
+    from pipeline.source_encodings import load_encodings
+
+    snaps = tmp_path / "_cf_snapshots"
+    pins = {}
+    for cik, encoding in sorted(load_encodings().items()):
+        concepts = encoding.get("cash_rows_include_concepts") or []
+        if not concepts:
+            continue
+        rel = "%s/20010101T000000Z_fixture0000.json" % cik
+        facts = {concept: {"units": {"USD": [{"end": "2001-01-01", "val": 1.0, "form": "10-Q",
+                                              "fy": 2001, "fp": "Q1"}]}} for concept in concepts}
+        target = snaps / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps({"cik": int(cik), "facts": {"us-gaap": facts}}), encoding="utf-8")
+        pins[cik] = rel
+    pin_file = tmp_path / "_cf_pins.json"
+    pin_file.write_text(json.dumps({"pins": pins}), encoding="utf-8")
+    monkeypatch.setattr(_config, "COMPANYFACTS_SNAPSHOT_DIR", snaps)
+    monkeypatch.setenv(store.PIN_ENV, str(pin_file))
+    return pin_file
