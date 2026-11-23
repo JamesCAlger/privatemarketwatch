@@ -310,10 +310,14 @@ def test_prompt_paths_are_absolute_and_resolvable(tmp_path):
     for pid in wl["packet_id"]:
         prompt = (batch_dir / "prompts" / f"{pid}.md").read_text("utf-8")
 
-        # No path is relative to the batch dir any more.
+        # No path is relative to the batch dir any more. The absolute paths themselves end in
+        # 'packets/<pid>.json' on POSIX (forward slashes), so take the batch dir out first.
+        bare = prompt
+        for root in {str(batch_dir), batch_dir.as_posix(), str(batch_dir.resolve()), batch_dir.resolve().as_posix()}:
+            bare = bare.replace(root, "")
         for rel in (f"packets/{pid}.json", f"verdicts/{pid}.json", f"filings/{pid}",
                     "python scripts/review_agent/evidence_cli.py"):
-            assert rel not in prompt, f"{pid}: relative path {rel!r} left in prompt"
+            assert rel not in bare, f"{pid}: relative path {rel!r} left in prompt"
 
         # The packet the worker is told to read exists at the absolute path given.
         packet_path = re.search(r'## Your packet\n"([^"\n]+)"\n', prompt).group(1)

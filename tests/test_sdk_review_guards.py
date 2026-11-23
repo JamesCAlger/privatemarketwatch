@@ -42,7 +42,12 @@ def test_read_repo_file_allowed():
     assert call("Glob") is None
 
 
-@pytest.mark.parametrize("target", [str(Path.home() / ".claude" / "settings.json"), "C:/Windows/win.ini", ".env"])
+@pytest.mark.parametrize("target", [
+    str(Path.home() / ".claude" / "settings.json"),
+    # A drive-letter path is absolute only on Windows; elsewhere it is a relative path inside the repo.
+    pytest.param("C:/Windows/win.ini", marks=pytest.mark.skipif(sys.platform != "win32", reason="drive-letter path is relative off Windows")),
+    ".env",
+])
 def test_read_outside_repo_or_secret_refused(target):
     assert call("Read", file_path=target) is not None
 
