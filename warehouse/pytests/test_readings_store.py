@@ -76,13 +76,46 @@ def test_manifest_records_the_hash_of_each_wrapper_copy_read(tmp_path):
     # edited after the load fails the build until the readings are loaded again.
     wrappers, stores = _inputs(tmp_path)
     manifest = store.write(tmp_path / "out", *cli.load(["0000000001"], wrappers, stores))
-    expected = store.file_sha256(wrappers / "0000000001.json")
+    expected = store.text_sha256(wrappers / "0000000001.json")
     assert manifest["wrapper_copy_sha256"] == {"0000000001": expected}
     on_disk = json.loads((tmp_path / "out" / "_manifest.json").read_text(encoding="utf-8"))
     assert on_disk["wrapper_copy_sha256"] == {"0000000001": expected}
+    assert _sql_text_sha256(wrappers / "0000000001.json") == expected
+
+
+def _sql_text_sha256(path):
+    # the expression stg_wrapper_drift uses
     con = duckdb.connect()
-    got = con.execute(f"select sha256(content) from read_blob('{(wrappers / '0000000001.json').as_posix()}')").fetchone()
-    assert got == (expected,)
+    return con.execute("select sha256(replace(content, chr(13) || chr(10), chr(10))) "
+                       f"from read_text('{path.as_posix()}')").fetchone()[0]
+
+
+def test_text_hash_ignores_crlf_and_sees_a_real_change(tmp_path):
+    # Slice 4 Task 5, repair a: a fresh Windows checkout (core.autocrlf) writes CRLF; the drift check must not call
+    # that a change. The same text with LF and with CRLF gives one hash, in Python and in the SQL of stg_wrapper_drift.
+    lf = tmp_path / "lf.json"
+    crlf = tmp_path / "crlf.json"
+    edited = tmp_path / "edited.json"
+    text = '{\n "a": 1,\n "b": [2, 3]\n}\n'
+    lf.write_bytes(text.encode("utf-8"))
+    crlf.write_bytes(text.replace("\n", "\r\n").encode("utf-8"))
+    edited.write_bytes(text.replace('"a": 1', '"a": 2').replace("\n", "\r\n").encode("utf-8"))
+    assert store.file_sha256(lf) != store.file_sha256(crlf)
+    assert store.text_sha256(lf) == store.text_sha256(crlf) == store.text_sha256(lf.read_bytes())
+    assert store.text_sha256(edited) != store.text_sha256(lf)
+    assert _sql_text_sha256(lf) == _sql_text_sha256(crlf) == store.text_sha256(lf)
+    assert _sql_text_sha256(edited) == store.text_sha256(edited)
+
+
+def test_crlf_checkout_of_an_unchanged_production_wrapper_is_not_drift(tmp_path):
+    # the copy record holds the hash taken from an LF file; the production file on disk is the same text with CRLF
+    wrappers, stores, production, prod_file = _copies(tmp_path, '{"a": 1}\n')
+    prod_file.write_bytes(b'{"a": 1}\r\n')
+    tables, _ = cli.load(["0000000001"], wrappers, stores, production)
+    assert _one_row(tables["wrapper_drift"])["changed"] is False
+    prod_file.write_bytes(b'{"a": 2}\r\n')
+    tables, _ = cli.load(["0000000001"], wrappers, stores, production)
+    assert _one_row(tables["wrapper_drift"])["changed"] is True
 
 
 def test_two_runs_give_the_same_manifest_and_replace_the_output(tmp_path):
@@ -121,7 +154,7 @@ def _copies(tmp_path, production_text):
     production.mkdir()
     prod_file = production / "0000000001.json"
     prod_file.write_text(production_text, encoding="utf-8")
-    copied = store.file_sha256(prod_file)
+    copied = store.text_sha256(prod_file)
     (wrappers / "_source.json").write_text(json.dumps(
         {"copied_on": "2026-11-19", "funds": {"0000000001": {"sha256": copied, "git_blob": "x"}}}), encoding="utf-8")
     return wrappers, stores, production, prod_file
@@ -142,7 +175,7 @@ def test_edited_production_wrapper_is_drift_in_table_and_manifest(tmp_path):
     prod_file.write_text('{"a": 2}\n', encoding="utf-8")
     tables, inputs = cli.load(["0000000001"], wrappers, stores, production)
     row = _one_row(tables["wrapper_drift"])
-    assert row["changed"] is True and row["current_sha256"] == store.file_sha256(prod_file)
+    assert row["changed"] is True and row["current_sha256"] == store.text_sha256(prod_file)
     manifest = store.write(tmp_path / "out", tables, inputs)
     assert manifest["production_wrappers_changed"] == ["0000000001"]
     con = duckdb.connect()

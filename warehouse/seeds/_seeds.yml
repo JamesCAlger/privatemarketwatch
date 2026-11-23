@@ -179,4 +179,11 @@ seeds:
           total margin). A rule whose action names one cannot be decided on the rows it applies to: int_field_rule gives
           those rows resolution text_not_read, and int_field_normalised leaves the field unresolved with reason
           text_not_read, under a measured ceiling. Slice 4 Task 3 fix round 1 (controller ruling). A missing row feature
-          stays feature_missing, an error class with ceiling 0.
+          stays feature_missing, an error class with ceiling 0. The values in use are listed (slice 4 Task 5): a new
+          name, or a misspelt one, fails the build, so the list of inputs not yet read stays closed and reviewed.
+          (int_field_rule treats any non-empty value as "needs an unread input"; only an empty cell switches the
+          mechanism off for that action.)
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['printed_total_margin', 'printed_rate_type_and_loan_class']

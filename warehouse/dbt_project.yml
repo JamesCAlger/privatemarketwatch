@@ -279,24 +279,75 @@ vars:
   # 2026-11-23 reversed the Task 3 PIK-only readings; those rows and the 838 non-loan coupon rows no longer get a rate).
   # owner_review: scale_decided_by_size_in_production (interest_rate 668, cash 2, pik 16, spread 68, kind 668;
   # unpublished 1 each on rate, cash, pik, kind) and two_values_filed_production_keeps_first (1 on rate, cash, kind).
-  # needs_store_not_loaded: the details in the model header (printed text, identifier text, the two unbuilt procedures);
-  # PIK-only rows: printed_rate_type_and_loan_class_not_read (rate and kind 405, spread 287). maturity_date 43,997
-  # published are dates production read from the printed row.
+  # needs_store_not_loaded: since slice 4 Task 5 (repair d) every detail of this cause has its own ceiling in
+  # cmp_rate_detail_max below, so the cause ceiling here counts only rows with any other detail: 0. Totals before the
+  # split (published): rate 600, cash 177, pik 55, spread 1,202, maturity 43,997, kind 600; unpublished: rate 8, cash 8,
+  # spread 23, maturity 8,082, kind 8. A new detail of this cause fails the build until it gets its own ceiling.
   cmp_rate_max:
     published:
-      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 52, needs_store_not_loaded: 600, production_stale: 0, owner_review: 669, not_yet_explained: 0}
-      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 132, needs_store_not_loaded: 177, production_stale: 0, owner_review: 3, not_yet_explained: 0}
-      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 158, needs_store_not_loaded: 55, production_stale: 0, owner_review: 16, not_yet_explained: 0}
-      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 123, needs_store_not_loaded: 1202, production_stale: 0, owner_review: 68, not_yet_explained: 0}
-      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 9, needs_store_not_loaded: 43997, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 46, needs_store_not_loaded: 600, production_stale: 0, owner_review: 669, not_yet_explained: 0}
+      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 52, needs_store_not_loaded: 0, production_stale: 0, owner_review: 669, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 132, needs_store_not_loaded: 0, production_stale: 0, owner_review: 3, not_yet_explained: 0}
+      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 158, needs_store_not_loaded: 0, production_stale: 0, owner_review: 16, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 123, needs_store_not_loaded: 0, production_stale: 0, owner_review: 68, not_yet_explained: 0}
+      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 9, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 46, needs_store_not_loaded: 0, production_stale: 0, owner_review: 669, not_yet_explained: 0}
     unpublished:
-      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 8, production_stale: 0, owner_review: 1, not_yet_explained: 0}
-      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 8, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
       pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
-      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 142, needs_store_not_loaded: 23, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 8082, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 8, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 142, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+  # Per-detail ceilings of needs_store_not_loaded (slice 4 Task 5, repair d; the cmp_amount_detail_max pattern), keyed
+  # 'cause|detail', measured 2026-11-23 (scripts/slice4/q_t4_mechanism_checks.sql). The text_not_read detail is set by
+  # elimination in cmp_rate (a spread read on the row -> printed_total_margin_not_read, else
+  # printed_rate_type_and_loan_class_not_read); a ceiling each keeps the two apart.
+  cmp_rate_detail_max:
+    published:
+      interest_rate:
+        "needs_store_not_loaded|identifier_text_not_read": 73
+        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 405
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
+        "needs_store_not_loaded|production_corrected_no_loaded_store": 1
+        "needs_store_not_loaded|rate_only_context_not_adopted": 6
+        "needs_store_not_loaded|whole_coupon_pik_not_read": 3
+      interest_rate_cash:
+        "needs_store_not_loaded|identifier_text_not_read": 55
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 76
+        "needs_store_not_loaded|production_corrected_no_loaded_store": 1
+        "needs_store_not_loaded|rate_only_context_not_adopted": 1
+        "needs_store_not_loaded|whole_coupon_pik_not_read": 44
+      pik_rate:
+        "needs_store_not_loaded|identifier_text_not_read": 9
+        "needs_store_not_loaded|rate_only_context_not_adopted": 2
+        "needs_store_not_loaded|whole_coupon_pik_not_read": 44
+      spread:
+        "needs_store_not_loaded|identifier_text_not_read": 19
+        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 287
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 413
+        "needs_store_not_loaded|printed_total_margin_not_read": 479
+        "needs_store_not_loaded|rate_only_context_not_adopted": 4
+      maturity_date:
+        "needs_store_not_loaded|identifier_text_not_read": 1
+        "needs_store_not_loaded|printed_maturity_not_read": 43996
+      rate_kind:
+        "needs_store_not_loaded|identifier_text_not_read": 73
+        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 405
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
+        "needs_store_not_loaded|production_corrected_no_loaded_store": 1
+        "needs_store_not_loaded|rate_only_context_not_adopted": 6
+        "needs_store_not_loaded|whole_coupon_pik_not_read": 3
+    unpublished:
+      interest_rate:
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 8
+      interest_rate_cash:
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 8
+      spread:
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 23
+      maturity_date:
+        "needs_store_not_loaded|printed_maturity_not_read": 8082
+      rate_kind:
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 8
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as

@@ -13,7 +13,9 @@ import hashlib
 # 3: rule rows gain sel_label_pattern (fund rule position_without_term_fact, slice 2 Task 6). Every rule_id changes again.
 # 4: the manifest gains wrapper_copy_sha256 (fund -> SHA-256 of the copy read), checked by dbt at build time (final
 # fix wave F1). Tables and rule ids are unchanged.
-LOADER_VERSION = "4"
+# 5: wrapper hashes (wrapper_drift.copied/current_sha256, manifest wrapper_copy_sha256) are text hashes, CRLF read as
+# LF (store.text_sha256; slice 4 Task 5). Tables other than wrapper_drift and rule ids are unchanged.
+LOADER_VERSION = "5"
 
 RULE_COLUMNS = [
     "rule_id", "cik", "valid_from", "valid_to", "validity_basis", "sel_accession", "sel_axis",

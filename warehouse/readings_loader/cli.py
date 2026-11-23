@@ -6,6 +6,8 @@ the hash recorded when the copy was taken (warehouse/wrappers/_source.json) and 
 wrapper_drift and the manifest, so an edit on the production side is seen and carried over by hand. The manifest also
 records the hash of each copy read (wrapper_copy_sha256). dbt hashes both sets of files again at build time
 (stg_wrapper_drift), so a build without a reload still fails on an edit made after this load (final fix wave F1).
+Both wrapper hashes are text hashes: the file's bytes with CRLF read as LF (store.text_sha256, slice 4 Task 5), so a
+checkout that writes CRLF line endings does not raise a false drift.
 """
 import argparse
 import hashlib
@@ -42,9 +44,10 @@ def wrapper_drift(ciks, wrappers_dir, production_dir):
         if not copied:
             raise LoadError(f"{cik}: no copied hash in {source_path.as_posix()}")
         prod = Path(production_dir) / f"{cik}.json"
-        current = store.file_sha256(prod) if prod.exists() else ""
+        # the text hash (CRLF read as LF, store.text_sha256): a CRLF checkout of an unchanged wrapper is not drift
+        current = store.text_sha256(prod) if prod.exists() else ""
         if current:
-            inputs[prod.as_posix()] = current
+            inputs[prod.as_posix()] = store.file_sha256(prod)
         rows.append({"cik": cik, "copied_sha256": copied, "current_sha256": current, "changed": current != copied})
     return rows, inputs
 
@@ -69,10 +72,10 @@ def load(ciks, wrappers_dir, row_store_paths, production_dir=None):
         tables["correction"] += corrections
         tables["not_loaded"] += not_loaded
         tables["rule_label_example"] += wrappers.label_examples(cik, wrapper)
-        # the hash of the bytes parsed above, so the record cannot describe a later edit
-        digest = hashlib.sha256(raw).hexdigest()
-        inputs[path.as_posix()] = digest
-        tables["wrapper_copy_sha256"][cik] = digest
+        # the hash of the bytes parsed above, so the record cannot describe a later edit; the drift record takes the
+        # text hash (CRLF read as LF, store.text_sha256), inputs keeps the raw bytes' hash
+        inputs[path.as_posix()] = hashlib.sha256(raw).hexdigest()
+        tables["wrapper_copy_sha256"][cik] = store.text_sha256(raw)
     if production_dir is not None:
         drift, drift_inputs = wrapper_drift(ciks, wrappers_dir, production_dir)
         tables["wrapper_drift"] = drift

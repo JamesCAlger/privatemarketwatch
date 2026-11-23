@@ -272,6 +272,8 @@ with rule as (
         , any_value(state) filter (where field = 'maturity_date') as md_state
         , any_value(why) filter (where field = 'maturity_date') as md_why
         , any_value(value_date) filter (where field = 'maturity_date') as md_date
+        , any_value(status) filter (where field = 'maturity_date') as md_read_status
+        , any_value(reason) filter (where field = 'maturity_date') as md_read_reason
     from rate_read
     group by 1, 2
 )
@@ -453,11 +455,14 @@ with rule as (
                          'applied')
             -- an action with no value for this field (printed_margin_cash_plus_pik never wins: text_not_read); defensive
             when r.resolution = 'rule' then 'action_not_built'
-            -- no rule: as read, else no_rule (a number in a unit that is not a ratio)
+            -- no rule: as read, else no_rule (a number in a unit that is not a ratio). An unresolved maturity date keeps
+            -- its read reason (not_a_date, values_differ), as pik_rate and spread do (slice 4 Task 5 repair g)
             when (case r.field when 'pik_rate' then i.pk_state when 'spread' then i.sp_state else i.md_state end)
                 = 'absent' then case r.field when 'pik_rate' then i.pk_why when 'spread' then i.sp_why else i.md_why end
-            when (case r.field when 'pik_rate' then i.pk_read_status when 'spread' then i.sp_read_status end)
-                = 'unresolved' then case r.field when 'pik_rate' then i.pk_read_reason else i.sp_read_reason end
+            when (case r.field when 'pik_rate' then i.pk_read_status when 'spread' then i.sp_read_status
+                               else i.md_read_status end)
+                = 'unresolved' then case r.field when 'pik_rate' then i.pk_read_reason when 'spread' then i.sp_read_reason
+                                                 else i.md_read_reason end
             else 'no_rule'
           end as reason
         , case

@@ -30,6 +30,15 @@ def file_sha256(path):
     return h.hexdigest()
 
 
+def text_sha256(data):
+    """SHA-256 of a text file's bytes with every CRLF read as LF (slice 4 Task 5, repair a). The wrapper-drift check
+    uses it, so a checkout that writes CRLF line endings (Windows, core.autocrlf) hashes the same as one that writes LF;
+    any other change still changes the hash. data: bytes, or a path to read. stg_wrapper_drift computes the same value
+    in SQL: sha256(replace(content, chr(13) || chr(10), chr(10))) over read_text."""
+    raw = data if isinstance(data, (bytes, bytearray)) else Path(data).read_bytes()
+    return hashlib.sha256(bytes(raw).replace(b"\r\n", b"\n")).hexdigest()
+
+
 def _sorted_unique(name, rows):
     columns, key = TABLES[name]
     rows = sorted(rows, key=lambda r: tuple(str(r[c]) for c in key))

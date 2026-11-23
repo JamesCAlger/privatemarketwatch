@@ -740,7 +740,8 @@ models:
               arguments:
                 values: ['old_wrong', 'new_wrong', 'convention', 'needs_correction', 'needs_store_not_loaded',
                          'production_stale', 'owner_review', 'not_yet_explained']
-    # One baseline per basis, field and cause. Ceilings var cmp_rate_max in dbt_project.yml.
+    # One baseline per basis, field and cause (ceilings var cmp_rate_max in dbt_project.yml), and since slice 4 Task 5
+    # one per needs_store_not_loaded detail (var cmp_rate_detail_max), listed after the 96.
     data_tests:
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: old_wrong}, name: baseline_cmp_rate_published_interest_rate_old_wrong}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: new_wrong}, name: baseline_cmp_rate_published_interest_rate_new_wrong}
@@ -838,6 +839,39 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: production_stale}, name: baseline_cmp_rate_unpublished_rate_kind_production_stale}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: owner_review}, name: baseline_cmp_rate_unpublished_rate_kind_owner_review}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: not_yet_explained}, name: baseline_cmp_rate_unpublished_rate_kind_not_yet_explained}
+      # Slice 4 Task 5, repair d: one baseline per needs_store_not_loaded detail. Ceilings var cmp_rate_detail_max.
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_interest_rate_nsnl_identifier_text_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: needs_store_not_loaded, detail: printed_rate_type_and_loan_class_not_read}, name: baseline_cmp_rate_published_interest_rate_nsnl_printed_rate_type_and_loan_class_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_published_interest_rate_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: needs_store_not_loaded, detail: production_corrected_no_loaded_store}, name: baseline_cmp_rate_published_interest_rate_nsnl_production_corrected_no_loaded_store}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_interest_rate_nsnl_rate_only_context_not_adopted}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_interest_rate_nsnl_whole_coupon_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_identifier_text_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: production_corrected_no_loaded_store}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_production_corrected_no_loaded_store}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_rate_only_context_not_adopted}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_whole_coupon_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_identifier_text_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_pik_rate_nsnl_rate_only_context_not_adopted}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_whole_coupon_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_spread_nsnl_identifier_text_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: printed_rate_type_and_loan_class_not_read}, name: baseline_cmp_rate_published_spread_nsnl_printed_rate_type_and_loan_class_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_published_spread_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: printed_total_margin_not_read}, name: baseline_cmp_rate_published_spread_nsnl_printed_total_margin_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_spread_nsnl_rate_only_context_not_adopted}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: maturity_date, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_maturity_date_nsnl_identifier_text_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: maturity_date, cause: needs_store_not_loaded, detail: printed_maturity_not_read}, name: baseline_cmp_rate_published_maturity_date_nsnl_printed_maturity_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_rate_kind_nsnl_identifier_text_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: printed_rate_type_and_loan_class_not_read}, name: baseline_cmp_rate_published_rate_kind_nsnl_printed_rate_type_and_loan_class_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_published_rate_kind_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: production_corrected_no_loaded_store}, name: baseline_cmp_rate_published_rate_kind_nsnl_production_corrected_no_loaded_store}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_rate_kind_nsnl_rate_only_context_not_adopted}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_rate_kind_nsnl_whole_coupon_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_interest_rate_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate_cash, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_interest_rate_cash_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: spread, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_spread_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: maturity_date, cause: needs_store_not_loaded, detail: printed_maturity_not_read}, name: baseline_cmp_rate_unpublished_maturity_date_nsnl_printed_maturity_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_rate_kind_nsnl_printed_reference_rate_column_not_read}
 
 unit_tests:
   - name: cmp_row_set_catch_all_causes
@@ -3269,7 +3303,8 @@ unit_tests:
       the rate, its cash leg and the PIK rate. Spread: s1 fraction_to_percent 6.25; s2 7.5 in pure scale_not_decided; s3
       text_not_read (fix round 1); s6 feature_missing still passes through as its own reason; s4 two values, no rule
       (values_differ carried); s5 a unit that is not a ratio, no rule (no_rule).
-      Maturity: m1 as_filed into value_date; m2 absent.
+      Maturity: m1 as_filed into value_date; m2 absent; m3 a maturity fact that is not a date, no rule: unresolved
+      with its read reason not_a_date (slice 4 Task 5 repair g; it was no_rule before).
       Controller ruling 2026-11-23 (slice 4 Task 4): both PIK-only actions now name unread_input, so int_field_rule
       never gives them resolution rule and the p1 to p3 arithmetic is unreachable in a build. It is kept, and tested
       here on hand-made rule rows, because clearing unread_input (text spec) switches it back on. p4 is what a build
@@ -3302,7 +3337,8 @@ unit_tests:
             ('A', 's4', 'spread', null, null, 'no_rule'),
             ('A', 's5', 'spread', null, null, 'no_rule'),
             ('A', 'm1', 'maturity_date', 'gm', 'as_filed', 'rule'),
-            ('A', 'm2', 'maturity_date', null, null, 'no_rule')
+            ('A', 'm2', 'maturity_date', null, null, 'no_rule'),
+            ('A', 'm3', 'maturity_date', null, null, 'no_rule')
           ) t(acc, ctx, field, rule_id, action, resolution)
       - input: ref('int_field_read')
         format: sql
@@ -3320,7 +3356,8 @@ unit_tests:
             ('A', 's4', 'spread', 'unresolved', 'values_differ', null, null, null),
             ('A', 's5', 'spread', 'read', 'one_fact', 0.0625, null, 'other'),
             ('A', 'm1', 'maturity_date', 'read', 'one_fact', null, date '2030-06-30', null),
-            ('A', 'm2', 'maturity_date', 'absent', 'no_fact', null, null, null)
+            ('A', 'm2', 'maturity_date', 'absent', 'no_fact', null, null, null),
+            ('A', 'm3', 'maturity_date', 'unresolved', 'not_a_date', null, null, null)
           ) t(acc, ctx, field, status, reason, value_filed, value_date, unit)
       - input: ref('reading_action')
         rows:
@@ -3362,6 +3399,7 @@ unit_tests:
         - {context_id: s5, field: spread, value: null, value_date: null, status: unresolved, reason: no_rule, rate_kind: null}
         - {context_id: m1, field: maturity_date, value: null, value_date: 2030-06-30, status: normalised, reason: applied, rate_kind: null}
         - {context_id: m2, field: maturity_date, value: null, value_date: null, status: absent, reason: no_fact, rate_kind: null}
+        - {context_id: m3, field: maturity_date, value: null, value_date: null, status: unresolved, reason: not_a_date, rate_kind: null}
 
   - name: int_rate_legs_check_fails_a_row_that_does_not_add
     description: >

@@ -3,7 +3,7 @@
 with r as (
     select c.*, h.interest_rate as p_ir, h.interest_rate_cash as p_cash, h.pik_rate as p_pik, h.basis_spread as p_bs,
         h.interest_rate_kind as p_kind, h.asset_category, coalesce(h.src_transforms, '') as tr,
-        h.interest_rate_reported as p_reported
+        h.interest_rate_reported as p_reported, h.bdc_investment_identifier as p_identifier
     from cmp_rate c
     join stg_holdings h on h.accession_number = c.accession and h.src_context_id = c.context_id
     where c.cause is not null
@@ -17,11 +17,12 @@ with r as (
 )
 , corr as (
     -- a loaded correction on the compared field itself whose value equals production's value (percent, or a
-    -- fraction times 100; dates as text)
+    -- fraction times 100; dates as text). Keyed by context id, or by accession and production's identifier, as
+    -- cmp_rate joins it (slice 4 Task 5 repair b: before, any identifier-keyed correction of the accession matched)
     select distinct r.accession, r.context_id, r.field
     from r
     join stg_correction c on c.kind = 'value' and c.accession = r.accession
-        and (c.context_id = r.context_id or (c.context_id is null and c.identifier is not null))
+        and (c.context_id = r.context_id or (c.context_id is null and c.identifier = r.p_identifier))
     where c.field = case r.field when 'spread' then 'basis_spread' when 'rate_kind' then 'interest_rate_kind' else r.field end
       and (
           (r.field = 'maturity_date' and try_cast(c.value as date) = r.date_production)
@@ -31,7 +32,17 @@ with r as (
           or (r.value_production is null and r.field not in ('maturity_date', 'rate_kind') and nullif(trim(c.value), '') is null)
       )
 )
-select r.basis, r.field, r.cause, r.cause_detail, count(*) as rows
+select r.basis, r.field, r.cause, r.cause_detail
+    -- slice 4 Task 5 repair c: a check that the cause rule or the outcome already implies cannot fail; it restates
+    -- the rule and is no independent check (the evidence for those groups is the rows opened)
+    , case
+        when r.cause_detail in ('rate_only_context_not_adopted', 'production_corrected_no_loaded_store',
+                                'identifier_text_not_read', 'printed_maturity_not_read') then 'rule_restated'
+        when r.cause_detail = 'scale_decided_by_size_in_production' and r.field = 'interest_rate_cash' then 'rule_restated'
+        else 'independent'
+      end as check_kind
+    , count(*) as rows
+    , count(*) filter (where r.outcome = 'production_empty') as production_empty_rows
     , count(*) filter (where case r.cause_detail
         -- production keeps a value between 0.5 and 50 as a percent and divides one of 50 or more by 100
         when 'scale_decided_by_size_in_production' then

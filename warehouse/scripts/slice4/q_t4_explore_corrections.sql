@@ -1,6 +1,8 @@
 -- Slice 4 Task 4 exploration: for open rate pairs (not equal, not both empty; maturity left out), what production's
 -- corrected_fields and src_field_overrides say about rate fields, whether a loaded correction (stg_correction) names a
 -- rate field on the row, production's asset_category and interest_rate_kind.
+-- Parameter (slice 4 Task 5): the fund whose open interest_rate rows are all listed is a DuckDB variable, not a literal:
+--   run_sql_vars.py q_t4_explore_corrections.sql <max_rows> cik=<cik> (run_sql_vars passes digits as an integer; lpad restores the 10-digit text)
 with both_rows as (
     select c.basis, c.accession, c.context_id, c.cik, c.report_date
     from cmp_row_set c
@@ -45,6 +47,6 @@ select cik, field,
 from pairs
 where not (vn is null and vp is null) and not coalesce(abs(vn - vp) <= 1e-9, false)
   and (len(corr_rate) > 0 or loaded_fields is not null or nullif(src_field_overrides, '') is not null
-       or (field = 'interest_rate' and cik = '0001287750'))
+       or (field = 'interest_rate' and cik = lpad(cast(getvariable('cik') as varchar), 10, '0')))
 group by all
 order by field, cik, outcome, n desc
