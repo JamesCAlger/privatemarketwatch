@@ -37,6 +37,13 @@ vars:
   # A rate older than this many days before the report date is not used (scripts/programme_closeout/fx.py convert,
   # max_age_days=7: FX_stale).
   fx_max_age_days: 7
+  # Slice 4 Task 3. The legs check (cash leg plus PIK equals all-in, spec section 7) and the comparison of two filed
+  # rate tags, in percentage points. Float rounding only: the legs are fractions times 100 in double precision (error
+  # near 1e-15); 1e-9 is far above that and far below the smallest printed rate step (0.01).
+  rate_legs_tolerance: 1.0e-9
+  # A PIK rate above the all-in rate tag by more than this (percentage points) contradicts rate_is_all_in: production's
+  # own margin (pipeline/financial_conventions.py prepare: pik > reported_rate + 0.01).
+  pik_above_rate_margin: 0.01
   # Row-correction store drift (stg_row_store_drift, slice 3 Task 1): the stores the readings loader reads, hashed at
   # build time against the loader's manifest. Same files as readings_loader/cli.py ROW_STORES. Relative to warehouse/.
   row_store_files:
@@ -160,6 +167,35 @@ vars:
     # left is an Apollo principal tagged KPW, a currency the file does not hold.
     int_field_normalised_unresolved_principal_amount_usd_no_fx_rate: 1
     int_field_normalised_unresolved_other: 0
+    # Slice 4 Task 3 (rate fields), measured 2026-11-23 on all position rows of the five funds. scale_not_decided: a rate,
+    # PIK rate or spread filed above 1 in a ratio unit (pure, utr:Rate), never rescaled by its size (controller ruling);
+    # on interest_rate and its cash leg it also counts rows whose PIK rate is such a value. pik_above_rate: a PIK rate above
+    # the all-in tag plus 0.01 (production keeps these unresolved too). values_differ: the six Ares rows of Task 2 carried
+    # through. rule_conflict 628: the Blue Owl (460) and HPS (168) PIK-only rows, both readings tie (controller ruling,
+    # waits for the text spec). spread feature_missing 540: printed_margin_cash_plus_pik needs the printed total margin
+    # (text): Blue Owl 321, Apollo 219.
+    int_field_normalised_unresolved_interest_rate_pik_above_rate: 15
+    int_field_normalised_unresolved_interest_rate_scale_not_decided: 679
+    int_field_normalised_unresolved_interest_rate_values_differ: 1
+    int_field_normalised_unresolved_interest_rate_rule_conflict: 628
+    int_field_normalised_unresolved_interest_rate_cash_pik_above_rate: 15
+    int_field_normalised_unresolved_interest_rate_cash_scale_not_decided: 679
+    int_field_normalised_unresolved_interest_rate_cash_values_differ: 1
+    int_field_normalised_unresolved_interest_rate_cash_rule_conflict: 628
+    int_field_normalised_unresolved_pik_rate_scale_not_decided: 20
+    int_field_normalised_unresolved_spread_scale_not_decided: 68
+    int_field_normalised_unresolved_spread_values_differ: 5
+    int_field_normalised_unresolved_spread_feature_missing: 540
+    int_field_normalised_unresolved_spread_rule_conflict: 628
+    # Positions whose rate reading is a rule conflict (tests/baseline_int_field_rule_rate_conflict.sql): the 628 above, all
+    # published. Rate bound 0 to 40 after conversion: 0 rows per field. Maturity before the report date: 6 Apollo rows,
+    # one loan (maturity 2024-04-30) carried in six quarters 2024-06-30 to 2025-09-30.
+    int_field_rule_rate_conflict: 628
+    int_field_normalised_rate_bound_interest_rate: 0
+    int_field_normalised_rate_bound_interest_rate_cash: 0
+    int_field_normalised_rate_bound_pik_rate: 0
+    int_field_normalised_rate_bound_spread: 0
+    int_field_normalised_maturity_before_report_date: 6
     # The sum check (tests/baseline_int_field_normalised_sum_not_tied.sql), measured 2026-11-22 (fix round 1): fund-
     # quarters whose published normalised fair value misses the filed total investments on the step 1 basis
     # (fact_fund_period's A04 rule): Ares 3, BCRED 14 (it ties without cash rows, but its filed cash equivalents are
@@ -239,6 +275,19 @@ vars:
     - "principal_amount|values_differ"
     - "principal_amount_usd|principal_unresolved"
     - "principal_amount_usd|no_fx_rate"
+    - "interest_rate|pik_above_rate"
+    - "interest_rate|scale_not_decided"
+    - "interest_rate|values_differ"
+    - "interest_rate|rule_conflict"
+    - "interest_rate_cash|pik_above_rate"
+    - "interest_rate_cash|scale_not_decided"
+    - "interest_rate_cash|values_differ"
+    - "interest_rate_cash|rule_conflict"
+    - "pik_rate|scale_not_decided"
+    - "spread|scale_not_decided"
+    - "spread|values_differ"
+    - "spread|feature_missing"
+    - "spread|rule_conflict"
   cmp_excluded_quarters_pinned:
     - "0001287750|2026-09-30|0001628280-26-067383"
     - "0001812554|2026-09-30|0001812554-26-000060"
