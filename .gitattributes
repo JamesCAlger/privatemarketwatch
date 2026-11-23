@@ -1,0 +1,6 @@
+# Files whose exact bytes are bound by a recorded sha256 (rule admission manifests, FX quote
+# sources, retired corrections kept "with original bytes"). Git must never convert their line
+# ends, or the same commit hashes differently on Windows and Linux. "-text" stores and checks
+# out the bytes exactly as committed. Add a path here BEFORE committing a new hash-bound file.
+data/reference/monetary_conversion/** -text
+data/overrides/**/_retired_*.json -text
