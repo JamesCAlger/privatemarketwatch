@@ -16,7 +16,8 @@ from {{ ref('int_field_normalised') }} n
 where n.status <> 'normalised' and (n.value is not null or n.fx_rate is not null)
 union all
 -- final fix wave F8: a normalised row carries a value; the one documented exception is shares moved to the principal
--- (reason moved_to_principal), whose value is null on purpose
+-- (reason moved_to_principal), whose value is null on purpose. Slice 4 Task 1, item c: null-safe, so a null value
+-- with a null reason fails (with "<>" it passed)
 select n.accession, n.context_id, n.field, n.rule_id, n.action, 'normalised without a value'
 from {{ ref('int_field_normalised') }} n
-where n.status = 'normalised' and n.value is null and n.reason <> 'moved_to_principal'
+where n.status = 'normalised' and n.value is null and n.reason is distinct from 'moved_to_principal'

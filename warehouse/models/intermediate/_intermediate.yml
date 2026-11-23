@@ -323,7 +323,8 @@ models:
           True when every rule beaten by step 2 that can be decided would have given the same action and scale. A loser
           that cannot be decided (a feature it needs is missing) is left out, not counted as a different effect (final
           fix wave F3). Null when there is no loser, or none that can be decided. False fails
-          tests/int_field_rule_tie_break_same_effect.sql (ceiling 0).
+          tests/baseline_int_field_rule_tie_break_different_effect.sql (ceiling 0); null with a loser (every beaten
+          rule undecidable) fails tests/baseline_int_field_rule_tie_break_undecidable_loser.sql (ceiling 0).
 
   - name: int_field_normalised
     description: >
@@ -379,6 +380,39 @@ models:
       - baseline_normalised_unresolved: {arguments: {field: principal_amount, reason: values_differ}, name: baseline_int_field_normalised_unresolved_principal_amount_values_differ}
       - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: principal_unresolved}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_principal_unresolved}
       - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: no_fx_rate}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_no_fx_rate}
+
+  - name: int_repeated_commitment_value
+    description: >
+      One row per position row (int_source_row role position): whether it is a commitment line whose fair value is
+      printed again on a line of the same borrower in the same schedule (owner decision 2026-11-23: flag now, keep or
+      drop after reproduction). Decided from row features only (see the model's header). A flag: it changes no role,
+      value or published set. Flagged rows are counted by tests/baseline_int_repeated_commitment_value.sql.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: cik
+        data_tests:
+          - not_null
+      - name: is_commitment_line
+        description: >
+          A position whose only term fact is a filer concept read through a fund rule concept_is_term_fact, not an
+          ownership percent, with no cost fact.
+        data_tests:
+          - not_null
+      - name: twin_count
+        description: Non-commitment positions of the same filing and scope with the same non-zero fair value and borrower key.
+        data_tests:
+          - not_null
+      - name: twin_context_id
+        description: One such twin (the smallest context id); null when there is none.
+      - name: is_repeated_commitment_value
+        description: True on a commitment line with at least one twin. Read by slice 6.
+        data_tests:
+          - not_null
 
   - name: cmp_row_set
     description: >
@@ -536,6 +570,9 @@ models:
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: production_stale}, name: baseline_cmp_amount_published_principal_amount_usd_production_stale}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: owner_review}, name: baseline_cmp_amount_published_principal_amount_usd_owner_review}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: not_yet_explained}, name: baseline_cmp_amount_published_principal_amount_usd_not_yet_explained}
+      # Slice 4 Task 1, item d: the correction-check detail has its own ceiling (cmp_amount_detail_max) and is left out
+      # of the not_yet_explained count above.
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: not_yet_explained, detail: correction_loaded_value_not_matched}, name: baseline_cmp_amount_published_principal_amount_usd_not_yet_explained_correction_loaded_value_not_matched}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: old_wrong}, name: baseline_cmp_amount_published_shares_old_wrong}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: new_wrong}, name: baseline_cmp_amount_published_shares_new_wrong}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: convention}, name: baseline_cmp_amount_published_shares_convention}
@@ -2343,3 +2380,73 @@ unit_tests:
         - {context_id: x23, field: principal_amount_usd, outcome: new_empty, cause: not_yet_explained, cause_detail: correction_loaded_value_not_matched}
         - {context_id: x23, field: shares, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x23, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+
+  - name: int_repeated_commitment_value_structure
+    description: >
+      Slice 4 Task 1. Invented rows, filing A, scope J (a JV schedule) unless named. Flagged: l1, a commitment line
+      (term fact from fund rule r1, no cost) whose fair value -740 repeats schedule row t1 of the same borrower
+      ("Acme Corp." and "Acme Corp 2" share the key "acme corp"). Not flagged: l2 (same value, another borrower), l3
+      (same borrower and value, other scope), l4 (zero fair value), l5 and l5b (two commitment lines repeat each other,
+      no schedule row), l6 (an ownership percent line, not a commitment line), l7 (carries a cost fact, not a
+      commitment line), l8 (twin in another filing), l9 (the matching row g9 is an aggregate). Aggregates get no row.
+    model: int_repeated_commitment_value
+    given:
+      - input: ref('int_source_row')
+        rows:
+          - {accession: A, context_id: l1, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: t1, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l2, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: t2, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l3, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: t3, cik: "1", report_date: 2026-03-31, role: position, scope: fund, is_published: true}
+          - {accession: A, context_id: l4, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: t4, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l5, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l5b, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l6, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: t6, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l7, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: t7, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l8, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: B, context_id: t8, cik: "1", report_date: 2026-06-30, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: l9, cik: "1", report_date: 2026-03-31, role: position, scope: J, is_published: false}
+          - {accession: A, context_id: g9, cik: "1", report_date: 2026-03-31, role: aggregate, scope: J, is_published: false}
+      - input: ref('int_context_feature')
+        rows:
+          - {accession: A, context_id: l1, fair_value: -740, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Acme Corp."}
+          - {accession: A, context_id: t1, fair_value: -740, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Acme Corp 2"}
+          - {accession: A, context_id: l2, fair_value: 500, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Beta Inc"}
+          - {accession: A, context_id: t2, fair_value: 500, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Gamma LLC 1"}
+          - {accession: A, context_id: l3, fair_value: 300, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Delta Co"}
+          - {accession: A, context_id: t3, fair_value: 300, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Delta Co 1"}
+          - {accession: A, context_id: l4, fair_value: 0, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Eps Co"}
+          - {accession: A, context_id: t4, fair_value: 0, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Eps Co 1"}
+          - {accession: A, context_id: l5, fair_value: 200, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Zeta Co"}
+          - {accession: A, context_id: l5b, fair_value: 200, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Zeta Co 2"}
+          - {accession: A, context_id: l6, fair_value: 100, cost_fact_count: 0, term_fact_source: r2, has_ownership_percent: true, identifier_label: "Eta Co"}
+          - {accession: A, context_id: t6, fair_value: 100, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Eta Co 1"}
+          - {accession: A, context_id: l7, fair_value: 50, cost_fact_count: 1, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Theta Co"}
+          - {accession: A, context_id: t7, fair_value: 50, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Theta Co 1"}
+          - {accession: A, context_id: l8, fair_value: 70, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Iota Co"}
+          - {accession: B, context_id: t8, fair_value: 70, cost_fact_count: 1, term_fact_source: standard, has_ownership_percent: false, identifier_label: "Iota Co 1"}
+          - {accession: A, context_id: l9, fair_value: 90, cost_fact_count: 0, term_fact_source: r1, has_ownership_percent: false, identifier_label: "Kappa Co"}
+          - {accession: A, context_id: g9, fair_value: 90, cost_fact_count: 1, term_fact_source: null, has_ownership_percent: false, identifier_label: "Kappa Co 1"}
+    expect:
+      rows:
+        - {context_id: l1, is_commitment_line: true, twin_count: 1, twin_context_id: t1, is_repeated_commitment_value: true}
+        - {context_id: t1, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l2, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: t2, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l3, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: t3, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l4, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: t4, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l5, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l5b, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l6, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: t6, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l7, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: t7, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l8, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: t8, is_commitment_line: false, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
+        - {context_id: l9, is_commitment_line: true, twin_count: 0, twin_context_id: null, is_repeated_commitment_value: false}
