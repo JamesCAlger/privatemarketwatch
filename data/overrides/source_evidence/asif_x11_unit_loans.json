@@ -1,0 +1,54 @@
+{
+  "schema_version": "source-unit-loan-evidence.v1",
+  "owner_request": "ASIF-X11-source-printed-loan-units-20261113",
+  "entries": [
+    {
+      "cik": "0001918712",
+      "report_date": "2025-06-30",
+      "accession_number": "0001918712-25-000065",
+      "src_context_id": "c-1012",
+      "row_id": "ROW-23fefa977d1f492d",
+      "issuer_name": "CFC Funding LLC",
+      "instrument_description": "Loan instrument units",
+      "shares_held": 5300.0,
+      "fair_value": 6115900.0,
+      "cost": 5851300.0,
+      "principal_amount": null,
+      "quote": "CFC Funding LLC Loan instrument units 9.75 % PIK 07/2023 5,300 5,851.3 6,115.9 (5)(12)",
+      "page_sha256": "441428b1565ff700e873835abdf4707633b174aa1d6b91a6d07bf1503d899a8f",
+      "finding_id": "RVQ_REV_08a742ed15f7"
+    },
+    {
+      "cik": "0001918712",
+      "report_date": "2023-12-31",
+      "accession_number": "0001918712-24-000048",
+      "src_context_id": "c-319",
+      "row_id": "ROW-b5b7b7b243ad85ff",
+      "issuer_name": "CFC Funding LLC",
+      "instrument_description": "Loan instrument units",
+      "shares_held": 5300.0,
+      "fair_value": 5141000.0,
+      "cost": 5035300.0,
+      "principal_amount": null,
+      "quote": "CFC Funding LLC Loan instrument units 9.75 % PIK 07/2023 5,300 5,035.3 5,141.0 (3)(6)",
+      "page_sha256": "8c899eafdc0dd69c0b4243ba8836c7846a68e6a70bbda356422b121da17f17b2",
+      "finding_id": "RVQ_REV_53740926d0c6"
+    },
+    {
+      "cik": "0001918712",
+      "report_date": "2023-09-30",
+      "accession_number": "0001918712-23-000026",
+      "src_context_id": "c-268",
+      "row_id": "ROW-d768c778f4ac237c",
+      "issuer_name": "CFC Funding LLC",
+      "instrument_description": "Loan instrument units",
+      "shares_held": 5300.0,
+      "fair_value": 5141000.0,
+      "cost": 5035300.0,
+      "principal_amount": null,
+      "quote": "CFC Funding LLC Loan instrument units 9.75 % PIK 07/2023 5,300 5,035.3 5,141.0 (3)(6)",
+      "page_sha256": "9264f5da5271757c74b99efc7fcaf70884e6b5ef22b2c9b358a542168d981d48",
+      "finding_id": "RVQ_REV_e927bbab7be7"
+    }
+  ]
+}

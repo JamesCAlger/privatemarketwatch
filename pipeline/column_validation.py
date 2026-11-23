@@ -275,6 +275,8 @@ def validate_column_contracts(
         return _empty_issues(), _empty_metrics()
 
     df = _prepare_df(unified_df)
+    from pipeline.source_unit_loans import verified_row_keys
+    df["_source_unit_loan_verified"] = df["_row_key"].isin(verified_row_keys(df))
     con = duckdb.connect()
     con.register("h", df)
 
@@ -793,7 +795,8 @@ def validate_column_contracts(
             "source = 'bdc' AND COALESCE(CAST(asset_category AS VARCHAR), '') = 'LOAN' "
             "AND TRY_CAST(fair_value AS DOUBLE) > 0 "
             f"AND {_blank_sql('principal_amount')} "
-            "AND COALESCE(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'",
+            "AND COALESCE(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule' "
+            "AND NOT _source_unit_loan_verified",
             "drawn BDC loan has a fair value and no principal_amount",
             "the printed schedule carries a par amount for a funded loan; check which tag holds it",
         ),

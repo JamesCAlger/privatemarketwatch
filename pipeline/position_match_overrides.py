@@ -178,6 +178,8 @@ def _validate_override_record(
 def apply_match_overrides(
     result_df: pd.DataFrame,
     overrides_df: pd.DataFrame,
+    *,
+    unified_df: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, int, int]:
     """Apply position match overrides to a matched-pairs DataFrame.
 
@@ -192,13 +194,16 @@ def apply_match_overrides(
 
     con = duckdb.connect()
     con.register("matches", result_with_idx)
-    con.register("overrides", overrides_df)
+    indexed_overrides = overrides_df.copy()
+    indexed_overrides["_override_idx"] = range(len(indexed_overrides))
+    con.register("overrides", indexed_overrides)
 
     # Join overrides to matches on natural key with FV tolerance.
     # Case-insensitive name matching, FV within 1% or $1000 absolute.
     join_sql = """
     SELECT
         m._match_idx,
+        o._override_idx,
         o.action,
         o.replace_end_issuer_name,
         o.replace_end_fair_value,
@@ -257,15 +262,11 @@ def apply_match_overrides(
     # Use the _match_idx column as positional index into the original result
     result = result_df.reset_index(drop=True).copy()
 
-    # Mark force_pair replacements
-    for _, frow in force_rows.iterrows():
-        ridx = int(frow["_match_idx"])
-        if ridx < len(result):
-            result.at[ridx, "end_issuer_name"] = frow["replace_end_issuer_name"]
-            result.at[ridx, "end_fair_value"] = frow["replace_end_fair_value"]
-            orig_method = str(result.at[ridx, "match_method"])
-            if not orig_method.endswith("_override"):
-                result.at[ridx, "match_method"] = orig_method + "_override"
+    if unified_df is not None:
+        from pipeline.reviewed_position_identity import reconcile_financial_matches
+        result = reconcile_financial_matches(result, unified_df, preserve_indices=set(force_rows['_match_idx']))
+
+    _rebind_forced_endpoints(result, force_rows, unified_df, reject_idxs)
 
     # Remove rejected rows
     if reject_idxs:
@@ -282,3 +283,103 @@ def apply_match_overrides(
         )
 
     return result, n_rejected, n_forced
+
+
+def _rebind_forced_endpoints(result, force_rows, unified, rejected_indices):
+    """Replace the whole selected endpoint, never just its name and value.
+
+    Replacement name/FV are exact selectors into the current corrected
+    holdings. Missing or ambiguous targets fail closed. Only the small set
+    of applied directives is iterated; full holdings lookup stays in SQL.
+    """
+    if force_rows.empty:
+        return
+    if unified is None:
+        raise ValueError("force_pair requires unified holdings to resolve the complete endpoint")
+    endpoint_fields = ("issuer_name", "fair_value", "cost", "principal_amount",
+                       "interest_rate", "basis_spread", "shares_held")
+    metadata_fields = ("index_classification", "asset_category", "issuer_category",
+                       "maturity_date", "coupon_type")
+    replacements = {"end_" + field: field for field in endpoint_fields
+                    if "end_" + field in result}
+    replacements.update({field: field for field in metadata_fields if field in result})
+    required = {"cik", "source", "report_date", "issuer_name", "fair_value"} | set(replacements.values())
+    missing = required - set(unified.columns)
+    if missing:
+        raise ValueError("force_pair destination holdings lack columns: " + ", ".join(sorted(missing)))
+    if "source" not in result:
+        raise ValueError("force_pair matched endpoint requires source")
+    if force_rows["_match_idx"].duplicated().any():
+        raise ValueError("Multiple force_pair directives select the same matched endpoint")
+    if force_rows["_override_idx"].duplicated().any():
+        raise ValueError("A force_pair directive selects multiple matched pairs")
+    # A destination may legitimately replace an integer with a decimal, null
+    # or a numeric string. Keep exact source values without dtype coercion.
+    for output_field in replacements:
+        result[output_field] = result[output_field].astype(object)
+    from pipeline.matching_contract import scope_sql
+
+    with duckdb.connect() as con:
+        con.register("holdings", unified)
+        con.register("paired", result.assign(_pair_idx=result.index))
+        excluded_indices = set(force_rows["_match_idx"].astype(int)) | rejected_indices
+        con.register("excluded_indices", pd.DataFrame({"_match_idx": sorted(excluded_indices)}))
+        scope = scope_sql(unified.columns, row_id="_override_uid")
+        con.execute("CREATE VIEW destinations AS SELECT *, " + scope + " AS _override_scope "
+                    "FROM (SELECT *, row_number() OVER () AS _override_uid FROM holdings)")
+        selector = """FROM destinations WHERE
+            lpad(CAST(cik AS VARCHAR), 10, '0') = lpad(CAST(? AS VARCHAR), 10, '0')
+            AND CAST(source AS VARCHAR) = ?
+            AND TRY_CAST(report_date AS DATE) = TRY_CAST(? AS DATE)
+            AND lower(trim(CAST(issuer_name AS VARCHAR))) = lower(trim(CAST(? AS VARCHAR)))
+            AND TRY_CAST(fair_value AS DOUBLE) = TRY_CAST(? AS DOUBLE)"""
+        seen_destinations = set()
+        for _, directive in force_rows.iterrows():
+            ridx = int(directive["_match_idx"])
+            original = result.loc[ridx]
+            prefix = [str(original["cik"]), str(original["source"]), str(original["end_report_date"])]
+            target = con.execute("SELECT * " + selector, prefix + [
+                str(directive["replace_end_issuer_name"]), str(directive["replace_end_fair_value"])]).fetchdf()
+            if len(target) != 1:
+                raise ValueError("force_pair requires exactly one destination holding; found " + str(len(target)))
+            selected = target.iloc[0]
+            destination_key = (str(pd.Timestamp(original["begin_report_date"]).date()),
+                               str(pd.Timestamp(selected["report_date"]).date()),
+                               str(selected["cik"]).zfill(10), str(selected["source"]),
+                               str(selected["issuer_name"]).strip().lower(),
+                               float(selected["fair_value"]), str(selected["_override_scope"]))
+            if destination_key in seen_destinations:
+                raise ValueError("force_pair directives would share a destination holding")
+            seen_destinations.add(destination_key)
+            old_selector = selector
+            if "bdc_investment_identifier" in unified:
+                old_selector = old_selector.replace(
+                    "lower(trim(CAST(issuer_name AS VARCHAR))) = lower(trim(CAST(? AS VARCHAR)))",
+                    "lower(trim(CAST(? AS VARCHAR))) IN (lower(trim(CAST(issuer_name AS VARCHAR))), "
+                    "lower(trim(CAST(bdc_investment_identifier AS VARCHAR))))")
+            old_scopes = con.execute("SELECT DISTINCT _override_scope " + old_selector,
+                                     prefix + [str(original["end_issuer_name"]), str(original["end_fair_value"])]).fetchall()
+            if len(old_scopes) != 1 or old_scopes[0][0] != target.iloc[0]["_override_scope"]:
+                raise ValueError("force_pair destination accounting scope is unresolved or differs")
+            destination = target.iloc[0]
+            destination_names = [str(destination["issuer_name"]),
+                                 str(destination.get("bdc_investment_identifier", destination["issuer_name"]))]
+            collisions = con.execute("""SELECT count(*) FROM
+                paired p
+                WHERE _pair_idx NOT IN (SELECT _match_idx FROM excluded_indices)
+                  AND lpad(CAST(cik AS VARCHAR),10,'0')=lpad(CAST(? AS VARCHAR),10,'0')
+                  AND CAST(source AS VARCHAR)=?
+                  AND TRY_CAST(begin_report_date AS DATE)=TRY_CAST(? AS DATE)
+                  AND TRY_CAST(end_report_date AS DATE)=TRY_CAST(? AS DATE)
+                  AND lower(trim(CAST(end_issuer_name AS VARCHAR))) IN
+                      (lower(trim(CAST(? AS VARCHAR))),lower(trim(CAST(? AS VARCHAR))))
+                  AND TRY_CAST(end_fair_value AS DOUBLE)=TRY_CAST(? AS DOUBLE)""",
+                [str(original["cik"]), str(original["source"]), str(original["begin_report_date"]),
+                 str(original["end_report_date"]), *destination_names, str(destination["fair_value"])]).fetchone()[0]
+            if collisions:
+                raise ValueError("force_pair destination already has an ordinary matched pair for this period")
+            for output_field, holding_field in replacements.items():
+                result.at[ridx, output_field] = target.iloc[0][holding_field]
+            method = str(original["match_method"])
+            if not method.endswith("_override"):
+                result.at[ridx, "match_method"] = method + "_override"

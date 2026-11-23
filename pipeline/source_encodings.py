@@ -39,7 +39,7 @@ def load_encodings(wrapper_directory=None):
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
                 'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors',
-                'twin_lines_on_distinct_members'}:
+                'twin_lines_on_distinct_members','position_identity_contexts'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -125,6 +125,12 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A fair-value concept is one local name, no prefix: '+str(path))
             if key=='context_identifiers' and any(not _CONTEXT_IDENTIFIER_RE.fullmatch(v) for v in values):
                 raise ValueError('A context identifier reads "ACCESSION CONTEXT => IDENTIFIER": '+str(path))
+            if key=='position_identity_contexts':
+                if any(not _CONTEXT_IDENTIFIER_RE.fullmatch(v) or v.count(' => ')!=1 for v in values):
+                    raise ValueError('A position identity reads "ACCESSION CONTEXT => TRANCHE KEY": '+str(path))
+                contexts=[v.split(' => ',1)[0] for v in values]
+                if len(set(contexts))!=len(contexts):
+                    raise ValueError('Duplicate position identity context: '+str(path))
             if key=='relabelled_contexts' and any(not _RELABELLED_CONTEXT_RE.fullmatch(v) or v.count(' :: ')!=2 for v in values):
                 raise ValueError('A relabelled context reads "ACCESSION CONTEXT :: MEMBER IDENTIFIER :: PRINTED IDENTIFIER": '+str(path))
             if key=='untagged_values' and any(not _UNTAGGED_VALUE_RE.fullmatch(v) for v in values):

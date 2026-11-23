@@ -72,6 +72,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     ``pik_only_coupon`` (set of cik10; default: the wrappers' pik_only_tag_reading) names the
     funds whose PIK tag, on a loan row with no plain rate and no spread, holds the whole coupon.
     It is a separate setting because the same tag holds a margin for other filers (HPS).
+    That supported whole-PIK coupon has a zero cash leg; an unsupported missing rate stays unknown.
 
     ``pik_only_margin`` (set of cik10; default: wrappers with pik_only_tag_reading ['margin'])
     names the funds whose PIK tag on such a row holds a margin over the reference rate. Where
@@ -196,6 +197,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             coalesce(json_extract_string(TRY_CAST(src_facts AS JSON),'$.maturity_date.r'),'') AS maturity_raw
             FROM input""")
         con.execute("""CREATE TABLE conventions AS SELECT typed.row_id,reported_rate,reported_cost,pik,fv,
+            (pik_is_coupon AND reported_rate IS NULL AND spread IS NULL
+                AND coalesce(isfinite(pik) AND pik>0,false)) AS coupon_from_pik,
             -- the fund's own column heading can name PIK on every row ('Cash Interest Rate / PIK Rate'),
             -- so the row text is not consulted here: the setting says an untagged PIK does not exist
             (no_untagged_pik AND NOT coalesce(isfinite(pik) AND pik<>0,false)) AS cash_is_all_in,
@@ -232,8 +235,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  -- whole coupon that way (Ares prints '13.25 % PIK' in the coupon column). Not when
                  -- a spread is filed: the PIK is then a part of a floating coupon. Not by default:
                  -- HPS files a PIK margin in the same tag ('E + 6.75 %', coupon 8.75 %).
-                 WHEN pik_is_coupon AND reported_rate IS NULL AND spread IS NULL
-                      AND coalesce(isfinite(pik) AND pik>0,false) THEN 'all_in'
+                 WHEN coupon_from_pik THEN 'all_in'
                  ELSE 'unresolved' END AS rate_kind,
             CASE WHEN p.cost_state IS NOT NULL THEN p.cost_state
                  WHEN upper(trim(cost_currency)) NOT IN ('','USD') THEN 'unresolved_currency'
@@ -281,7 +283,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  WHEN rate_kind='cash' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate+pik
                  WHEN rate_kind='cash' AND isfinite(reported_rate) AND cash_is_all_in THEN reported_rate END AS all_in,
             CASE WHEN rate_kind='cash' AND isfinite(reported_rate) THEN reported_rate
-                 WHEN rate_kind='all_in' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate-pik END AS cash,
+                 WHEN rate_kind='all_in' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate-pik
+                 WHEN rate_kind='all_in' AND coupon_from_pik THEN 0.0 END AS cash,
             CASE WHEN precision_value='month' THEN last_day(coalesce(TRY_CAST(maturity_raw||'-01' AS DATE),TRY_CAST(maturity_date AS DATE)))
                  WHEN precision_value='year' THEN coalesce(TRY_CAST(maturity_raw||'-12-31' AS DATE),
                     CAST(date_trunc('year',TRY_CAST(maturity_date AS DATE))+INTERVAL '1 year'-INTERVAL '1 day' AS DATE))

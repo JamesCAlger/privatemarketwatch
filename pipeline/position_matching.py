@@ -67,7 +67,7 @@ MATCH_UNIFIED_COLUMNS = (
     "issuer_category", "index_classification", "asset_class", "interest_rate", "basis_spread",
     "coupon_type", "maturity_date", "maturity_precision", "bdc_investment_identifier",
     "bdc_dimensions_raw", "nport_holding_id", "is_subsidiary", "entity_id", "lien_position",
-    "position_key", "position_id", "row_id", "row_id_basis",
+    "position_key", "position_id", "row_id", "row_id_basis", "src_context_id",
 )
 
 # Raw BDC columns Tier A reads (_match_bdc_within_filing).
@@ -2504,6 +2504,8 @@ def match_positions(
     )
     SELECT cik, entity_name, source,
         begin_quarter, begin_report_date,
+        begin_issuer_name AS _identity_begin_name,
+        end_issuer_name AS _identity_end_name,
         COALESCE(_u_issuer_name, begin_issuer_name) AS begin_issuer_name,
         begin_fair_value, begin_cost, begin_principal_amount,
         begin_interest_rate, begin_basis_spread, begin_shares_held,
@@ -2569,12 +2571,15 @@ def match_positions(
     )
     overrides_df = load_position_match_overrides()
     if not overrides_df.empty:
-        result, n_rejected, n_forced = apply_match_overrides(result, overrides_df)
+        result, n_rejected, n_forced = apply_match_overrides(result, overrides_df, unified_df=unified_df)
         if n_rejected or n_forced:
             logger.info(
                 "  Match overrides applied: %d rejected, %d forced",
                 n_rejected, n_forced,
             )
+
+    from pipeline.reviewed_position_identity import reconcile_financial_matches
+    result = reconcile_financial_matches(result, unified_df, emit_missing=True)
 
     # Ensure column order
     for col in MATCH_COLUMNS:
@@ -2707,7 +2712,7 @@ def assign_position_ids(
     """Assign stable position_id values to unified holdings and match pairs.
 
     ``contested_assignment=True`` (experimental, mg3 replay) applies the
-    coexistence veto to every chain-forming edge and lets the supplementary
+    coexistence veto to inferred chain-forming edges and lets the supplementary
     exact-name pass resolve contested name groups by principal instead of
     refusing them.
 
@@ -2734,7 +2739,14 @@ def assign_position_ids(
         if retirements_path is None:
             retirements_path = POSITION_ID_RETIREMENTS_FILE
 
-    if matches_df.empty:
+    from pipeline.reviewed_position_identity import (
+        adjacent_identity_pairs, compatible as reviewed_compatible, context_identity_keys,
+    )
+    unified_df = _sort_existing(unified_df.copy(), UNIFIED_SORT_COLUMNS)
+    reviewed_keys = context_identity_keys(unified_df)
+    had_matches = not matches_df.empty
+
+    if matches_df.empty and not reviewed_keys:
         # All singletons
         unified_df = _sort_existing(unified_df.copy(), UNIFIED_SORT_COLUMNS)
         if use_registry:
@@ -2755,10 +2767,19 @@ def assign_position_ids(
     # ------------------------------------------------------------------
     # Step 1: Add stable integer row indices
     # ------------------------------------------------------------------
-    unified_df = _sort_existing(unified_df.copy(), UNIFIED_SORT_COLUMNS)
     unified_df["_uid"] = range(len(unified_df))
 
+    if matches_df.empty:
+        matches_df = pd.DataFrame(columns=MATCH_COLUMNS)
     matches_df = _sort_existing(matches_df.copy(), MATCH_SORT_COLUMNS)
+    strict_endpoints = {}
+    if reviewed_keys:
+        from pipeline.reviewed_position_identity import reconcile_financial_matches
+        matches_df = reconcile_financial_matches(matches_df, unified_df, endpoint_uids=strict_endpoints)
+        index_map = pd.Series(range(len(matches_df)), index=matches_df.index)
+        strict_endpoints = {(int(index_map.at[midx]), side): uid
+                            for (midx, side), uid in strict_endpoints.items() if midx in index_map.index}
+        matches_df = matches_df.reset_index(drop=True)
     matches_df["_midx"] = range(len(matches_df))
 
     # ------------------------------------------------------------------
@@ -2770,6 +2791,9 @@ def assign_position_ids(
     from pipeline.matching_contract import scope_sql,bounds_sql,interval_rank_sql
     scope_expression=scope_sql(unified_df.columns,row_id='row_id' if 'row_id' in unified_df.columns else '_uid')
     row_scopes=con.execute('SELECT '+scope_expression+' AS scope FROM u ORDER BY _uid').fetchnumpy()['scope']
+    # Validate reviewed-key quarter uniqueness before ANY primary or inferred
+    # union can choose an arbitrary branch from ambiguous declarations.
+    reviewed_pairs = adjacent_identity_pairs(unified_df, reviewed_keys, row_scopes)
     supp_mat_low,supp_mat_high=bounds_sql(unified_df.columns)
     reported_cost='cost_reported' if 'cost_reported' in unified_df.columns else 'cost'
 
@@ -2801,6 +2825,7 @@ def assign_position_ids(
              AND CAST(m.{date_col} AS VARCHAR) = CAST(u.report_date AS VARCHAR)
              AND CAST(m.{name_col} AS VARCHAR) = CAST(u.bdc_investment_identifier AS VARCHAR)
             WHERE CAST(m.match_method AS VARCHAR) LIKE 'A%'
+              AND ('{side}' != 'end' OR NOT ends_with(CAST(m.match_method AS VARCHAR), '_override'))
         ),
         poskey_cand AS (
             SELECT
@@ -2830,7 +2855,8 @@ def assign_position_ids(
              AND CAST(m.source AS VARCHAR) = CAST(u.source AS VARCHAR)
              AND CAST(m.{date_col} AS VARCHAR) = CAST(u.report_date AS VARCHAR)
              AND CAST(m.{name_col} AS VARCHAR) = CAST(u.issuer_name AS VARCHAR)
-            WHERE CAST(m.match_method AS VARCHAR) NOT LIKE 'A%'
+            WHERE (CAST(m.match_method AS VARCHAR) NOT LIKE 'A%'
+                   OR ('{side}' = 'end' AND ends_with(CAST(m.match_method AS VARCHAR), '_override')))
               AND CAST(m.match_method AS VARCHAR) != 'B1b_position_key'
         ),
         all_cand AS (
@@ -2870,6 +2896,8 @@ def assign_position_ids(
     end_uid = dict(zip(
         end_map["_midx"].astype(int), end_map["_uid"].astype(int),
     ))
+    begin_uid.update({midx: uid for (midx, side), uid in strict_endpoints.items() if side == 'begin'})
+    end_uid.update({midx: uid for (midx, side), uid in strict_endpoints.items() if side == 'end'})
 
     n_begin = len(begin_uid)
     n_end = len(end_uid)
@@ -2904,6 +2932,12 @@ def assign_position_ids(
 
     def _guarded_union(a: int, b: int) -> bool:
         """Union two rows only if the component remains date-unique."""
+        if not had_matches and a not in reviewed_keys and b not in reviewed_keys:
+            # Preserve the legacy all-singletons outcome for unreviewed rows
+            # when reviewed declarations are the only reason this path runs.
+            return False
+        if reviewed_keys and not reviewed_compatible(reviewed_keys, a, b):
+            return False
         if row_scopes[a]!=row_scopes[b]:
             return False
         root_a = _register_component(a)
@@ -3200,6 +3234,23 @@ def assign_position_ids(
         )
 
     # ------------------------------------------------------------------
+    # Step 3d: Reviewed source-context continuity, after all inferred passes.
+    # The central guard above applies to every pass and isolates mapped rows
+    # from unmapped intermediates, so no component can launder another key.
+    # Principal/name twins are inference evidence, weaker than an exact
+    # source-reviewed tranche identity. Equal-key competitors cannot exist:
+    # adjacent_identity_pairs rejects same-quarter duplicate keys beforehand.
+    # Keep the central key, scope and component-date guards for these edges.
+    used_reviewed_edges: set[tuple[int, int]] = set()
+    for a, b in reviewed_pairs:
+        if uf.find(a) == uf.find(b):
+            continue
+        if _guarded_union(a, b):
+            used_reviewed_edges.add((a, b))
+    if reviewed_keys:
+        logger.info("  Reviewed context identity: %d rows, %d new adjacent edges",
+                    len(reviewed_keys), len(used_reviewed_edges))
+
     # Step 4: Assign component IDs (sorted for determinism)
     # ------------------------------------------------------------------
     components = uf.components()
@@ -3243,7 +3294,8 @@ def assign_position_ids(
     for midx in range(n_match):
         e = end_uid.get(midx)
         b = begin_uid.get(midx)
-        if b is not None and e is not None and row_scopes[b]!=row_scopes[e]:
+        if ((reviewed_keys and not reviewed_compatible(reviewed_keys, b, e))
+                or (b is not None and e is not None and row_scopes[b]!=row_scopes[e])):
             match_pids.append("")
             n_unlinked+=1
         elif e is not None:
@@ -3344,6 +3396,23 @@ def assign_position_ids(
             "match_key": str(end.get("position_key", "")).strip().lower(),
             "match_score": "1.0",
             "span_months": "3",
+        })
+    for a, b in sorted(used_reviewed_edges):
+        begin = uid_lookup.loc[a]
+        end = uid_lookup.loc[b]
+        edge_rows.append({
+            "edge_type": "reviewed_context_identity", "position_id": uid_to_pid[b],
+            "cik": end.get("cik", ""), "source": end.get("source", ""),
+            "begin_report_date": begin.get("report_date", ""),
+            "begin_quarter": _quarter_from_date(begin.get("report_date", "")),
+            "begin_issuer_name": begin.get("issuer_name", ""),
+            "begin_fair_value": begin.get("fair_value", ""),
+            "end_report_date": end.get("report_date", ""),
+            "end_quarter": _quarter_from_date(end.get("report_date", "")),
+            "end_issuer_name": end.get("issuer_name", ""),
+            "end_fair_value": end.get("fair_value", ""),
+            "match_method": "REVIEWED_context_identity", "match_key": reviewed_keys[b],
+            "match_score": "1.0", "span_months": "3",
         })
     _write_position_id_edges(edge_rows, edges_file)
     logger.info("  Position ID edge artifact: %d edges", len(edge_rows))
