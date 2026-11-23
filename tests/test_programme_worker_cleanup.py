@@ -1,5 +1,7 @@
-import psutil
 import pytest
+
+# psutil is listed only in requirements-programme-windows.txt, so CI does not install it.
+psutil = pytest.importorskip("psutil")
 
 from pipeline.programme.core import ContractError,atomic_json
 from pipeline.programme.runner import stop_owned_worker
