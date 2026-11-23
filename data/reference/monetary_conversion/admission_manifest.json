@@ -4,7 +4,7 @@
       "admission_status": "promoted",
       "evidence": {
         "authorization": "owner decision 2026-09-15: single canonical FX source (FRED H.10), replaces ECB contract",
-        "built_utc": "2026-09-15T10:49:00Z",
+        "built_utc": "2026-11-23T10:50:05Z",
         "currencies": [
           "AUD",
           "BRL",
@@ -29,8 +29,8 @@
           "TWD",
           "ZAR"
         ],
-        "fetch_manifest_sha256": "371fde5ec86b6eff392dbcb7d4c8f65b001cac229c1f4fe6f432fa6c072b2e1e",
-        "fetched_utc": "2026-09-15T10:40:17Z",
+        "fetch_manifest_sha256": "2d9c46f9d200b4d77834555ea5602db17ba310b7458e611dae11bc37c825d9a7",
+        "fetched_utc": "2026-11-23T10:49:49Z",
         "gate": {
           "checks": [
             "cached_series_hash_matches_fetch_manifest",
@@ -41,11 +41,11 @@
         },
         "kind": "fx_reference_package",
         "provider": "FRED",
-        "quote_dates": 1983,
+        "quote_dates": 2026,
         "release": "H.10",
-        "source_sha256": "aaf8f86e8749f328d838a3fd2e3ba4e85bd7a21a027c661c70b380324e4bd88e"
+        "source_sha256": "7ef31f2e4b83ad353e94d45f94f194168594ad24201439c920748cb879d6143a"
       },
-      "sha256": "1b29f8dfe5c5fc0f3b6a451e8af7f46c91b2ff67ceec8f34a62f0b691d864456"
+      "sha256": "bc39289ee6b013e0840cb3330a26699c3de04c54b759fc0cd29bd62cd897e89a"
     }
   },
   "format_version": 1
