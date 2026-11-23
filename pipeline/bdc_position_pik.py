@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 PIK_EVIDENCE_COLUMNS = [
     "cik", "entity_name", "accession_number", "form_type",
-    "filing_date", "report_date", "period", "concept",
+    "filing_date", "report_date", "period", "period_start", "concept",
     "context_id", "dimensions_raw", "matched_identifier",
     "amount", "unit", "decimals", "evidence_kind", "position_level",
 ]
@@ -69,6 +69,20 @@ def _parse_numeric(raw: str) -> float | None:
         return None
 
 
+def _context_start_dates(root: etree._Element) -> dict[str, str]:
+    """contextRef -> startDate for duration contexts. The shared context parser keeps only the
+    end date, which cannot tell a quarter from a year-to-date fact."""
+    starts: dict[str, str] = {}
+    for ctx in root.iter():
+        if _local_name(ctx.tag) != "context" or not ctx.get("id"):
+            continue
+        for node in ctx.iter():
+            if _local_name(node.tag) == "startDate":
+                starts[ctx.get("id")] = (node.text or "").strip()
+                break
+    return starts
+
+
 def _extract_pik_evidence_facts(
     tree: etree._ElementTree,
     contexts: dict[str, dict],
@@ -77,6 +91,7 @@ def _extract_pik_evidence_facts(
     """Extract PIK current-payment evidence facts from one parsed XBRL tree."""
     records: list[dict[str, Any]] = []
     root = tree.getroot()
+    period_starts = _context_start_dates(root)
 
     for elem in root.iter():
         ctx_ref = elem.get("contextRef")
@@ -109,6 +124,7 @@ def _extract_pik_evidence_facts(
             "filing_date": filing_meta.get("filing_date", ""),
             "report_date": filing_meta.get("report_date", ""),
             "period": ctx.get("period", ""),
+            "period_start": period_starts.get(ctx_ref, ""),
             "concept": local,
             "context_id": ctx_ref,
             "dimensions_raw": dimensions_raw,

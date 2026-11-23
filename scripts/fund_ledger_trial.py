@@ -3,7 +3,7 @@
 Creates ``scratch/fund_sandbox/<label>/output`` holding only the chosen funds' inputs, then runs
 the production commands unchanged with ``PM_OUTPUT_DIR`` pointing at it:
 
-    fund highlights -> fund financials -> unified rebuild -> non-accrual -> validate -> oracle
+    fund highlights -> fund financials -> unified rebuild -> non-accrual -> pik -> validate -> oracle
     -> provenance -> shadow -> queue -> ledger
 
 So the ledger is produced by the same code as the official one, for those funds only. Verdicts
@@ -42,7 +42,8 @@ PAD = "lpad(regexp_replace(cast(cik AS VARCHAR),'[^0-9]','','g'),10,'0')"
 NOT_SEEDED = ("private_markets_holdings", "position_matches", "position_id_edges", "position_returns",
               "position_pik_status", "position_match_residuals", "identity_registry", "identity_aliases",
               "cost_donor_audit", "provenance_ledger", "row_validation_issues", "pipeline.log",
-              "quarter_acceptance", "pass_preflight")
+              "quarter_acceptance", "pass_preflight", "pik_accretion", "pik_lincoln_summary",
+              "pik_reconciliation")
 SEEDED_DIRS = ("linkbase_analysis",)
 RESOLVED = frozenset({"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream",
                       "gone_unadjudicated", "dispositioned_informational", "dispositioned_as_filed",
@@ -53,6 +54,10 @@ STAGES = (
     ("financials", [PY, "scripts/rebuild_outputs.py", "--financials"]),
     ("rebuild", [PY, "scripts/rebuild_outputs.py", "--unified"]),
     ("nonaccrual", [PY, "-m", "pipeline.extract_nonaccrual_flags"]),
+    # PIK evidence, status and accretion (Lincoln-style bad-PIK proxy). Other filers' history comes
+    # from the published holdings, read only.
+    ("pik", [PY, "-m", "pipeline.pik_accretion", "--with-status",
+             "--reference-holdings", str(PRODUCTION / "private_markets_holdings.csv")]),
     ("validate", [PY, "-m", "pipeline.main", "--validate"]),
     # After validate, which writes the source reconciliation detail that oracle checks A01, B01,
     # B07 and E07 read. Run before it, they saw the previous build's file and skipped a quarter

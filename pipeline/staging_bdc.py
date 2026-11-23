@@ -524,6 +524,29 @@ def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
 # BDC preparation
 # ---------------------------------------------------------------------------
 
+_IXBRL_STATUS_COLUMNS = ["cik", "accession_number", "report_date", "raw_id_lower",
+                         "maturity_date", "maturity_status", "reference_rate_type",
+                         "reference_rate_status", "lien_position", "lien_status", "printed_margin",
+                         "gics_sector", "sector_status", "acquisition_date", "acquisition_status"]
+
+
+def read_ixbrl_field_status(path) -> pd.DataFrame:
+    """The page readings the staging overlay can apply.
+
+    Only the columns the overlay needs, and only rows with an applicable status=value (a narrow,
+    pre-filtered frame instead of a full ~1M-row CSV round-trip). A printed margin is read only on
+    a row whose reference rate has status value. An artifact written before the acquisition
+    columns existed reads as before.
+    """
+    sdf = pd.read_csv(path, dtype=str, usecols=lambda c: c in _IXBRL_STATUS_COLUMNS)
+    blank = pd.Series("", index=sdf.index)
+    return sdf[(sdf.get("maturity_status", blank) == "value")
+               | (sdf.get("lien_status", blank) == "value")
+               | (sdf.get("reference_rate_status", blank).isin(["value", "not_applicable"]))
+               | (sdf.get("sector_status", blank) == "value")
+               | (sdf.get("acquisition_status", blank) == "value")]
+
+
 def _prepare_bdc(
     bdc_df: pd.DataFrame | None = None,
     bdc_file: Union[Path, str, None] = None,
@@ -3089,22 +3112,7 @@ def _prepare_bdc(
     from pipeline.config import BDC_IXBRL_FIELD_STATUS_FILE
     if BDC_IXBRL_FIELD_STATUS_FILE.exists():
         from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
-        # Read only the columns the overlay needs and keep only rows with an
-        # applicable status=value (the only rows that can be applied).  This is the
-        # difference between a full ~1M-row CSV->dicts->DataFrame round-trip and a
-        # narrow, pre-filtered DataFrame passed straight through.
-        _cols = ["cik", "accession_number", "report_date", "raw_id_lower",
-                 "maturity_date", "maturity_status", "reference_rate_type",
-                 "reference_rate_status", "lien_position", "lien_status", "printed_margin",
-                 "gics_sector", "sector_status"]
-        _sdf = pd.read_csv(BDC_IXBRL_FIELD_STATUS_FILE, dtype=str,
-                           usecols=lambda c: c in _cols)
-        # a printed margin is read only on a row whose reference rate has status value
-        _sdf = _sdf[(_sdf["maturity_status"] == "value")
-                    | (_sdf["lien_status"] == "value")
-                    | (_sdf["reference_rate_status"].isin(["value", "not_applicable"]))
-                    | (_sdf.get("sector_status", pd.Series("", index=_sdf.index)) == "value")]
-        result = apply_ixbrl_field_status_overlay(result, _sdf)
+        result = apply_ixbrl_field_status_overlay(result, read_ixbrl_field_status(BDC_IXBRL_FIELD_STATUS_FILE))
 
     # Agent A basis_spread corrections: audited, keyed OVERRIDE (NOT blank-only) of the
     # per-position spreads where the freeform-identifier spread reconciles with all-in+SOFR

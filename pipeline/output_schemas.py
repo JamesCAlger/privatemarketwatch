@@ -291,6 +291,8 @@ OUTPUT_SCHEMAS: dict[str, dict[str, str]] = {
         "sector_status": "VARCHAR",
         "printed_row": "VARCHAR",
         "lien_reconciled": "BOOLEAN",
+        "acquisition_date": "VARCHAR",
+        "acquisition_status": "VARCHAR",
         "in_unified": "BOOLEAN",
     },
     "row_validation_issues.csv": {

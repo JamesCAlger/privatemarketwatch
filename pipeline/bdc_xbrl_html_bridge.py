@@ -975,10 +975,11 @@ def propose_html_section_bridges(
 
 
 # Fields carried from the inline anchor, and where their status lives.
-_STATUS_FIELDS = ("maturity_date", "reference_rate_type", "lien_position", "gics_sector")
+_STATUS_FIELDS = ("maturity_date", "reference_rate_type", "lien_position", "gics_sector", "acquisition_date")
 _FIELD_STATUS_KEY = {
     "maturity_date": "maturity_status",
     "reference_rate_type": "reference_rate_status",
+    "acquisition_date": "acquisition_status",
 }
 
 
@@ -1150,6 +1151,9 @@ def build_field_status_rows(
             "sector_status": _fs(j.get("gics_sector_status", "")),
             "printed_row": j.get("printed_row", ""),
             "lien_reconciled": lien_ok,
+            # the filer's printed acquisition date (Ares Capital, BCRED print it and do not tag it)
+            "acquisition_date": j.get("acquisition_date", ""),
+            "acquisition_status": _fs(j.get("acquisition_date_status", "")),
         })
     return rows
 
@@ -1293,6 +1297,10 @@ def apply_ixbrl_field_status_overlay(
     keep = ["_k"] + [c for f in _OVERLAY_FIELDS for c in (f, _OVERLAY_FIELDS[f]) if c in sdf.columns]
     if "printed_margin" in sdf.columns:
         keep.append("printed_margin")
+    if {"acquisition_date", "acquisition_status"} <= set(sdf.columns):
+        # carried under its own name: staging's column is bdc_acquisition_date
+        sdf["_printed_acquisition_date"] = sdf["acquisition_date"].where(sdf["acquisition_status"].astype(str) == "value", "")
+        keep.append("_printed_acquisition_date")
     if {"gics_sector", "sector_status"} <= set(sdf.columns):
         # the industry heading printed above the row; carried under its own name so that it
         # never collides with a staged column
@@ -1345,6 +1353,22 @@ def apply_ixbrl_field_status_overlay(
             if _src not in result.columns:
                 result[_src] = ""
             result.loc[mask.values, _src] = "ixbrl_field_status"
+    # The acquisition date printed in the filer's own column (Ares Capital, BCRED print it and do not
+    # tag it). Staging has already named the tagged value bdc_acquisition_date; blank-only, the same
+    # range rule as the tag (1950 to the report date), and an event in place of a source column.
+    if "_printed_acquisition_date" in merged.columns and "bdc_acquisition_date" in result.columns:
+        printed = pd.to_datetime(merged["_printed_acquisition_date"].replace("", None), errors="coerce")
+        reported = pd.to_datetime(merged["report_date"].map(_norm_text), errors="coerce")
+        take = (printed.notna()
+                & (printed >= pd.Timestamp("1950-01-01")) & (printed <= reported)
+                & blank(merged["bdc_acquisition_date"]))
+        if take.any():
+            result.loc[take.values, "bdc_acquisition_date"] = printed[take].dt.strftime("%Y-%m-%d").values
+            if "src_transforms" not in result.columns:
+                result["src_transforms"] = ""
+            events = result.loc[take.values, "src_transforms"].astype("string").fillna("")
+            result.loc[take.values, "src_transforms"] = ((events + ";").where(events != "", "")
+                                                         + "bdc_acquisition_date:printed_page").values
     # A reference rate inferred from the report date (LIBOR before July 2023, SOFR after) is a
     # guess, and one read from the identifier text can be a borrower's name ('Prime Security
     # Services Borrower') or a label the filer did not update (Apollo 10-Q 2023-03-31, Garda

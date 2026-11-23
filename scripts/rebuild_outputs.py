@@ -159,6 +159,10 @@ def rebuild_pik_status():
         len(transitions_df),
         time.time() - t1,
     )
+
+    from pipeline.pik_accretion import build_pik_accretion_outputs
+    logger.info("=== Rebuilding PIK accretion and Lincoln-style summary ===")
+    build_pik_accretion_outputs()
     return status_df, transitions_df
 
 
