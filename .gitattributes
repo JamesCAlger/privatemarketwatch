@@ -1,3 +1,6 @@
-# The rule-admission manifest records the hash of this file as checked out on Windows (CRLF).
-# Check it out with CRLF everywhere so the hash is the same on Linux CI. See pipeline/rule_admission.py.
-data/reference/monetary_conversion/quotes.json text eol=crlf
+# Files whose exact bytes are bound by a recorded sha256 (rule admission manifests, FX quote
+# sources, retired corrections kept "with original bytes"). Git must never convert their line
+# ends, or the same commit hashes differently on Windows and Linux. "-text" stores and checks
+# out the bytes exactly as committed. Add a path here BEFORE committing a new hash-bound file.
+data/reference/monetary_conversion/** -text
+data/overrides/**/_retired_*.json -text
