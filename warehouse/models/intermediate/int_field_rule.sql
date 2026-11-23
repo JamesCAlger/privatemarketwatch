@@ -1,6 +1,6 @@
 -- Decides which rule converts each amount field of each position row (spec intermediate_spine.md sections 5 and 6.4).
--- Resolution only: no value is computed here. One row per (accession, context_id, field), for the five fields of
--- int_field_read plus principal_amount_usd.
+-- Resolution only: no value is computed here. One row per (accession, context_id, field), for the five amount fields
+-- of int_field_read plus principal_amount_usd.
 --
 -- Rules come from two places, and both are rows, never an else branch:
 --   global defaults  seeds/field_rule_default.csv (origin global_default, priority 10), for example as_filed for an
@@ -50,6 +50,8 @@
 --                           fact whose label names no equity word, scale 1
 -- These decide from the size of a number; each is listed for review in docs/owner_review_value_size_rules_2026-11-22.md.
 with read as (
+    -- the five amount fields only: int_field_read also reads the rate fields and the maturity date since slice 4 Task 2;
+    -- their rules are slice 4 Task 3, which extends this list
     select *
         , case
             when status <> 'read' or is_nil or value_filed is null then null
@@ -60,6 +62,7 @@ with read as (
             else 'other'
           end as unit_kind
     from {{ ref('int_field_read') }}
+    where field in ('fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets')
 )
 
 , unresolved_cost as (

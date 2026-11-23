@@ -34,6 +34,11 @@ seeds:
       DuckDB glob), never on the prefix (filed_layer.md section 7 ruling 12). Every model that reads a standard concept
       reads it here; no model writes a concept name (pytests/test_no_concept_literals.py). A filer's own concept is a
       fund rule in its wrapper copy, not a row here. concept_map_id is the rule a standard value names (spec section 7).
+      Two field columns (slice 4 Task 2): field is the term-fact family the row roles and the row-set check read
+      (int_context_feature has_*, cmp_row_set rate facts); field rate holds both the interest-rate and the cash-pay
+      concept, one definition of "a rate" (slice 3 ruling). read_field is the int_field_read field the concept is read
+      into, which keeps the two rate tags apart (interest_rate_tag, interest_rate_cash_tag); empty for a concept
+      int_field_read does not read (ownership percent).
     columns:
       - name: concept_map_id
         data_tests:
@@ -46,6 +51,13 @@ seeds:
               arguments:
                 values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets', 'rate', 'spread',
                          'pik_rate', 'maturity', 'ownership_percent']
+      - name: read_field
+        description: The int_field_read field (one of its ten); empty where int_field_read does not read the concept.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets', 'interest_rate_tag',
+                         'interest_rate_cash_tag', 'pik_rate', 'spread', 'maturity_date']
       - name: concept_local
         data_tests:
           - not_null

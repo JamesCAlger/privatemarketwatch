@@ -137,6 +137,16 @@ vars:
     int_field_read_unresolved_principal_amount: 1
     int_field_read_unresolved_shares: 0
     int_field_read_unresolved_pct_of_net_assets: 0
+    # Slice 4 Task 2 (int_field_read, rate fields and maturity date): unresolved per field, measured 2026-11-23. All six
+    # unresolved rows are one fund's, in two filings (2025-03-31, 2025-06-30): the context carries the concept twice,
+    # once in unit pure and once in utr:Rate, with two different numbers (values_differ). No cash-pay tag is filed on
+    # any position of the five funds. Every maturity fact is an ISO date (not_a_date 0).
+    int_field_read_unresolved_interest_rate_tag: 1
+    int_field_read_unresolved_interest_rate_cash_tag: 0
+    int_field_read_unresolved_pik_rate: 0
+    int_field_read_unresolved_spread: 5
+    int_field_read_unresolved_maturity_date: 0
+    int_field_read_maturity_not_a_date: 0
     # Slice 3 Task 3 (int_field_normalised): unresolved amount fields per field and reason, measured 2026-11-22.
     # Share of net assets is no longer here: fraction_to_percent is built for it (fix round 1, was 30759 action_not_built).
     # 1: one principal tagged in two currencies with two numbers. 1: its principal_amount_usd.

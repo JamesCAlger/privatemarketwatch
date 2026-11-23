@@ -211,11 +211,13 @@ models:
 
   - name: int_field_read
     description: >
-      One row per position row of int_source_row (published or not) and amount field (fair_value, cost,
-      principal_amount, shares, pct_of_net_assets): the filed fact that is the field's value, as filed (after the tag's
-      own scale and sign, nothing else), its unit, fact id, printed text and the rule it was read under (spec
-      intermediate_spine.md 6.3). Key, five rows per position and the columns per status are tested in
-      tests/int_field_read_*.sql; unresolved fields per field have baseline ceilings.
+      One row per position row of int_source_row (published or not) and tagged field: the five amounts (fair_value,
+      cost, principal_amount, shares, pct_of_net_assets) and, since slice 4 Task 2, interest_rate_tag,
+      interest_rate_cash_tag, pik_rate, spread and maturity_date. The filed fact that is the field's value, as filed
+      (after the tag's own scale and sign, nothing else; a rate stays as tagged), its unit, fact id, printed text and
+      the rule it was read under (spec intermediate_spine.md 6.3). The two _tag fields are the interest-rate and the
+      cash-pay concept as filed, before any reading decides which leg they hold. Key, ten rows per position and the
+      columns per status are tested in tests/int_field_read_*.sql; unresolved fields per field have baseline ceilings.
     columns:
       - name: accession
         data_tests:
@@ -228,7 +230,8 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets']
+                values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets', 'interest_rate_tag',
+                         'interest_rate_cash_tag', 'pik_rate', 'spread', 'maturity_date']
       - name: cik
         data_tests:
           - not_null
@@ -247,9 +250,15 @@ models:
           - accepted_values:
               arguments:
                 values: ['one_fact', 'same_value_repeated', 'value_beside_nil', 'nil', 'no_fact', 'values_differ',
-                         'units_differ', 'fact_without_number']
+                         'units_differ', 'fact_without_number', 'not_a_date']
       - name: value_filed
-        description: The instance value of the fact (scale and sign of the printed number already applied). Null unless read.
+        description: >
+          The instance value of the fact (scale and sign of the printed number already applied). Null unless read, and
+          null on maturity_date.
+      - name: value_date
+        description: >
+          maturity_date only: the date fact's filed text read as an ISO date (YYYY-MM-DD). Null unless read, and null on
+          every other field. A date fact whose text is not such a date is unresolved, reason not_a_date.
       - name: unit
         description: The fact's unit measure as written in the filing (numerator, or numerator/denominator). Null unless read.
       - name: fact_count
@@ -1384,7 +1393,8 @@ unit_tests:
       Slice 3 Task 2. Invented rows, fund 1 at 2026-03-31, three positions and one aggregate. p1: the standard
       fair-value fact wins over the fund's own concept; cost tagged twice with one number is read once, naming the
       printed fact; principal in two currencies with two numbers is unresolved; shares absent; share of net assets
-      nil-only is read with is_nil; a rate fact is not an amount and is ignored. p2: fair value from the fund rule alone;
+      nil-only is read with is_nil; a rate fact is read into interest_rate_tag, as tagged (slice 4 Task 2; every other
+      rate field and the maturity date are absent on all four). p2: fair value from the fund rule alone;
       principal beside a nil fact is read; one cost number in two units is unresolved; a hidden share of net assets
       takes the text of the cell that shows it. p3: the fund rule starts after the report date, so fair value is
       absent; principal in the FASB supplement namespace is read under its own seed row; a shares fact with no number
@@ -1405,13 +1415,13 @@ unit_tests:
           - {accession: A, cik: "1", document_period_end_date: 2026-03-31}
       - input: ref('concept_map')
         rows:
-          - {concept_map_id: cm_fair_value, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
-          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
-          - {concept_map_id: cm_principal, field: principal_amount, concept_local: InvestmentOwnedBalancePrincipalAmount, namespace_pattern: "http://fasb.org/us-gaap/*"}
-          - {concept_map_id: cm_principal_sup, field: principal_amount, concept_local: InvestmentOwnedBalancePrincipalAmount, namespace_pattern: "http://fasb.org/us-gaap-sup/*"}
-          - {concept_map_id: cm_shares, field: shares, concept_local: InvestmentOwnedBalanceShares, namespace_pattern: "http://fasb.org/us-gaap/*"}
-          - {concept_map_id: cm_pct_net_assets, field: pct_of_net_assets, concept_local: InvestmentOwnedPercentOfNetAssets, namespace_pattern: "http://fasb.org/us-gaap/*"}
-          - {concept_map_id: cm_rate, field: rate, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_fair_value, field: fair_value, read_field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, read_field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_principal, field: principal_amount, read_field: principal_amount, concept_local: InvestmentOwnedBalancePrincipalAmount, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_principal_sup, field: principal_amount, read_field: principal_amount, concept_local: InvestmentOwnedBalancePrincipalAmount, namespace_pattern: "http://fasb.org/us-gaap-sup/*"}
+          - {concept_map_id: cm_shares, field: shares, read_field: shares, concept_local: InvestmentOwnedBalanceShares, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_pct_net_assets, field: pct_of_net_assets, read_field: pct_of_net_assets, concept_local: InvestmentOwnedPercentOfNetAssets, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_rate, field: rate, read_field: interest_rate_tag, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
       - input: ref('stg_reading_rule')
         rows:
           - {rule_id: fr1, cik: "1", action: concept_is_fair_value, sel_concept_namespace: "http://fund.example/*", sel_concept_local: OwnFairValue, sel_accession: null, valid_from: null, valid_to: null}
@@ -1480,6 +1490,118 @@ unit_tests:
         - {context_id: p4, field: principal_amount, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
         - {context_id: p4, field: shares, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
         - {context_id: p4, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p1, field: interest_rate_tag, status: read, reason: one_fact, value_filed: 0.08, unit: "xbrli:pure", fact_id: f08, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_rate}
+        - {context_id: p1, field: interest_rate_cash_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p1, field: pik_rate, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p1, field: spread, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p1, field: maturity_date, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p2, field: interest_rate_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p2, field: interest_rate_cash_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p2, field: pik_rate, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p2, field: spread, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p2, field: maturity_date, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: interest_rate_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: interest_rate_cash_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: pik_rate, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: spread, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p3, field: maturity_date, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: interest_rate_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: interest_rate_cash_tag, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: pik_rate, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: spread, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: p4, field: maturity_date, status: absent, reason: no_fact, value_filed: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+
+  - name: int_field_read_rates_and_maturity
+    description: >
+      Slice 4 Task 2. Invented rows, fund 2 at 2026-03-31, three positions with no amount facts (their five amount
+      fields are absent). q1: the interest-rate tag (0.0925) and the cash-pay tag (0.07) are read apart, each under its
+      own concept_map row, and stay as tagged (no times 100); a PIK rate tagged twice with one number is read once
+      (fact_count 2); a nil spread is read with a null value and is_nil; the maturity date '2029-06-30' is read into
+      value_date with value_filed and unit null; an ownership-percent fact (no read_field) is not read. q2: two
+      different interest rates are unresolved (values_differ); one spread number in two units is unresolved
+      (units_differ); a maturity written 'June 30, 2029' is unresolved (not_a_date). q3: an interest-rate fact with
+      no number is unresolved (fact_without_number); two different maturity dates are unresolved (values_differ); the
+      PIK rate in the FASB supplement namespace is read under its own row.
+    model: int_field_read
+    given:
+      - input: ref('int_source_row')
+        rows:
+          - {accession: B, context_id: q1, cik: "2", report_date: 2026-03-31, role: position}
+          - {accession: B, context_id: q2, cik: "2", report_date: 2026-03-31, role: position}
+          - {accession: B, context_id: q3, cik: "2", report_date: 2026-03-31, role: position}
+      - input: ref('stg_filed_filing')
+        rows:
+          - {accession: B, cik: "2", document_period_end_date: 2026-03-31}
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_rate, field: rate, read_field: interest_rate_tag, concept_local: InvestmentInterestRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_rate_cash, field: rate, read_field: interest_rate_cash_tag, concept_local: InvestmentInterestRatePaidInCash, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_pik_rate, field: pik_rate, read_field: pik_rate, concept_local: InvestmentInterestRatePaidInKind, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_pik_rate_sup, field: pik_rate, read_field: pik_rate, concept_local: InvestmentInterestRatePaidInKind, namespace_pattern: "http://fasb.org/us-gaap-sup/*"}
+          - {concept_map_id: cm_spread, field: spread, read_field: spread, concept_local: InvestmentBasisSpreadVariableRate, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_maturity, field: maturity, read_field: maturity_date, concept_local: InvestmentMaturityDate, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_ownership, field: ownership_percent, read_field: null, concept_local: InvestmentOwnedBalancePercentOfShares, namespace_pattern: "http://fasb.org/us-gaap/*"}
+      - input: ref('stg_reading_rule')
+        rows: []
+      - input: ref('stg_filed_fact')
+        rows:
+          - {accession: B, fact_id: g01, fact_index: 1, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRate, unit_id: pure, value_numeric: 0.0925, value_text: "0.0925", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g02, fact_index: 2, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRatePaidInCash, unit_id: pure, value_numeric: 0.07, value_text: "0.07", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g03, fact_index: 3, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRatePaidInKind, unit_id: pure, value_numeric: 0.0225, value_text: "0.0225", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g04, fact_index: 4, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRatePaidInKind, unit_id: pure, value_numeric: 0.0225, value_text: "0.0225", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g05, fact_index: 5, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentBasisSpreadVariableRate, unit_id: pure, value_numeric: null, value_text: "", decimals: null, is_nil: true}
+          - {accession: B, fact_id: g06, fact_index: 6, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentMaturityDate, unit_id: null, value_numeric: null, value_text: "2029-06-30", decimals: null, is_nil: false}
+          - {accession: B, fact_id: g07, fact_index: 7, context_id: q1, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentOwnedBalancePercentOfShares, unit_id: pure, value_numeric: 0.5, value_text: "0.5", decimals: "2", is_nil: false}
+          - {accession: B, fact_id: g11, fact_index: 11, context_id: q2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRate, unit_id: pure, value_numeric: 0.09, value_text: "0.09", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g12, fact_index: 12, context_id: q2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRate, unit_id: pure, value_numeric: 0.095, value_text: "0.095", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g13, fact_index: 13, context_id: q2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentBasisSpreadVariableRate, unit_id: pure, value_numeric: 0.05, value_text: "0.05", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g14, fact_index: 14, context_id: q2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentBasisSpreadVariableRate, unit_id: rate, value_numeric: 0.05, value_text: "0.05", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g15, fact_index: 15, context_id: q2, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentMaturityDate, unit_id: null, value_numeric: null, value_text: "June 30, 2029", decimals: null, is_nil: false}
+          - {accession: B, fact_id: g21, fact_index: 21, context_id: q3, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentInterestRate, unit_id: pure, value_numeric: null, value_text: "n/a", decimals: "4", is_nil: false}
+          - {accession: B, fact_id: g22, fact_index: 22, context_id: q3, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentMaturityDate, unit_id: null, value_numeric: null, value_text: "2029-06-30", decimals: null, is_nil: false}
+          - {accession: B, fact_id: g23, fact_index: 23, context_id: q3, concept_namespace: "http://fasb.org/us-gaap/2025", concept_local: InvestmentMaturityDate, unit_id: null, value_numeric: null, value_text: "2030-01-15", decimals: null, is_nil: false}
+          - {accession: B, fact_id: g24, fact_index: 24, context_id: q3, concept_namespace: "http://fasb.org/us-gaap-sup/2023", concept_local: InvestmentInterestRatePaidInKind, unit_id: pure, value_numeric: 0.03, value_text: "0.03", decimals: "4", is_nil: false}
+      - input: ref('stg_filed_unit')
+        rows:
+          - {accession: B, unit_id: pure, numerator: "pure", denominator: null}
+          - {accession: B, unit_id: rate, numerator: "utr:Rate", denominator: null}
+      - input: ref('stg_filed_fact_placement')
+        rows:
+          - {accession: B, fact_id: g01, row_index: 0, cell_index: 4, displayed_text: "9.25%", in_hidden: false, shown_row_index: null, shown_cell_index: null}
+      - input: ref('stg_filed_document_row')
+        rows: []
+    expect:
+      rows:
+        - {context_id: q1, field: fair_value, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q1, field: cost, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q1, field: principal_amount, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q1, field: shares, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q1, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q1, field: interest_rate_tag, status: read, reason: one_fact, value_filed: 0.0925, value_date: null, unit: "pure", fact_id: g01, fact_count: 1, printed_text: "9.25%", is_nil: false, read_rule_id: cm_rate}
+        - {context_id: q1, field: interest_rate_cash_tag, status: read, reason: one_fact, value_filed: 0.07, value_date: null, unit: "pure", fact_id: g02, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_rate_cash}
+        - {context_id: q1, field: pik_rate, status: read, reason: same_value_repeated, value_filed: 0.0225, value_date: null, unit: "pure", fact_id: g03, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_pik_rate}
+        - {context_id: q1, field: spread, status: read, reason: nil, value_filed: null, value_date: null, unit: "pure", fact_id: g05, fact_count: 1, printed_text: null, is_nil: true, read_rule_id: cm_spread}
+        - {context_id: q1, field: maturity_date, status: read, reason: one_fact, value_filed: null, value_date: 2029-06-30, unit: null, fact_id: g06, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_maturity}
+        - {context_id: q2, field: fair_value, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: cost, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: principal_amount, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: shares, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: interest_rate_tag, status: unresolved, reason: values_differ, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_rate}
+        - {context_id: q2, field: interest_rate_cash_tag, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: pik_rate, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q2, field: spread, status: unresolved, reason: units_differ, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_spread}
+        - {context_id: q2, field: maturity_date, status: unresolved, reason: not_a_date, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_maturity}
+        - {context_id: q3, field: fair_value, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: cost, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: principal_amount, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: shares, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: pct_of_net_assets, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: interest_rate_tag, status: unresolved, reason: fact_without_number, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_rate}
+        - {context_id: q3, field: interest_rate_cash_tag, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: pik_rate, status: read, reason: one_fact, value_filed: 0.03, value_date: null, unit: "pure", fact_id: g24, fact_count: 1, printed_text: null, is_nil: false, read_rule_id: cm_pik_rate_sup}
+        - {context_id: q3, field: spread, status: absent, reason: no_fact, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 0, printed_text: null, is_nil: false, read_rule_id: null}
+        - {context_id: q3, field: maturity_date, status: unresolved, reason: values_differ, value_filed: null, value_date: null, unit: null, fact_id: null, fact_count: 2, printed_text: null, is_nil: false, read_rule_id: cm_maturity}
 
   - name: int_field_rule_defaults_and_units
     description: >
