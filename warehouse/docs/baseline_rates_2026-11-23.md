@@ -368,11 +368,12 @@ Published table, `interest_rate_cash` only (the other five fields did not change
 | Before | 2,450 | 72 | 234 | 6 | 57,913 |
 | After ruling A | 2,450 | 143 | 163 | 30,579 | 27,340 |
 
-Residual risk, measured: a PIK that exists but is not tagged gives an overstated cash leg. Of the
-40,410 rows, 68 print "PIK" in the rate tag's own cell (Ares 36, BCRED 7, Apollo 3, HPS 22; for
-example "11.00% PIK", "12.74% (incl. 0.50% PIK)"; `scripts/rate_rulings/q_a_cash_rows.sql`). On those
-rows the cash leg is probably too high. They are not changed: reading the print is the text spec's
-job. The other 40,342 rows print no "PIK" in that cell, which is not proof that they pay no PIK.
+Residual risk: a PIK that exists but is not tagged gives an overstated cash leg. Where the page
+says so, the cash leg is no longer stored (fix round 1, controller ruling R1, below): 69 rows after
+ruling B (Ares 37, BCRED 7, Apollo 3, HPS 22; 67 published, 2 unpublished) print the word PIK in the
+rate tag's own cell, for example "11.00% PIK", "12.74% (incl. 0.50% PIK)". They are now unresolved,
+reason `pik_printed_not_tagged`, not stored. The other rows print no PIK in that cell, which is not
+proof that they pay no PIK.
 
 Build: `PASS=660 WARN=114 ERROR=0 TOTAL=774` (two new detail tests, both warn). Python tests 146.
 CI fixture 3 / 318 / 2 / 33; its rows c-7 and c-24 now expect a cash leg of 8.0 and 7.0.
@@ -482,3 +483,68 @@ the page the same way, not that either is right.
 
 Build: `PASS=684 WARN=104 ERROR=0 TOTAL=788`. Python tests 146. CI fixture 3 / 332 / 2 / 34 (the
 fixture has no scale rule; its row c-25 still pins `scale_not_decided`).
+
+## Addendum, 2026-11-23 (later): fix round 1 after review of rulings A and B
+
+Controller rulings R1 to R3 (recorded in `HANDOFF.md`, "Rulings made without the owner (slice 4)").
+
+**R1: no cash leg where the page contradicts it.** Under ruling A, where the all-in rate is normalised
+and no PIK rate is read, the cash leg is NOT set when the rate tag's own printed cell prints a PIK.
+Status unresolved, reason `pik_printed_not_tagged`. The exact test (model `int_rate_tag_cell`): the
+cell the filed layer places the rate tag's fact in (for a hidden fact, the cell that shows it),
+lowercased, matches the regular expression `(^|[^a-z])pik([^a-z]|$)`: the letters "pik" with no letter
+right before or right after. It trips on "6.00% PIK", "11.62% (4.50% PIK)", "12.74% (incl. 0.50%
+PIK)". It does not trip on "9.48%", "Pikes Peak 7.00%", "SPIKE 8.00%", a PIK printed only in another
+cell of the row, or an unplaced fact (unit test `int_rate_tag_cell_prints_pik`).
+
+Measured (`scripts/rate_rulings/q_r1_pik_printed.sql`): 69 cash legs, Ares 37, BCRED 7, Apollo 3, HPS
+22; 67 published, 2 unpublished (BCRED). Ceiling 69. In `cmp_rate` the 67 published rows are now
+`new_empty`, cause `needs_store_not_loaded` `printed_pik_not_read` (ceiling 67): production holds a
+cash leg that comes from the printed PIK, through a loaded correction of the PIK rate (64 rows; 45
+of the 67 hold cash 0) or its identifier-text reading (3 Apollo rows); this layer does not read the
+printed PIK. The rule is checked before the correction rule, because the reason this side is empty
+is the unread print. The 2 unpublished rows are both_empty (production has no cash leg either). The
+ruling A row of the second addendum (Ares 2022-09-30, "6.00% PIK", cash 6.00 against production's
+0.00) is one of the 69 and is no longer stored.
+
+**R2: the 3 HPS rows keep their scale rules.** c-115 (0001838126-24-000061), c-376
+(0001628280-26-020206), c-372 (0001628280-26-033248). The scale is right. The page prints the whole
+coupon as PIK ("SF + | 10.00% PIK | 15.45"); the PIK tag holds only the PIK margin. So the stored
+PIK rates (10.00, 6.50, 6.50) and cash legs (5.45, 3.93, 3.96) are known to contradict the printed
+coupon (all PIK: 15.45, 10.43, 10.46; cash 0). These 3 rows belong to the whole-coupon class (wrapper
+procedure `pik_margin_reading whole_coupon`), which the owner left until slice 5. Rows of that class
+tagged at or below 1 were already stored this way before ruling B. Size of the class now (published,
+`cmp_rate` detail `whole_coupon_pik_not_read`): 44 cash legs and 44 PIK rates differ from production,
+3 of each on scale-rule values. The three rules' evidence text says so. Editing that text changed
+the three rule ids (the id hashes every column), so 9 HPS PIK rows carry a new rule id; no value
+changed.
+
+**R3: the 6 Apollo rate tags stay without a rule.** This differs from R2: there the tag is in the right
+field (a PIK rate) and only its place in the coupon is open, a known class. Here the tag is in the
+wrong field: the page prints a margin over SOFR ("S+610"), and the rate tag holds it. Storing it as
+the all-in rate would be wrong at any scale. That is a wrong-field problem, not a scale problem.
+
+**What the print check proves.** In inline XBRL the tagged number is computed from the displayed text,
+so "printed number equals the tag" is close to automatic. The checks that tell a percent from a
+fraction are the percent sign after the number and the reference rate plus "+" before a basis-point
+margin. `tests/rate_scale_rule_evidence.sql` catches a logic error in `int_rate_scale` and a filing
+that stops fitting its rule; it cannot catch a wrong rule. Every number above 1 in the ruled filings
+agreed, so today the row-by-row gate only protects future filings and changes.
+
+**`scale_rule_ids`.** Documented, not changed: on interest_rate and interest_rate_cash it lists the
+scale rules of every rate input read for the reading (rate tag, cash-pay tag, PIK rate), including a
+PIK rate that on the all-in row only fed the check against the tag. It does not prove that input
+changed the row's value.
+
+Snapshot against the ruling B build (every table): `int_field_normalised` 84 rows (69 cash legs
+normalised `cash_equals_all_in` -> unresolved `pik_printed_not_tagged`; 9 HPS PIK rows with a new rule
+id; 6 HPS rate and cash rows whose `scale_rule_ids` lists the new ids); `cmp_rate` 78 rows (the 69
+cash rows; 9 PIK rows with a new rule id, outcome unchanged); `int_rate_scale` 9 rows (new rule
+ids). New table `int_rate_tag_cell`. No other table and no amount changed.
+
+Published `interest_rate_cash` row: after ruling B 2,452 / 147 / 157 / 31,245 / 26,674; after fix
+round 1 2,452 / 80 / 224 / 31,245 / 26,674 (equal / differs / new empty / production empty / both
+empty). Other fields unchanged. `not_yet_explained` 0, `new_wrong` 0.
+
+Build after fix round 1: `PASS=690 WARN=106 ERROR=0 TOTAL=796`. Python tests 146. CI fixture 3 / 339 / 2 / 35
+(the fixture has no PIK-printed rate cell and no scale rule; its expected rates did not change).

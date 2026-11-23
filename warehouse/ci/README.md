@@ -54,11 +54,11 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   `field_rule_default` and `action_field`, the view `stg_fx_rate` (over the fixture's rate file), and
   the tables `int_field_read`, `int_field_rule` and `int_field_normalised`. `cmp_amount` is left out,
   as `cmp_row_set` is: it reads production's holdings; `cmp_rate` likewise (slice 4). Last local run
-  (slice 4 Task 5, 2026-11-23): `PASS=313 WARN=5 ERROR=0 TOTAL=318` (6 seeds, 20 views, 13 tables, 254
-  data tests, 25 unit tests). The 5 warnings are the generic unresolved baselines on the fixture's
+  (rate rulings fix round 1, 2026-11-23): `PASS=334 WARN=5 ERROR=0 TOTAL=339`; the new models `int_rate_scale` and
+  `int_rate_tag_cell` and their tests are selected as `int_*` (slice 4 Task 5: 318). The 5 warnings are the generic unresolved baselines on the fixture's
   deliberate unresolved rate rows (see below). Slice 3 ended at 281.
 - Step 6: `PASS=2` (the two empty comparison models).
-- Step 7: all 30 unit tests (dbt build runs a unit test only when its model is built, so the five on
+- Step 7: all 32 unit tests (dbt build runs a unit test only when its model is built, so the five on
   `cmp_row_set`, `cmp_excluded_quarter`, `cmp_amount` and `cmp_rate` need this step; the int_* ones run twice) and
   the three drift baselines, whose ceilings 0 are rules, not measurements. All hash the files at build
   time (`stg_wrapper_drift`, `stg_row_store_drift`). `baseline_production_wrapper_changed`: the fixture's copy record
@@ -66,8 +66,8 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   a real file and finds no change. `baseline_wrapper_copy_changed_since_load`: the fixture's wrapper copy
   against the hash the loader recorded in step 2. `baseline_row_store_changed_since_load` (slice 3): the
   fixture's two row stores against the hashes the loader recorded in step 2 (`stg_row_store_drift`).
-  Since slice 4 the two wrapper checks hash the text with CRLF read as LF. Last local run (slice 4
-  Task 5): `PASS=33 TOTAL=33` (30 unit tests, 3 drift baselines).
+  Since slice 4 the two wrapper checks hash the text with CRLF read as LF. Last local run (rate rulings
+  fix round 1, 2026-11-23): `PASS=35 TOTAL=35` (32 unit tests, 3 drift baselines; slice 4 Task 5: 33).
 
 ### The drift views and `dbt test --vars`
 

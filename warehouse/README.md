@@ -213,7 +213,11 @@ fraction into a percent (`fraction_to_percent`, times 100). Which leg the filer'
 fund rule in its wrapper copy: `rate_is_all_in` (the tag is the all-in rate; cash = all-in less PIK) or
 `rate_is_cash_leg` (the tag is the cash leg). Under `rate_is_all_in`, a row with no PIK rate read gets
 cash = all-in (owner ruling, 2026-11-23; reason `cash_equals_all_in`). Production leaves that cash leg
-empty. The risk: if a loan pays some PIK but the filer did not tag it, the cash leg is too high. A rule is a row of data, not code: the global defaults are
+empty. The risk: if a loan pays some PIK but the filer did not tag it, the cash leg is too high.
+Where the page itself says so, the cash leg is not stored: if the rate's own printed cell contains
+the word PIK on its own (for example "6.00% PIK" or "11.62% (4.50% PIK)"; not "Pikes" or "SPIKE"),
+the cash leg is unresolved, reason `pik_printed_not_tagged` (controller ruling, 2026-11-23; model
+`int_rate_tag_cell`). A rule is a row of data, not code: the global defaults are
 rows of `seeds/field_rule_default.csv`, and `seeds/action_field.csv` says which fields and rows each
 fund-rule action acts on.
 
@@ -235,6 +239,16 @@ a spread printed as "S+450"). The rule carries its evidence and author. It appli
 where that row's printed number agrees (model `int_rate_scale`). A row whose print disagrees stays
 `scale_not_decided`. Three tests keep this honest: every decided row is re-checked against the
 printed page, a rule that decides no row fails, and no stored rate may rest on an undecided number.
+
+What the print check proves, and what it does not. In inline XBRL the tagged number is computed from
+the displayed text, so "the printed number equals the tag" is close to automatic. The parts that
+tell a percent from a fraction are the percent sign after the number, and the reference rate plus
+"+" before a basis-point margin. The evidence test catches a logic error in `int_rate_scale` and a
+filing that stops fitting its rule. It cannot catch a wrong rule (a rule on the wrong field, or a
+page that prints a wrong rate). Every number above 1 in the ruled filings agreed, so today the
+row-by-row gate only protects against future filings or changes. A rate tag that holds a margin
+("S+610" tagged as the interest rate) is a wrong-field problem, not a scale problem: it gets no scale
+rule.
 
 **A missing rate is not "no rate".** Empty means this layer could not read a rate, not that the
 position pays none. For example a row with only a PIK tag has a printed coupon, but its all-in rate is

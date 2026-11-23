@@ -43,6 +43,10 @@
 --   convention|cash_equals_all_in_owner_ruling  the cash leg, production empty, this layer's reason cash_equals_all_in:
 --        under rate_is_all_in with no PIK rate read this layer stores cash = all-in (owner ruling A, 2026-11-23);
 --        production's code sets the cash leg only where a PIK rate is read. A deliberate difference of convention.
+--   needs_store_not_loaded|printed_pik_not_read  the cash leg, this layer's reason pik_printed_not_tagged (controller
+--        ruling R1, 2026-11-23): the rate's printed cell names a PIK no tag carries, so this layer stores no cash leg;
+--        production's cash leg comes from that printed PIK (a loaded correction of the PIK rate, or identifier text).
+--        Checked second, before the correction and identifier-text rules.
 --   not_yet_explained|rule_conflict  this layer's reason is rule_conflict on a rate field. No cause is known for a
 --        conflict: it was labelled a PIK-only text gap while the two PIK-only readings tied, but since the ruling of
 --        2026-11-23 those rows are text_not_read and rate-field conflicts are 0 (guard at ceiling 0), so any such row
@@ -267,6 +271,12 @@ with both_rows as (
             -- a moved spread), production would still leave this cash leg empty
             when field = 'interest_rate_cash' and new_reason = 'cash_equals_all_in' and outcome = 'production_empty'
                 then 'convention|cash_equals_all_in_owner_ruling'
+            -- controller ruling R1: this layer leaves the cash leg empty because the rate's printed cell names a PIK that
+            -- no tag carries; production holds a cash leg that comes from the printed PIK (through a loaded correction
+            -- of the PIK rate, or its identifier-text reading). Checked before those causes: the reason this side is
+            -- empty is the unread printed PIK, whatever route production took
+            when field = 'interest_rate_cash' and new_reason = 'pik_printed_not_tagged'
+                then 'needs_store_not_loaded|printed_pik_not_read'
             when has_loaded_correction and production_corrected then 'needs_correction|correction_loaded_applied'
             when has_loaded_correction then 'not_yet_explained|correction_loaded_not_named'
             when production_corrected then 'needs_store_not_loaded|production_corrected_no_loaded_store'

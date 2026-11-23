@@ -8,7 +8,13 @@
 -- pik_above_rate, cash_leg_without_pik, pik_only_coupon (cash leg not set; status absent),
 -- pik_is_coupon (spread not set under the coupon reading; status absent), pik_is_margin, not_a_date (as read).
 -- Status normalised with reason cash_equals_all_in: the cash leg under rate_is_all_in where no PIK rate is read (owner
--- ruling A, 2026-11-23; it was absent, reason no_pik_read, as production's code).
+-- ruling A, 2026-11-23; it was absent, reason no_pik_read, as production's code). Except (controller ruling R1,
+-- 2026-11-23): where the rate tag's own printed cell prints a PIK (int_rate_tag_cell.prints_pik: the word 'pik' on its
+-- own in that one cell), the cash leg is unresolved, reason pik_printed_not_tagged: the page says part of the coupon is
+-- PIK, no PIK rate is tagged, so cash = all-in would contradict the page.
+-- scale_rule_ids on interest_rate and interest_rate_cash lists the scale rules of every rate input read for the
+-- reading (rate tag, cash-pay tag, PIK rate), including a PIK rate that on the all-in row only fed the check against
+-- the tag (pik_above_rate); it does not prove the listed input changed this row's value.
 --
 -- What each action does (where its meaning was read is in the slice 3 Task 3 report):
 --   as_filed              value = value_filed. For principal_amount_usd: value = the principal, already in dollars.
@@ -319,7 +325,8 @@ with rule as (
     --   rate_is_all_in    all-in = interest-rate tag; cash = all-in less PIK where a PIK rate is read, else cash =
     --                     all-in (reason cash_equals_all_in; owner ruling A, 2026-11-23: PIK absent counts as zero.
     --                     Production leaves this cash leg empty. Residual risk: a PIK that exists but is not tagged
-    --                     gives an overstated cash leg); a PIK rate above the tag plus var pik_above_rate_margin (0.01,
+    --                     gives an overstated cash leg; controller ruling R1: not where the rate's printed cell prints
+    --                     a PIK, reason pik_printed_not_tagged, unresolved); a PIK rate above the tag plus var pik_above_rate_margin (0.01,
     --                     production's margin) leaves both unresolved (pik_above_rate)
     --   rate_is_cash_leg  cash = interest-rate tag; all-in = cash plus PIK where a PIK rate is read, else empty
     --                     (cash_leg_without_pik)
@@ -349,6 +356,8 @@ with rule as (
         , i.*  exclude (accession, context_id)
         , coalesce(i.it_state, 'absent') <> 'absent' as has_it
         , coalesce(i.ct_state, 'absent') <> 'absent' as has_ct
+        -- controller ruling R1 (2026-11-23): the rate tag's own printed cell prints a PIK (int_rate_tag_cell)
+        , coalesce(tc.prints_pik, false) as rate_cell_prints_pik
         , case
             when i.it_state = 'unresolved' then i.it_why
             when i.ct_state = 'unresolved' then i.ct_why
@@ -356,6 +365,7 @@ with rule as (
           end as input_why
     from rate_rule r
     join rate_input i on i.accession = r.accession and i.context_id = r.context_id
+    left join {{ ref('int_rate_tag_cell') }} tc on tc.accession = r.accession and tc.context_id = r.context_id
     where r.field = 'interest_rate'
 )
 
@@ -427,6 +437,8 @@ with rule as (
             else outcome
           end as ir_reason
         , case
+            -- controller ruling R1: no PIK rate read, but the rate cell prints a PIK: the page contradicts cash = all-in
+            when outcome = 'all_in' and pk_state is distinct from 'value' and rate_cell_prints_pik then 'unresolved'
             when outcome in ('all_in_both', 'cash', 'all_in') then 'normalised'
             when outcome in ('coupon', 'absent') then 'absent'
             else 'unresolved'
@@ -434,6 +446,7 @@ with rule as (
         , case
             when outcome in ('all_in_both', 'cash') then 'applied'
             when outcome = 'all_in' and pk_state = 'value' then 'applied'
+            when outcome = 'all_in' and rate_cell_prints_pik then 'pik_printed_not_tagged'
             when outcome = 'all_in' then 'cash_equals_all_in'
             when outcome = 'coupon' then 'pik_only_coupon'
             when outcome = 'input_unresolved' then coalesce(input_why, pk_why)
