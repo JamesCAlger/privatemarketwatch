@@ -12,8 +12,15 @@ right. This comparison cannot see:
   position has none);
 - a change in what a field means, or offsetting errors.
 
-Build line: `PASS=642 WARN=95 ERROR=0 TOTAL=737` (was 563 / 65 / 628). Python tests 144. CI fixture
-3 / 314 / 2 / 33. A passing build does not show the data is correct.
+Build line: `PASS=648 WARN=91 ERROR=0 TOTAL=739` (before this task 563 / 65 / 628). Python tests 144.
+CI fixture 3 / 316 / 2 / 33. A passing build does not show the data is correct.
+
+**Ruling change (controller, 2026-11-23).** The first version of this comparison found that Task 3's
+PIK-only coupon reading, applied to every PIK-only row, gave 838 Ares non-loan rows (preferred, common
+equity, fund) a PIK dividend as an all-in interest rate, and 3 Apollo rows printed as a floating
+margin the margin as the rate. The reading was reversed: both PIK-only actions now need the printed
+rate type and the loan class, which are not read yet. PIK-only rows carry no all-in rate, cash leg
+or spread (`text_not_read`); their PIK rate is still read. All numbers below are after the change.
 
 ## How the sides are joined
 
@@ -51,12 +58,12 @@ Reference rate type and source are text fields: out of scope (second spec).
 
 | Field | Equal | Differs | New empty | Production empty | Both empty |
 |---|---:|---:|---:|---:|---:|
-| interest_rate | 33,479 | 10 | 978 | 850 | 25,358 |
+| interest_rate | 33,155 | 8 | 1,304 | 9 | 26,199 |
 | interest_rate_cash | 2,450 | 72 | 234 | 6 | 57,913 |
 | pik_rate | 5,215 | 90 | 126 | 13 | 55,231 |
 | spread | 45,614 | 5 | 962 | 426 | 13,668 |
 | maturity_date | 7,023 | 0 | 44,006 | 0 | 9,646 |
-| rate_kind | 58,844 | 1,831 | 0 | 0 | 0 |
+| rate_kind | 59,360 | 1,315 | 0 | 0 | 0 |
 
 Every open row (differs, new empty, production empty) has a cause. `not_yet_explained` is 0 on every
 field and both bases.
@@ -65,12 +72,12 @@ Open rows by cause (published):
 
 | Field | needs_correction | needs_store_not_loaded | owner_review | new_wrong | not_yet_explained |
 |---|---:|---:|---:|---:|---:|
-| interest_rate | 52 | 1,114 | 669 | 3 | 0 |
+| interest_rate | 52 | 600 | 669 | 0 | 0 |
 | interest_rate_cash | 132 | 177 | 3 | 0 | 0 |
 | pik_rate | 158 | 55 | 16 | 0 | 0 |
 | spread | 123 | 1,202 | 68 | 0 | 0 |
 | maturity_date | 9 | 43,997 | 0 | 0 | 0 |
-| rate_kind | 44 | 1,115 | 669 | 3 | 0 |
+| rate_kind | 46 | 600 | 669 | 0 | 0 |
 
 Unpublished basis: interest_rate 8 needs_store_not_loaded and 1 owner_review; cash the same; PIK 1
 owner_review; spread 142 needs_correction and 23 needs_store_not_loaded; maturity 2 needs_correction
@@ -81,12 +88,12 @@ everywhere.
 
 | Fund | Field | Equal | Differs | New empty | Prod. empty | Both empty |
 |---|---|---:|---:|---:|---:|---:|
-| Ares | interest_rate | 12,376 | 4 | 701 | 839 | 5,847 |
+| Ares | interest_rate | 12,103 | 2 | 976 | 1 | 6,685 |
 | Ares | interest_rate_cash | 1,145 | 0 | 65 | 0 | 18,557 |
 | Ares | pik_rate | 2,554 | 14 | 57 | 1 | 17,141 |
 | Ares | spread | 12,745 | 3 | 14 | 1 | 7,004 |
 | Ares | maturity_date | 0 | 0 | 14,556 | 0 | 5,211 |
-| Ares | rate_kind | 18,226 | 1,541 | 0 | 0 | 0 |
+| Ares | rate_kind | 18,790 | 977 | 0 | 0 | 0 |
 | BCRED | interest_rate | 14,320 | 0 | 72 | 0 | 1,107 |
 | BCRED | interest_rate_cash | 703 | 0 | 77 | 0 | 14,719 |
 | BCRED | pik_rate | 921 | 0 | 5 | 0 | 14,573 |
@@ -99,12 +106,12 @@ everywhere.
 | Blue Owl | spread | 6,328 | 0 | 491 | 36 | 2,864 |
 | Blue Owl | maturity_date | 0 | 0 | 6,908 | 0 | 2,811 |
 | Blue Owl | rate_kind | 9,613 | 106 | 0 | 0 | 0 |
-| Apollo | interest_rate | 312 | 6 | 28 | 11 | 6,891 |
+| Apollo | interest_rate | 261 | 6 | 79 | 8 | 6,894 |
 | Apollo | interest_rate_cash | 6 | 2 | 57 | 3 | 7,180 |
 | Apollo | pik_rate | 260 | 0 | 11 | 8 | 6,969 |
 | Apollo | spread | 6,402 | 2 | 275 | 10 | 559 |
 | Apollo | maturity_date | 7,023 | 0 | 2 | 0 | 223 |
-| Apollo | rate_kind | 7,207 | 41 | 0 | 0 | 0 |
+| Apollo | rate_kind | 7,159 | 89 | 0 | 0 | 0 |
 | HPS | interest_rate | 6,471 | 0 | 71 | 0 | 1,900 |
 | HPS | interest_rate_cash | 596 | 70 | 35 | 3 | 7,738 |
 | HPS | pik_rate | 768 | 70 | 45 | 4 | 7,555 |
@@ -123,19 +130,20 @@ Each cause is set by a rule on row features (production's own source, transform 
 its corrected fields, this layer's reason). No list of ids. The rule order is in the header of
 `models/intermediate/cmp_rate.sql`. "Opened" means the printed schedule row of the position was read
 from the filed layer (`scripts/slice4/q_t4_open_rows.sql`, up to 4 rows per field and cause detail,
-148 rows in all). "Check" is an independent test of the mechanism on every row of the group
+135 rows in the final sample, plus 14 read for the two groups the ruling change removed). "Check" is an
+independent test of the mechanism on every row of the group
 (`scripts/slice4/q_t4_mechanism_checks.sql`).
 
-### needs_correction: a correction production applied (published 518 rows across fields)
+### needs_correction: a correction production applied (published 520 rows across fields)
 
 - Rule: a loaded value correction (`stg_correction`) sets a field that sets this one, and production's
   `corrected_fields` names such a field. Covers: the rate, cash leg and kind are set by a correction
   of the rate, the kind or the PIK rate; the PIK rate by a PIK correction; the spread by a spread
   correction; the maturity by a maturity correction.
-- Counts: rate 52, cash 132, PIK 158, spread 123, maturity 9, kind 44 (unpublished: spread 142,
+- Counts: rate 52, cash 132, PIK 158, spread 123, maturity 9, kind 46 (unpublished: spread 142,
   maturity 2).
 - Check: a correction on the field itself carries production's value on 48 of 52 rates, 158 of 158
-  PIK rates, 123 of 123 spreads, 9 of 9 maturities, 27 of 44 kinds. The rest (and all 132 cash legs,
+  PIK rates, 123 of 123 spreads, 9 of 9 maturities, 29 of 46 kinds. The rest (and all 132 cash legs,
   which no correction names) are set through a covering field.
 - Opened: 24. Example: Apollo 2026-03-31, printed "5.38% Cash plus 5.38% PIK": this layer stores the
   tag 5.38 as the all-in rate; production's correction gives 10.76. Apollo 2025-12-31: the tag is
@@ -148,10 +156,9 @@ from the filed layer (`scripts/slice4/q_t4_open_rows.sql`, up to 4 rows per fiel
 |---|---|---|---:|
 | printed_maturity_not_read | Maturity printed on the schedule row (production's source `ixbrl_field_status`) | 0 / 0 / 0 / 0 / 43,996 / 0 | 4 |
 | printed_total_margin_not_read | The printed total margin (`printed_margin_cash_plus_pik`; this layer's reason `text_not_read`) | 0 / 0 / 0 / 479 / 0 / 0 | 4 |
-| pik_only_reading_needs_printed_text | Printed reference rate and coupon type (the two PIK-only readings tie; reason `rule_conflict`) | 132 / 0 / 0 / 287 / 0 / 132 | 12 |
+| printed_rate_type_and_loan_class_not_read | Printed rate type and loan class: both PIK-only readings (`pik_only_is_coupon`, `pik_only_is_margin`) need them; this layer's reason `text_not_read`, no spread read | 405 / 0 / 0 / 287 / 0 / 405 | 12 |
 | printed_reference_rate_column_not_read | The printed reference-rate column ("N/A" or blank): production moves the spread tag to the rate or drops it | 112 / 76 / 0 / 413 / 0 / 112 | 16 |
-| loan_class_not_read | Production's loan class (`asset_category`, from text). Production applies the coupon reading to loans only | 838 / 0 / 0 / 0 / 0 / 838 | 8 |
-| identifier_text_not_read | Rates and dates production read from the identifier text (source `identifier_text`) | 23 / 55 / 9 / 19 / 1 / 23 | 21 |
+| identifier_text_not_read | Rates and dates production read from the identifier text (source `identifier_text`) | 73 / 55 / 9 / 19 / 1 / 73 | 21 |
 | whole_coupon_pik_not_read | Wrapper procedure `pik_margin_reading whole_coupon` (production label `pik_rate:whole_coupon_printed`) | 3 / 44 / 44 / 0 / 0 / 3 | 14 |
 | rate_only_context_not_adopted | Wrapper procedure `rate_only_contexts adopt_adjacent` (production names the moved fields in `src_filled_fields`) | 6 / 1 / 2 / 4 / 0 / 6 | 15 |
 | production_corrected_no_loaded_store | A correction production applied that is not in the loaded store | 0 / 1 / 0 / 0 / 0 / 1 | 2 |
@@ -166,20 +173,21 @@ Evidence per detail:
   of those two; the last one is the sum after production's size rule (filed spread 5.55, a percent).
   Opened: Blue Owl "S+ | 3.50% | 4.25%" (production 7.75), Apollo "SONIA+350 Cash plus 2.00% PIK"
   (production 5.50).
-- **pik_only_reading_needs_printed_text.** Blue Owl and HPS declare both PIK-only readings. Production
-  read 132 rows as the coupon (label `interest_rate:pik_only`, rate = PIK) and 287 as the margin
-  (label `basis_spread:pik_margin`, spread = PIK). Check: 132 and 287 of 132 and 287. Opened: "12.00%
-  PIK" with no reference rate (coupon), "SR + | 10.50% PIK" (margin).
+- **printed_rate_type_and_loan_class_not_read.** PIK-only rows (a PIK tag, no rate tag, no spread):
+  this layer gives no all-in rate, cash leg or spread (controller ruling 2026-11-23). Production read
+  405 published rows as the coupon (label `interest_rate:pik_only`, rate = PIK: Blue Owl 70, HPS 62,
+  Ares 272, Apollo 1) and 287 as the margin (label `basis_spread:pik_margin`, spread = PIK: Blue Owl
+  199, HPS 88). Check: 405 and 287 of 405 and 287. Opened: 12, for example Ares "Senior subordinated
+  loan | 10.50% PIK" (production coupon 10.5), Blue Owl "AAM Series 2.1 ... | 12.00% PIK" (coupon),
+  HPS "SF + | 7.75% PIK" (margin). The PIK-only rows where production has no rate either (Ares
+  non-loan rows: 838; Apollo floating margins: 3) are now `both_empty`, not differences.
 - **printed_reference_rate_column_not_read.** Production labels `interest_rate:from_spread_tag` and
   `basis_spread:fixed_coupon`. Check: on every rate row production's rate equals the filed spread
   tag times 100; on every spread row production's spread is empty. Opened: BCRED "AI Altius | 9.75% |
   9.75% PIK", Blue Owl "Dealer Tire | Unsecured notes | 8.00%" (fixed coupons tagged as spreads).
-- **loan_class_not_read.** All 838 are Ares rows production classes as preferred or common equity or
-  a fund (658 / 171 / 9). Production's rate is empty and its kind `unresolved` on all 838. Opened:
-  "Series A preferred shares | 10.50% PIK", "Class A units | 8.00% PIK". This layer stores the
-  preferred dividend as an all-in rate under the coupon ruling of Task 3.
 - **identifier_text_not_read.** All Apollo. Opened: "Unsecured Debt - Corporate Bond | 4.75%" with
-  no rate tag; "11.81% PIK" where the PIK rate comes from the text, so production's cash leg is 0.
+  no rate tag; "11.81% PIK" where the PIK rate comes from the text, so production's cash leg is 0. On 50 Apollo PIK-only rows
+  ('13.00% PIK', '6.75% PIK') production took the rate itself from the text; this layer has none.
 - **whole_coupon_pik_not_read.** HPS. Production changed 49 rows; 44 land here, 5 are taken by a
   correction first. Check: production's PIK rate equals its all-in rate and its cash leg is 0 on
   all. Opened: "SF + | 6.25% PIK | 10.07 %": this layer PIK 6.25, production PIK 10.07; "SF + | 5.50%
@@ -204,23 +212,24 @@ Evidence per detail:
   rate is filed twice, 0.1005 and 0.098. This layer withholds it (`values_differ`). Production keeps
   the first fact in the instance: 9.80, which is what the page prints. Opened: 3 (one position).
 
-### new_wrong: a defect in this layer (not patched; controller decides)
+### new_wrong: none
 
-- **coupon_read_on_printed_floating_margin** (rate 3, kind 3). Apollo, two loans:
+The first version of this comparison had one `new_wrong` group, `coupon_read_on_printed_floating_margin`
+(rate 3, kind 3): two Apollo loans printed "S+450 PIK" (2023-06-30, 2023-09-30) and "S+610 Cash
+(includes 5.97% PIK)" (2023-09-30) were given the PIK margin as the all-in rate by the Task 3 coupon
+reading. With that reading reversed (controller ruling 2026-11-23) the rows carry no rate here, as in
+production: both empty. 6 rows were opened.
 
-| Quarter | Context | Printed rate | This layer | Production |
-|---|---|---|---|---|
-| 2023-06-30 | C_8a5fa6bf-... | S+450 PIK | all-in 4.50, kind all_in | rate empty, spread 4.50 (text) |
-| 2023-09-30 | C_3a1d2f29-... | S+450 PIK | all-in 4.50, kind all_in | rate empty, spread 4.50 (text) |
-| 2023-09-30 | C_94c123f3-... | S+610 Cash (includes 5.97% PIK) | all-in 5.97, kind all_in | rate empty, spread 6.10 (text) |
+### What the reversed reading had done (published rows compared, before the ruling)
 
-  The PIK tag is a margin over SOFR, not the coupon. The coupon reading (`pik_only_is_coupon`, applied
-  to every PIK-only row by Task 3 ruling 2) stores it as the all-in rate. The true all-in rate is about
-  SOFR plus the margin. Production avoids it because it read a spread from the text.
-- Proposed fix (for the controller): the coupon reading needs a test that the row prints no reference
-  rate, which is printed text (the text spec). Until then the options are to leave these rows
-  unresolved when the identifier or printed row names a benchmark, or to accept the 3 rows as a known
-  defect under this ceiling. Not patched here. Opened: 6 (the 3 positions, rate and kind).
+| Fund | PIK-only rows read as a coupon | Agreed with production | Wrong | Production corrected |
+|---|---:|---:|---:|---:|
+| Ares | 1,113 | 273 | 838 (preferred 658, common equity 171, fund 9: production has no rate) | 2 |
+| Apollo | 54 | 51 | 3 (printed floating margin) | 0 |
+| Blue Owl, HPS | 0 (rule conflict) | - | - | - |
+
+The 324 agreeing rows are now differences (`new_empty`, printed_rate_type_and_loan_class_not_read, or
+identifier_text_not_read for the 50 Apollo rows whose rate production read from the text).
 
 ## Unresolved in this layer (Tasks 2 and 3), and where they land
 
@@ -228,8 +237,8 @@ All rows, all quarters (`int_field_normalised`; `scripts/slice4/q_t4_by_design.s
 
 | This layer's reason | Field | Not compared | Both empty | Cause given (published, unless noted) |
 |---|---|---:|---:|---|
-| rule_conflict (628 Blue Owl and HPS positions) | interest_rate | 33 | 462 | 132 pik_only_reading_needs_printed_text; 1 needs_correction |
-| rule_conflict | spread | 33 | 307 | 287 pik_only_reading_needs_printed_text; 1 needs_correction |
+| text_not_read, PIK-only (1,885: Ares 1,195, Apollo 62, Blue Owl 460, HPS 168) | interest_rate | 123 | 1,303 | 405 printed_rate_type_and_loan_class_not_read; 50 identifier_text_not_read; 3 needs_correction; 1 production_corrected_no_loaded_store |
+| text_not_read, PIK-only | spread | 123 | 1,470 | 287 printed_rate_type_and_loan_class_not_read; 3 identifier_text_not_read; 2 needs_correction |
 | text_not_read (540) | spread | 46 | 8 | 479 printed_total_margin_not_read; 7 needs_correction |
 | scale_not_decided (679 / 20 / 68) | interest_rate | 0 | 6 | 668 owner_review; 3 whole_coupon_pik_not_read; 1 needs_correction; unpublished 1 owner_review |
 | scale_not_decided | pik_rate | 0 | 0 | 16 owner_review; 3 whole_coupon_pik_not_read; unpublished 1 owner_review |
@@ -255,10 +264,10 @@ loan class of its own). Published rows on both sides.
 
 | Fund | Published loans | All-in rate here | All-in rate in production | Spread, no rate here | Spread, no rate in production |
 |---|---:|---:|---:|---:|---:|
-| Ares | 1,022 | 935 | 935 | 22 | 22 |
+| Ares | 1,022 | 914 | 935 | 22 | 22 |
 | BCRED | 1,192 | 1,160 | 1,168 | 30 | 22 |
 | Blue Owl | 778 | 0 | 9 | 401 | 439 |
-| Apollo | 747 | 44 | 44 | 645 | 703 |
+| Apollo | 747 | 38 | 44 | 645 | 703 |
 | HPS | 776 | 612 | 617 | 4 | 13 |
 
 "Spread, no rate here" are the rows spec section 10 (base rate plus spread) would later fill. The
@@ -268,11 +277,11 @@ loans another way; not reconciled here.
 ## What was not checked
 
 - Whether any agreeing rate is right. Both pipelines read the same tags; a mis-tagged rate agrees.
-- Rates missing on both sides (both_empty): 25,358 published all-in rates, most of Blue Owl and
+- Rates missing on both sides (both_empty): 26,199 published all-in rates, most of Blue Owl and
   Apollo.
 - Whether production's text readings (maturity, identifier text, printed margin, reference-rate
   column, loan class) are right. Only up to 4 rows per group were opened.
-- Whether the Ares PIK-only rows production does read as coupons are coupons. They agree.
+- Whether production's readings of PIK-only rows (coupon or margin) are right; this layer reads none.
 - The reference rate type and source, the floor, the coupon type (second spec).
 - Rates on rows on one side only (`cmp_row_set` handles those).
 - The 2026-09-30 quarters in `cmp_excluded_quarter`.

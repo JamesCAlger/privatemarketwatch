@@ -31,10 +31,6 @@
 --   needs_store_not_loaded|whole_coupon_pik_not_read  production's src_transforms has pik_rate:whole_coupon_printed:
 --        it stored the printed coupon as the PIK rate (wrapper procedure pik_margin_reading whole_coupon,
 --        pipeline/whole_coupon_pik.py; printed text, not built here). Rate, cash leg, PIK rate and kind only.
---   new_wrong|coupon_read_on_printed_floating_margin  this layer applied pik_only_is_coupon (all-in = the PIK rate)
---        on a row whose printed text names a floating margin: production read a spread from the identifier text
---        ('S+450 PIK') and so did not apply the coupon reading. The PIK tag is a margin, not the coupon. A defect of
---        the slice 4 Task 3 coupon ruling (no text test); not patched here (task-4 report).
 --   needs_store_not_loaded|identifier_text_not_read  production's source for the field is identifier_text: it read
 --        the value from the investment identifier's text (pipeline/staging_bdc.py, the _text_* fallbacks). For the
 --        rate, cash leg and kind also when production's PIK rate came from that text (the legs follow from it).
@@ -44,12 +40,14 @@
 --   needs_store_not_loaded|printed_reference_rate_column_not_read  src_transforms has interest_rate:from_spread_tag or
 --        basis_spread:fixed_coupon: production read 'no reference rate' in the printed reference-rate column and
 --        moved the spread tag to the rate or withdrew it (apply_ixbrl_field_status_overlay).
---   needs_store_not_loaded|pik_only_reading_needs_printed_text  this layer's reason is rule_conflict: the fund declares
---        both PIK-only readings; production separates them by printed reference rate and coupon type.
---   needs_store_not_loaded|printed_total_margin_not_read  this layer's reason is text_not_read: the printed total
---        margin decides printed_margin_cash_plus_pik.
---   needs_store_not_loaded|loan_class_not_read  this layer applied pik_only_is_coupon on a row production does not
---        class as a loan (asset_category, read from text); production applies the coupon reading to loans only.
+--   needs_store_not_loaded|pik_only_reading_needs_printed_text  this layer's reason is rule_conflict: two PIK-only
+--        readings tie; production separates them by printed text. 0 rows since the ruling of 2026-11-23 (an unread
+--        input is resolved before a conflict); kept for a conflict that does not need text.
+--   needs_store_not_loaded|printed_rate_type_and_loan_class_not_read  this layer's reason is text_not_read on a
+--        PIK-only row (no spread read here): pik_only_is_coupon and pik_only_is_margin need the printed rate type and
+--        the loan class (action_field.unread_input printed_rate_type_and_loan_class; controller ruling 2026-11-23).
+--   needs_store_not_loaded|printed_total_margin_not_read  this layer's reason is text_not_read on a row with a spread
+--        read here: the printed total margin decides printed_margin_cash_plus_pik (unread_input printed_total_margin).
 --   owner_review|scale_decided_by_size_in_production  this layer's reason is scale_not_decided (a ratio-unit value
 --        above 1): production keeps or rescales it by its size (pipeline/staging_bdc.py _prepare_bdc). Not a
 --        convention: no filer rule says which scale the tag is in (controller ruling, slice 4 Task 3).
@@ -87,7 +85,6 @@ with both_rows as (
         , coalesce(src_filled_fields, '') as src_filled_fields
         , corrected_fields
         , bdc_investment_identifier
-        , asset_category
     from {{ ref('stg_holdings') }}
     where src_context_id is not null
 )
@@ -157,14 +154,11 @@ with both_rows as (
             when 'basis_spread_source' then p.basis_spread_source
             when 'maturity_date_source' then p.maturity_date_source
           end as production_source
-        , p.basis_spread_source as production_spread_source
         , p.pik_rate_source as production_pik_source
-        , p.interest_rate as production_interest_rate
         , p.src_transforms
         , p.src_filled_fields
         , p.corrected_fields
         , p.bdc_investment_identifier
-        , p.asset_category as production_asset_category
     from both_rows b
     cross join field_list fl
     join prod p on p.accession = b.accession and p.context_id = b.context_id
@@ -231,6 +225,15 @@ with both_rows as (
     group by 1, 2, 3
 )
 
+, spread_read as (
+    -- open rows on which this layer read a spread fact (a row with a spread and a PIK rate, not a PIK-only row)
+    select distinct o.accession, o.context_id
+    from open_pairs o
+    join {{ ref('int_field_read') }} r
+        on r.accession = o.accession and r.context_id = o.context_id and r.field = 'spread'
+    where r.status <> 'absent' and not coalesce(r.is_nil, false)
+)
+
 , featured as (
     select
         o.*
@@ -240,9 +243,11 @@ with both_rows as (
         , regexp_matches(o.src_transforms, '(^|;)pik_rate:whole_coupon_printed(;|$)') as whole_coupon
         , regexp_matches(o.src_transforms, '(^|;)(interest_rate:from_spread_tag|basis_spread:fixed_coupon)(;|$)')
             as reference_column_move
+        , sr.accession is not null as spread_read
     from open_pairs o
     left join loaded_correction lc on lc.accession = o.accession and lc.context_id = o.context_id and lc.field = o.field
     left join production_named pn on pn.accession = o.accession and pn.context_id = o.context_id and pn.field = o.field
+    left join spread_read sr on sr.accession = o.accession and sr.context_id = o.context_id
 )
 
 , caused as (
@@ -257,9 +262,6 @@ with both_rows as (
             when production_filled then 'needs_store_not_loaded|rate_only_context_not_adopted'
             when whole_coupon and field in ('interest_rate', 'interest_rate_cash', 'pik_rate', 'rate_kind')
                 then 'needs_store_not_loaded|whole_coupon_pik_not_read'
-            when new_action = 'pik_only_is_coupon' and field in ('interest_rate', 'interest_rate_cash', 'rate_kind')
-                and production_spread_source = 'identifier_text' and production_interest_rate is null
-                then 'new_wrong|coupon_read_on_printed_floating_margin'
             when production_source = 'identifier_text' then 'needs_store_not_loaded|identifier_text_not_read'
             when field in ('interest_rate', 'interest_rate_cash', 'rate_kind') and production_pik_source = 'identifier_text'
                 then 'needs_store_not_loaded|identifier_text_not_read'
@@ -268,10 +270,10 @@ with both_rows as (
             when reference_column_move and field in ('interest_rate', 'interest_rate_cash', 'spread', 'rate_kind')
                 then 'needs_store_not_loaded|printed_reference_rate_column_not_read'
             when new_reason = 'rule_conflict' then 'needs_store_not_loaded|pik_only_reading_needs_printed_text'
-            when new_reason = 'text_not_read' then 'needs_store_not_loaded|printed_total_margin_not_read'
-            when new_action = 'pik_only_is_coupon' and production_asset_category is distinct from 'LOAN'
-                and field in ('interest_rate', 'interest_rate_cash', 'rate_kind')
-                then 'needs_store_not_loaded|loan_class_not_read'
+            when new_reason = 'text_not_read' and spread_read
+                then 'needs_store_not_loaded|printed_total_margin_not_read'
+            when new_reason = 'text_not_read'
+                then 'needs_store_not_loaded|printed_rate_type_and_loan_class_not_read'
             when new_reason = 'scale_not_decided' then 'owner_review|scale_decided_by_size_in_production'
             when new_reason = 'values_differ' then 'owner_review|two_values_filed_production_keeps_first'
             else 'not_yet_explained|none'

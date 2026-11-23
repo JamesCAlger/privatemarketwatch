@@ -1,6 +1,7 @@
 # Owner review: rate readings (slice 4 Task 3)
 
-Date: 2026-11-23. Build: branch `warehouse-dbt`, slice 4 Task 3. All counts are position rows of the five v0.5 funds,
+Date: 2026-11-23. Build: branch `warehouse-dbt`, slice 4 Task 3; PIK-only readings changed by the controller ruling
+of 2026-11-23 in Task 4 (sections 1, 2.2, 2.3, 6). All counts are position rows of the five v0.5 funds,
 all quarters, published or not, from `int_field_rule` / `int_field_normalised`. Queries:
 `warehouse/scripts/slice4/q_t3_*.sql`.
 
@@ -18,11 +19,18 @@ right; a rule that reads a rate the same way production does would make the same
   Residual risk: a value tagged as a percent and at or below 1 (for example a 0.75 percent PIK rate tagged 0.75) passes
   as a fraction and becomes 75 percent. Measured: 0 filed values between 0.5 and 1 on the five funds; 0 normalised
   values outside 0 to 40 percent. That bound does not catch a 0.25 percent tagged 0.25 (stored as 25).
-- **The PIK-only readings do not see the row's text.** Production reads a PIK-only row as the whole coupon only on a
-  loan row (`asset_category = LOAN`), and for a fund with both readings only where the page prints a fixed coupon with
-  no reference rate (`pipeline/financial_conventions.py`, `prepare`, table `typed`: `pik_is_coupon`, `pik_is_margin`).
-  Those are printed-text features, not loaded in this slice. Here a fund with one reading applies it to every
-  `pik_tag_only` row (controller ruling); a fund with two is a rule conflict (section 3).
+- **PIK-only rows carry no rate until printed text is read** (controller ruling 2026-11-23, slice 4 Task 4; replaces
+  the Task 3 assumption that a fund with one PIK-only reading applies it to every `pik_tag_only` row). Production reads
+  a PIK-only row as the whole coupon only on a loan row (`asset_category = LOAN`, a text class), and for a fund with
+  both readings only where the page prints a fixed coupon with no reference rate (`pipeline/financial_conventions.py`,
+  `prepare`, table `typed`: `pik_is_coupon`, `pik_is_margin`). Neither input is read here. Both actions now name
+  `unread_input` `printed_rate_type_and_loan_class` in `seeds/action_field.csv`, so every PIK-only row is `unresolved`,
+  reason `text_not_read`, on the all-in rate, its cash leg and the spread. The PIK rate itself is still read and
+  normalised. Rows per fund (all quarters): Ares 1,195, Apollo 62, Blue Owl 460, HPS 168 (1,885). The Blue Owl and HPS
+  rows were a rule conflict; the existing resolution order puts an unread input before a conflict, so they are now
+  `text_not_read` too (rule conflicts on rate fields: 0). The comparison showed why: on Ares, 838 rows that production
+  classes as preferred or common equity or a fund were given a PIK dividend as an all-in interest rate; on Apollo, 3 rows
+  printed as a floating margin ('S+450 PIK') were given the margin as the all-in rate.
 - **`pik_tag_only`** is production's PIK-only test without the loan test: a PIK rate above zero read, no interest-rate
   or cash-pay tag with a value (a nil-only tag does not count, production skips nil facts), no spread.
 - **Cash leg.** Follows production's code on this branch: set only where a PIK rate is read (all-in less PIK), left
@@ -58,31 +66,37 @@ Examples (tag value, printed text in brackets, stored):
 
 ### 2.2 `pik_only_is_coupon` alone (wrapper `pik_only_tag_reading: coupon`): Ares, Apollo
 
-What it does: on a `pik_tag_only` row the PIK rate is the whole coupon: all-in = PIK rate, kind `all_in`; cash leg
-left empty (`pik_only_coupon`); spread left empty (`pik_is_coupon`). Source: `prepare`, `pik_is_coupon` branch.
+Changed by the controller ruling of 2026-11-23 (slice 4 Task 4). The rule loads as before, but its action names
+`unread_input` `printed_rate_type_and_loan_class`: it needs the loan class and the printed rate type, which no model
+reads yet. So it never decides a row. Every `pik_tag_only` row is `unresolved`, reason `text_not_read`, on the all-in
+rate, its cash leg and the spread; the PIK rate is normalised as before. The coupon arithmetic (all-in = PIK rate,
+kind `all_in`, cash and spread empty) stays in `int_field_normalised` and is unit-tested; clearing `unread_input` (text
+spec) switches it back on.
 
-| Fund | Rows given the coupon reading | Per quarter |
+| Fund | Rows now text_not_read | Per quarter |
 |---|---|---|
 | Ares | 1,195 | 52, 58, 59, 59, 68, 71, 65, 76, 80, 74, 72, 70, 80, 76, 79, 74, 82 (2022-09-30 to 2026-09-30) |
 | Apollo | 62 | 1, 5, 3, 2, 2, 5, 3, 4, 7, 5, 5, 6, 6, 8 (2023-06-30 to 2026-09-30) |
 
-Assumption: every such row is a loan with a fixed PIK coupon. Production also requires the loan test; not checked
-here. "Is a loan" is not a tagged row feature in `int_context_feature` or `int_source_row` (production's
-`asset_category` is derived from text), so it is not a condition.
+What the unconditional reading (Task 3) did against production, published rows compared (`cmp_rate`, before the
+ruling; the 2026-09-30 quarter is not compared):
 
-| Fund | Filing, context | Tagged | Stored |
-|---|---|---|---|
-| Ares | 0001628280-26-067383 c-103 | PIK 0.09 [9.00] | all-in 9.00, PIK 9.00 |
-| Ares | 0001628280-26-067383 c-1018 | PIK 0.20 [20.00] | all-in 20.00, PIK 20.00 |
-| Apollo | 0001193125-26-449955 C_01681cb4-... | PIK 0.125 [12.50] | all-in 12.50, PIK 12.50 |
+| Fund | Agreed with production | Wrong | Other |
+|---|---:|---:|---:|
+| Ares | 273 | 838: rows production classes preferred (658), common equity (171) or fund (9) got a PIK dividend as an all-in interest rate; production has no rate | 2: production corrected the rate |
+| Apollo | 51 | 3: two loans printed 'S+450 PIK' and 'S+610 Cash (includes 5.97% PIK)' got the margin as the all-in rate | 0 |
 
-### 2.3 `pik_only_is_coupon` and `pik_only_is_margin` together: Blue Owl, HPS (rule conflict)
+After the ruling the 273 + 51 agreeing rows are `new_empty` in the comparison (production has the rate, this layer
+does not); the 838 + 3 wrong rows are `both_empty`.
 
-The two rules tie (same priority, same feature, no parameter, no dates). Controller ruling: neither is picked; the rows
-are `rule_conflict`: interest rate, cash leg and spread unresolved, no value. The PIK rate itself is still normalised.
-Production separates the two by printed text: a reference rate present means margin (spread = PIK rate, interest rate
-unresolved); printed Fixed with no reference rate means coupon; loan rows only (`financial_conventions.py` `prepare`).
-Waits for the text spec.
+### 2.3 `pik_only_is_coupon` and `pik_only_is_margin` together: Blue Owl, HPS
+
+Before the ruling of 2026-11-23 the two rules tied (`rule_conflict`). Both actions now need an unread input, and the
+resolution order (`int_field_rule`, `top`) puts `text_not_read` before `rule_conflict`, so these rows are
+`text_not_read` like the single-rule funds; not special-cased. Rate-field rule conflicts: 0. Interest rate, cash leg
+and spread unresolved, no value; the PIK rate is still normalised. Production separates the two by printed text: a
+reference rate present means margin (spread = PIK rate, interest rate unresolved); printed Fixed with no reference rate
+means coupon; loan rows only (`financial_conventions.py` `prepare`). Waits for the text spec.
 
 | Fund | Rows (all published) | Per quarter |
 |---|---|---|
@@ -91,7 +105,7 @@ Waits for the text spec.
 
 | Fund | Filing, context | Tagged | Stored |
 |---|---|---|---|
-| Blue Owl | 0001812554-26-000060 c-249 | PIK 0.0575 [5.75] | PIK 5.75; rate, cash, spread unresolved rule_conflict |
+| Blue Owl | 0001812554-26-000060 c-249 | PIK 0.0575 [5.75] | PIK 5.75; rate, cash, spread unresolved text_not_read |
 | Blue Owl | 0001812554-26-000060 c-250 | PIK 0.0625 [6.25] | same |
 | HPS | 0001628280-26-056772 c-368 | PIK 0.05 [5.00] | same |
 
@@ -119,7 +133,7 @@ spread is `unresolved`, reason `text_not_read`, on every row with a spread and a
 ### 2.5 Blue Owl: no rate reading
 
 Blue Owl declares no `filed_rate_reading` and files no interest-rate tag on any position. Its interest rate is never
-set: 11,483 rows `absent` (no tag), 460 `rule_conflict` (section 2.3); `rate_kind` is `unresolved` on all 11,943. This
+set: 11,483 rows `absent` (no tag), 460 `text_not_read` (section 2.3; `rule_conflict` before the ruling of 2026-11-23); `rate_kind` is `unresolved` on all 11,943. This
 is the expected result, not a defect.
 
 ## 3. Two wrapper entries not built (need a procedure)
@@ -130,7 +144,7 @@ is the expected result, not a defect.
 | `pik_margin_reading whole_coupon` | HPS | On a loan printed '<benchmark> + m PIK c %', store the printed coupon as the PIK rate (cash leg 0) (`pipeline/whole_coupon_pik.py` `apply`, `parse`) | about 171 rows over 14 quarters (0 to 28 a quarter), 86 of them with a rate tag; 3 listed exceptions (approximation of the printed grammar, `q_t3_whole_coupon.sql`) |
 
 Neither can be a plain row-feature rule: one pairs two contexts, the other parses printed text. Rows of the second that
-carry no rate tag overlap the HPS rule-conflict rows of section 2.3.
+carry no rate tag overlap the HPS PIK-only (`text_not_read`) rows of section 2.3.
 
 ## 4. Values whose scale is not decided (filed above 1 in a ratio unit)
 
@@ -191,7 +205,13 @@ was extended, matured unpaid or is mis-tagged was not checked.
 
 1. Cash leg where no PIK rate is read: empty (as production's code) or equal to the all-in rate (the brief).
 2. PIK-only coupons: cash leg empty (code on this branch) or 0 (production changelog 2026-11-13, not in the code).
-3. The 628 Blue Owl and HPS PIK-only rows: wait for the text spec, or a dated wrapper rule.
+   Moot until item 3 is settled: no PIK-only row gets a coupon now.
+3. PIK-only rows carry no rate until printed text is read (controller ruling 2026-11-23; replaces the earlier item on
+   the 628 Blue Owl and HPS rows). Rows per fund, all quarters: Ares 1,195, Apollo 62, Blue Owl 460, HPS 168. Where
+   the unconditional coupon reading of Task 3 had been applied (published rows compared with production): Ares agreed
+   273, wrong 838 (non-loan rows given a PIK dividend as a rate), 2 corrected by production; Apollo agreed 51, wrong 3
+   (a printed floating margin given as the rate). Blue Owl and HPS were never read (conflict), 0 and 0. Options: wait
+   for the text spec (loan class, printed rate type), or a dated, filer-level rule with evidence.
 4. Values filed above 1 in a ratio unit (section 4): production's size rule, a filer rule per filing, or leave
    unresolved.
 5. The two procedures of section 3.

@@ -50,6 +50,10 @@ select r.basis, r.field, r.cause, r.cause_detail, count(*) as rows
         when 'printed_reference_rate_column_not_read' then
             case when r.field = 'spread' then r.p_bs is null
                  else regexp_matches(r.tr, 'interest_rate:from_spread_tag') and abs(r.p_ir - f.f_spread * 100) <= 1e-9 end
+        -- production read the PIK-only row as the coupon (rate = PIK) or as the margin (spread = PIK)
+        when 'printed_rate_type_and_loan_class_not_read' then
+            (r.field in ('interest_rate', 'rate_kind') and regexp_matches(r.tr, 'interest_rate:pik_only') and abs(r.p_ir - r.p_pik) <= 1e-9)
+            or (r.field = 'spread' and regexp_matches(r.tr, 'basis_spread:pik_margin') and abs(r.p_bs - r.p_pik) <= 1e-9)
         when 'pik_only_reading_needs_printed_text' then
             (r.field in ('interest_rate', 'rate_kind') and regexp_matches(r.tr, 'interest_rate:pik_only') and abs(r.p_ir - r.p_pik) <= 1e-9)
             or (r.field = 'spread' and regexp_matches(r.tr, 'basis_spread:pik_margin') and abs(r.p_bs - r.p_pik) <= 1e-9)
