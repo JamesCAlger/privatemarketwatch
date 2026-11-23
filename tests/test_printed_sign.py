@@ -95,6 +95,26 @@ def test_magnitude_must_match_the_record(page_dir):
     assert records["c-463"]["fair_value"] == 4500.0
 
 
+@pytest.mark.needs_cache
+def test_gs_private_credit_2024q3_flips_only_esperanto_cost():
+    """GS Private Credit Corp. 10-Q 2024-09-30 prints Esperanto BidCo's undrawn CHF line
+    'CHF 24,087 $ ( 407 ) $ ( 249 )' and tags the cost +407 with no sign. Listing the filing flips
+    that one fact (Total Switzerland cost 20,602 = -407 + 10,530 + 7,507 + 2,972) and no other."""
+    from pathlib import Path
+    from pipeline.config import BDC_HTML_CACHE_DIR
+    printed_sign._listed.cache_clear()
+    acc = "0000950170-24-126294"
+    assert acc in printed_sign.listed_accessions("0001920145")
+    page = Path(BDC_HTML_CACHE_DIR) / "1920145" / (acc.replace("-", "") + ".html")
+    found = printed_sign.printed_signs(page.read_text(encoding="utf-8", errors="replace"))
+    mismatched = [(ctx, col, m) for (ctx, col), facts in found.items() for m, b, s in facts if b != s and m]
+    assert mismatched == [("C_5e13e8a0-d85f-466f-b867-855dc7713293", "cost", 407000.0)]
+    records = {"C_5e13e8a0-d85f-466f-b867-855dc7713293": {"cost": 407000.0, "fair_value": -249000.0}}
+    assert printed_sign.apply_printed_signs(records, {"cik": "0001920145", "accession_number": acc},
+                                            record_events=False) == 1
+    assert records["C_5e13e8a0-d85f-466f-b867-855dc7713293"] == {"cost": -407000.0, "fair_value": -249000.0}
+
+
 def test_reverifier_multiplier_reads_the_event():
     from pipeline.provenance_reverify import _extractor_multiplier
     assert _extractor_multiplier([printed_sign.SIGN_EVENT]) == -1.0

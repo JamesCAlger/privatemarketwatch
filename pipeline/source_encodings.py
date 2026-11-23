@@ -66,7 +66,7 @@ def load_encodings(wrapper_directory=None):
                     errors=entry_errors(entry)
                     if errors:
                         raise ValueError('Invalid printed row ('+'; '.join(errors)+'): '+str(path))
-                seen=[(e['accession'],' '.join(e['issuer'].lower().split()),' '.join(e['instrument'].lower().split())) for e in values]
+                seen=[(e['accession'],' '.join(e['issuer'].lower().split()),' '.join(e['instrument'].lower().split()),e.get('occurrence',1)) for e in values]
                 if len(set(seen))!=len(seen):
                     raise ValueError('Duplicate printed row: '+str(path))
                 continue

@@ -44,7 +44,10 @@ REQUIRED_FIELDS = ("accession", "quarter", "issuer", "instrument", "fair_value",
 # them as fractions, as a tagged fact would be, so staging reads them exactly as it reads tagged ones.
 PERCENT_FIELDS = ("interest_rate", "basis_spread", "interest_rate_floor", "pct_of_net_assets")
 TERM_FIELDS = PERCENT_FIELDS + ("reference_rate_type", "maturity_date")
-OPTIONAL_FIELDS = ("industry",) + TERM_FIELDS
+# occurrence: the second and later printing of one issuer and instrument in a filing (two tranches that
+# differ only in terms or amounts; BlackRock Private Credit Fund 10-K 2022-12-31 prints athenahealth's
+# 'First Lien Term Loan' twice). Part of the row's identity; absent on the first printing.
+OPTIONAL_FIELDS = ("industry", "occurrence") + TERM_FIELDS
 
 _ACCESSION_RE = re.compile(r"[0-9]{10}-[0-9]{2}-[0-9]{6}")
 _DATE_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
@@ -67,9 +70,14 @@ def _percent_in_line(line: str, value: float, after: str = "") -> bool:
 
 
 def _date_in_line(line: str, day: str) -> bool:
-    """The maturity is printed in the line as MM/DD/YY or MM/DD/YYYY."""
+    """The maturity is printed in the line as MM/DD/YY or MM/DD/YYYY, or with the month and day
+    unpadded (BlackRock Private Credit Fund, 10-K 2022-12-31: '8/23/2027')."""
     year, month, dom = day.split("-")
-    for text in (month + "/" + dom + "/" + year[2:], month + "/" + dom + "/" + year):
+    texts = set()
+    for m in (month, month.lstrip("0")):
+        for d in (dom, dom.lstrip("0")):
+            texts |= {m + "/" + d + "/" + year[2:], m + "/" + d + "/" + year}
+    for text in sorted(texts):
         if re.search(r"(?<![0-9/])" + re.escape(text) + r"(?![0-9/])", line):
             return True
     return False
@@ -82,6 +90,20 @@ def _squash(text: Any) -> str:
 def _printed_number(value: float) -> str:
     """The number as a schedule prints it: whole dollars with thousands separators."""
     return "{:,}".format(int(round(float(value))))
+
+
+def _number_in_line(line: str, value: float) -> bool:
+    """The whole-dollar number is printed in the line. A positive number as written ('28,434,971');
+    a negative one in brackets or with a minus sign ('(5,507 )', '$ (5,507)', '-5,507'); zero as a
+    standalone 0 or dash ('$ -' for an undrawn line's par). BlackRock Private Credit Fund, 10-K
+    2022-12-31: 'Pueblo Mechanical and Controls, LLC First Lien Revolver ... $ - (5,507 ) (5,478 )'."""
+    number = int(round(float(value)))
+    if number > 0:
+        return _printed_number(number) in line
+    if number == 0:
+        return bool(re.search(r"(?<![\w.,%-])(?:0|-|—|–)(?![\w.,%-])", line))
+    text = re.escape(_printed_number(-number))
+    return bool(re.search(r"(?:\(\s*\$?\s*" + text + r"\s*\)|(?<![\w.,])-\s*\$?\s*" + text + r"(?![\d,]))", line))
 
 
 def entry_errors(entry: Any) -> list[str]:
@@ -108,6 +130,9 @@ def entry_errors(entry: Any) -> list[str]:
         if key in entry and (isinstance(entry[key], bool) or not isinstance(entry[key], (int, float))
                              or not 0 <= float(entry[key]) < 100):
             errors.append(key + " must be a percent as printed (12.63 for '12.63%')")
+    if "occurrence" in entry and (isinstance(entry["occurrence"], bool) or not isinstance(entry["occurrence"], int)
+                                  or entry["occurrence"] < 2):
+        errors.append("occurrence must be a whole number from 2 (the first printing has none)")
     if "maturity_date" in entry and isinstance(entry["maturity_date"], str) and not _DATE_RE.fullmatch(entry["maturity_date"]):
         errors.append("maturity_date must read YYYY-MM-DD")
     if "reference_rate_type" in entry and isinstance(entry["reference_rate_type"], str) \
@@ -124,7 +149,7 @@ def entry_errors(entry: Any) -> list[str]:
         if _squash(entry[key]) not in line:
             errors.append(key + " is not in the printed line")
     for key in ("fair_value", "cost", "principal_amount"):
-        if _printed_number(entry[key]) not in line:
+        if not _number_in_line(line, entry[key]):
             errors.append(key + " " + _printed_number(entry[key]) + " is not in the printed line")
     # every declared term must be printed in the line (OVR-T8Z-R2): a value not on the page is refused
     for key in PERCENT_FIELDS:
@@ -142,6 +167,8 @@ def entry_errors(entry: Any) -> list[str]:
 def context_id(entry: dict) -> str:
     """Stable synthetic context id of a declared row (accession, quarter, issuer, instrument)."""
     key = "|".join(_squash(entry[k]).lower() for k in ("accession", "quarter", "issuer", "instrument"))
+    if "occurrence" in entry:
+        key += "|#" + str(int(entry["occurrence"]))
     return CONTEXT_PREFIX + hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
 
 
