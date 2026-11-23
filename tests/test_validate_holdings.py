@@ -4103,6 +4103,7 @@ class TestPositionPurityDiagnostics:
 # check_gav_reconciliation
 # ---------------------------------------------------------------------------
 
+@pytest.mark.usefixtures("isolated_companyfacts")
 class TestCheckGavReconciliation:
     def test_basic_reconciliation(self):
         """Holdings FV sum matches fund_financials investments_at_fair_value."""

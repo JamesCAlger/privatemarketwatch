@@ -377,6 +377,7 @@ def test_parse_published_errors(tmp_path):
 
 
 def test_cohort_sql_placeholder():
+    pytest.importorskip("claude_agent_sdk")  # scripts/sdk_review/tools.py imports it; not installed in CI
     import tools
     assert tools.sql_problem("SELECT count(*) FROM read_parquet('{P}/private_markets_holdings.parquet')", placeholder="{P}") is None
     assert tools.sql_problem("SELECT * FROM read_parquet('{S}/x.parquet')", placeholder="{P}") is not None
