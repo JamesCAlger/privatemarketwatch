@@ -387,7 +387,7 @@ models:
                 values: ['applied', 'moved_to_principal', 'no_fact', 'nil', 'values_differ', 'units_differ',
                          'fact_without_number', 'no_rule', 'rule_conflict', 'feature_missing', 'action_not_built', 'no_fx_rate',
                          'principal_unresolved', 'not_a_date', 'scale_not_decided', 'unit_not_pure', 'legs_do_not_add',
-                         'pik_above_rate', 'cash_leg_without_pik', 'no_pik_read', 'pik_only_coupon', 'pik_is_coupon',
+                         'pik_above_rate', 'cash_leg_without_pik', 'cash_equals_all_in', 'pik_printed_not_tagged', 'pik_only_coupon', 'pik_is_coupon',
                          'pik_is_margin', 'text_not_read']
       - name: fx_rate
         description: US dollars per unit of the principal's currency, where to_usd applied.
@@ -405,6 +405,10 @@ models:
           - accepted_values:
               arguments:
                 values: ['all_in', 'cash', 'unresolved']
+      - name: scale_rule_ids
+        description: >
+          Owner ruling B (2026-11-23): on a normalised rate row, the fund scale rules (comma-separated rule ids) that kept
+          an input filed above 1 in a ratio unit as a percent (int_rate_scale). Null where no scale rule was used.
     data_tests:
       - baseline_normalised_unresolved: {arguments: {field: principal_amount, reason: values_differ}, name: baseline_int_field_normalised_unresolved_principal_amount_values_differ}
       - baseline_normalised_unresolved: {arguments: {field: principal_amount_usd, reason: principal_unresolved}, name: baseline_int_field_normalised_unresolved_principal_amount_usd_principal_unresolved}
@@ -419,6 +423,7 @@ models:
       - baseline_normalised_unresolved: {arguments: {field: interest_rate_cash, reason: values_differ}, name: baseline_int_field_normalised_unresolved_interest_rate_cash_values_differ}
       - baseline_normalised_unresolved: {arguments: {field: interest_rate_cash, reason: rule_conflict}, name: baseline_int_field_normalised_unresolved_interest_rate_cash_rule_conflict}
       - baseline_normalised_unresolved: {arguments: {field: interest_rate_cash, reason: text_not_read}, name: baseline_int_field_normalised_unresolved_interest_rate_cash_text_not_read}
+      - baseline_normalised_unresolved: {arguments: {field: interest_rate_cash, reason: pik_printed_not_tagged}, name: baseline_int_field_normalised_unresolved_interest_rate_cash_pik_printed_not_tagged}
       - baseline_normalised_unresolved: {arguments: {field: pik_rate, reason: scale_not_decided}, name: baseline_int_field_normalised_unresolved_pik_rate_scale_not_decided}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: scale_not_decided}, name: baseline_int_field_normalised_unresolved_spread_scale_not_decided}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: values_differ}, name: baseline_int_field_normalised_unresolved_spread_values_differ}
@@ -430,6 +435,65 @@ models:
       Slice 4 Task 3. One row per position that fails the legs check of spec section 7 (all-in, cash leg and PIK rate
       all normalised, and cash + PIK differs from all-in by more than var rate_legs_tolerance). Empty when the check
       holds; tests/int_field_normalised_rate_legs.sql fails the build on any row.
+
+  - name: int_rate_scale
+    description: >
+      Owner ruling B, 2026-11-23. One row per rate tag, PIK rate or spread read with a number above 1 in a ratio unit
+      (pure, utr:Rate): whether a fund scale rule (action ratio_value_is_percent, wrapper copy reading_rules, naming the
+      filing and the field) keeps it as a percent. Decided per row: the rule applies only where the row's own printed
+      number agrees with the rule's printed reading (percent, or basis points on a spread). Not production's size rule.
+      int_field_normalised reads outcome kept_as_percent; every other row stays scale_not_decided there.
+      tests/rate_scale_rule_evidence.sql re-checks every kept row against the filed layer; tests/rate_scale_rule_live.sql
+      fails a rule that decides no row; tests/int_field_normalised_scale_decided.sql fails a normalised value built on an
+      undecided number.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: field
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['interest_rate_tag', 'interest_rate_cash_tag', 'pik_rate', 'spread']
+      - name: printed_form
+        description: percent_form, margin_bps or other (see the model header).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['percent_form', 'margin_bps', 'other']
+      - name: scale_rule_id
+        description: The matching fund scale rule (stg_reading_rule), null when none.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_reading_rule')
+                field: rule_id
+      - name: outcome
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['kept_as_percent', 'printed_disagrees', 'no_scale_rule']
+
+  - name: int_rate_tag_cell
+    description: >
+      Controller ruling R1, 2026-11-23. One row per position whose interest-rate tag is read with a value: the tag's
+      own printed cell and prints_pik, true when the lowercased cell matches (^|[^a-z])pik([^a-z]|$) (the word PIK on
+      its own in that one cell). int_field_normalised leaves the ruling A cash leg unresolved (pik_printed_not_tagged)
+      where it is true and no PIK rate is read.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: prints_pik
+        data_tests:
+          - not_null
 
   - name: int_repeated_commitment_value
     description: >
@@ -854,6 +918,8 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: production_corrected_no_loaded_store}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_production_corrected_no_loaded_store}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_rate_only_context_not_adopted}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_whole_coupon_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: needs_store_not_loaded, detail: printed_pik_not_read}, name: baseline_cmp_rate_published_interest_rate_cash_nsnl_printed_pik_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: interest_rate_cash, cause: convention, detail: cash_equals_all_in_owner_ruling}, name: baseline_cmp_rate_published_interest_rate_cash_convention_cash_equals_all_in_owner_ruling}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_identifier_text_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_pik_rate_nsnl_rate_only_context_not_adopted}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_whole_coupon_pik_not_read}
@@ -872,6 +938,7 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: rate_kind, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_rate_kind_nsnl_whole_coupon_pik_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_interest_rate_nsnl_printed_reference_rate_column_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate_cash, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_interest_rate_cash_nsnl_printed_reference_rate_column_not_read}
+      - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: interest_rate_cash, cause: convention, detail: cash_equals_all_in_owner_ruling}, name: baseline_cmp_rate_unpublished_interest_rate_cash_convention_cash_equals_all_in_owner_ruling}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: spread, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_spread_nsnl_printed_reference_rate_column_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: maturity_date, cause: needs_store_not_loaded, detail: printed_maturity_not_read}, name: baseline_cmp_rate_unpublished_maturity_date_nsnl_printed_maturity_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_rate_kind_nsnl_printed_reference_rate_column_not_read}
@@ -2285,6 +2352,10 @@ unit_tests:
           - {currency: EUR, rate_date: 2026-03-27, usd_per_unit: 1.25}
           - {currency: EUR, rate_date: 2026-04-01, usd_per_unit: 9.0}
           - {currency: GBP, rate_date: 2026-03-20, usd_per_unit: 1.3}
+      - input: ref('int_rate_scale')
+        rows: []
+      - input: ref('int_rate_tag_cell')
+        rows: []
     expect:
       rows:
         - {context_id: a1, field: fair_value, value: 100.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
@@ -2433,7 +2504,10 @@ unit_tests:
       production's whole-coupon transform -> whole_coupon_pik_not_read on the PIK rate, NOT on the spread. r16 the
       spread moved to the rate by the printed reference-rate column -> printed_reference_rate_column_not_read. r17
       production filled the rate from another context -> rate_only_context_not_adopted. r18 values_differ here ->
-      owner_review two_values_filed_production_keeps_first. x1 sits in an excluded quarter and x2 is new only: no rows.
+      owner_review two_values_filed_production_keeps_first. r3's cash leg is now cash_equals_all_in (owner ruling A,
+      2026-11-23), equal to production's 5.38. r19 cash = all-in with no PIK read here, production's cash leg empty ->
+      convention cash_equals_all_in_owner_ruling; r20 a cash leg from a read PIK rate with production's cash empty -> NOT
+      caused (the cause needs reason cash_equals_all_in). r21 (controller ruling R1) cash leg unresolved pik_printed_not_tagged, production a cash leg through a loaded PIK correction -> printed_pik_not_read, not needs_correction. x1 sits in an excluded quarter and x2 is new only: no rows.
     model: cmp_rate
     given:
       - input: ref('cmp_row_set')
@@ -2454,6 +2528,9 @@ unit_tests:
           - {basis: published, accession: A, context_id: r16, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: r17, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: r18, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: r19, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: r20, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: r21, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: Z, context_id: x1, cik: "1", report_date: 2026-09-30, side: both}
           - {basis: published, accession: A, context_id: x2, cik: "1", report_date: 2026-03-31, side: new_only}
       - input: ref('cmp_excluded_quarter')
@@ -2479,6 +2556,9 @@ unit_tests:
           - {accession_number: A, src_context_id: r18, interest_rate: 9.8, interest_rate_kind: all_in}
           - {accession_number: Z, src_context_id: x1, interest_rate: 5}
           - {accession_number: A, src_context_id: x2, interest_rate: 5}
+          - {accession_number: A, src_context_id: r19, interest_rate: 9, interest_rate_kind: all_in}
+          - {accession_number: A, src_context_id: r20, interest_rate: 9, interest_rate_kind: all_in, pik_rate: 2}
+          - {accession_number: A, src_context_id: r21, interest_rate: 15, interest_rate_cash: 0, interest_rate_kind: all_in, corrected_fields: "pik_rate"}
       - input: ref('int_field_normalised')
         rows:
           - {accession: A, context_id: r1, field: interest_rate, value: 9.63, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
@@ -2486,7 +2566,7 @@ unit_tests:
           - {accession: A, context_id: r2, field: interest_rate, value: 9.63, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
           - {accession: A, context_id: r2, field: maturity_date, value_date: 2028-01-01, action: as_filed, status: normalised, reason: applied}
           - {accession: A, context_id: r3, field: interest_rate, value: 5.38, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
-          - {accession: A, context_id: r3, field: interest_rate_cash, value: null, action: rate_is_all_in, status: absent, reason: no_pik_read}
+          - {accession: A, context_id: r3, field: interest_rate_cash, value: 5.38, action: rate_is_all_in, status: normalised, reason: cash_equals_all_in}
           - {accession: A, context_id: r3, field: spread, value: 5, action: fraction_to_percent, status: normalised, reason: applied}
           - {accession: A, context_id: r4, field: pik_rate, value: null, status: absent, reason: no_fact}
           - {accession: A, context_id: r5, field: interest_rate, value: null, rate_kind: unresolved, action: rate_is_all_in, status: unresolved, reason: scale_not_decided}
@@ -2506,10 +2586,18 @@ unit_tests:
           - {accession: A, context_id: r16, field: spread, value: 10, action: fraction_to_percent, status: normalised, reason: applied}
           - {accession: A, context_id: r17, field: interest_rate, value: null, rate_kind: unresolved, status: absent, reason: no_fact}
           - {accession: A, context_id: r18, field: interest_rate, value: null, rate_kind: unresolved, action: rate_is_all_in, status: unresolved, reason: values_differ}
+          - {accession: A, context_id: r19, field: interest_rate, value: 9, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r19, field: interest_rate_cash, value: 9, action: rate_is_all_in, status: normalised, reason: cash_equals_all_in}
+          - {accession: A, context_id: r20, field: interest_rate, value: 9, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r20, field: interest_rate_cash, value: 7, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r20, field: pik_rate, value: 2, action: fraction_to_percent, status: normalised, reason: applied}
+          - {accession: A, context_id: r21, field: interest_rate, value: 15, rate_kind: all_in, action: rate_is_all_in, status: normalised, reason: applied}
+          - {accession: A, context_id: r21, field: interest_rate_cash, value: null, action: rate_is_all_in, status: unresolved, reason: pik_printed_not_tagged}
           - {accession: Z, context_id: x1, field: interest_rate, value: 6, rate_kind: all_in, status: normalised, reason: applied}
       - input: ref('stg_correction')
         rows:
           - {kind: value, field: interest_rate, accession: A, context_id: r3, identifier: null, value: "10.76"}
+          - {kind: value, field: pik_rate, accession: A, context_id: r21, identifier: null, value: "15"}
       - input: ref('int_field_read')
         rows:
           - {accession: A, context_id: r11, field: spread, status: read, is_nil: false}
@@ -2529,7 +2617,7 @@ unit_tests:
         - {context_id: r2, field: maturity_date, outcome: differs, cause: not_yet_explained, cause_detail: none}
         - {context_id: r2, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
         - {context_id: r3, field: interest_rate, outcome: differs, cause: needs_correction, cause_detail: correction_loaded_applied}
-        - {context_id: r3, field: interest_rate_cash, outcome: new_empty, cause: needs_correction, cause_detail: correction_loaded_applied}
+        - {context_id: r3, field: interest_rate_cash, outcome: equal, cause: null, cause_detail: null}
         - {context_id: r3, field: pik_rate, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r3, field: spread, outcome: differs, cause: not_yet_explained, cause_detail: none}
         - {context_id: r3, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
@@ -2612,6 +2700,24 @@ unit_tests:
         - {context_id: r18, field: spread, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r18, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: r18, field: rate_kind, outcome: differs, cause: owner_review, cause_detail: two_values_filed_production_keeps_first}
+        - {context_id: r19, field: interest_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r19, field: interest_rate_cash, outcome: production_empty, cause: convention, cause_detail: cash_equals_all_in_owner_ruling}
+        - {context_id: r19, field: pik_rate, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r19, field: spread, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r19, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r19, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r20, field: interest_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r20, field: interest_rate_cash, outcome: production_empty, cause: not_yet_explained, cause_detail: none}
+        - {context_id: r20, field: pik_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r20, field: spread, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r20, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r20, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r21, field: interest_rate, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: r21, field: interest_rate_cash, outcome: new_empty, cause: needs_store_not_loaded, cause_detail: printed_pik_not_read}
+        - {context_id: r21, field: pik_rate, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r21, field: spread, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r21, field: maturity_date, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: r21, field: rate_kind, outcome: equal, cause: null, cause_detail: null}
 
   - name: cmp_amount_cause_rules
     description: >
@@ -3205,7 +3311,7 @@ unit_tests:
   - name: int_field_normalised_rate_legs
     description: >
       Slice 4 Task 3. The interest_rate reading and its cash leg (binary fractions, so the percents are exact).
-      rate_is_all_in: n1 all-in 12.5, PIK 6.25, cash 6.25; n2 no PIK: cash left empty (no_pik_read, as production);
+      rate_is_all_in: n1 all-in 12.5, PIK 6.25, cash 6.25; n2 no PIK: cash = all-in (cash_equals_all_in, owner ruling A 2026-11-23; production leaves it empty);
       n3 PIK above the rate: both unresolved (pik_above_rate). rate_is_cash_leg: n4 cash 6.25 plus PIK 3.125 = 9.375;
       n5 no PIK: the all-in rate is not set (cash_leg_without_pik), kind cash. Both tags: n6 add up with the PIK rate
       (all-in 12.5, cash 6.25); n7 do not (legs_do_not_add). n8 a cash-pay tag only under rate_is_all_in is the cash
@@ -3230,7 +3336,9 @@ unit_tests:
             ('A', 'n9', 'ra', 'rate_is_all_in', 'rule'),
             ('A', 'n10', null, null, 'no_rule'),
             ('A', 'n11', null, null, 'rule_conflict'),
-            ('A', 'n12', null, null, 'no_rule')
+            ('A', 'n12', null, null, 'no_rule'),
+            ('A', 'n13', 'ra', 'rate_is_all_in', 'rule'),
+            ('A', 'n14', 'ra', 'rate_is_all_in', 'rule')
           ) t(acc, ctx, rule_id, action, resolution)
       - input: ref('int_field_read')
         format: sql
@@ -3257,7 +3365,9 @@ unit_tests:
             ('A', 'n9', 'interest_rate_tag', 'read', 'one_fact', 9.5, 'pure'),
             ('A', 'n10', 'interest_rate_tag', 'read', 'one_fact', 0.125, 'pure'),
             ('A', 'n11', 'pik_rate', 'read', 'one_fact', 0.0625, 'pure'),
-            ('A', 'n12', 'interest_rate_tag', 'absent', 'no_fact', null, null)
+            ('A', 'n12', 'interest_rate_tag', 'absent', 'no_fact', null, null),
+            ('A', 'n13', 'interest_rate_tag', 'read', 'one_fact', 9.5, 'utr:Rate'),
+            ('A', 'n14', 'interest_rate_tag', 'read', 'one_fact', 0.125, 'pure')
           ) t(acc, ctx, field, status, reason, value_filed, unit)
       - input: ref('reading_action')
         rows:
@@ -3271,12 +3381,19 @@ unit_tests:
         rows: []
       - input: ref('stg_fx_rate')
         rows: []
+      - input: ref('int_rate_scale')
+        rows:
+          - {accession: A, context_id: n13, field: interest_rate_tag, outcome: kept_as_percent, scale_rule_id: sr}
+      - input: ref('int_rate_tag_cell')
+        rows:
+          - {accession: A, context_id: n14, printed_cell: "12.50% PIK", prints_pik: true}
+          - {accession: A, context_id: n2, printed_cell: "12.50%", prints_pik: false}
     expect:
       rows:
         - {context_id: n1, field: interest_rate, value: 12.5, status: normalised, reason: applied, rate_kind: all_in}
         - {context_id: n1, field: interest_rate_cash, value: 6.25, status: normalised, reason: applied, rate_kind: null}
         - {context_id: n2, field: interest_rate, value: 12.5, status: normalised, reason: applied, rate_kind: all_in}
-        - {context_id: n2, field: interest_rate_cash, value: null, status: absent, reason: no_pik_read, rate_kind: null}
+        - {context_id: n2, field: interest_rate_cash, value: 12.5, status: normalised, reason: cash_equals_all_in, rate_kind: null}
         - {context_id: n3, field: interest_rate, value: null, status: unresolved, reason: pik_above_rate, rate_kind: unresolved}
         - {context_id: n3, field: interest_rate_cash, value: null, status: unresolved, reason: pik_above_rate, rate_kind: null}
         - {context_id: n4, field: interest_rate, value: 9.375, status: normalised, reason: applied, rate_kind: cash}
@@ -3297,6 +3414,10 @@ unit_tests:
         - {context_id: n11, field: interest_rate_cash, value: null, status: unresolved, reason: rule_conflict, rate_kind: null}
         - {context_id: n12, field: interest_rate, value: null, status: absent, reason: no_fact, rate_kind: unresolved}
         - {context_id: n12, field: interest_rate_cash, value: null, status: absent, reason: no_fact, rate_kind: null}
+        - {context_id: n13, field: interest_rate, value: 9.5, status: normalised, reason: applied, rate_kind: all_in}
+        - {context_id: n13, field: interest_rate_cash, value: 9.5, status: normalised, reason: cash_equals_all_in, rate_kind: null}
+        - {context_id: n14, field: interest_rate, value: 12.5, status: normalised, reason: applied, rate_kind: all_in}
+        - {context_id: n14, field: interest_rate_cash, value: null, status: unresolved, reason: pik_printed_not_tagged, rate_kind: null}
 
   - name: int_field_normalised_pik_only_spread_maturity
     description: >
@@ -3339,6 +3460,8 @@ unit_tests:
             ('A', 's6', 'spread', null, null, 'feature_missing'),
             ('A', 's4', 'spread', null, null, 'no_rule'),
             ('A', 's5', 'spread', null, null, 'no_rule'),
+            ('A', 's7', 'spread', 'gs', 'fraction_to_percent', 'rule'),
+            ('A', 's8', 'spread', 'gs', 'fraction_to_percent', 'rule'),
             ('A', 'm1', 'maturity_date', 'gm', 'as_filed', 'rule'),
             ('A', 'm2', 'maturity_date', null, null, 'no_rule'),
             ('A', 'm3', 'maturity_date', null, null, 'no_rule')
@@ -3358,6 +3481,8 @@ unit_tests:
             ('A', 's6', 'spread', 'read', 'one_fact', 0.0625, null, 'pure'),
             ('A', 's4', 'spread', 'unresolved', 'values_differ', null, null, null),
             ('A', 's5', 'spread', 'read', 'one_fact', 0.0625, null, 'other'),
+            ('A', 's7', 'spread', 'read', 'one_fact', 4.5, null, 'pure'),
+            ('A', 's8', 'spread', 'read', 'one_fact', 4.5, null, 'pure'),
             ('A', 'm1', 'maturity_date', 'read', 'one_fact', null, date '2030-06-30', null),
             ('A', 'm2', 'maturity_date', 'absent', 'no_fact', null, null, null),
             ('A', 'm3', 'maturity_date', 'unresolved', 'not_a_date', null, null, null)
@@ -3375,6 +3500,12 @@ unit_tests:
       - input: ref('stg_filed_unit')
         rows: []
       - input: ref('stg_fx_rate')
+        rows: []
+      - input: ref('int_rate_scale')
+        rows:
+          - {accession: A, context_id: s7, field: spread, outcome: kept_as_percent, scale_rule_id: sr}
+          - {accession: A, context_id: s8, field: spread, outcome: printed_disagrees, scale_rule_id: sr}
+      - input: ref('int_rate_tag_cell')
         rows: []
     expect:
       rows:
@@ -3400,9 +3531,119 @@ unit_tests:
         - {context_id: s6, field: spread, value: null, value_date: null, status: unresolved, reason: feature_missing, rate_kind: null}
         - {context_id: s4, field: spread, value: null, value_date: null, status: unresolved, reason: values_differ, rate_kind: null}
         - {context_id: s5, field: spread, value: null, value_date: null, status: unresolved, reason: no_rule, rate_kind: null}
+        - {context_id: s7, field: spread, value: 4.5, value_date: null, status: normalised, reason: applied, rate_kind: null}
+        - {context_id: s8, field: spread, value: null, value_date: null, status: unresolved, reason: scale_not_decided, rate_kind: null}
         - {context_id: m1, field: maturity_date, value: null, value_date: 2030-06-30, status: normalised, reason: applied, rate_kind: null}
         - {context_id: m2, field: maturity_date, value: null, value_date: null, status: absent, reason: no_fact, rate_kind: null}
         - {context_id: m3, field: maturity_date, value: null, value_date: null, status: unresolved, reason: not_a_date, rate_kind: null}
+
+  - name: int_rate_scale_rules_and_print
+    description: >
+      Owner ruling B, 2026-11-23. Fund 1. Filing A has two scale rules: 'interest_rate_tag percent' and 'spread
+      basis_points'. k1 a rate tag 13.0 in utr:Rate printed '13.00%' -> kept_as_percent. k2 a spread 4.5 printed 'S+450,
+      0.75% Floor' -> kept_as_percent (basis points). k3 a rate tag 6.1 printed 'S+610' under the percent rule -> NOT kept
+      (printed_disagrees: 610 is not 6.1 and no percent sign follows). k4 a rate tag 7.0 printed '7.00' with no percent
+      sign in its cell or the next -> NOT kept. k5 a PIK rate 6.5 in filing A, no PIK rule -> no_scale_rule. k6 a rate
+      0.095 (not above 1) -> no row. Filing C: a rule 'interest_rate_tag basis_points' (refused by
+      tests/rate_scale_rule_selectors.sql) on k7 printed 'S+500' -> NOT kept: basis points only count on a spread.
+    model: int_rate_scale
+    given:
+      - input: ref('int_field_read')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, field, '1' as cik, date '2026-03-31' as report_date,
+                 'read' as status, false as is_nil, value_filed, unit, printed_text, fact_id
+          from (values
+            ('A', 'k1', 'interest_rate_tag', 13.0, 'utr:Rate', '13.00', 'f1'),
+            ('A', 'k2', 'spread', 4.5, 'pure', '450', 'f2'),
+            ('A', 'k3', 'interest_rate_tag', 6.1, 'pure', '610', 'f3'),
+            ('A', 'k4', 'interest_rate_tag', 7.0, 'pure', '7.00', 'f4'),
+            ('A', 'k5', 'pik_rate', 6.5, 'pure', '6.50', 'f5'),
+            ('A', 'k6', 'interest_rate_tag', 0.095, 'pure', '9.50', 'f6'),
+            ('C', 'k7', 'interest_rate_tag', 5.0, 'pure', '500', 'f7')
+          ) t(acc, ctx, field, value_filed, unit, printed_text, fact_id)
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: ra, cik: "1", sel_accession: A, action: ratio_value_is_percent, parameter: "interest_rate_tag percent"}
+          - {rule_id: rb, cik: "1", sel_accession: A, action: ratio_value_is_percent, parameter: "spread basis_points"}
+          - {rule_id: rc, cik: "1", sel_accession: C, action: ratio_value_is_percent, parameter: "interest_rate_tag basis_points"}
+          - {rule_id: rx, cik: "1", sel_accession: A, action: rate_is_all_in, parameter: null}
+      - input: ref('stg_filed_fact_placement')
+        format: sql
+        rows: |
+          select acc as accession, fid as fact_id, ri as row_index, 0 as cell_index, null::integer as shown_row_index,
+                 null::integer as shown_cell_index
+          from (values ('A', 'f1', 1), ('A', 'f2', 2), ('A', 'f3', 3), ('A', 'f4', 4), ('A', 'f5', 5), ('A', 'f6', 6),
+                       ('C', 'f7', 7)) t(acc, fid, ri)
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, cells
+          from (values
+            ('A', 1, ['13.00%', 'SOFR (Q)']),
+            ('A', 2, ['S+450, 0.75% Floor', '6/7/2031']),
+            ('A', 3, ['S+610, 1.00% Floor', '12/18/2028']),
+            ('A', 4, ['7.00', '150']),
+            ('A', 5, ['6.50% PIK', '']),
+            ('A', 6, ['9.50%', '']),
+            ('C', 7, ['S+500', ''])
+          ) t(acc, ri, cells)
+    expect:
+      rows:
+        - {context_id: k1, field: interest_rate_tag, printed_form: percent_form, scale_rule_id: ra, outcome: kept_as_percent}
+        - {context_id: k2, field: spread, printed_form: margin_bps, scale_rule_id: rb, outcome: kept_as_percent}
+        - {context_id: k3, field: interest_rate_tag, printed_form: margin_bps, scale_rule_id: ra, outcome: printed_disagrees}
+        - {context_id: k4, field: interest_rate_tag, printed_form: other, scale_rule_id: ra, outcome: printed_disagrees}
+        - {context_id: k5, field: pik_rate, printed_form: percent_form, scale_rule_id: null, outcome: no_scale_rule}
+        - {context_id: k7, field: interest_rate_tag, printed_form: margin_bps, scale_rule_id: rc, outcome: printed_disagrees}
+
+  - name: int_rate_tag_cell_prints_pik
+    description: >
+      Controller ruling R1 (2026-11-23). The rate tag's own printed cell prints a PIK when 'pik' stands as a word of its
+      own. Trips: t1 "6.00% PIK", t2 "11.62% (4.50% PIK)", t3 a hidden fact shown in "12.74% (incl. 0.50% PIK)". Must
+      NOT trip: t4 "9.48%", t5 "Pikes Peak 7.00%" (letters follow), t6 "SPIKE 8.00%" (letters before), t7 a PIK printed
+      only in the next cell of the row, t8 a fact with no placement (cell null). t9 a nil tag: no row.
+    model: int_rate_tag_cell
+    given:
+      - input: ref('int_field_read')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, 'interest_rate_tag' as field, 'read' as status, is_nil,
+                 value_filed, fact_id
+          from (values
+            ('A', 't1', false, 0.06, 'f1'), ('A', 't2', false, 0.1162, 'f2'), ('A', 't3', false, 0.1274, 'f3'),
+            ('A', 't4', false, 0.0948, 'f4'), ('A', 't5', false, 0.07, 'f5'), ('A', 't6', false, 0.08, 'f6'),
+            ('A', 't7', false, 0.09, 'f7'), ('A', 't8', false, 0.09, 'f8'), ('A', 't9', true, null::double, 'f9')
+          ) t(acc, ctx, is_nil, value_filed, fact_id)
+      - input: ref('stg_filed_fact_placement')
+        format: sql
+        rows: |
+          select acc as accession, fid as fact_id, ri as row_index, ci as cell_index, sri as shown_row_index,
+                 sci as shown_cell_index
+          from (values
+            ('A', 'f1', 1, 0, null::integer, null::integer), ('A', 'f2', 2, 0, null, null),
+            ('A', 'f3', null, null, 3, 1), ('A', 'f4', 4, 0, null, null), ('A', 'f5', 5, 0, null, null),
+            ('A', 'f6', 6, 0, null, null), ('A', 'f7', 7, 0, null, null)
+          ) t(acc, fid, ri, ci, sri, sci)
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, cells
+          from (values
+            ('A', 1, ['6.00% PIK', '']), ('A', 2, ['11.62% (4.50% PIK)', '']),
+            ('A', 3, ['Loan', '12.74% (incl. 0.50% PIK)']), ('A', 4, ['9.48%', '']), ('A', 5, ['Pikes Peak 7.00%', '']),
+            ('A', 6, ['SPIKE 8.00%', '']), ('A', 7, ['9.00%', 'PIK'])
+          ) t(acc, ri, cells)
+    expect:
+      rows:
+        - {context_id: t1, prints_pik: true}
+        - {context_id: t2, prints_pik: true}
+        - {context_id: t3, prints_pik: true}
+        - {context_id: t4, prints_pik: false}
+        - {context_id: t5, prints_pik: false}
+        - {context_id: t6, prints_pik: false}
+        - {context_id: t7, prints_pik: false}
+        - {context_id: t8, prints_pik: false}
 
   - name: int_rate_legs_check_fails_a_row_that_does_not_add
     description: >

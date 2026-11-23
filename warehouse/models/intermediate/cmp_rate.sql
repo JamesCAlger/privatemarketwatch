@@ -40,6 +40,13 @@
 --   needs_store_not_loaded|printed_reference_rate_column_not_read  src_transforms has interest_rate:from_spread_tag or
 --        basis_spread:fixed_coupon: production read 'no reference rate' in the printed reference-rate column and
 --        moved the spread tag to the rate or withdrew it (apply_ixbrl_field_status_overlay).
+--   convention|cash_equals_all_in_owner_ruling  the cash leg, production empty, this layer's reason cash_equals_all_in:
+--        under rate_is_all_in with no PIK rate read this layer stores cash = all-in (owner ruling A, 2026-11-23);
+--        production's code sets the cash leg only where a PIK rate is read. A deliberate difference of convention.
+--   needs_store_not_loaded|printed_pik_not_read  the cash leg, this layer's reason pik_printed_not_tagged (controller
+--        ruling R1, 2026-11-23): the rate's printed cell names a PIK no tag carries, so this layer stores no cash leg;
+--        production's cash leg comes from that printed PIK (a loaded correction of the PIK rate, or identifier text).
+--        Checked second, before the correction and identifier-text rules.
 --   not_yet_explained|rule_conflict  this layer's reason is rule_conflict on a rate field. No cause is known for a
 --        conflict: it was labelled a PIK-only text gap while the two PIK-only readings tied, but since the ruling of
 --        2026-11-23 those rows are text_not_read and rate-field conflicts are 0 (guard at ceiling 0), so any such row
@@ -51,7 +58,9 @@
 --        read here: the printed total margin decides printed_margin_cash_plus_pik (unread_input printed_total_margin).
 --   owner_review|scale_decided_by_size_in_production  this layer's reason is scale_not_decided (a ratio-unit value
 --        above 1): production keeps or rescales it by its size (pipeline/staging_bdc.py _prepare_bdc). Not a
---        convention: no filer rule says which scale the tag is in (controller ruling, slice 4 Task 3).
+--        convention: no filer rule says which scale the tag is in (controller ruling, slice 4 Task 3). Since owner
+--        ruling B (2026-11-23) a fund scale rule per filing decides most such values (int_rate_scale); 0 rows here in
+--        the build of that day (the 6 left unscaled are both_empty).
 --   owner_review|two_values_filed_production_keeps_first  this layer's reason is values_differ (one concept filed
 --        twice with different numbers, slice 4 Task 2): production keeps the first fact in the instance
 --        (pipeline/bdc_filings.py, "keep first non-None"), this layer withholds the value (D5).
@@ -257,6 +266,17 @@ with both_rows as (
         , context_id
         , field
         , case
+            -- first: production's cash leg is empty because its code sets a cash leg only from a read PIK rate; this
+            -- layer's is the all-in rate by owner ruling A. Whatever else differs on the row (a correction of the rate,
+            -- a moved spread), production would still leave this cash leg empty
+            when field = 'interest_rate_cash' and new_reason = 'cash_equals_all_in' and outcome = 'production_empty'
+                then 'convention|cash_equals_all_in_owner_ruling'
+            -- controller ruling R1: this layer leaves the cash leg empty because the rate's printed cell names a PIK that
+            -- no tag carries; production holds a cash leg that comes from the printed PIK (through a loaded correction
+            -- of the PIK rate, or its identifier-text reading). Checked before those causes: the reason this side is
+            -- empty is the unread printed PIK, whatever route production took
+            when field = 'interest_rate_cash' and new_reason = 'pik_printed_not_tagged'
+                then 'needs_store_not_loaded|printed_pik_not_read'
             when has_loaded_correction and production_corrected then 'needs_correction|correction_loaded_applied'
             when has_loaded_correction then 'not_yet_explained|correction_loaded_not_named'
             when production_corrected then 'needs_store_not_loaded|production_corrected_no_loaded_store'

@@ -584,9 +584,9 @@ Recorded, not yet built unless stated. Item numbers are those of the list above.
 | Item | Owner ruling | Work it creates |
 |---|---|---|
 | 1 | Wait for printed text. No fund-level PIK-only rule now | None until the text spec |
-| 2 | Cash leg = all-in rate where no PIK rate is read | Model change, 40,410 rows gain a cash leg; residual risk: a PIK that exists but is not tagged overstates cash |
+| 2 | Cash leg = all-in rate where no PIK rate is read | BUILT 2026-11-23 (branch `warehouse-rate-rulings`): 40,410 cash legs set (reason `cash_equals_all_in`; Ares 11,775, BCRED 22,440, Apollo 305, HPS 5,890). `cmp_rate`: 30,573 published and 8,863 unpublished rows now `production_empty`, cause `convention` `cash_equals_all_in_owner_ruling` (own ceiling); 71 published rows moved from new_empty to differs under their old cause. Residual risk: where the rate cell prints the word PIK and no PIK rate is tagged, the cash leg is not stored (controller ruling R1, fix round 1): 69 rows unresolved `pik_printed_not_tagged` (67 published, 2 unpublished); 40,341 cash legs remain set to the all-in rate. Detail: addendum in `docs/baseline_rates_2026-11-23.md` |
 | 3 | PIK-only coupon: cash leg 0 | None while item 1 stands |
-| 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | Dated filer rules for the 767 values (657 in the Ares 2023-09-30 filing) |
+| 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | BUILT 2026-11-23 (branch `warehouse-rate-rulings`): 17 fund rules `ratio_value_is_percent` in the wrapper copies (Ares 6, BCRED 2, Blue Owl 3, Apollo 2, HPS 4), read by the new model `int_rate_scale`, applied per row only where the row's own print agrees. 759 numbers kept as a percent (rate tag 670, PIK 20, spread 69); every printed number agreed (0 missing, 0 disagree). `scale_not_decided` left: 6 rates and their 6 cash legs (was 679 / 679 / PIK 20 / spread 68). Every former `scale_decided_by_size_in_production` row now equals production. Newly scaled values that differ from production: 1 Ares cash leg (printed "6.00% PIK"; no longer stored since R1) and 3 HPS PIK rates and cash legs (whole-coupon class, existing cause; kept by R2, they contradict the printed coupon; the class holds 44 cash legs and 44 PIK rates). OPEN for the owner: the 6 left are Apollo 0000950170-24-094137 rate tags printed as margins ("S+610"): the tag holds a spread, not a rate, so no rule was written. Detail: second addendum in `docs/baseline_rates_2026-11-23.md` |
 | 5 | Leave both procedures as named differences until slice 5 | None now |
 | 6 | Wait for the printed margin | None until the text spec |
 | 7 | Leave unresolved (0 rows) | None |
@@ -594,6 +594,17 @@ Recorded, not yet built unless stated. Item numbers are those of the list above.
 | 9 | Leave (0 rows) | None |
 | 10 | Read the unit properly in slice 5, with the unit mapping moved to data | Slice 5 |
 | 11 | Push slice 4 | Done with this commit |
+
+After items 2 and 4 were built (2026-11-23, branch `warehouse-rate-rulings`, two commits, not pushed):
+build `PASS=684 WARN=104 ERROR=0 TOTAL=788`; `warehouse/pytests` 146 passed; CI fixture 3 / 332 / 2 / 34.
+Rulings made by the implementer, not by the owner: the scale rule's author is written inside its
+evidence text (a separate column would change every rule id); the printed reading (`percent` or
+`basis_points`) is part of the rule's parameter; `basis_points` is allowed on a spread only; the
+cause for ruling A is `convention` and is checked first in `cmp_rate`; the CI fixture has no scale
+rule (the unit test `int_rate_scale_rules_and_print` covers the model).
+Fix round 1 (controller rulings R1 to R3, table below): build `PASS=690 WARN=106 ERROR=0 TOTAL=796`; 146 Python
+tests; CI fixture 3 / 339 / 2 / 35. Implementer choice in that round: `scale_rule_ids` is documented (it lists
+every rate input read for the reading), not narrowed.
 
 ### Rulings made without the owner (slice 4), with the cost if wrong
 
@@ -611,6 +622,9 @@ From the ledger (`progress.md`). Each was made by the controller.
 | Task 3: the 540 spread-with-PIK rows get their own reason `text_not_read` (ceiling 540); `feature_missing` stays an error at ceiling 0 | 540 spreads empty that production stores |
 | Task 4: both PIK-only readings need printed inputs not read (`unread_input`); every row they would decide is `text_not_read` | 324 published rows (Ares 273, Apollo 51) where the old reading agreed with production now carry no rate; 90 more PIK-only rows in the excluded 2026-09-30 quarter were not compared; 841 wrong values were removed |
 | Task 4: `production_corrected_no_loaded_store` stays under `needs_store_not_loaded` (2 published rows) | 2 rows under one cause instead of another |
+| R1 (controller, fix round 1 of the rate rulings, 2026-11-23): under ruling A, where the rate tag's own printed cell contains the word PIK on its own (`int_rate_tag_cell`, regexp `(^|[^a-z])pik([^a-z]|$)` on the lowercased cell) and no PIK rate is read, the cash leg is unresolved, `pik_printed_not_tagged`, not set to the all-in rate. 69 rows (Ares 37, BCRED 7, Apollo 3, HPS 22; 67 published, 2 unpublished). `cmp_rate` cause `needs_store_not_loaded` `printed_pik_not_read` (67 published), checked before the correction rule | About 69 cash legs left empty that might equal the all-in rate |
+| R2 (controller): the 3 HPS rows c-115 (0001838126-24-000061), c-376 (0001628280-26-020206), c-372 (0001628280-26-033248) keep their scale rules. The scale is right; their PIK tag holds the PIK margin where the page prints the whole coupon as PIK, the whole-coupon class the owner left until slice 5. Their stored PIK rate and cash leg contradict the printed coupon. The class: 44 published cash legs and 44 PIK rates differ from production (3 of them on scale-rule values) | 3 more rows in an already open class |
+| R3 (controller): the 6 Apollo rate tags of 0000950170-24-094137 stay without a scale rule. Unlike R2, where the field is right (a PIK rate) and only its meaning within the coupon is open, these tags are in the wrong field: the page prints a margin ("S+610"), so storing them as the all-in rate would be wrong whatever the scale | 6 rates stay empty that production fills (with a margin) |
 
 Implementer decisions in Task 5, also not seen by the owner: the rate expectations are a new test file
 beside the amounts one (`tests/ci_fixture_expected_rates.sql`); the fixture keeps one rate in

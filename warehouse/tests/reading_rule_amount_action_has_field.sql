@@ -11,6 +11,9 @@ with converting_rule as (
     from {{ ref('stg_reading_rule') }} r
     join {{ ref('reading_action') }} a on a.action = r.action
     where a.built_in_slice in ('3', '4') and r.action not like 'concept_is_%'
+      -- owner ruling B (2026-11-23): a scale rule decides the scale of a read number (int_rate_scale), not which rule
+      -- converts a field, so it has no action_field row by design
+      and r.action <> 'ratio_value_is_percent'
 )
 
 select r.rule_id, r.cik, r.origin, r.action, r.target, 'action has no action_field row' as problem

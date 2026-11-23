@@ -488,6 +488,48 @@
         "Class A units"
       ],
       "evidence": "Equity, LP and warrant lines whose units are printed (or not printed) but not tagged: only cost and fair value are tagged. 10 contexts, 2022-09-30 to 2025-09-30, e.g. 0001287750-22-000052 'GHX Ultimate Parent Corporation, Commerce Parent, Inc. and Commerce Topco, LLC, Class A units' printed 'Class A units | 6/2017 | 14,853,569 | 15.7 | 28.5'. Production publishes all 10. Selected on the instrument named after the last comma; the issuer-only lines of the same companies, which production leaves out, name no instrument. Owner decision D15, 2026-11-19. Slice 2 Task 6."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001287750-22-000052",
+      "parameter": "interest_rate_tag percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing an interest-rate tag filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 1 row filed above 1 (6.00, utr:Rate); its printed number equals the tag read as a percent and its cell prints '6.00% PIK'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001287750-23-000010",
+      "parameter": "interest_rate_tag percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing an interest-rate tag filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 8 rows filed above 1 (3.75 to 9.29, utr:Rate); on all 8 the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. '6.50%', '3.75%'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001287750-23-000021",
+      "parameter": "spread percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a spread filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 1 row filed above 1 (8.00, utr:Rate); its printed number equals the tag read as a percent and its cell prints '8.00%' after 'LIBOR (Q)'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001287750-23-000045",
+      "parameter": "interest_rate_tag percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing an interest-rate tag filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 657 rows filed above 1 (3.61 to 16.43; 12 in pure, 645 in utr:Rate); on all 657 the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. c-1015 '13.00%' beside 'Base Rate (Q) | 4.50%'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001628280-26-050307",
+      "parameter": "interest_rate_tag percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing an interest-rate tag filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 3 rows filed above 1 (9.48 to 9.91, utr:Rate); on all 3 the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. c-36 '9.48% (2.88% PIK)', c-725 '9.48%'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001628280-26-050307",
+      "parameter": "pik_rate percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a PIK rate filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 2 rows filed above 1 (1.25 and 2.88, utr:Rate); on both the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. c-36 '9.48% (2.88% PIK)', c-1394 '9.91% (1.25% PIK)'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
     }
   ]
 }

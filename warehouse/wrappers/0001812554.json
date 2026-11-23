@@ -609,6 +609,27 @@
       "action": "as_filed",
       "accession": "0001812554-23-000022",
       "evidence": "10-Q for 2023-06-30: the share of net assets is tagged as a percent, not a fraction. Context c-206 prints '4.0' and the pure fact is 4.0 (decimals 3); c-522 prints '3.5', tagged 3.5. The 646 tagged values sum to 196.8. The next filing, 0001812554-23-000030 (2023-09-30), prints '4.0' on c-1432 and tags 0.04. Without this rule the default fraction_to_percent would store 400 pct. Same reading as production's filing-level test (pipeline/staging_bdc.py _pct_in_percent: 20 or more values summing past 20). Filing-scoped. Slice 3 Task 3 fix round 1."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001812554-23-000022",
+      "parameter": "pik_rate percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a PIK rate filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 3 rows filed above 1 (6.25 to 6.75, pure); on all 3 the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. c-319 'SR + | 6.25% PIK'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001812554-23-000030",
+      "parameter": "pik_rate percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a PIK rate filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 3 rows filed above 1 (6.25 to 6.75, pure); on all 3 the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. c-337 'SR + | 6.25% PIK'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001812554-24-000014",
+      "parameter": "pik_rate percent",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a PIK rate filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 2 rows filed above 1 (12.00, pure); on both the printed number equals the tag read as a percent and the cell prints c-1417 and c-1418 '12.00% PIK'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
     }
   ]
 }
