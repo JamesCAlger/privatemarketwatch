@@ -25,7 +25,7 @@
     <!-- balance sheet instant: rule 1 not_schedule -->
     <context id="c-2"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier></entity>
         <period><instant>2026-03-31</instant></period></context>
-    <!-- rule 9 position (principal and rate) -->
+    <!-- rule 9 position (principal, rate and PIK rate) -->
     <context id="c-3"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
         <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Acme Corp | First lien term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
         </segment></entity><period><instant>2026-03-31</instant></period></context>
@@ -130,7 +130,7 @@
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-3" unitRef="usd" decimals="0" id="f-2">1000</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedAtCost contextRef="c-3" unitRef="usd" decimals="0" id="f-3">990</us-gaap:InvestmentOwnedAtCost>
     <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-3" unitRef="usd" decimals="0" id="f-4">1000</us-gaap:InvestmentOwnedBalancePrincipalAmount>
-    <us-gaap:InvestmentInterestRate contextRef="c-3" unitRef="pure" decimals="4" id="f-5">0.0900</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentInterestRate contextRef="c-3" unitRef="pct" decimals="4" id="f-5">0.0900</us-gaap:InvestmentInterestRate>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-4" unitRef="usd" decimals="0" id="f-6">500</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedAtCost contextRef="c-4" unitRef="usd" decimals="0" id="f-7">510</us-gaap:InvestmentOwnedAtCost>
     <us-gaap:InvestmentMaturityDate contextRef="c-4" id="t-1">2030-01-01</us-gaap:InvestmentMaturityDate>
@@ -139,7 +139,7 @@
     <us-gaap:InvestmentOwnedAtCost contextRef="c-6" unitRef="usd" decimals="0" id="f-10">300</us-gaap:InvestmentOwnedAtCost>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-7" unitRef="usd" decimals="0" id="f-11">200</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedAtCost contextRef="c-7" unitRef="usd" decimals="0" id="f-12">200</us-gaap:InvestmentOwnedAtCost>
-    <us-gaap:InvestmentInterestRate contextRef="c-7" unitRef="pure" decimals="4" id="f-13">0.0800</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentInterestRate contextRef="c-7" unitRef="pct" decimals="4" id="f-13">0.0800</us-gaap:InvestmentInterestRate>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-8" unitRef="usd" decimals="0" id="f-14">100</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedAtCost contextRef="c-8" unitRef="usd" decimals="0" id="f-15">100</us-gaap:InvestmentOwnedAtCost>
     <us-gaap:InvestmentInterestRate contextRef="c-8" unitRef="pure" decimals="4" id="f-16">0.0800</us-gaap:InvestmentInterestRate>
@@ -167,14 +167,29 @@
     <us-gaap:InvestmentOwnedAtCost contextRef="c-23" unitRef="usd" decimals="0" id="f-38">999</us-gaap:InvestmentOwnedAtCost>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-24" unitRef="usd" decimals="0" id="f-39">250</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedAtCost contextRef="c-24" unitRef="usd" decimals="0" id="f-40">250</us-gaap:InvestmentOwnedAtCost>
-    <us-gaap:InvestmentInterestRate contextRef="c-24" unitRef="pure" decimals="4" id="f-41">0.0700</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentInterestRate contextRef="c-24" unitRef="pct" decimals="4" id="f-41">0.0700</us-gaap:InvestmentInterestRate>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-25" unitRef="usd" decimals="0" id="f-42">150</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedAtCost contextRef="c-25" unitRef="usd" decimals="0" id="f-43">150</us-gaap:InvestmentOwnedAtCost>
-    <us-gaap:InvestmentInterestRate contextRef="c-25" unitRef="pure" decimals="4" id="f-44">0.0700</us-gaap:InvestmentInterestRate>
+    <us-gaap:InvestmentInterestRate contextRef="c-25" unitRef="pct" decimals="2" id="f-44">7.00</us-gaap:InvestmentInterestRate>
     <us-gaap:InvestmentOwnedAtFairValue contextRef="c-26" unitRef="usd" decimals="0" id="f-45">20</us-gaap:InvestmentOwnedAtFairValue>
     <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-26" unitRef="usd" decimals="0" id="f-46">20</us-gaap:InvestmentOwnedBalancePrincipalAmount>
     <!-- slice 3 amounts: c-7 principal in euros (kept in euros; its dollar value by the fund rule to_usd, from
          principal_usd_reference in the wrapper copy); c-3 share of net assets as a fraction (default fraction_to_percent) -->
     <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-7" unitRef="eur" decimals="0" id="f-47">180</us-gaap:InvestmentOwnedBalancePrincipalAmount>
     <us-gaap:InvestmentOwnedPercentOfNetAssets contextRef="c-3" unitRef="pct" decimals="4" id="f-48">0.1000</us-gaap:InvestmentOwnedPercentOfNetAssets>
+    <!-- slice 4 rates (ci_fixture_expected_rates.sql; the fund reads its rate tag as all-in, filed_rate_reading):
+         c-3 a rate tag and a PIK tag: all-in 9.00, PIK 2.00, cash leg 7.00 (the legs check runs on this row);
+         c-7 a spread 5.00 beside the rate (the default fraction_to_percent);
+         c-17 only a PIK tag, 12.50: the fund's pik_only_tag_reading coupon needs printed text not read yet, so the
+         all-in rate, cash leg and spread are unresolved (text_not_read) while the PIK rate is still read;
+         c-25 its rate tag (f-44 above) is filed as 7.00, a percent, in pure: scale_not_decided, unresolved;
+         c-4 keeps its maturity date (fact t-1 above), taken as filed.
+         Units: the rate facts are in unit pct (pure written without a prefix, as the five funds write it). c-8's rate
+         (f-16) stays in unit pure, written xbrli:pure: the warehouse reads unit kinds from the unit text, so the
+         prefixed spelling is not recognised as a ratio and the rate is unresolved (unit_not_pure). That pins today's
+         behaviour; none of the five funds writes the prefix (slice 4 Task 5 report). -->
+
+    <us-gaap:InvestmentInterestRatePaidInKind contextRef="c-3" unitRef="pct" decimals="4" id="f-49">0.0200</us-gaap:InvestmentInterestRatePaidInKind>
+    <us-gaap:InvestmentBasisSpreadVariableRate contextRef="c-7" unitRef="pct" decimals="4" id="f-50">0.0500</us-gaap:InvestmentBasisSpreadVariableRate>
+    <us-gaap:InvestmentInterestRatePaidInKind contextRef="c-17" unitRef="pct" decimals="4" id="f-51">0.1250</us-gaap:InvestmentInterestRatePaidInKind>
 </xbrl>

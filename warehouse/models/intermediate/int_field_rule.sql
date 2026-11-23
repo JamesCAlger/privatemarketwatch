@@ -1,6 +1,7 @@
--- Decides which rule converts each amount field of each position row (spec intermediate_spine.md sections 5 and 6.4).
--- Resolution only: no value is computed here. One row per (accession, context_id, field), for the five fields of
--- int_field_read plus principal_amount_usd.
+-- Decides which rule converts each amount field and each rate field of each position row (spec intermediate_spine.md
+-- sections 5 and 6.4). Resolution only: no value is computed here. One row per (accession, context_id, field), for the
+-- five amount fields of int_field_read plus principal_amount_usd, and the four rate rule fields (slice 4 Task 3, see
+-- "Rate fields" below).
 --
 -- Rules come from two places, and both are rows, never an else branch:
 --   global defaults  seeds/field_rule_default.csv (origin global_default, priority 10), for example as_filed for an
@@ -16,16 +17,18 @@
 -- Two rules still equal after both steps (two filing rules, or two feature rules) are a conflict: no rule is chosen
 -- (rule_id null, resolution rule_conflict). tie_break_losers counts the rules a row's winner beat by step 2 alone, and
 -- tie_break_same_effect says whether every one of them that can be decided would have given the same action and scale
--- (an undecidable loser is left out; null when none can be decided). tests/int_field_rule_tie_break_same_effect.sql
--- fails when a tie-break is decided between rules of different effect (ceiling 0).
+-- (an undecidable loser is left out; null when none can be decided).
+-- tests/baseline_int_field_rule_tie_break_different_effect.sql fails when a tie-break is decided between rules of
+-- different effect (ceiling 0); tests/baseline_int_field_rule_tie_break_undecidable_loser.sql fails when every beaten
+-- rule is undecidable (ceiling 0).
 -- A row no rule matches has resolution no_rule.
 -- Spec section 5 rule 2, a missing row feature is an error, never "no match": where a rule's other tests let a row
 -- through but a feature it needs is null (the label for the equity-word tests, the read cost for a band, a printed
 -- placement for the sign test), the rule counts as a candidate it cannot decide. If such a candidate is among the
 -- top-ranked, the field gets resolution feature_missing and no rule.
 --
--- applies_to, the rows each kind of rule can act on (unit kind is read from the unit as filed: iso4217:USD is usd,
--- another iso4217 code is foreign, shares, pure, anything else other):
+-- applies_to, the rows each kind of rule can act on (unit kind is read from the unit as filed, macro unit_kind:
+-- iso4217:USD is usd, another iso4217 code is foreign, shares, pure or utr:Rate is pure, anything else other):
 --   unit_usd / unit_foreign / unit_shares / unit_pure  the field was read with a number in that unit kind
 --   two_unit_cost                    cost unresolved because it is tagged once in USD and once in another currency
 --                                    with two numbers (macro two_unit_cost_facts)
@@ -47,17 +50,74 @@
 --   listed_rows_without_instrument  in a filing a whole_filing rule of the same fund lists, a row with no debt term
 --                           fact whose label names no equity word, scale 1
 -- These decide from the size of a number; each is listed for review in docs/owner_review_value_size_rules_2026-11-22.md.
+--
+-- Rate fields (slice 4 Task 3): interest_rate, pik_rate, spread and maturity_date (macro rate_rule_fields), one row each
+-- per position. interest_rate is not a read field: its rule is the fund's reading of the rate tags. interest_rate_cash
+-- has no row here; int_field_normalised derives it under the interest_rate rule. applies_to for these rows (read from
+-- int_field_read, rate_position below):
+--   rate_tag         the interest-rate tag or the cash-pay tag carries a value or is unresolved (a nil-only tag does
+--                    not count: production skips nil facts)
+--   pik_tag_only     a PIK rate above zero is read, and no rate tag (as above) and no spread (a value, or unresolved)
+--                    is carried. Production's PIK-only test (pipeline/financial_conventions.py prepare: PIK > 0, no
+--                    reported rate, no spread). Production also requires a loan row and, for a fund with both readings,
+--                    the printed reference rate and coupon type (text, not read here). Both pik_only actions name
+--                    unread_input (controller ruling of 2026-11-23), so every such row is text_not_read, for a fund
+--                    with one reading and for a fund with both. Rate-field conflicts are 0 (the baseline is a guard
+--                    at ceiling 0).
+--   spread_with_pik  a spread and a PIK rate above zero are read. printed_margin_cash_plus_pik decides from the printed
+--                    total margin (pipeline/bdc_xbrl_html_bridge.py), text no model reads yet (action_field.unread_input):
+--                    the rule is never decided here; resolution text_not_read (fix round 1; not feature_missing)
+--   unit_pure        as for amounts (pik_rate, spread): the fraction_to_percent default
+--   date_read        maturity_date read as a date: the as_filed default
 with read as (
+    -- the five amount fields (macro amount_rule_fields); the rate fields are read in rate_position
     select *
         , case
             when status <> 'read' or is_nil or value_filed is null then null
-            when unit = 'iso4217:USD' then 'usd'
-            when regexp_full_match(unit, 'iso4217:[A-Z]{3}') then 'foreign'
-            when unit = 'shares' then 'shares'
-            when unit = 'pure' then 'pure'
-            else 'other'
+            else {{ unit_kind('unit') }}
           end as unit_kind
     from {{ ref('int_field_read') }}
+    where field in {{ amount_rule_fields() }}
+)
+
+, rate_position as (
+    -- one row per position with what the rate rules read
+    select
+        accession
+        , context_id
+        , any_value(cik) as cik
+        , any_value(report_date) as report_date
+        , bool_or(field in ('interest_rate_tag', 'interest_rate_cash_tag')
+                  and (status = 'unresolved' or (status = 'read' and not is_nil))) as is_rate_tag
+        , bool_or(field = 'pik_rate' and status = 'read' and value_filed > 0) as pik_positive
+        , bool_or(field = 'spread' and (status = 'unresolved' or (status = 'read' and not is_nil))) as spread_carried
+        , bool_or(field = 'spread' and status = 'read' and value_filed > 0) as spread_positive
+        , any_value(case when status = 'read' and not is_nil and value_filed is not null then {{ unit_kind('unit') }} end)
+            filter (where field = 'pik_rate') as pik_unit_kind
+        , any_value(case when status = 'read' and not is_nil and value_filed is not null then {{ unit_kind('unit') }} end)
+            filter (where field = 'spread') as spread_unit_kind
+        , bool_or(field = 'maturity_date' and status = 'read' and value_date is not null) as is_date_read
+    from {{ ref('int_field_read') }}
+    where field in {{ rate_read_fields() }}
+    group by 1, 2
+)
+
+, rate_field_row as (
+    -- the four rate rule fields per position, with the flags their rules test (amount flags empty)
+    select
+        p.accession
+        , p.context_id
+        , f.field
+        , p.cik
+        , p.report_date
+        , case f.field when 'pik_rate' then p.pik_unit_kind when 'spread' then p.spread_unit_kind end as unit_kind
+        , f.field = 'interest_rate' and p.is_rate_tag as is_rate_tag
+        , f.field in ('interest_rate', 'spread') and p.pik_positive and not p.is_rate_tag and not p.spread_carried
+            as is_pik_tag_only
+        , f.field = 'spread' and p.spread_positive and p.pik_positive as is_spread_with_pik
+        , f.field = 'maturity_date' and p.is_date_read as is_date_read
+    from rate_position p
+    cross join (select unnest(list_value{{ rate_rule_fields() }}) as field) f
 )
 
 , unresolved_cost as (
@@ -196,11 +256,44 @@ with read as (
         , p.no_shares and p.principal_positive and not p.has_debt_term as principal_as_units
         , s.context_id is not null as sign_differs
         , su.context_id is not null as sign_unplaced
+        , false as is_rate_tag
+        , false as is_pik_tag_only
+        , false as is_spread_with_pik
+        , false as is_date_read
     from read r
     join par_feature p on p.accession = r.accession and p.context_id = r.context_id
     left join two_unit_cost t on t.accession = r.accession and t.context_id = r.context_id
     left join sign_differs s on s.accession = r.accession and s.context_id = r.context_id and s.field = r.field
     left join sign_unplaced su on su.accession = r.accession and su.context_id = r.context_id and su.field = r.field
+    union all
+    -- the rate rule fields: no amount domain flag holds on them
+    select
+        accession
+        , context_id
+        , field
+        , cik
+        , report_date
+        , unit_kind
+        , false as is_two_unit_cost
+        , null as no_principal
+        , false as par_candidate
+        , null as has_debt_term
+        , null as is_rated
+        , null as names_equity
+        , null as names_equity_wide
+        , null as in_whole_filing
+        , null as near_scale
+        , null as wide_scale
+        , null as label_missing
+        , null as cost_missing
+        , false as principal_as_units
+        , false as sign_differs
+        , false as sign_unplaced
+        , is_rate_tag
+        , is_pik_tag_only
+        , is_spread_with_pik
+        , is_date_read
+    from rate_field_row
 )
 
 , fund_rule as (
@@ -216,6 +309,7 @@ with read as (
         , r.origin
         , af.field
         , af.applies_to
+        , nullif(trim(cast(af.unread_input as varchar)), '') as unread_input
     from {{ ref('stg_reading_rule') }} r
     join {{ ref('action_field') }} af on af.action = r.action
 )
@@ -233,6 +327,8 @@ with read as (
         , 'global_default' as origin
         , field
         , applies_to
+        -- a global default reads only tagged values
+        , cast(null as varchar) as unread_input
     from {{ ref('field_rule_default') }}
 )
 
@@ -279,6 +375,9 @@ with read as (
             when 'sign_differs_from_print' then f.sign_unplaced
             else false
           end, false) as is_undecidable
+        -- the action needs an input no model reads yet (action_field.unread_input, printed text): it cannot be
+        -- decided on any row it applies to; not a missing row feature (slice 4 Task 3 fix round 1, controller ruling)
+        , r.unread_input is not null as needs_unread_input
         , r.applies_to
         , f.par_candidate
         , f.unit_kind
@@ -286,6 +385,10 @@ with read as (
         , f.no_principal
         , f.principal_as_units
         , f.sign_differs
+        , f.is_rate_tag
+        , f.is_pik_tag_only
+        , f.is_spread_with_pik
+        , f.is_date_read
     from field_row f
     join rule_set r
         on r.field = f.field
@@ -309,6 +412,10 @@ with read as (
             when 'shares_as_par' then par_candidate and value_scale is not null
             when 'principal_as_units' then principal_as_units
             when 'sign_differs_from_print' then sign_differs
+            when 'rate_tag' then is_rate_tag
+            when 'pik_tag_only' then is_pik_tag_only
+            when 'spread_with_pik' then is_spread_with_pik
+            when 'date_read' then is_date_read
             else false
           end
 )
@@ -319,18 +426,21 @@ with read as (
         , count(*) over (partition by accession, context_id, field) as candidate_count
         , count(*) over (partition by accession, context_id, field, specificity) as same_rank_count
         , bool_or(is_undecidable) over (partition by accession, context_id, field, specificity) as rank_undecidable
+        , bool_or(needs_unread_input) over (partition by accession, context_id, field, specificity) as rank_unread_input
         , rank() over (partition by accession, context_id, field order by specificity desc) as rank_at
     from applicable
 )
 
 , top as (
     -- the winning rule; a conflict when two remain at the top; feature_missing when a top candidate cannot be decided
+    -- for a missing row feature; text_not_read when a top candidate needs an input no model reads yet
     select
         accession
         , context_id
         , field
         , case
             when rank_undecidable then 'feature_missing'
+            when rank_unread_input then 'text_not_read'
             when same_rank_count = 1 then 'rule'
             else 'rule_conflict'
           end as resolution
@@ -357,7 +467,7 @@ with read as (
         -- final fix wave F3: a loser that cannot be decided (a feature it needs is missing, so no scale) is left out
         -- of the comparison, not counted as a different effect; null when no loser can be decided
         , bool_and(l.action = t.action and l.value_scale is not distinct from t.value_scale)
-            filter (where not l.is_undecidable) as tie_break_same_effect
+            filter (where not l.is_undecidable and not l.needs_unread_input) as tie_break_same_effect
     from top t
     join ranked l
         on l.accession = t.accession and l.context_id = t.context_id and l.field = t.field
@@ -383,7 +493,12 @@ with read as (
         , case when t.resolution = 'rule' then t.value_scale end as value_scale
         , coalesce(tb.tie_break_losers, 0) as tie_break_losers
         , tb.tie_break_same_effect
-    from read r
+    from (
+        -- every amount read row and every rate rule row
+        select accession, context_id, field, cik, report_date from read
+        union all
+        select accession, context_id, field, cik, report_date from rate_field_row
+    ) r
     left join top t on t.accession = r.accession and t.context_id = r.context_id and t.field = r.field
     left join tie_break tb on tb.accession = r.accession and tb.context_id = r.context_id and tb.field = r.field
 )

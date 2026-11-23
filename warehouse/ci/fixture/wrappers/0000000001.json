@@ -1,8 +1,9 @@
 {
   "cik": "0000000001",
-  "note": "Invented wrapper copy of the CI fixture fund (warehouse/ci/README.md), the counterpart of warehouse/wrappers/<cik>.json. It holds the production wrapper's declarations plus fund rules of each kind the loader and the row-role models read. Contexts named here are in ../raw/bdc_xbrl/1/000000000126000011.xml.",
+  "note": "Invented wrapper copy of the CI fixture fund (warehouse/ci/README.md), the counterpart of warehouse/wrappers/<cik>.json. It holds the production wrapper's declarations plus fund rules of each kind the loader and the row-role models read. Contexts named here are in ../raw/bdc_xbrl/1/000000000126000011.xml. pik_only_tag_reading (slice 4 Task 5) is in this copy only, not in the production stand-in: it puts c-17, a PIK-only row, under pik_only_is_coupon, which needs printed text not read yet (text_not_read).",
   "source_encodings": {
     "filed_rate_reading": ["all_in"],
+    "pik_only_tag_reading": ["coupon"],
     "principal_usd_reference": ["fred_h10"],
     "legal_entity_members": ["legalentityaxis=FixtureJvMember -> Fixture JV LLC"],
     "reporting_entity_suffixes": ["Fixture JV LLC"],

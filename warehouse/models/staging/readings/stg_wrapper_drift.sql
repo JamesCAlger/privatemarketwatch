@@ -5,20 +5,24 @@
 --   (b) copy side: the wrapper copy (var wrappers_dir) now, against the SHA-256 the readings loader recorded when it
 --       read the copy (readings manifest, key wrapper_copy_sha256) -> copy_changed. The loaded rules are stale; run
 --       load_readings.ps1 again.
--- Hashes are DuckDB sha256 over the file bytes (read_blob), the same SHA-256 the loader computes. A file that is
+-- Hashes are text hashes: DuckDB sha256 over the file's text with every CRLF read as LF (read_text), the same value
+-- the loader computes (readings_loader store.text_sha256; slice 4 Task 5), so a checkout that writes CRLF line
+-- endings is not drift, and any other edit still is. A file that is
 -- missing gives a null hash, which counts as changed. Paths come from vars so the CI fixture build passes its own.
 with scope as (
     select cik from {{ ref('stg_v05_scope') }}
 )
 
 , production_file as (
-    select regexp_extract(filename, '([^/\\]+)\.json$', 1) as cik, sha256(content) as sha256
-    from read_blob('{{ var("production_wrappers_dir") }}/*.json')
+    select regexp_extract(filename, '([^/\\]+)\.json$', 1) as cik
+        , sha256(replace(content, chr(13) || chr(10), chr(10))) as sha256
+    from read_text('{{ var("production_wrappers_dir") }}/*.json')
 )
 
 , copy_file as (
-    select regexp_extract(filename, '([^/\\]+)\.json$', 1) as cik, sha256(content) as sha256
-    from read_blob('{{ var("wrappers_dir") }}/*.json')
+    select regexp_extract(filename, '([^/\\]+)\.json$', 1) as cik
+        , sha256(replace(content, chr(13) || chr(10), chr(10))) as sha256
+    from read_text('{{ var("wrappers_dir") }}/*.json')
 )
 
 , copy_record as (

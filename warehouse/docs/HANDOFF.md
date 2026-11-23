@@ -460,7 +460,215 @@ Parked for the opening of the slice 4 plan:
   with the 14 others; they have no ceiling of their own.
 - A tie-break whose only losing rule is undecidable is not checked (0 rows today).
 
-## RESUME HERE (updated 2026-11-23)
+## State after slice 4 (rates), 2026-11-23
+
+A passing build and agreement with production show the layer is consistent and agrees with the old
+pipeline where stated. They do not show the data is correct: a rate both pipelines read wrongly in the
+same way counts as equal, a rate missing on both sides counts as "both empty", and no test sees a field
+whose meaning changed.
+
+### Where the work lives
+
+Since 2026-11-23 (owner decision) the warehouse work is on branch `warehouse-dbt`, in the git worktree
+`.claude/worktrees/warehouse-dbt`, cut at e44f990c from `ensemble-fp-experiment`. Four folders in the
+worktree are junctions (links) to the main checkout: `warehouse\.venv`, `warehouse\data\filed`,
+`data\output`, `.superpowers`. They are shared inputs. Remove them with `rmdir` before removing the
+worktree, never with a recursive delete.
+
+Operating notes:
+
+1. A fresh Windows checkout writes some wrapper files with CRLF line endings. Until Task 5 the
+   wrapper-drift check hashed raw bytes, so this raised a false "production wrapper changed". It now
+   hashes the text with CRLF read as LF (`readings_loader` `store.text_sha256`, and the same expression
+   in `stg_wrapper_drift`). In an existing checkout run `.\warehouse\load_readings.ps1` once after
+   pulling this.
+2. A seed that gains a column needs `.\warehouse\dbt.ps1 seed --full-refresh --select <seed>` once in an
+   existing database (here: `action_field` gained `unread_input` in Task 3).
+
+### What is built
+
+| Piece | What | Commits |
+|---|---|---|
+| Plan | `docs/2026-11-23-slice4-rates-plan.md` | 4dcca972 |
+| Task 1 | Flag on HPS JV commitment lines whose fair value is printed twice (`int_repeated_commitment_value`, 24 rows); per-detail ceiling for `cmp_amount`; slice 3 parked minors | 4dcca97..b8790dc |
+| Task 2 | `int_field_read` reads the rate tag, the cash-pay tag, PIK rate, spread and maturity date (ten fields per position) | e44f990c |
+| Task 3 | `int_field_rule` and `int_field_normalised` convert them: all-in rate, cash leg, PIK rate, spread, maturity date, `rate_kind`; legs check; `action_field.unread_input` | cc63ec05, 00b80611 |
+| Task 4 | `cmp_rate`: rates against production, every difference with a cause; PIK-only readings switched off (ruling below) | 990713e6, dcf296e1 |
+| Task 5 | CI fixture rates and `tests/ci_fixture_expected_rates.sql`; repairs (a) to (i) of the ledger; these records | 1f431224 and the records commit after it |
+
+Plain-language guide: `README.md`, "Rates: reading and converting a rate". Counts and causes:
+`docs/baseline_rates_2026-11-23.md`. Questions for the owner: `docs/owner_review_rate_readings_2026-11-23.md`.
+Ledger and task reports: `.superpowers/sdd/2026-11-23-slice4-rates-plan/` (git-ignored).
+
+### Not pushed
+
+Nothing of slice 4 is pushed. The step "check the `warehouse` CI job with `gh run view` after the push"
+is OPEN: it needs a push, and a push needs the owner's go. The other two CI jobs (`frontend-build`,
+`python-tests`) failed on the last push for older reasons outside `warehouse/`.
+
+### How to run, and the last results
+
+From the repository root of the worktree, in PowerShell.
+
+| Command | Last result |
+|---|---|
+| `.\warehouse\dbt.ps1 build` | `PASS=660 WARN=112 ERROR=0 TOTAL=772` (Task 4 ended at 648 / 91 / 0 / 739; slice 3 at 534 / 46 / 0 / 580) |
+| `.\warehouse\.venv\Scripts\python.exe -m pytest -c warehouse\pytest.ini warehouse\pytests -q` | 146 passed (144 before Task 5) |
+| `.\warehouse\.venv\Scripts\python.exe warehouse\ci\run_fixture_build.py --work <empty folder>` | step 4 `PASS=3`; build `PASS=313 WARN=5 ERROR=0 TOTAL=318`; empty run `PASS=2`; unit-test and drift step `PASS=33` |
+
+The warnings are baseline tests above zero and within their ceilings.
+
+### Counts (published basis, 60,675 rows on both sides, compared quarters)
+
+| Field | Equal | Differs | Empty here | Empty in production | Both empty |
+|---|---:|---:|---:|---:|---:|
+| interest_rate (all-in) | 33,155 | 8 | 1,304 | 9 | 26,199 |
+| interest_rate_cash | 2,450 | 72 | 234 | 6 | 57,913 |
+| pik_rate | 5,215 | 90 | 126 | 13 | 55,231 |
+| spread | 45,614 | 5 | 962 | 426 | 13,668 |
+| maturity_date | 7,023 | 0 | 44,006 | 0 | 9,646 |
+| rate_kind | 59,360 | 1,315 | 0 | 0 | 0 |
+
+`not_yet_explained` 0 and `new_wrong` 0 on every field and both bases. Every open row has a cause:
+`needs_correction` (corrections, slice 5), `needs_store_not_loaded` (an input not read yet: printed
+text, identifier text, or one of two wrapper procedures), `owner_review` (production decides by the
+size of the number). Maturity: only Apollo tags it; every other fund's maturity in production comes
+from the printed row.
+
+Left empty here by design, each under a ceiling (all rows, all quarters):
+
+| What | Rows | Why |
+|---|---:|---|
+| Rows with only a PIK tag: all-in rate, cash leg and spread | 1,885 (Ares 1,195, Apollo 62, Blue Owl 460, HPS 168) | `text_not_read`: both PIK-only readings need the printed rate type and the loan class. The PIK rate itself is read |
+| Spread on rows with a spread and a PIK rate (Blue Owl 321, Apollo 219) | 540 | `text_not_read`: needs the printed total margin |
+| Values filed above 1 in a ratio unit | 767 (rate 679, PIK 20, spread 68) | `scale_not_decided`: not rescaled by size |
+| Cash leg where no PIK rate is read | most rate rows | production leaves it empty too (ruling below) |
+
+Two wrapper procedures are measured, not built: Ares `rate_only_contexts adopt_adjacent` (7 pairs),
+HPS `pik_margin_reading whole_coupon` (about 171 candidate rows; production changed 49).
+
+`int_source_row`, `cmp_row_set`, `cmp_amount` and every amount row did not change in this slice
+(row snapshots in every task).
+
+### Owner decisions open (slice 4)
+
+From `docs/owner_review_rate_readings_2026-11-23.md` section 6 and the plan:
+
+1. PIK-only rows carry no rate until printed text is read (1,885 rows). Wait for the text spec, or a
+   dated filer-level rule with evidence.
+2. Cash leg where no PIK rate is read: empty (as production's code) or equal to the all-in rate. 40,410 cash-leg rows of 74,495
+   are empty for this reason (`no_pik_read`; 28,768 more have no fact). The PIK-only cash contract is carried by unmerged work:
+   branches `asif-identity-20261113` and `codex-wip-20261114` on GitHub (the 2026-11-13 changelog line "cash = 0 for
+   PIK-only coupons" refers to it).
+3. PIK-only coupons: cash leg empty or 0 (moot while item 1 stands). Same unmerged branches as item 2.
+4. Values filed above 1 in a ratio unit (767): production's size rule, a filer rule per filing, or
+   leave unresolved.
+5. The two wrapper procedures: build each as a general mechanism, or leave the rows as a named
+   difference until slice 5.
+6. The 540 spread-with-PIK rows: unresolved until the printed margin is read, or another reading.
+7. `rate_is_cash_leg` with no PIK rate (0 rows today): unresolved here; production stores the tag as
+   the all-in rate when the row text names no PIK.
+8. Whether Blue Owl gets a rate reading at all (it tags no interest rate; spec section 10 is the later
+   route).
+9. Rows where the two rate tags and the PIK tag do not add up: 0 rows on the five funds today.
+10. New in Task 5: unit kinds are read from the unit's text, so a filer writing `xbrli:pure` (the
+    same unit as `pure`) gets no ratio kind and its rates are `unit_not_pure`. None of the five funds
+    writes the prefix (0 rows); the CI fixture pins today's behaviour on one row. Read the unit by
+    namespace instead (a model change), or leave it.
+11. Pushing slice 4.
+
+### Owner rulings on the list above (2026-11-23, in session)
+
+Recorded, not yet built unless stated. Item numbers are those of the list above.
+
+| Item | Owner ruling | Work it creates |
+|---|---|---|
+| 1 | Wait for printed text. No fund-level PIK-only rule now | None until the text spec |
+| 2 | Cash leg = all-in rate where no PIK rate is read | Model change, 40,410 rows gain a cash leg; residual risk: a PIK that exists but is not tagged overstates cash |
+| 3 | PIK-only coupon: cash leg 0 | None while item 1 stands |
+| 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | Dated filer rules for the 767 values (657 in the Ares 2023-09-30 filing) |
+| 5 | Leave both procedures as named differences until slice 5 | None now |
+| 6 | Wait for the printed margin | None until the text spec |
+| 7 | Leave unresolved (0 rows) | None |
+| 8 | Blue Owl keeps no rate until the later spec route; a computed rate is not a filed one | None |
+| 9 | Leave (0 rows) | None |
+| 10 | Read the unit properly in slice 5, with the unit mapping moved to data | Slice 5 |
+| 11 | Push slice 4 | Done with this commit |
+
+### Rulings made without the owner (slice 4), with the cost if wrong
+
+From the ledger (`progress.md`). Each was made by the controller.
+
+| Ruling | Cost if wrong |
+|---|---|
+| Task 1 (d) may change the cause or detail text of exactly the 2 correction-check principal rows of `cmp_amount` if a separate ceiling needs a separate label | 2 rows relabelled; visible in the snapshot diff; reversible |
+| Task 2: the stop condition on the unit was read as covering the prefixed form `xbrli:pure` only (0 rows on the five funds). `utr:Rate` (28k Ares rate facts) was given the pure unit kind in Task 3 as one literal in the `unit_kind` macro (`macros/field_lists.sql`). The ruling asked for this as data; that was not done | Ares rates read on the wrong scale if the literal is wrong; a unit name sits in SQL |
+| Task 5 (controller): the unit-kind mapping stays a literal in the `unit_kind` macro for this slice | A unit name sits in SQL until slice 5; no number at risk. Moving it to a seed is proposed for slice 5, where owner decision 10 settles its content |
+| Task 3: a rate, PIK rate or spread filed above 1 in a ratio unit, with no filer rule for its scale, is unresolved `scale_not_decided`; never rescaled by size | A true rate above 100 pct is left empty (none expected); a percent tagged at or below 1 passes as a fraction, caught only outside 0 to 40 |
+| Task 3: the 628 Blue Owl / HPS PIK-only rows with both readings stay `rule_conflict`, no reading picked (since Task 4 they are `text_not_read`, below) | 628 rows with no rate that production has |
+| Task 3: a fund with one PIK-only rule gets it on every PIK-only row. REVERSED in Task 4 (next row) | was: 841 wrong rates; now none |
+| Task 3: the cash leg follows production's code: empty where no PIK rate is read | Cash empty where it logically equals all-in; derivable later |
+| Task 3: the 540 spread-with-PIK rows get their own reason `text_not_read` (ceiling 540); `feature_missing` stays an error at ceiling 0 | 540 spreads empty that production stores |
+| Task 4: both PIK-only readings need printed inputs not read (`unread_input`); every row they would decide is `text_not_read` | 324 published rows (Ares 273, Apollo 51) where the old reading agreed with production now carry no rate; 90 more PIK-only rows in the excluded 2026-09-30 quarter were not compared; 841 wrong values were removed |
+| Task 4: `production_corrected_no_loaded_store` stays under `needs_store_not_loaded` (2 published rows) | 2 rows under one cause instead of another |
+
+Implementer decisions in Task 5, also not seen by the owner: the rate expectations are a new test file
+beside the amounts one (`tests/ci_fixture_expected_rates.sql`); the fixture keeps one rate in
+`xbrli:pure` so the `unit_not_pure` behaviour is pinned; the `needs_store_not_loaded` cause ceilings
+are now 0 (every detail has its own); the loader version is 5 (wrapper hashes changed format).
+
+### Deferred (minor, from the slice 4 ledger; not done in Task 5)
+
+- `int_field_normalised` makes two decisions and repeats a case block five times; split into a rate
+  model (final review).
+- `is_not_numeric` / `not_numeric_count` also mean "no ISO date": rename or comment (final review).
+- Six near-identical `scripts/slice4/q_t1_snap_*.sql` files (final review).
+- `is_commitment_line` is a heuristic (true on 2,271 Blue Owl rows); its description should say so.
+- Field names listed in several places; no test that `read_field` = `field` on the amount rows of
+  `concept_map`; no unit-test case for a nil maturity or white space round an ISO date.
+- `pik_only_is_margin` unit test has no must-not-touch case; the legs check cannot fail on today's
+  code (a regression guard only); `unit_not_pure` is assigned but not reported on spread and PIK rate;
+  the `action_is_built` macro counts any slice 4 action as built for any rate field.
+- A `cmp_amount_detail_max` / `cmp_rate_detail_max` key without a matching detail test leaves those
+  rows uncounted (no guard).
+- `cmp_rate_cause_rules` misses two paths; the owner-review file gives ranges, not per-quarter counts,
+  for two items; fund names remain in comments of `dbt_project.yml`.
+
+### Left for slice 5 (from the final review of slice 4)
+
+- Split `int_field_normalised` into `int_amount_normalised` and `int_rate_normalised` with a union view, as the first task of slice 5, done only on a 0/0 snapshot diff.
+- `int_field_rule` checks an unread input before a conflict at the same rank, so a tie between a text-needing rule and a decidable one would read `text_not_read`; return `rule_conflict` when the top rules are mixed.
+- A guard test that every key of `cmp_amount_detail_max` / `cmp_rate_detail_max` has a matching detail test.
+- `printed_margin_cash_plus_pik` is marked built in `seeds/reading_action.csv` while the spec says not built.
+- No CI fixture row exercises a rate tag with no rate reading declared.
+- Fund names remain in SQL comments of `int_filing_candidate.sql`, `int_role_structure.sql`, `marts/fact_fund_period.sql`, `tests/baseline_concept_rule_value_and_term.sql`.
+- Move the unit-kind mapping (a literal in the `unit_kind` macro) to a seed.
+### Next: slice 5, corrections
+
+Slice 5 applies the loaded corrections (`stg_correction`: the two row stores and the wrapper
+correction entries) to the converted values, and compares again. It opens with the owner decisions of
+2026-11-23:
+
+1. The list of correction stores that hold entries for the five funds (spec section 11, open point).
+2. The two Apollo rollups with a zero-value position beneath: publish the position at 0, as
+   production does (production does it by a correction).
+3. A one-time trace, with a time limit, of the 14 BCRED structured-credit principals production
+   empties; if the step is not found, record them as production's error.
+
+Waiting on it: 716 amount field rows and 520 published rate field rows marked `needs_correction`.
+
+### Plan after this slice (owner, 2026-11-23; a plan, not done)
+
+One catch-up merge of the trunk into `main`, which needs the owner's explicit go. Then short branches
+off `main`, one per slice; slice 5 would be the first.
+
+## RESUME HERE (updated 2026-11-23, after slice 4)
+
+Slice 4 (rates) is built and committed on branch `warehouse-dbt` (worktree
+`.claude/worktrees/warehouse-dbt`), NOT pushed. Read "State after slice 4" above. Next: the owner's
+answers on the slice 4 decisions, the push and the CI check, then the merge into `main` and slice 5.
+
+The text below is the earlier RESUME HERE (after slice 3), kept for its owner answers.
 
 Slice 3 is closed and pushed (branch `ensemble-fp-experiment`). Nothing is running. Build 2026-11-23:
 PASS=534 WARN=46 ERROR=0; 144 Python tests; CI fixture passes locally.

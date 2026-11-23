@@ -17,7 +17,8 @@ seeds:
       ('text' is the second spec). A rule naming an action not listed here fails the build. built_early_for_field: a
       field for which the action is already built before its slice (fraction_to_percent is built in slice 3 for
       pct_of_net_assets only, controller ruling slice 3 Task 3 fix round 1; for rates it stays slice 4). An action is
-      built for a field when built_in_slice is 3 or built_early_for_field names that field.
+      built for a field when built_in_slice is 3, or built_early_for_field names that field, or (slice 4 Task 3)
+      built_in_slice is 4 and the field is a rate field (macro rate_output_fields).
     config:
       column_types:
         built_in_slice: varchar
@@ -34,6 +35,11 @@ seeds:
       DuckDB glob), never on the prefix (filed_layer.md section 7 ruling 12). Every model that reads a standard concept
       reads it here; no model writes a concept name (pytests/test_no_concept_literals.py). A filer's own concept is a
       fund rule in its wrapper copy, not a row here. concept_map_id is the rule a standard value names (spec section 7).
+      Two field columns (slice 4 Task 2): field is the term-fact family the row roles and the row-set check read
+      (int_context_feature has_*, cmp_row_set rate facts); field rate holds both the interest-rate and the cash-pay
+      concept, one definition of "a rate" (slice 3 ruling). read_field is the int_field_read field the concept is read
+      into, which keeps the two rate tags apart (interest_rate_tag, interest_rate_cash_tag); empty for a concept
+      int_field_read does not read (ownership percent).
     columns:
       - name: concept_map_id
         data_tests:
@@ -46,6 +52,13 @@ seeds:
               arguments:
                 values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets', 'rate', 'spread',
                          'pik_rate', 'maturity', 'ownership_percent']
+      - name: read_field
+        description: The int_field_read field (one of its ten); empty where int_field_read does not read the concept.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'shares', 'pct_of_net_assets', 'interest_rate_tag',
+                         'interest_rate_cash_tag', 'pik_rate', 'spread', 'maturity_date']
       - name: concept_local
         data_tests:
           - not_null
@@ -92,7 +105,7 @@ seeds:
                 values: ['aggregate', 'position']
   - name: field_rule_default
     description: >
-      The global defaults of the amount conversion (slice 3 Task 3, spec intermediate_spine.md 5 and 6.4). One row per
+      The global defaults of the amount and rate conversion (slice 3 Task 3, slice 4 Task 3; spec 5 and 6.4). One row per
       default rule: the field, the rows it applies to (applies_to, see int_field_rule), the action and priority 10,
       below every fund rule (20, 30). int_field_rule reads these as rules with origin global_default; nothing in SQL
       stands in for them. The action must be in seeds/reading_action.csv. No fund appears here.
@@ -110,13 +123,14 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets',
+                         'pik_rate', 'spread', 'maturity_date']
       - name: applies_to
         data_tests:
           - not_null
           - accepted_values:
               arguments:
-                values: ['unit_usd', 'unit_foreign', 'unit_shares', 'unit_pure', 'principal_usd']
+                values: ['unit_usd', 'unit_foreign', 'unit_shares', 'unit_pure', 'principal_usd', 'date_read']
       - name: action
         data_tests:
           - not_null
@@ -133,7 +147,7 @@ seeds:
                 quote: false
   - name: action_field
     description: >
-      For each slice 3 action a fund rule may name, the amount fields it governs and the rows it can act on
+      For each slice 3 and slice 4 action a fund rule may name, the amount or rate fields it governs and the rows it can act on
       (applies_to; the tests are in int_field_rule). A fund rule whose action is listed here takes part in the amount
       conversion. The action must be in seeds/reading_action.csv. No fund appears here.
     columns:
@@ -149,11 +163,27 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets',
+                         'interest_rate', 'spread']
       - name: applies_to
         data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['unit_foreign', 'unit_pure', 'two_unit_cost', 'two_unit_cost_principal_absent', 'shares_as_par',
-                         'principal_as_units', 'sign_differs_from_print', 'principal_foreign']
+                         'principal_as_units', 'sign_differs_from_print', 'principal_foreign', 'rate_tag',
+                         'pik_tag_only', 'spread_with_pik']
+      - name: unread_input
+        description: >
+          Empty, or the name of an input the action needs that no model reads yet (printed text, for example the printed
+          total margin). A rule whose action names one cannot be decided on the rows it applies to: int_field_rule gives
+          those rows resolution text_not_read, and int_field_normalised leaves the field unresolved with reason
+          text_not_read, under a measured ceiling. Slice 4 Task 3 fix round 1 (controller ruling). A missing row feature
+          stays feature_missing, an error class with ceiling 0. The values in use are listed (slice 4 Task 5): a new
+          name, or a misspelt one, fails the build, so the list of inputs not yet read stays closed and reviewed.
+          (int_field_rule treats any non-empty value as "needs an unread input"; only an empty cell switches the
+          mechanism off for that action.)
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['printed_total_margin', 'printed_rate_type_and_loan_class']

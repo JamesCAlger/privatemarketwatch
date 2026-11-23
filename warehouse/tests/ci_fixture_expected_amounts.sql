@@ -56,6 +56,8 @@ with expected as (
 , normalised as (
     select * from {{ ref('int_field_normalised') }}
     where cik = '0000000001'
+      -- the amount rows only: the rate rows are checked by tests/ci_fixture_expected_rates.sql (slice 4 Task 5)
+      and (field in {{ amount_rule_fields() }} or field = 'principal_amount_usd')
 )
 
 , actual as (

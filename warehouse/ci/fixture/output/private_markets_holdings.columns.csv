@@ -48,4 +48,10 @@ asset_class,VARCHAR
 gics_sector,VARCHAR
 gics_sub_industry,VARCHAR
 corrected_fields,VARCHAR
+interest_rate_source,VARCHAR
+basis_spread_source,VARCHAR
+pik_rate_source,VARCHAR
+maturity_date_source,VARCHAR
+src_transforms,VARCHAR
+src_filled_fields,VARCHAR
 src_context_id,VARCHAR

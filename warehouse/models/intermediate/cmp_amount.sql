@@ -28,7 +28,8 @@
 --        carries production's value (loaded_correction says how a value is matched; final fix wave F2).
 --   not_yet_explained|correction_loaded_value_not_matched  a covering correction is loaded, production does not name
 --        the field and no covering correction carries production's value: the correction is not shown to explain the
---        difference, so a real error of this layer on a corrected row stays visible.
+--        difference, so a real error of this layer on a corrected row stays visible. Counted under its own ceiling,
+--        apart from the other not_yet_explained rows (var cmp_amount_detail_max; slice 4 Task 1, item d).
 --   needs_store_not_loaded|production_corrected_no_loaded_store  production's corrected_fields names the field, no
 --        loaded correction covers it.
 --   new_wrong|filer_concept_not_read  this layer read no fact; the context carries a numeric fact whose local name

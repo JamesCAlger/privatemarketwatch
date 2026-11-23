@@ -44,8 +44,9 @@ BUILD_SELECT = [
     "path:tests/concept_rule_namespace_gaps_fixture.sql", "path:tests/filed_one_filing_row_per_folder.sql",
 ]
 BUILD_EXCLUDE = ["path:tests/baseline_*.sql"]
-# 2b. dbt run --empty: the two comparison models the cmp_amount unit test reads (slice 3 Task 4 fix round 1), built with
-#     no rows over the stand-ins, only so the unit test can read their column types. No test of theirs runs here.
+# 2b. dbt run --empty: the two comparison models the cmp_amount and cmp_rate unit tests read (slice 3 Task 4 fix round
+#     1; cmp_rate since slice 4 Task 4), built with no rows over the stand-ins, only so the unit tests can read their
+#     column types. No test of theirs runs here; cmp_amount and cmp_rate themselves are not built in CI.
 EMPTY_UNIT_TEST_INPUTS = ["cmp_row_set", "cmp_excluded_quarter"]
 # 3. dbt test: every unit test (dbt build runs a unit test only when its model is built, so those of the two cmp
 #    models need this step; the int_* ones run again, which costs seconds) and the one baseline whose ceiling is a
@@ -144,8 +145,9 @@ def main(argv=None):
                             "row_corrections_by_context": (FIXTURE / "row_corrections_by_context.csv").as_posix()},
         # stg_fx_rate reads this small committed rate file (same columns as the FRED H.10 file production uses)
         "fx_rate_file": (FIXTURE / "fx_rates.csv").as_posix(),
-        # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get) and
-        # tests/ci_fixture_expected_amounts.sql (the amount each fixture position field must get)
+        # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get),
+        # tests/ci_fixture_expected_amounts.sql (the amount each fixture position field must get) and
+        # tests/ci_fixture_expected_rates.sql (the rate fields and maturity date, slice 4 Task 5)
         "ci_fixture": True,
     })
     common = ["--profiles-dir", ".", "--target", "ci", "--target-path", work / "target", "--log-path", work / "logs",

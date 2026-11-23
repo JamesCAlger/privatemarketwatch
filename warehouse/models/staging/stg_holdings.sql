@@ -48,6 +48,14 @@ select
     nullif(gics_sector, '')                as gics_sector,
     nullif(gics_sub_industry, '')          as gics_sub_industry,
     nullif(corrected_fields, '')           as corrected_fields,
+    -- provenance of the rate fields, read by cmp_rate (slice 4 Task 4): where production took each value
+    -- (xbrl_field, identifier_text, printed_page, ixbrl_field_status) and the transforms and fills it logged
+    nullif(interest_rate_source, '')       as interest_rate_source,
+    nullif(basis_spread_source, '')        as basis_spread_source,
+    nullif(pik_rate_source, '')            as pik_rate_source,
+    nullif(maturity_date_source, '')       as maturity_date_source,
+    nullif(src_transforms, '')             as src_transforms,
+    nullif(src_filled_fields, '')          as src_filled_fields,
     src_context_id
 from {{ source('pipeline', 'private_markets_holdings') }}
 where source = 'bdc'

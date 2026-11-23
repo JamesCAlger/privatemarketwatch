@@ -67,7 +67,8 @@ old-style `source_encodings` declarations, and the new-style top-level `reading_
 `concept_local`, `accession`, `axis`, `member`, `label`, `feature`, optional `valid_from` / `valid_to`, and
 `evidence`). Production keeps reading its own wrappers until cutover. A change made to a production wrapper is
 not seen here and must be carried into the copy by hand. dbt hashes the wrapper files at build time
-(`stg_wrapper_drift`, paths from the vars `wrappers_dir` and `production_wrappers_dir`):
+(`stg_wrapper_drift`, paths from the vars `wrappers_dir` and `production_wrappers_dir`; since slice 4
+the hash is of the text with CRLF line endings read as LF, so line endings alone are not a change):
 `baseline_production_wrapper_changed` (ceiling 0) fails the build until the copy is brought up to date and
 `_source.json` updated, and `baseline_wrapper_copy_changed_since_load` (ceiling 0) fails it when a copy was
 edited after the last load (run `load_readings.ps1` again). The two row-correction stores are checked the same
@@ -174,8 +175,8 @@ that field, or the field is `action_not_built`.
 
 **Currency rates** come from `data/reference/monetary_conversion/fred_h10_usd_per_unit.csv` (var
 `fx_rate_file`, view `stg_fx_rate`), the file behind production's rates. A quote more than 7 days
-before the report date is not used: the dollar principal stays empty (`no_fx_rate`). The file ends
-2026-09-11, so 2026-09-30 principals in a foreign currency are not converted until it is refreshed.
+before the report date is not used: the dollar principal stays empty (`no_fx_rate`). The file was
+refreshed on 2026-11-23 and now ends 2026-11-13.
 
 **The comparison with production** (`cmp_amount`): this layer's amounts against production's, on the
 rows both sides have (`cmp_row_set`), joined on filing and context. Fair value, cost and principal must
@@ -188,4 +189,70 @@ Every field that is empty for a reason is counted by a baseline test with a ceil
 dollar principals with no currency rate). A passing build means the counts did not grow, not that the
 values are correct.
 
+## Rates: reading and converting a rate (slice 4)
+
+For every position row, the same three models also read the rate tags, the PIK rate, the spread and
+the maturity date, and convert them. Counts and the comparison with production:
+`docs/baseline_rates_2026-11-23.md`. Open questions for the owner:
+`docs/owner_review_rate_readings_2026-11-23.md`.
+
+**Three stored rates** (production's contract, kept here):
+
+| Field | What it is |
+|---|---|
+| `interest_rate` | The all-in rate, in percent: what the loan pays in total, cash and PIK together |
+| `interest_rate_cash` | The cash leg: the part paid in cash |
+| `pik_rate` | The PIK leg: the part paid in kind (added to the loan, not paid in cash) |
+
+Beside them: `spread` (the margin over the reference rate, in percent), `maturity_date`, and
+`rate_kind` on the `interest_rate` row (`all_in`, `cash` or `unresolved`: how the rate tag was read).
+Where all three rates are set, a test checks that cash plus PIK equals all-in.
+
+**How a tag becomes a rate.** Filers tag rates as fractions (0.095 for 9.5%). The default rule turns a
+fraction into a percent (`fraction_to_percent`, times 100). Which leg the filer's rate tag holds is a
+fund rule in its wrapper copy: `rate_is_all_in` (the tag is the all-in rate; cash = all-in less PIK) or
+`rate_is_cash_leg` (the tag is the cash leg). A rule is a row of data, not code: the global defaults are
+rows of `seeds/field_rule_default.csv`, and `seeds/action_field.csv` says which fields and rows each
+fund-rule action acts on.
+
+**Unresolved** means the layer could not decide the value from what it reads, so the field is empty
+and the reason says why. Each reason has a ceiling (a baseline test). The main ones:
+
+| Reason | Meaning |
+|---|---|
+| `scale_not_decided` | A rate tagged above 1 in a ratio unit (for example 7.0): it may already be a percent. The layer does not guess from the size of the number |
+| `text_not_read` | The rule needs printed text the warehouse does not read yet: the printed total margin, or (for a row with only a PIK tag) the printed rate type and the loan class. `action_field.unread_input` names the missing input |
+| `values_differ` | Two different numbers filed for one field on one row |
+| `unit_not_pure` | A rate in a unit that is not a ratio |
+
+**A missing rate is not "no rate".** Empty means this layer could not read a rate, not that the
+position pays none. For example a row with only a PIK tag has a printed coupon, but its all-in rate is
+empty until the printed text is read. One fund (Blue Owl) tags no interest rate at all.
+
+**The comparison with production** (`cmp_rate`): the same rows and join as `cmp_amount`. Rates agree
+within 1e-9 percentage points. Every difference gets a cause, and each cause (and each detail of
+`needs_store_not_loaded`) has a ceiling. Agreement shows the two pipelines agree. It does not show
+either is right: a rate both read wrongly in the same way counts as equal, and a rate missing on both
+sides counts as `both_empty`.
+
+A passing build means the counts did not grow and the checks hold. It is not a statement that the data
+is correct.
+
 CI runs a build on an invented fund, without the repository's data: `ci/README.md`.
+
+## Where this work lives (since 2026-11-23)
+
+The warehouse work moved from branch `ensemble-fp-experiment` in the main checkout to branch
+`warehouse-dbt`, in the git worktree `.claude/worktrees/warehouse-dbt` (owner decision 2026-11-23,
+cut at e44f990c). Four folders in that worktree are junctions (links) to the main checkout, shared
+inputs that are not copied: `warehouse\.venv`, `warehouse\data\filed`, `data\output` and
+`.superpowers`. Remove them with `rmdir` (not a recursive delete) before removing the worktree.
+
+Two operating notes:
+
+1. A fresh Windows checkout can write wrapper files with CRLF line endings. Since slice 4 the
+   wrapper-drift check hashes the text with CRLF read as LF, so this no longer raises a false
+   "production wrapper changed". After pulling this change into an existing checkout, run
+   `.\warehouse\load_readings.ps1` once (the recorded hashes changed format).
+2. A seed that gains a column needs `.\warehouse\dbt.ps1 seed --full-refresh --select <seed>` once in an
+   existing database. A new database needs nothing.

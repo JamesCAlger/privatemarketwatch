@@ -21,13 +21,13 @@ from (
 -- Difference from the pilot (fix round 1). In the pilot every kept row is a node of the prefix tree, so a guarded row X
 --   whose label starts other rows' labels takes those rows as its children, and the subtotal G above X sums X only.
 --   Here X's descendants attach to G, so G sums X and X's descendants. Two cases:
---   (a) X's descendants are siblings, not parts, of X (Ares 'X, First lien loan' over 'X, First lien loan 2'): G
+--   (a) X's descendants are siblings, not parts, of X ('X, First lien loan' over 'X, First lien loan 2'): G
 --       passes here and fails in the pilot (the pilot's "hierarchy blocking" limit);
 --   (b) X is a true subtotal that carries a rate or maturity: G double-counts X's descendants and fails here, where
 --       the pilot would pass it.
 --   Measured 2026-11-19 on all parsed filings (warehouse/scripts/slice2/q_guarded.sql, the pilot's tree with this
---   model's test): 23 guarded intermediates (Ares 21, Apollo 2), all of kind (a) (loans over 'loan 2' lines). Subtotal
---   here and not under the pilot's tree: 22 (Ares 21, Apollo 1). Subtotal under the pilot's tree and not here (case
+--   model's test): 23 guarded intermediates (one fund 21, another 2), all of kind (a) (loans over 'loan 2' lines). Subtotal
+--   here and not under the pilot's tree: 22 (one fund 21, another 1). Subtotal under the pilot's tree and not here (case
 --   b): 0. If case (b) ever appears it shows as a G that is unresolved or a position, not as a silent removal.
 -- Test: the parent's fair value equals the sum of its direct children's fair values, and, when the parent has a cost
 --   fact, its cost equals the sum of their costs. Tolerance per measure: half a unit of the parent fact's decimals times
@@ -38,7 +38,7 @@ from (
 --   children's sum, so the level above sees the same total either way. It can differ only by rounding within the
 --   tolerances, or where a removed subtotal has no cost of its own (then the level above fails the cost test here and
 --   is kept; the pilot would have summed the grandchildren's costs). So the repeat is not needed and SQL suffices.
--- Fund rule subtotal_on_fair_value (stg_reading_rule; owner decision D12, Apollo): for that filer, inside the rule's
+-- Fund rule subtotal_on_fair_value (stg_reading_rule; owner decision D12): for that filer, inside the rule's
 --   dates, a parent whose fair value ties is a subtotal even where the cost test fails or cannot be made. The tree,
 --   the fair-value tolerance and the guard are unchanged. subtotal_rule_id names the rule where it decided.
 with filer_cost as (

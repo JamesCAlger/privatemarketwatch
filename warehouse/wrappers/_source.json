@@ -1,12 +1,12 @@
 {
  "copied_on": "2026-11-19",
  "copied_from": "data/overrides/bdc_xbrl_wrappers",
- "note": "Owner decision 2026-11-19: the new pipeline reads its own copies of the five v0.5 wrappers. Each entry is the production wrapper the copy was taken from: SHA-256 of the file bytes and its git blob id. The readings loader compares the production file's current SHA-256 with this value (table wrapper_drift).",
+ "note": "Owner decision 2026-11-19: the new pipeline reads its own copies of the five v0.5 wrappers. Each entry is the production wrapper the copy was taken from: SHA-256 of the file text with every CRLF read as LF (since slice 4 Task 5, 2026-11-23; before, of the raw bytes, which made a CRLF checkout look like a change) and its git blob id. The readings loader and stg_wrapper_drift compare the production file's current text hash with this value (table wrapper_drift).",
  "funds": {
   "0001287750": {"sha256": "1b4a0327d01f1421efcf246f837dbae1cbf65a22512b757ab77bb3c3fbb2310b", "git_blob": "5a69a9565b1ba10bd173db4b60b9f19dd8c28e4a"},
-  "0001803498": {"sha256": "6f0a413d65dd3e3ee3c6fb2fe7e0e465ebb42c2af6bf983b2b80e9a8aafb730f", "git_blob": "81c323f0c85f7a810add46e5f468b340164e1e12"},
-  "0001812554": {"sha256": "9653255b546681197f941ab175ee1cc5e791ca760e794a53c03921824115b70f", "git_blob": "a1425d73b8bb37639db5bc78e99fbb73ce211d42"},
-  "0001837532": {"sha256": "d3ab4907fe5f2e55740d33f5b6741e5802bebc17e95bab2232581fc81cc6d234", "git_blob": "5c5a4767c28a9ddf2900df332def165cbc427a93"},
-  "0001838126": {"sha256": "36c86937ab8af64e47551a98bf822ccb0ab87639dac46fd9fba411eea30832b8", "git_blob": "8a4cdec40496c8c31a6aaf46f87e655be0d318d2"}
+  "0001803498": {"sha256": "c1c657223c6c2a36ed4d10086a3351a85bcb8c295a1a464578cc727a2e46040d", "git_blob": "81c323f0c85f7a810add46e5f468b340164e1e12"},
+  "0001812554": {"sha256": "0822d32087d3b7163d29ced30ea04be00fa7aaf5722f981464a0109b44995868", "git_blob": "a1425d73b8bb37639db5bc78e99fbb73ce211d42"},
+  "0001837532": {"sha256": "7c5153d30059d12ded62df42381a466034e9b8f509a347eae2cbb280ef7d3d1d", "git_blob": "5c5a4767c28a9ddf2900df332def165cbc427a93"},
+  "0001838126": {"sha256": "1057a6c0f4d4bdc864ac1869bac26d71444fb4cdcad4fac02c45bc00bf32142c", "git_blob": "8a4cdec40496c8c31a6aaf46f87e655be0d318d2"}
  }
 }
