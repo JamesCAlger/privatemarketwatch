@@ -586,7 +586,7 @@ Recorded, not yet built unless stated. Item numbers are those of the list above.
 | 1 | Wait for printed text. No fund-level PIK-only rule now | None until the text spec |
 | 2 | Cash leg = all-in rate where no PIK rate is read | BUILT 2026-11-23 (branch `warehouse-rate-rulings`): 40,410 cash legs set (reason `cash_equals_all_in`; Ares 11,775, BCRED 22,440, Apollo 305, HPS 5,890). `cmp_rate`: 30,573 published and 8,863 unpublished rows now `production_empty`, cause `convention` `cash_equals_all_in_owner_ruling` (own ceiling); 71 published rows moved from new_empty to differs under their old cause. Residual risk, measured: 68 of the rows print "PIK" in the rate cell, so their cash leg is probably too high (left as is until the text spec). Detail: addendum in `docs/baseline_rates_2026-11-23.md` |
 | 3 | PIK-only coupon: cash leg 0 | None while item 1 stands |
-| 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | Dated filer rules for the 767 values (657 in the Ares 2023-09-30 filing) |
+| 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | BUILT 2026-11-23 (branch `warehouse-rate-rulings`): 17 fund rules `ratio_value_is_percent` in the wrapper copies (Ares 6, BCRED 2, Blue Owl 3, Apollo 2, HPS 4), read by the new model `int_rate_scale`, applied per row only where the row's own print agrees. 759 numbers kept as a percent (rate tag 670, PIK 20, spread 69); every printed number agreed (0 missing, 0 disagree). `scale_not_decided` left: 6 rates and their 6 cash legs (was 679 / 679 / PIK 20 / spread 68). Every former `scale_decided_by_size_in_production` row now equals production. Newly scaled values that differ from production: 1 Ares cash leg (printed "6.00% PIK", ruling A residual) and 3 HPS PIK rates and cash legs (whole-coupon procedure, existing cause). OPEN for the owner: the 6 left are Apollo 0000950170-24-094137 rate tags printed as margins ("S+610"): the tag holds a spread, not a rate, so no rule was written. Detail: second addendum in `docs/baseline_rates_2026-11-23.md` |
 | 5 | Leave both procedures as named differences until slice 5 | None now |
 | 6 | Wait for the printed margin | None until the text spec |
 | 7 | Leave unresolved (0 rows) | None |
@@ -594,6 +594,14 @@ Recorded, not yet built unless stated. Item numbers are those of the list above.
 | 9 | Leave (0 rows) | None |
 | 10 | Read the unit properly in slice 5, with the unit mapping moved to data | Slice 5 |
 | 11 | Push slice 4 | Done with this commit |
+
+After items 2 and 4 were built (2026-11-23, branch `warehouse-rate-rulings`, two commits, not pushed):
+build `PASS=684 WARN=104 ERROR=0 TOTAL=788`; `warehouse/pytests` 146 passed; CI fixture 3 / 332 / 2 / 34.
+Rulings made by the implementer, not by the owner: the scale rule's author is written inside its
+evidence text (a separate column would change every rule id); the printed reading (`percent` or
+`basis_points`) is part of the rule's parameter; `basis_points` is allowed on a spread only; the
+cause for ruling A is `convention` and is checked first in `cmp_rate`; the CI fixture has no scale
+rule (the unit test `int_rate_scale_rules_and_print` covers the model).
 
 ### Rulings made without the owner (slice 4), with the cost if wrong
 

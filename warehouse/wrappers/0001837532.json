@@ -337,6 +337,20 @@
       "concept_local": "InvestmentOwnedAtCostAfterCashEquivalents",
       "valid_from": "2023-03-31",
       "evidence": "Apollo's own concept for the cost of its cash equivalents (money-market funds), the cost twin of InvestmentOwnedAtFairValueAfterCashEquivalents (fair-value rule above). Filed in every Apollo filing from 2023-03-31 (namespaces http://gwms.apollo.com/20230331 to /20260930); on published positions from 2025-06-30 (6 positions in 4 filings, none with a us-gaap cost fact). 10-Q for 2026-03-31 (0001193125-26-215667) table 59 is headed 'Industry/Company | Investment Type | Interest Rate | Maturity Date | Par/Shares/Units | Cost | Fair Value'; printed row 1849 (Goldman Sachs Financial Square Government Fund Institutional) reads '159,399 | $ 159,399 | $ 159,399' and the concept's fact on context C_bc74b73b-06d0-4688-9d1d-640f0f415614 is 159,399,000, in the Cost column. Read as the cost only where a context has no us-gaap cost fact. Controller ruling, slice 3 Task 4 fix round 1."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001193125-26-102386",
+      "parameter": "spread basis_points",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a spread filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Reading: the page prints the spread in basis points after the reference rate, so the printed 450 is the tag 4.50 read as a percent (450 basis points = 4.50 percent); the inline scale is -2, so the filer meant 450 percent-hundredths and the tag holds the percent. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 32 rows filed above 1 (2.25 to 7.50, pure); on all 32 the printed number equals the tag times 100 and the cell prints a reference rate, '+' and that number, e.g. 'S+450, 0.75% Floor'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate",
+      "action": "ratio_value_is_percent",
+      "accession": "0001193125-26-215667",
+      "parameter": "spread basis_points",
+      "evidence": "Owner ruling B, 2026-11-23: in this filing a spread filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Reading: the page prints the spread in basis points after the reference rate, so the printed 400 is the tag 4.00 read as a percent (400 basis points = 4.00 percent); the inline scale is -2. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 31 rows filed above 1 (2.25 to 7.50, pure); on all 31 the printed number equals the tag times 100 and the cell prints a reference rate, '+' and that number, e.g. 'S+400, 0.00% Floor'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Not written for filing 0000950170-24-094137: there the 6 interest-rate tags above 1 print as margins ('S+610, 1.00% Floor'), so the scale fits but the tag holds a spread, not an all-in rate. Author: Claude (implementer agent), on the owner's ruling."
     }
   ]
 }

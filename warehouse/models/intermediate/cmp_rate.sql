@@ -54,7 +54,9 @@
 --        read here: the printed total margin decides printed_margin_cash_plus_pik (unread_input printed_total_margin).
 --   owner_review|scale_decided_by_size_in_production  this layer's reason is scale_not_decided (a ratio-unit value
 --        above 1): production keeps or rescales it by its size (pipeline/staging_bdc.py _prepare_bdc). Not a
---        convention: no filer rule says which scale the tag is in (controller ruling, slice 4 Task 3).
+--        convention: no filer rule says which scale the tag is in (controller ruling, slice 4 Task 3). Since owner
+--        ruling B (2026-11-23) a fund scale rule per filing decides most such values (int_rate_scale); 0 rows here in
+--        the build of that day (the 6 left unscaled are both_empty).
 --   owner_review|two_values_filed_production_keeps_first  this layer's reason is values_differ (one concept filed
 --        twice with different numbers, slice 4 Task 2): production keeps the first fact in the instance
 --        (pipeline/bdc_filings.py, "keep first non-None"), this layer withholds the value (D5).

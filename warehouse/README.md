@@ -222,10 +222,19 @@ and the reason says why. Each reason has a ceiling (a baseline test). The main o
 
 | Reason | Meaning |
 |---|---|
-| `scale_not_decided` | A rate tagged above 1 in a ratio unit (for example 7.0): it may already be a percent. The layer does not guess from the size of the number |
+| `scale_not_decided` | A rate tagged above 1 in a ratio unit (for example 7.0): it may already be a percent. The layer does not guess from the size of the number. A fund scale rule can settle it (below) |
 | `text_not_read` | The rule needs printed text the warehouse does not read yet: the printed total margin, or (for a row with only a PIK tag) the printed rate type and the loan class. `action_field.unread_input` names the missing input |
 | `values_differ` | Two different numbers filed for one field on one row |
 | `unit_not_pure` | A rate in a unit that is not a ratio |
+
+**Scale rules (owner ruling, 2026-11-23).** Some filers tag a rate as a percent (13.00) where the
+standard is a fraction (0.13). The layer does not decide this from the size of the number. Instead
+the fund's wrapper copy holds a dated rule per filing and field: action `ratio_value_is_percent`,
+with the filing's accession, the field and how the page prints it (`percent`, or `basis_points` for
+a spread printed as "S+450"). The rule carries its evidence and author. It applies row by row, only
+where that row's printed number agrees (model `int_rate_scale`). A row whose print disagrees stays
+`scale_not_decided`. Three tests keep this honest: every decided row is re-checked against the
+printed page, a rule that decides no row fails, and no stored rate may rest on an undecided number.
 
 **A missing rate is not "no rate".** Empty means this layer could not read a rate, not that the
 position pays none. For example a row with only a PIK tag has a printed coupon, but its all-in rate is

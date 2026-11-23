@@ -174,7 +174,10 @@ vars:
     int_field_normalised_unresolved_other: 0
     # Slice 4 Task 3 (rate fields), measured 2026-11-23 on all position rows of the five funds. scale_not_decided: a rate,
     # PIK rate or spread filed above 1 in a ratio unit (pure, utr:Rate), never rescaled by its size (controller ruling);
-    # on interest_rate and its cash leg it also counts rows whose PIK rate is such a value. pik_above_rate: a PIK rate above
+    # on interest_rate and its cash leg it also counts rows whose PIK rate is such a value. Owner ruling B (2026-11-23): a
+    # fund scale rule per filing and field keeps such a value as a percent where the row's print agrees (int_rate_scale);
+    # 17 rules. Left: interest_rate 6 and its cash leg 6 (was 679), pik_rate 0 (was 20), spread 0 (was 68). The 6 are
+    # Apollo 0000950170-24-094137 rate tags printed as margins ('S+610'): no rule, the tag holds a spread, not a rate. pik_above_rate: a PIK rate above
     # the all-in tag plus 0.01 (production keeps these unresolved too). values_differ: the six Ares rows of Task 2 carried
     # through. text_not_read (controller ruling 2026-11-23, slice 4 Task 4, reverses the Task 3 PIK-only rulings): both
     # PIK-only actions need the printed rate type and the loan class (action_field.unread_input), so every PIK-only row is
@@ -185,17 +188,17 @@ vars:
     # printed_margin_cash_plus_pik needs the printed total margin, text no model reads yet (action_field.unread_input):
     # Blue Owl 321, Apollo 219. feature_missing stays an error class: no declared pair, ceiling 0 under _other.
     int_field_normalised_unresolved_interest_rate_pik_above_rate: 15
-    int_field_normalised_unresolved_interest_rate_scale_not_decided: 679
+    int_field_normalised_unresolved_interest_rate_scale_not_decided: 6
     int_field_normalised_unresolved_interest_rate_values_differ: 1
     int_field_normalised_unresolved_interest_rate_rule_conflict: 0
     int_field_normalised_unresolved_interest_rate_text_not_read: 1885
     int_field_normalised_unresolved_interest_rate_cash_pik_above_rate: 15
-    int_field_normalised_unresolved_interest_rate_cash_scale_not_decided: 679
+    int_field_normalised_unresolved_interest_rate_cash_scale_not_decided: 6
     int_field_normalised_unresolved_interest_rate_cash_values_differ: 1
     int_field_normalised_unresolved_interest_rate_cash_rule_conflict: 0
     int_field_normalised_unresolved_interest_rate_cash_text_not_read: 1885
-    int_field_normalised_unresolved_pik_rate_scale_not_decided: 20
-    int_field_normalised_unresolved_spread_scale_not_decided: 68
+    int_field_normalised_unresolved_pik_rate_scale_not_decided: 0
+    int_field_normalised_unresolved_spread_scale_not_decided: 0
     int_field_normalised_unresolved_spread_values_differ: 5
     int_field_normalised_unresolved_spread_text_not_read: 2425
     int_field_normalised_unresolved_spread_rule_conflict: 0
@@ -277,27 +280,30 @@ vars:
   # (tests/generic/baseline_cmp_rate_cause.sql), measured 2026-11-23 (docs/baseline_rates_2026-11-23.md). The two bases
   # are never summed. not_yet_explained 0 and new_wrong 0 everywhere (new_wrong was 3 before the controller ruling of
   # 2026-11-23 reversed the Task 3 PIK-only readings; those rows and the 838 non-loan coupon rows no longer get a rate).
-  # owner_review: scale_decided_by_size_in_production (interest_rate 668, cash 2, pik 16, spread 68, kind 668;
-  # unpublished 1 each on rate, cash, pik, kind) and two_values_filed_production_keeps_first (1 on rate, cash, kind).
+  # owner_review: two_values_filed_production_keeps_first (1 on rate, cash, kind). scale_decided_by_size_in_production
+  # was interest_rate 668, cash 2, pik 16, spread 68, kind 668 (unpublished 1 each on rate, cash, pik, kind); since owner
+  # ruling B (2026-11-23, fund scale rules per filing, int_rate_scale) it is 0: every such row is now equal to
+  # production or moved to an existing cause. needs_correction rate 52 -> 51 and kind 46 -> 45 in the same change (one
+  # Ares row now equal). whole_coupon_pik_not_read on rate and kind 3 -> 0 (three HPS rates now set and equal).
   # needs_store_not_loaded: since slice 4 Task 5 (repair d) every detail of this cause has its own ceiling in
   # cmp_rate_detail_max below, so the cause ceiling here counts only rows with any other detail: 0. Totals before the
   # split (published): rate 600, cash 177, pik 55, spread 1,202, maturity 43,997, kind 600; unpublished: rate 8, cash 8,
   # spread 23, maturity 8,082, kind 8. A new detail of this cause fails the build until it gets its own ceiling.
   cmp_rate_max:
     published:
-      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 52, needs_store_not_loaded: 0, production_stale: 0, owner_review: 669, not_yet_explained: 0}
-      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 132, needs_store_not_loaded: 0, production_stale: 0, owner_review: 3, not_yet_explained: 0}
-      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 158, needs_store_not_loaded: 0, production_stale: 0, owner_review: 16, not_yet_explained: 0}
-      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 123, needs_store_not_loaded: 0, production_stale: 0, owner_review: 68, not_yet_explained: 0}
+      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 51, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 132, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 158, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 123, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 9, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 46, needs_store_not_loaded: 0, production_stale: 0, owner_review: 669, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 45, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
     unpublished:
-      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
-      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
-      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 142, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
   # Per-detail ceilings of needs_store_not_loaded (slice 4 Task 5, repair d; the cmp_amount_detail_max pattern), keyed
   # 'cause|detail', measured 2026-11-23 (scripts/slice4/q_t4_mechanism_checks.sql). The text_not_read detail is set by
   # elimination in cmp_rate (a spread read on the row -> printed_total_margin_not_read, else
@@ -305,7 +311,8 @@ vars:
   # convention|cash_equals_all_in_owner_ruling (owner ruling A, 2026-11-23, measured that day): cash legs this layer
   # sets equal to the all-in rate where no PIK rate is read and production leaves empty. Published 30,573, unpublished
   # 8,863 (40,410 such cash legs over all rows; the rest are in the excluded 2026-09-30 quarters or one side only). The
-  # convention cause ceiling in cmp_rate_max stays 0: any other convention detail fails the build.
+  # convention cause ceiling in cmp_rate_max stays 0: any other convention detail fails the build. Published 31,239 since
+  # owner ruling B: 666 Ares rates kept as a percent by a scale rule now have an all-in rate, so a cash leg too.
   cmp_rate_detail_max:
     published:
       interest_rate:
@@ -314,9 +321,9 @@ vars:
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
         "needs_store_not_loaded|rate_only_context_not_adopted": 6
-        "needs_store_not_loaded|whole_coupon_pik_not_read": 3
+        "needs_store_not_loaded|whole_coupon_pik_not_read": 0
       interest_rate_cash:
-        "convention|cash_equals_all_in_owner_ruling": 30573
+        "convention|cash_equals_all_in_owner_ruling": 31239
         "needs_store_not_loaded|identifier_text_not_read": 55
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 76
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
@@ -341,7 +348,7 @@ vars:
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
         "needs_store_not_loaded|rate_only_context_not_adopted": 6
-        "needs_store_not_loaded|whole_coupon_pik_not_read": 3
+        "needs_store_not_loaded|whole_coupon_pik_not_read": 0
     unpublished:
       interest_rate:
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 8

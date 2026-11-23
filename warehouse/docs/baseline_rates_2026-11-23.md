@@ -376,3 +376,109 @@ job. The other 40,342 rows print no "PIK" in that cell, which is not proof that 
 
 Build: `PASS=660 WARN=114 ERROR=0 TOTAL=774` (two new detail tests, both warn). Python tests 146.
 CI fixture 3 / 318 / 2 / 33; its rows c-7 and c-24 now expect a cash leg of 8.0 and 7.0.
+
+## Addendum, 2026-11-23 (later): owner ruling B, scale rules per filer and filing
+
+Added after ruling A (addendum above). Owner item 4: a rate, PIK rate or spread filed above 1 in a
+ratio unit (`pure`, `utr:Rate`) is not rescaled by its size (production's rule); a dated rule per
+filer and filing decides it, with evidence from the printed page.
+
+**How it is built.** A fund rule in the wrapper copy: action `ratio_value_is_percent`, the filing's
+accession, and a parameter naming the read field and the printed form (`percent`, or `basis_points`
+on a spread). Each rule carries its evidence text (what was checked, rows, date) and its author. The
+rules are read by a new model, `int_rate_scale`, one row per number filed above 1 in a ratio unit.
+A rule decides a row only where that row's own printed number agrees: the printed number equals the
+tag read as a percent and a percent sign follows it in the cell, or (basis points, spread only) the
+printed number equals the tag times 100 after a reference rate and "+" ("S+450" for 4.50). A row
+with no rule, or whose print does not agree, stays `scale_not_decided`. A kept PIK rate or spread
+names the scale rule; the all-in rate and cash leg keep the reading's rule and list the scale rule
+in the new column `scale_rule_ids`. The cash leg follows (ruling A where no PIK rate is read).
+
+Tests: `tests/rate_scale_rule_evidence.sql` re-checks every decided row against the filed layer
+(displayed text and printed cell) and fails the build on any row whose print does not agree;
+`tests/rate_scale_rule_live.sql` fails a rule that decides no row; `tests/rate_scale_rule_selectors.sql`
+fails a rule without fund, filing and a known field and reading, with any other selector or dates, a
+basis-points rule on a field other than spread, or two rules for one filing and field;
+`tests/int_field_normalised_scale_decided.sql` fails a stored rate built on an undecided number.
+Unit tests: `int_rate_scale_rules_and_print` (kept, basis points, wrong number, no percent sign, no
+rule, basis points on a rate tag) and new cases in the two rate unit tests of `int_field_normalised`.
+
+**Evidence, measured 2026-11-23** (`scripts/rate_rulings/q_b_scale_evidence.sql`, `q_b_scale_forms.sql`,
+`q_b_scale_cells.sql`; the printed number is the displayed inline text of the same fact,
+`int_field_read.printed_text`, and its table cell). Every number filed above 1 printed the same
+number (or, for Apollo, the number times 100); none was missing or disagreed.
+
+| Fund | Filing | Field | Rows above 1 | Print agrees | Printed form | Rule |
+|---|---|---|---:|---:|---|---|
+| Ares | 0001287750-22-000052 | rate tag | 1 | 1 | "6.00% PIK" | percent |
+| Ares | 0001287750-23-000010 | rate tag | 8 | 8 | "6.50%" | percent |
+| Ares | 0001287750-23-000021 | spread | 1 | 1 | "8.00%" | percent |
+| Ares | 0001287750-23-000045 | rate tag | 657 (12 pure, 645 utr:Rate) | 657 | "13.00%" | percent |
+| Ares | 0001628280-26-050307 | rate tag | 3 | 3 | "9.48% (2.88% PIK)" | percent |
+| Ares | 0001628280-26-050307 | PIK rate | 2 | 2 | same cell | percent |
+| BCRED | 0001803498-24-000007 | rate tag | 1 | 1 | "11.45% (incl. 4.00% PIK)" | percent |
+| BCRED | 0001803498-24-000007 | PIK rate | 1 | 1 | same cell | percent |
+| Blue Owl | 0001812554-23-000022 | PIK rate | 3 | 3 | "6.25% PIK" | percent |
+| Blue Owl | 0001812554-23-000030 | PIK rate | 3 | 3 | "6.25% PIK" | percent |
+| Blue Owl | 0001812554-24-000014 | PIK rate | 2 | 2 | "12.00% PIK" | percent |
+| Apollo | 0001193125-26-102386 | spread | 32 | 32 | "S+450, 0.75% Floor" | basis_points |
+| Apollo | 0001193125-26-215667 | spread | 31 | 31 | "S+400, 0.00% Floor" | basis_points |
+| Apollo | 0000950170-24-094137 | rate tag | 6 | 6 (number) | "S+610, 1.00% Floor" | none: printed as a margin |
+| HPS | 0001838126-23-000040 | spread | 5 | 5 | "8.25%" | percent |
+| HPS | 0001838126-24-000061 | PIK rate | 1 | 1 | "10.00% PIK" | percent |
+| HPS | 0001628280-26-020206 | PIK rate | 4 | 4 | "6.50% PIK" | percent |
+| HPS | 0001628280-26-033248 | PIK rate | 4 | 4 | "6.50% PIK" | percent |
+
+17 rules; 759 numbers kept as a percent (rate tag 670, PIK rate 20, spread 69). Apollo prints
+basis points: 610 printed for a tag of 6.10 counts as agreeing under the `basis_points` reading,
+which is allowed on a spread only.
+
+**Left `scale_not_decided`: 6 rows** (and their 6 cash legs): the Apollo 2024-06-30 rate tags. Their
+printed number agrees in scale, but the page prints them as margins over SOFR ("S+610"), so the tag
+holds a spread, not an all-in rate. A scale rule would store a margin as the all-in rate, so none
+was written. In `cmp_rate` these rows are both_empty. Not changed here; a question for the owner.
+
+Rows changed (snapshot of every table against the ruling A build): `int_field_normalised` 1,434
+rows (interest_rate 673 and its cash leg 673, PIK rate 20, spread 68: unresolved `scale_not_decided`
+-> normalised; 3 of the 673 rates are HPS rates whose PIK rate was the undecided input);
+`cmp_rate` 2,107 rows; `reading_action` gains the action row; the new table `int_rate_scale` (765
+rows: 759 kept, 6 no rule, 0 print disagrees). No other table changed. `int_field_rule` did not
+change: scale rules have no `action_field` row (`tests/reading_rule_amount_action_has_field.sql`
+now says so). One spread in a ruled filing is kept by `int_rate_scale` but stays `text_not_read` on
+the spread field, as before.
+
+Comparison with production. Every `owner_review|scale_decided_by_size_in_production` row (published
+rate 668, cash 2, PIK 16, spread 68, kind 668; unpublished 1 each on rate, cash, PIK, kind) is now
+equal. Values resting on a kept number that are not equal to production
+(`scripts/rate_rulings/q_b_scaled_differs.sql`), besides 666 Ares cash legs now `production_empty`
+under ruling A's convention cause:
+
+| Fund | Row | Field | Here | Production | Cause |
+|---|---|---|---:|---:|---|
+| Ares | 0001287750-22-000052, 2022-09-30, printed "6.00% PIK" | cash leg | 6.00 | 0.00 | needs_correction (production's correction). This layer's cash leg is ruling A's residual risk: the page prints a PIK coupon, no PIK rate is tagged |
+| HPS | 0001838126-24-000061 c-115 | PIK rate / cash leg | 10.00 / 5.45 | 15.45 / 0 | whole_coupon_pik_not_read (production stores the printed whole coupon as the PIK rate) |
+| HPS | 0001628280-26-020206 c-376 | PIK rate / cash leg | 6.50 / 3.93 | 10.43 / 0 | whole_coupon_pik_not_read |
+| HPS | 0001628280-26-033248 c-372 | PIK rate / cash leg | 6.50 / 3.96 | 10.46 / 0 | whole_coupon_pik_not_read |
+
+Published table after both rulings (before both: the headline table at the top of this file):
+
+| Field | Equal | Differs | New empty | Production empty | Both empty |
+|---|---:|---:|---:|---:|---:|
+| interest_rate | 33,827 | 8 | 632 | 9 | 26,199 |
+| interest_rate_cash | 2,452 | 147 | 157 | 31,245 | 26,674 |
+| pik_rate | 5,231 | 93 | 107 | 13 | 55,231 |
+| spread | 45,682 | 5 | 894 | 426 | 13,668 |
+| maturity_date | 7,023 | 0 | 44,006 | 0 | 9,646 |
+| rate_kind | 60,032 | 643 | 0 | 0 | 0 |
+
+`not_yet_explained` 0 and `new_wrong` 0 on every field and both bases. Ceilings lowered to the
+measured counts: `scale_not_decided` rate 6, cash 6, PIK 0, spread 0; owner_review rate 1, cash 1,
+PIK 0, spread 0, kind 1 (unpublished all 0); needs_correction rate 51, kind 45;
+whole_coupon_pik_not_read rate and kind 0; ruling A's convention detail 31,239 published.
+
+What this does not show: that the print is right. The rules make the stored number match the page;
+a page that prints a wrong rate is matched too. Agreement with production here means both now read
+the page the same way, not that either is right.
+
+Build: `PASS=684 WARN=104 ERROR=0 TOTAL=788`. Python tests 146. CI fixture 3 / 332 / 2 / 34 (the
+fixture has no scale rule; its row c-25 still pins `scale_not_decided`).

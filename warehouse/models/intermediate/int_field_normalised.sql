@@ -25,6 +25,12 @@
 --   fraction_to_percent   value = value_filed times 100. Built here for pct_of_net_assets only (production stores a
 --                         percent: docs/reference/schemas.md line 25, pipeline/staging_bdc.py lines 2945-2949); for
 --                         rates it stays slice 4 (seeds/reading_action.csv built_early_for_field).
+--   ratio_value_is_percent  (owner ruling B, 2026-11-23) a rate number filed above 1 in a ratio unit is already a
+--                         percent: value = value_filed, no times 100. Decided per row by int_rate_scale (a fund scale
+--                         rule naming the filing and field, and the row's own print agrees). A PIK rate or spread so
+--                         decided names the scale rule as its rule_id and this action; the all-in rate and cash leg keep
+--                         their reading's rule. scale_rule_ids lists the scale rules behind a normalised rate value
+--                         (comma-separated; null where none).
 -- An action counts as built for a field when reading_action.built_in_slice is 3 or built_early_for_field names the
 -- field, or its slice is 4 and the field is a rate field (macro action_is_built); otherwise the field is unresolved,
 -- action_not_built.
@@ -207,25 +213,31 @@ with rule as (
 )
 
 , rate_read_kind as (
-    -- slice 4 Task 3: each rate read field, with its unit kind
+    -- slice 4 Task 3: each rate read field, with its unit kind; owner ruling B (2026-11-23): with the scale decision of
+    -- int_rate_scale for a number filed above 1 in a ratio unit (kept_as_percent under a fund scale rule, or not)
     select
-        accession
-        , context_id
-        , field
-        , status
-        , reason
-        , value_filed
-        , value_date
-        , is_nil
-        , case when status = 'read' and not is_nil and value_filed is not null then {{ unit_kind('unit') }} end as unit_kind
-    from read
-    where field in {{ rate_read_fields() }}
+        rd.accession
+        , rd.context_id
+        , rd.field
+        , rd.status
+        , rd.reason
+        , rd.value_filed
+        , rd.value_date
+        , rd.is_nil
+        , case when rd.status = 'read' and not rd.is_nil and rd.value_filed is not null then {{ unit_kind('rd.unit') }} end
+            as unit_kind
+        , case when sc.outcome = 'kept_as_percent' then sc.scale_rule_id end as scale_rule_id
+    from read rd
+    left join {{ ref('int_rate_scale') }} sc
+        on sc.accession = rd.accession and sc.context_id = rd.context_id and sc.field = rd.field
+    where rd.field in {{ rate_read_fields() }}
 )
 
 , rate_read as (
-    -- state: value (usable), absent (no fact or nil only), unresolved (why says why). A number is usable only as a
-    -- fraction in a ratio unit: times 100 (fraction_to_percent). Above 1 it may already be a percent; its scale is not
-    -- decided by its size (controller ruling): unresolved scale_not_decided.
+    -- state: value (usable), absent (no fact or nil only), unresolved (why says why). A number is usable as a fraction
+    -- in a ratio unit: times 100 (fraction_to_percent). Above 1 it may already be a percent; its scale is not decided by
+    -- its size (controller ruling): unresolved scale_not_decided, unless a fund scale rule kept it as a percent where
+    -- the row's own print agrees (int_rate_scale, owner ruling B 2026-11-23): then the filed number is the percent.
     select
         *
         , case
@@ -233,16 +245,16 @@ with rule as (
             when status = 'unresolved' then 'unresolved'
             when field = 'maturity_date' then 'value'
             when unit_kind is distinct from 'pure' then 'unresolved'
-            when value_filed > 1 then 'unresolved'
+            when value_filed > 1 and scale_rule_id is null then 'unresolved'
             else 'value'
           end as state
         , case
             when status = 'absent' or is_nil or status = 'unresolved' then reason
             when field = 'maturity_date' then null
             when unit_kind is distinct from 'pure' then 'unit_not_pure'
-            when value_filed > 1 then 'scale_not_decided'
+            when value_filed > 1 and scale_rule_id is null then 'scale_not_decided'
           end as why
-        , value_filed * 100 as pct
+        , case when value_filed > 1 and scale_rule_id is not null then value_filed else value_filed * 100 end as pct
     from rate_read_kind
 )
 
@@ -276,6 +288,10 @@ with rule as (
         , any_value(value_date) filter (where field = 'maturity_date') as md_date
         , any_value(status) filter (where field = 'maturity_date') as md_read_status
         , any_value(reason) filter (where field = 'maturity_date') as md_read_reason
+        , any_value(scale_rule_id) filter (where field = 'interest_rate_tag') as it_scale_rule_id
+        , any_value(scale_rule_id) filter (where field = 'interest_rate_cash_tag') as ct_scale_rule_id
+        , any_value(scale_rule_id) filter (where field = 'pik_rate') as pk_scale_rule_id
+        , any_value(scale_rule_id) filter (where field = 'spread') as sp_scale_rule_id
     from rate_read
     group by 1, 2
 )
@@ -437,8 +453,27 @@ with rule as (
         , r.field
         , r.cik
         , r.report_date
-        , r.rule_id
-        , r.action
+        -- owner ruling B: a PIK rate or spread whose filed number above 1 a fund scale rule kept as a percent names that
+        -- rule and its action (the default fraction_to_percent did not give the value)
+        , case
+            when r.resolution = 'rule' and r.action = 'fraction_to_percent' and r.field = 'pik_rate'
+                and i.pk_scale_rule_id is not null then i.pk_scale_rule_id
+            when r.resolution = 'rule' and r.action = 'fraction_to_percent' and r.field = 'spread'
+                and i.sp_scale_rule_id is not null then i.sp_scale_rule_id
+            else r.rule_id
+          end as rule_id
+        , case
+            when r.resolution = 'rule' and r.action = 'fraction_to_percent' and r.field = 'pik_rate'
+                and i.pk_scale_rule_id is not null then 'ratio_value_is_percent'
+            when r.resolution = 'rule' and r.action = 'fraction_to_percent' and r.field = 'spread'
+                and i.sp_scale_rule_id is not null then 'ratio_value_is_percent'
+            else r.action
+          end as action
+        , case
+            when r.field = 'pik_rate' then i.pk_scale_rule_id
+            when r.field = 'spread' and r.action = 'pik_only_is_margin' then i.pk_scale_rule_id
+            when r.field = 'spread' then i.sp_scale_rule_id
+          end as scale_rule_ids
         , case r.field when 'pik_rate' then i.pk_filed when 'spread' then
             case when r.action = 'pik_only_is_margin' then i.pk_filed else i.sp_filed end end as value_filed
         , case
@@ -502,6 +537,7 @@ select
     , cast(null as date) as fx_rate_date
     , cast(null as date) as value_date
     , cast(null as varchar) as rate_kind
+    , cast(null as varchar) as scale_rule_ids
 from five_status
 union all
 select
@@ -521,6 +557,7 @@ select
     , case when status = 'normalised' then fx_rate_date end as fx_rate_date
     , cast(null as date) as value_date
     , cast(null as varchar) as rate_kind
+    , cast(null as varchar) as scale_rule_ids
 from usd_status
 union all
 select
@@ -540,6 +577,8 @@ select
     , cast(null as date) as fx_rate_date
     , cast(null as date) as value_date
     , rate_kind
+    , case when ir_status = 'normalised' then nullif(concat_ws(',', it_scale_rule_id, ct_scale_rule_id, pk_scale_rule_id), '') end
+        as scale_rule_ids
 from interest_out
 union all
 select
@@ -559,6 +598,8 @@ select
     , cast(null as date) as fx_rate_date
     , cast(null as date) as value_date
     , cast(null as varchar) as rate_kind
+    , case when cash_status = 'normalised' then nullif(concat_ws(',', it_scale_rule_id, ct_scale_rule_id, pk_scale_rule_id), '') end
+        as scale_rule_ids
 from interest_out
 union all
 select
@@ -578,4 +619,5 @@ select
     , cast(null as date) as fx_rate_date
     , case when status = 'normalised' then value_date end as value_date
     , cast(null as varchar) as rate_kind
+    , case when status = 'normalised' then scale_rule_ids end as scale_rule_ids
 from (select * exclude (state), case state when 'value' then 'normalised' else state end as status from scaled)
