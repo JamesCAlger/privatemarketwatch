@@ -12,8 +12,10 @@ right. This comparison cannot see:
   position has none);
 - a change in what a field means, or offsetting errors.
 
-Build line: `PASS=648 WARN=91 ERROR=0 TOTAL=739` (before this task 563 / 65 / 628). Python tests 144.
-CI fixture 3 / 316 / 2 / 33. A passing build does not show the data is correct.
+Build line: `PASS=648 WARN=91 ERROR=0 TOTAL=739` at the end of Task 4 (before it 563 / 65 / 628).
+After Task 5 (per-detail ceilings, repairs, CI fixture rates): `PASS=660 WARN=112 ERROR=0 TOTAL=772`;
+Python tests 146; CI fixture 3 / 318 / 2 / 33. No row of `cmp_rate` changed in Task 5. A passing build
+does not show the data is correct.
 
 **Ruling change (controller, 2026-11-23).** The first version of this comparison found that Task 3's
 PIK-only coupon reading, applied to every PIK-only row, gave 838 Ares non-loan rows (preferred, common
@@ -122,17 +124,50 @@ everywhere.
 Read the both-empty column with care: Blue Owl files no interest-rate tag, so neither side has its
 all-in rate on 9,613 published rows. Agreement there is agreement on nothing.
 
-Causes per fund and field: `scripts/slice4/q_t4_fund_outcomes.sql`.
+## Per fund and field (unpublished: rows from a JV or subsidiary's own schedule)
+
+Only three funds have unpublished rows on both sides. Ares and Apollo have none.
+
+| Fund | Field | Equal | Differs | New empty | Prod. empty | Both empty |
+|---|---|---:|---:|---:|---:|---:|
+| BCRED | interest_rate | 8,901 | 0 | 9 | 0 | 263 |
+| BCRED | interest_rate_cash | 126 | 0 | 9 | 0 | 9,038 |
+| BCRED | pik_rate | 186 | 0 | 1 | 0 | 8,986 |
+| BCRED | spread | 8,769 | 0 | 1 | 164 | 239 |
+| BCRED | maturity_date | 0 | 0 | 7,964 | 0 | 1,209 |
+| BCRED | rate_kind | 9,164 | 9 | 0 | 0 | 0 |
+| Blue Owl | interest_rate | 0 | 0 | 0 | 0 | 1,416 |
+| Blue Owl | interest_rate_cash | 0 | 0 | 0 | 0 | 1,416 |
+| Blue Owl | pik_rate | 0 | 0 | 0 | 0 | 1,416 |
+| Blue Owl | spread | 1,416 | 0 | 0 | 0 | 0 |
+| Blue Owl | maturity_date | 0 | 0 | 1 | 0 | 1,415 |
+| Blue Owl | rate_kind | 1,416 | 0 | 0 | 0 | 0 |
+| HPS | interest_rate | 88 | 0 | 0 | 0 | 63 |
+| HPS | interest_rate_cash | 0 | 0 | 0 | 0 | 151 |
+| HPS | pik_rate | 0 | 0 | 0 | 0 | 151 |
+| HPS | spread | 88 | 0 | 0 | 0 | 63 |
+| HPS | maturity_date | 0 | 0 | 119 | 0 | 32 |
+| HPS | rate_kind | 151 | 0 | 0 | 0 | 0 |
+
+Rows: BCRED 9,173, Blue Owl 1,416, HPS 151 per field (10,740 in all). Causes on these rows are in the
+"Unpublished basis" line above. This table was added in Task 5. Causes per fund and field, both bases:
+`scripts/slice4/q_t4_fund_outcomes.sql`.
 
 ## Causes
 
 Each cause is set by a rule on row features (production's own source, transform and fill labels,
 its corrected fields, this layer's reason). No list of ids. The rule order is in the header of
 `models/intermediate/cmp_rate.sql`. "Opened" means the printed schedule row of the position was read
-from the filed layer (`scripts/slice4/q_t4_open_rows.sql`, up to 4 rows per field and cause detail,
-135 rows in the final sample, plus 14 read for the two groups the ruling change removed). "Check" is an
-independent test of the mechanism on every row of the group
-(`scripts/slice4/q_t4_mechanism_checks.sql`).
+from the filed layer (`scripts/slice4/q_t4_open_rows.sql`, up to 4 rows per field and cause detail).
+The final sample is 135 rows (`scripts/slice4/q_t5_sample_counts.sql`; the per-detail counts below add
+up to it). The first version of the comparison, before the ruling change, opened 148 rows; 26 of them
+were in three groups the change removed or replaced. "Check" is a test of the mechanism on every row
+of the group (`scripts/slice4/q_t4_mechanism_checks.sql`). Where the check only repeats the cause rule,
+or a condition the outcome already implies, it cannot fail: it is marked "rule restated, no independent
+check", and the evidence for that group is the rows opened (Task 5 review).
+
+Since Task 5 each `needs_store_not_loaded` detail has its own ceiling (`cmp_rate_detail_max` in
+`dbt_project.yml`), so a rise in one detail cannot hide behind a fall in another.
 
 ### needs_correction: a correction production applied (published 520 rows across fields)
 
@@ -142,9 +177,15 @@ independent test of the mechanism on every row of the group
   correction; the maturity by a maturity correction.
 - Counts: rate 52, cash 132, PIK 158, spread 123, maturity 9, kind 46 (unpublished: spread 142,
   maturity 2).
-- Check: a correction on the field itself carries production's value on 48 of 52 rates, 158 of 158
-  PIK rates, 123 of 123 spreads, 9 of 9 maturities, 29 of 46 kinds. The rest (and all 132 cash legs,
-  which no correction names) are set through a covering field.
+- Check (independent): a correction on the field itself, matched on context id or on accession and
+  production's identifier, carries production's value on 48 of 52 rates, 158 of 158 PIK rates, 123 of
+  123 spreads, 9 of 9 maturities, 15 of 46 kinds; unpublished 142 of 142 spreads, 2 of 2 maturities.
+  (Task 4 quoted 29 of 46 kinds: its check matched any identifier-keyed correction of the same filing
+  and field; corrected in Task 5. The other counts did not move.)
+- The rest (4 rates, 31 kinds, and all 132 cash legs, which no correction names) are set through a
+  covering field (a correction of the rate, the PIK rate or the kind). Not checked against
+  production's recomputation: that the covering correction gives production's value on these rows
+  is how the cause rule reads production's code, not a measured fact.
 - Opened: 24. Example: Apollo 2026-03-31, printed "5.38% Cash plus 5.38% PIK": this layer stores the
   tag 5.38 as the all-in rate; production's correction gives 10.76. Apollo 2025-12-31: the tag is
   0.001036 (this layer 0.1036); printed 10.36%; production's correction gives 10.36.
@@ -152,16 +193,21 @@ independent test of the mechanism on every row of the group
 
 ### needs_store_not_loaded: production used an input this layer does not read yet
 
-| Detail | Missing input | Published rows (rate / cash / PIK / spread / maturity / kind) | Opened |
-|---|---|---|---:|
-| printed_maturity_not_read | Maturity printed on the schedule row (production's source `ixbrl_field_status`) | 0 / 0 / 0 / 0 / 43,996 / 0 | 4 |
-| printed_total_margin_not_read | The printed total margin (`printed_margin_cash_plus_pik`; this layer's reason `text_not_read`) | 0 / 0 / 0 / 479 / 0 / 0 | 4 |
-| printed_rate_type_and_loan_class_not_read | Printed rate type and loan class: both PIK-only readings (`pik_only_is_coupon`, `pik_only_is_margin`) need them; this layer's reason `text_not_read`, no spread read | 405 / 0 / 0 / 287 / 0 / 405 | 12 |
-| printed_reference_rate_column_not_read | The printed reference-rate column ("N/A" or blank): production moves the spread tag to the rate or drops it | 112 / 76 / 0 / 413 / 0 / 112 | 16 |
-| identifier_text_not_read | Rates and dates production read from the identifier text (source `identifier_text`) | 73 / 55 / 9 / 19 / 1 / 73 | 21 |
-| whole_coupon_pik_not_read | Wrapper procedure `pik_margin_reading whole_coupon` (production label `pik_rate:whole_coupon_printed`) | 3 / 44 / 44 / 0 / 0 / 3 | 14 |
-| rate_only_context_not_adopted | Wrapper procedure `rate_only_contexts adopt_adjacent` (production names the moved fields in `src_filled_fields`) | 6 / 1 / 2 / 4 / 0 / 6 | 15 |
-| production_corrected_no_loaded_store | A correction production applied that is not in the loaded store | 0 / 1 / 0 / 0 / 0 / 1 | 2 |
+| Detail | Missing input | Published rows (rate / cash / PIK / spread / maturity / kind) | Check | Opened |
+|---|---|---|---|---:|
+| printed_maturity_not_read | Maturity printed on the schedule row (production's source `ixbrl_field_status`) | 0 / 0 / 0 / 0 / 43,996 / 0 | rule restated, no independent check | 4 |
+| printed_total_margin_not_read | The printed total margin (`printed_margin_cash_plus_pik`; this layer's reason `text_not_read`) | 0 / 0 / 0 / 479 / 0 / 0 | independent: 478 of 479 | 4 |
+| printed_rate_type_and_loan_class_not_read | Printed rate type and loan class: both PIK-only readings (`pik_only_is_coupon`, `pik_only_is_margin`) need them; this layer's reason `text_not_read`, no spread read | 405 / 0 / 0 / 287 / 0 / 405 | independent: all | 12 |
+| printed_reference_rate_column_not_read | The printed reference-rate column ("N/A" or blank): production moves the spread tag to the rate or drops it | 112 / 76 / 0 / 413 / 0 / 112 | independent: all | 16 |
+| identifier_text_not_read | Rates and dates production read from the identifier text (source `identifier_text`) | 73 / 55 / 9 / 19 / 1 / 73 | rule restated, no independent check | 21 |
+| whole_coupon_pik_not_read | Wrapper procedure `pik_margin_reading whole_coupon` (production label `pik_rate:whole_coupon_printed`) | 3 / 44 / 44 / 0 / 0 / 3 | independent: all | 14 |
+| rate_only_context_not_adopted | Wrapper procedure `rate_only_contexts adopt_adjacent` (production names the moved fields in `src_filled_fields`) | 6 / 1 / 2 / 4 / 0 / 6 | rule restated, no independent check | 15 |
+| production_corrected_no_loaded_store | A correction production applied that is not in the loaded store | 1 / 1 / 0 / 0 / 0 / 1 | rule restated, no independent check | 3 |
+| Total | | 600 / 177 / 55 / 1,202 / 43,997 / 600 | | 89 |
+
+The rate column summed to 599 in the Task 4 version of this table: the
+`production_corrected_no_loaded_store` row showed 0 rates where the data has 1 (Ares 2025-12-31,
+c-1095; `q_t4_mechanism_checks.sql`), and its opened count was 2 where the sample holds 3.
 
 Evidence per detail:
 

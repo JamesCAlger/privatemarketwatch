@@ -2,9 +2,10 @@
 
 Status: written 2026-11-19. Built so far: slice 1 (readings loader), slice 2 (filing selection,
 row roles, comparison of the row set with production) and slice 3 (amounts: field read, conversion,
-comparison of amounts with production; 2026-11-22). Not built: rates, corrections, observations.
-Counts: `baseline_readings_2026-11-19.md`, `baseline_roles_2026-11-19.md`,
-`baseline_amounts_2026-11-22.md`.
+comparison of amounts with production; 2026-11-22) and slice 4 (rates: the rate tags, PIK rate,
+spread and maturity date read, converted and compared with production; 2026-11-23). Not built:
+corrections, observations. Counts: `baseline_readings_2026-11-19.md`, `baseline_roles_2026-11-19.md`,
+`baseline_amounts_2026-11-22.md`, `baseline_rates_2026-11-23.md`.
 Step 3 of the data-model redesign (`design.md`). Follows `filed_layer.md` (step 2).
 
 Passing every test in this spec shows the layer is consistent, repeatable and agrees with the old
@@ -212,8 +213,26 @@ defaults are rows of `seeds/field_rule_default.csv`.
 | `fraction_to_percent` | share of net assets only | Times 100. Global default for a pure share of net assets. Built early for this field only (`built_early_for_field`); for rates it is slice 4 |
 | `concept_is_cost` | cost | Read side, like `concept_is_fair_value`: the filer's own cost concept is read where the context has no standard cost fact. Filer rule |
 
-Rates (`rate_is_all_in`, `rate_is_cash_leg`, `pik_only_is_coupon`, `pik_only_is_margin`,
-`printed_margin_cash_plus_pik`, and `fraction_to_percent` on rates) are slice 4.
+Rate actions as built in slice 4 (2026-11-23). Source in production and per-reading detail:
+`.superpowers/sdd/2026-11-23-slice4-rates-plan/task-3-report.md` section 2 (git-ignored) and the notes in
+`seeds/action_field.csv`. An action whose `action_field.unread_input` is set needs printed text no model
+reads yet: every row it would decide is unresolved, reason `text_not_read`, under a ceiling.
+
+| Action | Field | Effect as built |
+|---|---|---|
+| `fraction_to_percent` | PIK rate, spread (global default, ratio unit: `pure` or `utr:Rate`) | Times 100. A value filed above 1 is not rescaled by its size: unresolved `scale_not_decided` (controller ruling) |
+| `rate_is_all_in` | all-in rate, cash leg, kind | All-in = rate tag times 100, kind `all_in`; cash = all-in less PIK where a PIK rate is read, else empty (as production); PIK above the rate plus 0.01: both unresolved `pik_above_rate`. Filer rule |
+| `rate_is_cash_leg` | all-in rate, cash leg, kind | Cash = rate tag times 100, kind `cash`; all-in = cash plus PIK where a PIK rate is read, else unresolved `cash_leg_without_pik`. Filer rule; no fund of the five declares it |
+| `pik_only_is_coupon` | all-in rate, spread (row with only a PIK tag) | Built (all-in = PIK) but switched off: `unread_input` printed rate type and loan class (controller ruling 2026-11-23, after it gave 841 wrong rates). Rows are `text_not_read`; the PIK rate is still read. Filer rule |
+| `pik_only_is_margin` | all-in rate, spread (row with only a PIK tag) | Built (spread = PIK, rate unresolved) but switched off the same way. Filer rule |
+| `printed_margin_cash_plus_pik` | spread (row with a spread and a PIK rate) | Not built: `unread_input` printed total margin; rows are `text_not_read`. Filer rule |
+| `as_filed` | maturity date | The filed ISO date. Global default |
+
+A row with both rate tags keeps both where they agree with the PIK rate within 1e-9, else both are
+unresolved `legs_do_not_add` (production keeps the first fact in the instance; 0 rows on the five
+funds). No rate is derived from a base rate plus a spread (section 10). Two wrapper procedures are
+measured, not built: `rate_only_contexts adopt_adjacent` (Ares) and `pik_margin_reading whole_coupon`
+(HPS).
 
 The value-size readings in the wrappers (`par_tagged_as_units` row modes) are loaded as they are and
 listed for review. They decide from the size of a number.
