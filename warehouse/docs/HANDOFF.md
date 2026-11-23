@@ -486,6 +486,19 @@ Owner answers, 2026-11-23:
    the filed cash-equivalents figure is empty for BCRED was not examined. A declaration cannot see a
    non-cash row wrongly tagged cash that offsets a missing row.
 
+Owner decisions of 2026-11-23 on the items under "Owner decisions open" above (the owner took the
+recommended option on each; none is built yet):
+
+- HPS JV commitment lines carried twice (item 2): flag them, decide keep or drop after reproduction.
+  The flag is not built; it joins the parked items that open the slice 4 plan.
+- The two Apollo rollups with a zero-value position beneath (item 3): publish the position at 0, as
+  production does. Production does it by a correction, so it is built in slice 5.
+- The 14 BCRED structured-credit principals production empties (item 4): trace once in slice 5, with
+  a time limit; if the step is not found, record them as production's error.
+- The value-size rules, `par_tagged_as_units` row modes and the "is a loan" stand-in (item 6): keep
+  all as they are until the text spec, then review.
+- Items 1 and 8 stay deferred, as below.
+
 Still deferred by the owner until after reproduction: commitment and zero-value lines in the
 position set; the findings ledger on dbt.
 
