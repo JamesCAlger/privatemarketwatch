@@ -7,7 +7,6 @@ directory placement cannot establish a passing admission metric.
 from contextvars import ContextVar
 import csv
 from functools import wraps
-import hashlib
 from inspect import signature
 import json
 from pathlib import Path
@@ -76,29 +75,6 @@ def is_retired_path(path,base):
     return path.name.startswith('_') or any(p.startswith('_') for p in path.relative_to(base).parts[:-1])
 
 
-def content_matches(path,recorded):
-    """True when ``path`` holds the content whose sha256 was recorded at admission.
-
-    The recorded hash is of the file's bytes on the machine that admitted it. Git
-    checks a text file out with CRLF line ends on Windows and LF on Linux, so the
-    same admitted content has two byte forms. The file is accepted when the recorded
-    hash equals its bytes as stored, or with every CRLF read as LF, or with every
-    line end written as CRLF (so a file with mixed line ends also matches). Nothing
-    else is tolerated: any other byte (a digit, a space, a blank line, a CR that is
-    not part of a line end, a byte-order mark) changes all three hashes. Admitted inputs
-    are JSON, where a raw line end can only sit between tokens, never inside a
-    value, so the forms always parse to the same data. Other suffixes keep the
-    exact byte comparison.
-    """
-    if not recorded: return False
-    raw=Path(path).read_bytes()
-    if hashlib.sha256(raw).hexdigest()==recorded: return True
-    if Path(path).suffix.lower()!='.json': return False
-    unix=raw.replace(b'\r\n',b'\n')
-    return recorded in (hashlib.sha256(unix).hexdigest(),
-        hashlib.sha256(unix.replace(b'\n',b'\r\n')).hexdigest())
-
-
 def admitted(path,base,*,allow_legacy=True):
     path,base=Path(path),Path(base)
     from pipeline.rule_promotion import assert_ready
@@ -114,12 +90,12 @@ def admitted(path,base,*,allow_legacy=True):
     if data.get('format_version') not in (1,2): raise ValueError('Unsupported rule admission manifest')
     entry=data.get('entries',{}).get(path.relative_to(base).as_posix(),{})
     if data['format_version']==2 and entry.get('admission_status')=='legacy_unverified':
-        if not content_matches(path,entry.get('sha256')):
+        if entry.get('sha256')!=sha(path):
             record(path,'legacy_unverified',False,'Legacy rule changed after inventory')
             raise ValueError('Legacy rule changed after admission inventory: '+str(path))
         record(path,'legacy_unverified',allow_legacy,'Inventoried legacy input; original approval remains unavailable')
         return allow_legacy
-    accepted=entry.get('admission_status')=='promoted' and content_matches(path,entry.get('sha256')) and bool(entry.get('evidence'))
+    accepted=entry.get('admission_status')=='promoted' and entry.get('sha256')==sha(path) and bool(entry.get('evidence'))
     if entry.get('evidence_sha256') is not None:
         accepted=accepted and entry['evidence_sha256']==digest(entry.get('evidence'))
         accepted=accepted and entry.get('evidence',{}).get('gate',{}).get('verdict')=='PASS'
