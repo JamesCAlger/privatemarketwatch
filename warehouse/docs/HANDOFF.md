@@ -468,9 +468,9 @@ PASS=534 WARN=46 ERROR=0; 144 Python tests; CI fixture passes locally.
 Owner answers, 2026-11-23:
 
 1. Push: done, with `docs/agent_changelog.md` committed whole.
-2. The 18 slice 3 rulings: the owner CONFIRMED 17 (2026-11-23, "approve on all the others"). The
-   tie-break (a filing-named rule beats a feature-named one at equal priority) is NOT confirmed: the
-   owner asked for an example (given: HPS 2026-03-31, Radwell Parent, LLC 1) and had not answered.
+2. The 18 slice 3 rulings: the owner CONFIRMED all 18 (2026-11-23), the tie-break included (a
+   filing-named rule beats a feature-named one at equal priority; example shown: HPS 2026-03-31,
+   Radwell Parent, LLC 1).
 3. The 166 unit-count principals: empty them, as production does (D17 in `intermediate_spine.md`).
    NOT built. No label or term-fact feature separates them (measured); production separates them by
    its text class. They stay `owner_review` in `cmp_amount` until the text spec supplies the class.
