@@ -65,6 +65,11 @@ vars:
   cmp_amount_tolerance:
     dollar: 1
     measured: 0.000001
+  # Comparison of rates with production (cmp_rate, slice 4 Task 4): interest rate, cash leg, PIK rate and spread agree
+  # when they differ by no more than this many percentage points. Both sides multiply one tagged fraction by 100; the
+  # largest difference on agreeing rows is float rounding (3.6e-15); the smallest real difference measured is 0.12
+  # (scripts/slice4/q_t4_tolerance.sql). Same value as rate_legs_tolerance.
+  cmp_rate_tolerance: 1.0e-9
   # Baseline ceilings. Each baseline test warns while its count is above zero and FAILS the build if
   # the count rises above the ceiling. A count may fall freely. Raising a ceiling is a deliberate edit.
   baseline_max:
@@ -261,6 +266,30 @@ vars:
     published:
       principal_amount_usd:
         "not_yet_explained|correction_loaded_value_not_matched": 2
+  # Comparison of rates with production (cmp_rate, slice 4 Task 4), one ceiling per basis, field and cause
+  # (tests/generic/baseline_cmp_rate_cause.sql), measured 2026-11-23 (docs/baseline_rates_2026-11-23.md). The two bases
+  # are never summed. not_yet_explained 0 everywhere. new_wrong 3 (interest_rate and rate_kind):
+  # coupon_read_on_printed_floating_margin, the Task 3 coupon ruling on two loans whose printed rate is a margin over
+  # a benchmark; listed for the controller, not patched. owner_review: scale_decided_by_size_in_
+  # production (interest_rate 668, cash 2, pik 16, spread 68, kind 668; unpublished 1 each on rate, cash, pik, kind)
+  # and two_values_filed_production_keeps_first (1 on rate, cash, kind). needs_store_not_loaded: the details in the
+  # model header (printed text, identifier text, loan class, the two unbuilt procedures). maturity_date 43,997 published
+  # are dates production read from the printed row.
+  cmp_rate_max:
+    published:
+      interest_rate: {old_wrong: 0, new_wrong: 3, convention: 0, needs_correction: 52, needs_store_not_loaded: 1114, production_stale: 0, owner_review: 669, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 132, needs_store_not_loaded: 177, production_stale: 0, owner_review: 3, not_yet_explained: 0}
+      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 158, needs_store_not_loaded: 55, production_stale: 0, owner_review: 16, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 123, needs_store_not_loaded: 1202, production_stale: 0, owner_review: 68, not_yet_explained: 0}
+      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 9, needs_store_not_loaded: 43997, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 3, convention: 0, needs_correction: 44, needs_store_not_loaded: 1115, production_stale: 0, owner_review: 669, not_yet_explained: 0}
+    unpublished:
+      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 8, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 8, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 142, needs_store_not_loaded: 23, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 8082, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 8, production_stale: 0, owner_review: 1, not_yet_explained: 0}
   # The fund-quarters cmp_excluded_quarter may leave out, as cik|report_date|accessions. The count ceiling above does
   # not see a swap; tests/cmp_excluded_quarter_set.sql fails on any quarter not listed here. The list may shrink freely.
   # Concept-rule releases the guard tests/baseline_concept_rule_release_not_in_production.sql leaves out, as
