@@ -10,7 +10,10 @@
 -- owner's ruling of 2026-11-04 (check A04 in pipeline/oracle_checks.py): the total with cash rows
 -- misses the filed line, the total without them ties, and the cash rows equal the filed
 -- cash-equivalents figure within 0.5 pct of the investments line. The other half of the ruling, a
--- wrapper that declares the basis, is not read here: none of the five funds in scope declares one.
+-- wrapper that declares the basis, is read from the fund rules (macro
+-- filed_total_excludes_cash_declared; BCRED declares it, owner decision D16, 2026-11-23). This
+-- table is built from production's holdings, which carry no BCRED cash rows, so the declaration
+-- moves no difference here; it moves the sum check of the intermediate layer.
 with published as (
     select
         cik,
@@ -53,7 +56,8 @@ compared as (
 based as (
     select
         *,
-        coalesce(
+        {{ filed_total_excludes_cash_declared('cik', 'report_date') }}
+        or coalesce(
             cash_fair_value <> 0
             and abs(difference_to_filed) > {{ var('reconcile_tolerance') }}
             and abs(difference_to_filed_ex_cash) <= {{ var('reconcile_tolerance') }}

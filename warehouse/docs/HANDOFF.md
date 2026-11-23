@@ -460,25 +460,30 @@ Parked for the opening of the slice 4 plan:
   with the 14 others; they have no ceiling of their own.
 - A tie-break whose only losing rule is undecidable is not checked (0 rows today).
 
-## RESUME HERE (session closed 2026-11-22)
+## RESUME HERE (updated 2026-11-23)
 
-Slice 3 is closed at aa6fcc48; this file's last commit follows it. 12 commits are local, NOT
-pushed. Nothing is running. The owner was given the slice 3 report and the list of 18 rulings
-(ledger: `.superpowers/sdd/2026-11-22-slice3-amounts-plan/progress.md`, every `Ruling:` line) and
-had not answered when the session closed. Do not push and do not start slice 4 without the owner's
-go.
+Slice 3 is closed and pushed (branch `ensemble-fp-experiment`). Nothing is running. Build 2026-11-23:
+PASS=534 WARN=46 ERROR=0; 144 Python tests; CI fixture passes locally.
 
-Questions put to the owner, unanswered:
+Owner answers, 2026-11-23:
 
-1. Push the 12 commits (the only way CI runs on slice 3).
-2. Confirm or overturn the rulings, above all the tie-break (a rule naming a filing outranks one
-   naming a row feature at equal priority; guarded by a ceiling-0 test).
-3. The 166 principals that are unit counts in the samples read: empty them as production does, or
-   keep them.
-4. Refresh the currency rate file (ends 2026-09-11; 129 principals at 2026-09-30 have no dollar
-   value). Needs a download.
-5. `docs/agent_changelog.md`: the slice 3 entry is appended but uncommitted, because the file holds
-   other agents' uncommitted lines. Commit the whole file or leave it.
+1. Push: done, with `docs/agent_changelog.md` committed whole.
+2. The 18 slice 3 rulings were listed for the owner with a recommendation to confirm all. NOT yet
+   answered: ask before relying on them, above all the tie-break.
+3. The 166 unit-count principals: empty them, as production does (D17 in `intermediate_spine.md`).
+   NOT built. No label or term-fact feature separates them (measured); production separates them by
+   its text class. They stay `owner_review` in `cmp_amount` until the text spec supplies the class.
+4. Currency rate file refreshed from FRED: now ends 2026-11-13 (was 2026-09-11). Additive: no
+   earlier rate changed (compared row by row). Principals with no rate fell from 130 to 1 (an Apollo
+   principal tagged KPW). This is production's reference package too: its hash changed, so the next
+   production build converts the 2026-09-30 principals and its release fingerprint moves.
+5. BCRED cash basis (D16): fund rule `filed_total_excludes_cash` in `warehouse/wrappers/0001803498.json`,
+   read by macro `filed_total_excludes_cash_declared` (sum check and `fact_fund_period`). Non-tying
+   fund-quarters fell from 25 to 11 (Ares 4, Blue Owl 1, Apollo 6; three of them are 2026-09-30 with
+   no filed total). The BCRED quarters left the pinned list, so a BCRED quarter that stops tying
+   without cash fails the build. Basis: numbers only; the printed schedules were not read, and why
+   the filed cash-equivalents figure is empty for BCRED was not examined. A declaration cannot see a
+   non-cash row wrongly tagged cash that offsets a missing row.
 
 Still deferred by the owner until after reproduction: commitment and zero-value lines in the
 position set; the findings ledger on dbt.

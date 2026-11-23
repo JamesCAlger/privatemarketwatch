@@ -146,7 +146,9 @@ vars:
     # including feature_missing (a rule that needs a null row feature, spec section 5 rule 2): ceiling 0.
     int_field_normalised_unresolved_principal_amount_values_differ: 1
     int_field_normalised_unresolved_principal_amount_usd_principal_unresolved: 1
-    int_field_normalised_unresolved_principal_amount_usd_no_fx_rate: 130
+    # 1 (2026-11-23): the rate file was refreshed to 2026-11-13, so the 129 principals at 2026-09-30 convert; the one
+    # left is an Apollo principal tagged KPW, a currency the file does not hold.
+    int_field_normalised_unresolved_principal_amount_usd_no_fx_rate: 1
     int_field_normalised_unresolved_other: 0
     # The sum check (tests/baseline_int_field_normalised_sum_not_tied.sql), measured 2026-11-22 (fix round 1): fund-
     # quarters whose published normalised fair value misses the filed total investments on the step 1 basis
@@ -154,7 +156,9 @@ vars:
     # empty, so A04 keeps the published basis), Apollo 6; plus the three 2026-09-30 quarters with no filed total yet.
     # 25 (slice 3 Task 4 fix round 1): the split-bracket fix makes Apollo 2023-12-31 tie (ex cash 14.628m -> 0).
     # Final fix wave F5: the 25 are pinned by key in sum_not_tied_pinned below (tests/int_field_normalised_sum_not_tied_set.sql).
-    int_field_normalised_sum_not_tied: 25
+    # 11 (2026-11-23, owner decision D16): BCRED declares in its wrapper that the filed total leaves cash rows out
+    # (fund rule filed_total_excludes_cash), so its 14 quarters tie on the ex-cash basis and leave the pinned list.
+    int_field_normalised_sum_not_tied: 11
     # Final fix wave F3: tie-breaks (int_field_rule step 2) decided between rules of different effect. Measured 0 of 462
     # tie-broken rows per field (principal, shares). A rule, not a measurement.
     int_field_rule_tie_break_different_effect: 0
@@ -221,20 +225,6 @@ vars:
     - "0001287750|2025-03-31"
     - "0001287750|2025-06-30"
     - "0001287750|2026-09-30"
-    - "0001803498|2022-09-30"
-    - "0001803498|2023-06-30"
-    - "0001803498|2023-09-30"
-    - "0001803498|2023-12-31"
-    - "0001803498|2024-03-31"
-    - "0001803498|2024-06-30"
-    - "0001803498|2024-09-30"
-    - "0001803498|2024-12-31"
-    - "0001803498|2025-03-31"
-    - "0001803498|2025-06-30"
-    - "0001803498|2025-09-30"
-    - "0001803498|2025-12-31"
-    - "0001803498|2026-03-31"
-    - "0001803498|2026-06-30"
     - "0001812554|2026-09-30"
     - "0001837532|2023-09-30"
     - "0001837532|2024-06-30"

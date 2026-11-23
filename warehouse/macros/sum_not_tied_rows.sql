@@ -2,7 +2,8 @@
     normalised fair value against the filed total investments (stg_fund_financials), on the basis step 1 uses
     (fact_fund_period.sql): the published basis (cash rows in), or without the cash rows when the A04 evidence holds
     (owner ruling 2026-11-04): the total with cash misses, the total without cash ties, and the cash rows equal the
-    filed cash equivalents within 0.5 pct of the filed investments. A fund-quarter does not tie when the difference on
+    filed cash equivalents within 0.5 pct of the filed investments; or the fund's wrapper declares it (macro
+    filed_total_excludes_cash_declared, owner decision D16, 2026-11-23). A fund-quarter does not tie when the difference on
     that basis (difference_on_basis) is above var reconcile_tolerance. A published fair value that is not normalised
     counts as missing. Fund-quarters with no filed total are listed too (filed null). Controller ruling, slice 3 Task 3
     fix round 1. Read by tests/baseline_int_field_normalised_sum_not_tied.sql (the count) and
@@ -37,7 +38,8 @@ with published as (
     -- the basis rule of fact_fund_period.sql (step 1), applied to this layer's figures
     select
         *
-        , coalesce(
+        , {{ filed_total_excludes_cash_declared('cik', 'report_date') }}
+          or coalesce(
             cash_fair_value <> 0
             and abs(difference) > {{ var('reconcile_tolerance') }}
             and abs(difference_ex_cash) <= {{ var('reconcile_tolerance') }}

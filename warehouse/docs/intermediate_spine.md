@@ -44,6 +44,13 @@ Added 2026-11-19, during slice 2:
 | D14 | The 13 step 2 rulings in `filed_layer.md` section 7 are confirmed. |
 | D15 | Real positions that carry no term fact (a fund's own JV or fund interest, equity with no units tagged, a zero-value undrawn revolver, an unfunded commitment line) are released by a fund rule per class in that fund's wrapper. The zero-value classes are included to match production; whether they belong is decided after reproduction, with D11. |
 
+Added 2026-11-23, after slice 3:
+
+| # | Decision |
+|---|---|
+| D16 | BCRED's wrapper declares that its filed total investments line leaves the schedule's cash rows out (fund rule `filed_total_excludes_cash`, all quarters). The sum check and `fact_fund_period` compare a declaring fund without its cash rows. Basis: the numbers of all 16 quarters; the printed schedules were not read. |
+| D17 | A principal that is a unit count (the 166 `owner_review` principals of slice 3: 107 on production's equity and fund classes, 59 moved from a share count by `par_tagged_as_units` where production kept shares) is to be empty, as in production. Not built: the test that separates these rows in production is its text class, which this layer does not read until the text spec. Measured 2026-11-23: no label or term-fact feature separates them (every one of the 166 has a term fact; the narrow equity-word test finds 57 of them and also 24 equal rows and the 14 BCRED structured-credit rows). They stay `owner_review` in `cmp_amount` until the text spec supplies the class; then the rule is general ("no principal on an equity or fund class"), not a list of rows. |
+
 Earlier decisions that still apply: BDCs only, five funds first, per-fund build as the unit, Parquet
 and DuckDB, old pipeline keeps running (2026-11-18).
 

@@ -349,6 +349,11 @@
         "Pigments LP"
       ],
       "evidence": "Co-invest and LP equity lines with no units tagged (cost, fair value and percent of net assets only). 11 contexts, 2022-09-30 to 2023-06-30: GSO DL Co-Invest EIS LP and GSO DL CoInvest CI LP units in each quarter (two of them, 2022-09-30, in the Emerald JV schedule), and Pigments LP Int (0001803498-23-000017 c-878, fair value 0). E.g. c-876 'GSO DL Co-Invest EIS LP (EIS Acquisition Holdings, LP) - Class A Common Units | 558 | 2,779 | 0.01': no units printed. Production publishes all 11 (9 published, 2 in the JV schedule). Owner decision D15, 2026-11-19. Slice 2 Task 6."
+    },
+    {
+      "target": "filed_total",
+      "action": "filed_total_excludes_cash",
+      "evidence": "The filed total investments line leaves out the money-market and cash-management rows of the schedule. Measured 2026-11-23 on the build of 2026-11-22, all 16 quarters 2022-09-30 to 2026-06-30: in the 14 quarters with cash rows (1 to 5 rows, 13.8m to 1,183.4m) the published total without them equals the filed line within 2,000 dollars and with them misses it by the cash rows; the other two quarters (2022-12-31, 2023-03-31) have no cash rows and tie. No quarter ties with cash in. The evidence rule (owner ruling 2026-11-04, check A04) cannot confirm this because the financials file holds no filed cash-equivalents figure for the fund. Taken from the numbers; the printed schedules were not read. Owner decision D16, 2026-11-23."
     }
   ]
 }
