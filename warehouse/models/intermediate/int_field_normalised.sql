@@ -30,7 +30,8 @@
 --   normalised  a rule applied (reason applied, or moved_to_principal on shares)
 --   absent      no fact (reason no_fact), only nil facts (nil), or for principal_amount_usd a principal that is absent
 --   unresolved  reason: values_differ / units_differ / fact_without_number (as read, no rule settled it), no_rule,
---               rule_conflict, feature_missing (a top-ranked rule needs a row feature that is null),
+--               rule_conflict, feature_missing (a top-ranked rule needs a row feature that is null), text_not_read (a
+--               top-ranked rule needs printed text no model reads yet, action_field.unread_input),
 --               action_not_built (the action is not built for this field yet), no_fx_rate,
 --               principal_unresolved (principal_amount_usd of an unresolved principal)
 with rule as (
@@ -106,14 +107,14 @@ with rule as (
     select
         *
         , case
-            when resolution in ('rule_conflict', 'feature_missing') then 'unresolved'
+            when resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then 'unresolved'
             when resolution = 'rule' and not is_built then 'unresolved'
             when resolution = 'rule' then 'normalised'
             when read_status = 'absent' or is_nil then 'absent'
             else 'unresolved'
           end as status
         , case
-            when resolution in ('rule_conflict', 'feature_missing') then resolution
+            when resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then resolution
             when resolution = 'rule' and not is_built then 'action_not_built'
             when resolution = 'rule' and action = 'par_tagged_as_units' and field = 'shares' then 'moved_to_principal'
             when resolution = 'rule' then 'applied'
@@ -185,7 +186,7 @@ with rule as (
         , case
             when principal_status = 'absent' then 'absent'
             when principal_status = 'unresolved' then 'unresolved'
-            when resolution in ('rule_conflict', 'feature_missing') then 'unresolved'
+            when resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then 'unresolved'
             when resolution = 'rule' and not is_built then 'unresolved'
             when resolution = 'rule' and action = 'to_usd' and fx_rate is null then 'unresolved'
             when resolution = 'rule' then 'normalised'
@@ -194,7 +195,7 @@ with rule as (
         , case
             when principal_status = 'absent' then principal_reason
             when principal_status = 'unresolved' then 'principal_unresolved'
-            when resolution in ('rule_conflict', 'feature_missing') then resolution
+            when resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then resolution
             when resolution = 'rule' and not is_built then 'action_not_built'
             when resolution = 'rule' and action = 'to_usd' and fx_rate is null then 'no_fx_rate'
             when resolution = 'rule' then 'applied'
@@ -337,7 +338,7 @@ with rule as (
         *
         -- outcome: one label per case, read by the three columns below
         , case
-            when resolution in ('rule_conflict', 'feature_missing') then resolution
+            when resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then resolution
             when resolution = 'rule' and not is_built then 'action_not_built'
             when resolution = 'rule' and action in ('rate_is_all_in', 'rate_is_cash_leg') then
                 case
@@ -430,7 +431,7 @@ with rule as (
         , case r.field when 'pik_rate' then i.pk_filed when 'spread' then
             case when r.action = 'pik_only_is_margin' then i.pk_filed else i.sp_filed end end as value_filed
         , case
-            when r.resolution in ('rule_conflict', 'feature_missing') then 'unresolved'
+            when r.resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then 'unresolved'
             when r.resolution = 'rule' and not r.is_built then 'unresolved'
             when r.resolution = 'rule' and r.action = 'pik_only_is_coupon' then 'absent'
             when r.resolution = 'rule' and r.action = 'pik_only_is_margin' then
@@ -443,15 +444,15 @@ with rule as (
             else 'unresolved'
           end as state
         , case
-            when r.resolution in ('rule_conflict', 'feature_missing') then r.resolution
+            when r.resolution in ('rule_conflict', 'feature_missing', 'text_not_read') then r.resolution
             when r.resolution = 'rule' and not r.is_built then 'action_not_built'
             when r.resolution = 'rule' and r.action = 'pik_only_is_coupon' then 'pik_is_coupon'
             when r.resolution = 'rule' and r.action = 'pik_only_is_margin' then coalesce(i.pk_why, 'applied')
             when r.resolution = 'rule' and r.action in ('fraction_to_percent', 'as_filed') then
                 coalesce(case r.field when 'pik_rate' then i.pk_why when 'spread' then i.sp_why else i.md_why end,
                          'applied')
-            -- printed_margin_cash_plus_pik is never decided here (int_field_rule: feature_missing); defensive
-            when r.resolution = 'rule' then 'feature_missing'
+            -- an action with no value for this field (printed_margin_cash_plus_pik never wins: text_not_read); defensive
+            when r.resolution = 'rule' then 'action_not_built'
             -- no rule: as read, else no_rule (a number in a unit that is not a ratio)
             when (case r.field when 'pik_rate' then i.pk_state when 'spread' then i.sp_state else i.md_state end)
                 = 'absent' then case r.field when 'pik_rate' then i.pk_why when 'spread' then i.sp_why else i.md_why end

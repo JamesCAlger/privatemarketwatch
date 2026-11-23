@@ -172,8 +172,9 @@ vars:
     # on interest_rate and its cash leg it also counts rows whose PIK rate is such a value. pik_above_rate: a PIK rate above
     # the all-in tag plus 0.01 (production keeps these unresolved too). values_differ: the six Ares rows of Task 2 carried
     # through. rule_conflict 628: the Blue Owl (460) and HPS (168) PIK-only rows, both readings tie (controller ruling,
-    # waits for the text spec). spread feature_missing 540: printed_margin_cash_plus_pik needs the printed total margin
-    # (text): Blue Owl 321, Apollo 219.
+    # waits for the text spec). spread text_not_read 540 (fix round 1, controller ruling; was feature_missing):
+    # printed_margin_cash_plus_pik needs the printed total margin, text no model reads yet (action_field.unread_input):
+    # Blue Owl 321, Apollo 219. feature_missing stays an error class: no declared pair, ceiling 0 under _other.
     int_field_normalised_unresolved_interest_rate_pik_above_rate: 15
     int_field_normalised_unresolved_interest_rate_scale_not_decided: 679
     int_field_normalised_unresolved_interest_rate_values_differ: 1
@@ -185,7 +186,7 @@ vars:
     int_field_normalised_unresolved_pik_rate_scale_not_decided: 20
     int_field_normalised_unresolved_spread_scale_not_decided: 68
     int_field_normalised_unresolved_spread_values_differ: 5
-    int_field_normalised_unresolved_spread_feature_missing: 540
+    int_field_normalised_unresolved_spread_text_not_read: 540
     int_field_normalised_unresolved_spread_rule_conflict: 628
     # Positions whose rate reading is a rule conflict (tests/baseline_int_field_rule_rate_conflict.sql): the 628 above, all
     # published. Rate bound 0 to 40 after conversion: 0 rows per field. Maturity before the report date: 6 Apollo rows,
@@ -286,7 +287,7 @@ vars:
     - "pik_rate|scale_not_decided"
     - "spread|scale_not_decided"
     - "spread|values_differ"
-    - "spread|feature_missing"
+    - "spread|text_not_read"
     - "spread|rule_conflict"
   cmp_excluded_quarters_pinned:
     - "0001287750|2026-09-30|0001628280-26-067383"

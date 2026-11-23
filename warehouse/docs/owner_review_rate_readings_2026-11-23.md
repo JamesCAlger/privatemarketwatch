@@ -100,13 +100,15 @@ Waits for the text spec.
 What production does (`pipeline/bdc_xbrl_html_bridge.py`, `apply_ixbrl_field_status_overlay`, last block): on a loan
 row with a printed reference rate, spread > 0 and PIK > 0, where the printed total margin equals spread + PIK within
 0.011 and differs from the spread alone, the stored spread is spread + PIK (label `basis_spread:cash_plus_pik_margin`);
-`pik_rate` unchanged. Otherwise the spread stays as filed. The printed margin is text, not read here, so the rule is
-never decided: the spread is `unresolved`, `feature_missing` on every row with a spread and a PIK rate.
+`pik_rate` unchanged. Otherwise the spread stays as filed. The printed margin is text that no model reads yet (marked
+in data: `seeds/action_field.csv`, column `unread_input` = `printed_total_margin`), so the rule is never decided: the
+spread is `unresolved`, reason `text_not_read`, on every row with a spread and a PIK rate (controller ruling, fix round
+1; ceiling 540). It is not a missing row feature: `feature_missing` stays an error class with ceiling 0.
 
-| Fund | Rows (spread and PIK both read) |
-|---|---|
-| Blue Owl | 321 (9 to 28 a quarter, 2023-03-31 to 2026-09-30) |
-| Apollo | 219 (2 to 29 a quarter, 2023-03-31 to 2026-09-30) |
+| Fund | Rows (spread and PIK both read) | Per quarter |
+|---|---|---|
+| Blue Owl | 321 | 9, 13, 16, 22, 28, 28, 25, 16, 19, 23, 25, 22, 25, 28, 22 (2023-03-31 to 2026-09-30) |
+| Apollo | 219 | 5, 4, 2, 4, 7, 6, 10, 15, 17, 24, 29, 21, 28, 23, 24 (2023-03-31 to 2026-09-30) |
 
 | Fund | Filing, context | Tagged | Stored |
 |---|---|---|---|
@@ -193,3 +195,12 @@ was extended, matured unpaid or is mis-tagged was not checked.
 4. Values filed above 1 in a ratio unit (section 4): production's size rule, a filer rule per filing, or leave
    unresolved.
 5. The two procedures of section 3.
+6. The 540 spread-with-PIK rows of Blue Owl (321) and Apollo (219) under `printed_margin_cash_plus_pik` (section 2.4,
+   per-quarter counts there): spread unresolved `text_not_read` until the printed total margin is read (text spec), or
+   another reading. Production stores spread + PIK where the printed margin says so and the filed spread otherwise.
+7. `rate_is_cash_leg` with no PIK rate read (no fund of the five declares it; 0 rows): here the all-in rate is left
+   unresolved (`cash_leg_without_pik`). Production (`financial_conventions.py` `prepare`, the plain-tag branch before
+   the fund reading) stores the tag as the all-in rate when the row text names no PIK (`names_pik`), for every fund
+   whatever its reading. Leaving it unresolved is a choice made because the text is not read, not a reproduction.
+   The same branch gives kind all_in to a plain rate tag with no PIK in a fund with no reading; on the five funds that
+   is 0 rows (the only fund with no reading files no rate tag).

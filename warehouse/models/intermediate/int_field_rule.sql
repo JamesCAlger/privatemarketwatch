@@ -63,8 +63,8 @@
 --                    the printed reference rate and coupon type (text, not read here): both pik_only rules of such a fund
 --                    tie on this feature and the row is rule_conflict (controller ruling, slice 4 Task 3).
 --   spread_with_pik  a spread and a PIK rate above zero are read. printed_margin_cash_plus_pik decides from the printed
---                    total margin (pipeline/bdc_xbrl_html_bridge.py), text not read in this slice: the rule can never be
---                    decided here, so it is a candidate whose feature is missing (feature_missing, spec section 5 rule 2)
+--                    total margin (pipeline/bdc_xbrl_html_bridge.py), text no model reads yet (action_field.unread_input):
+--                    the rule is never decided here; resolution text_not_read (fix round 1; not feature_missing)
 --   unit_pure        as for amounts (pik_rate, spread): the fraction_to_percent default
 --   date_read        maturity_date read as a date: the as_filed default
 with read as (
@@ -307,6 +307,7 @@ with read as (
         , r.origin
         , af.field
         , af.applies_to
+        , nullif(trim(cast(af.unread_input as varchar)), '') as unread_input
     from {{ ref('stg_reading_rule') }} r
     join {{ ref('action_field') }} af on af.action = r.action
 )
@@ -324,6 +325,8 @@ with read as (
         , 'global_default' as origin
         , field
         , applies_to
+        -- a global default reads only tagged values
+        , cast(null as varchar) as unread_input
     from {{ ref('field_rule_default') }}
 )
 
@@ -368,10 +371,11 @@ with read as (
                 else false
               end
             when 'sign_differs_from_print' then f.sign_unplaced
-            -- the printed total margin is never read in this slice (text)
-            when 'spread_with_pik' then f.is_spread_with_pik
             else false
           end, false) as is_undecidable
+        -- the action needs an input no model reads yet (action_field.unread_input, printed text): it cannot be
+        -- decided on any row it applies to; not a missing row feature (slice 4 Task 3 fix round 1, controller ruling)
+        , r.unread_input is not null as needs_unread_input
         , r.applies_to
         , f.par_candidate
         , f.unit_kind
@@ -381,6 +385,7 @@ with read as (
         , f.sign_differs
         , f.is_rate_tag
         , f.is_pik_tag_only
+        , f.is_spread_with_pik
         , f.is_date_read
     from field_row f
     join rule_set r
@@ -407,6 +412,7 @@ with read as (
             when 'sign_differs_from_print' then sign_differs
             when 'rate_tag' then is_rate_tag
             when 'pik_tag_only' then is_pik_tag_only
+            when 'spread_with_pik' then is_spread_with_pik
             when 'date_read' then is_date_read
             else false
           end
@@ -418,18 +424,21 @@ with read as (
         , count(*) over (partition by accession, context_id, field) as candidate_count
         , count(*) over (partition by accession, context_id, field, specificity) as same_rank_count
         , bool_or(is_undecidable) over (partition by accession, context_id, field, specificity) as rank_undecidable
+        , bool_or(needs_unread_input) over (partition by accession, context_id, field, specificity) as rank_unread_input
         , rank() over (partition by accession, context_id, field order by specificity desc) as rank_at
     from applicable
 )
 
 , top as (
     -- the winning rule; a conflict when two remain at the top; feature_missing when a top candidate cannot be decided
+    -- for a missing row feature; text_not_read when a top candidate needs an input no model reads yet
     select
         accession
         , context_id
         , field
         , case
             when rank_undecidable then 'feature_missing'
+            when rank_unread_input then 'text_not_read'
             when same_rank_count = 1 then 'rule'
             else 'rule_conflict'
           end as resolution
@@ -456,7 +465,7 @@ with read as (
         -- final fix wave F3: a loser that cannot be decided (a feature it needs is missing, so no scale) is left out
         -- of the comparison, not counted as a different effect; null when no loser can be decided
         , bool_and(l.action = t.action and l.value_scale is not distinct from t.value_scale)
-            filter (where not l.is_undecidable) as tie_break_same_effect
+            filter (where not l.is_undecidable and not l.needs_unread_input) as tie_break_same_effect
     from top t
     join ranked l
         on l.accession = t.accession and l.context_id = t.context_id and l.field = t.field

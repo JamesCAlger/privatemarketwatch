@@ -173,3 +173,10 @@ seeds:
                 values: ['unit_foreign', 'unit_pure', 'two_unit_cost', 'two_unit_cost_principal_absent', 'shares_as_par',
                          'principal_as_units', 'sign_differs_from_print', 'principal_foreign', 'rate_tag',
                          'pik_tag_only', 'spread_with_pik']
+      - name: unread_input
+        description: >
+          Empty, or the name of an input the action needs that no model reads yet (printed text, for example the printed
+          total margin). A rule whose action names one cannot be decided on the rows it applies to: int_field_rule gives
+          those rows resolution text_not_read, and int_field_normalised leaves the field unresolved with reason
+          text_not_read, under a measured ceiling. Slice 4 Task 3 fix round 1 (controller ruling). A missing row feature
+          stays feature_missing, an error class with ceiling 0.

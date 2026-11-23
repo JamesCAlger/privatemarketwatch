@@ -321,7 +321,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['rule', 'no_rule', 'rule_conflict', 'feature_missing']
+                values: ['rule', 'no_rule', 'rule_conflict', 'feature_missing', 'text_not_read']
       - name: value_scale
         description: For par_tagged_as_units, the power of a thousand the share count is multiplied by; null otherwise.
       - name: tie_break_losers
@@ -388,7 +388,7 @@ models:
                          'fact_without_number', 'no_rule', 'rule_conflict', 'feature_missing', 'action_not_built', 'no_fx_rate',
                          'principal_unresolved', 'not_a_date', 'scale_not_decided', 'unit_not_pure', 'legs_do_not_add',
                          'pik_above_rate', 'cash_leg_without_pik', 'no_pik_read', 'pik_only_coupon', 'pik_is_coupon',
-                         'pik_is_margin']
+                         'pik_is_margin', 'text_not_read']
       - name: fx_rate
         description: US dollars per unit of the principal's currency, where to_usd applied.
       - name: fx_rate_date
@@ -420,7 +420,7 @@ models:
       - baseline_normalised_unresolved: {arguments: {field: pik_rate, reason: scale_not_decided}, name: baseline_int_field_normalised_unresolved_pik_rate_scale_not_decided}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: scale_not_decided}, name: baseline_int_field_normalised_unresolved_spread_scale_not_decided}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: values_differ}, name: baseline_int_field_normalised_unresolved_spread_values_differ}
-      - baseline_normalised_unresolved: {arguments: {field: spread, reason: feature_missing}, name: baseline_int_field_normalised_unresolved_spread_feature_missing}
+      - baseline_normalised_unresolved: {arguments: {field: spread, reason: text_not_read}, name: baseline_int_field_normalised_unresolved_spread_text_not_read}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: rule_conflict}, name: baseline_int_field_normalised_unresolved_spread_rule_conflict}
 
   - name: int_rate_legs_check
@@ -2770,7 +2770,8 @@ unit_tests:
   - name: int_field_rule_printed_margin
     description: >
       Slice 4 Task 3. printed_margin_cash_plus_pik (fund 7) matches g1, a row with a spread and a PIK rate, but needs
-      the printed total margin, text not read in this slice: the spread is feature_missing (spec section 5 rule 2). It
+      the printed total margin, text no model reads yet (action_field.unread_input): the spread is text_not_read, not a
+      missing row feature (fix round 1). It
       does NOT touch g2 (a spread and no PIK rate): the default fraction_to_percent applies.
     model: int_field_rule
     given:
@@ -2791,7 +2792,7 @@ unit_tests:
           - {rule_id: fr_margin7, cik: "7", action: printed_margin_cash_plus_pik, parameter: null, sel_accession: null, sel_feature: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:printed_margin_reading"}
       - input: ref('action_field')
         rows:
-          - {action: printed_margin_cash_plus_pik, field: spread, applies_to: spread_with_pik}
+          - {action: printed_margin_cash_plus_pik, field: spread, applies_to: spread_with_pik, unread_input: printed_total_margin}
       - input: ref('field_rule_default')
         rows:
           - {rule_id: gd_pik_rate_pure, field: pik_rate, applies_to: unit_pure, action: fraction_to_percent, parameter: null, priority: 10}
@@ -2810,7 +2811,7 @@ unit_tests:
       rows:
         - {context_id: g1, field: interest_rate, rule_id: null, action: null, resolution: no_rule}
         - {context_id: g1, field: pik_rate, rule_id: gd_pik_rate_pure, action: fraction_to_percent, resolution: rule}
-        - {context_id: g1, field: spread, rule_id: null, action: null, resolution: feature_missing}
+        - {context_id: g1, field: spread, rule_id: null, action: null, resolution: text_not_read}
         - {context_id: g1, field: maturity_date, rule_id: null, action: null, resolution: no_rule}
         - {context_id: g2, field: interest_rate, rule_id: null, action: null, resolution: no_rule}
         - {context_id: g2, field: pik_rate, rule_id: null, action: null, resolution: no_rule}
@@ -2919,7 +2920,8 @@ unit_tests:
       code on this branch), no spread (pik_is_coupon). pik_only_is_margin (p2): the spread is the PIK rate 12.5, the
       rate unresolved (pik_is_margin). p3: the coupon reading on a PIK rate filed as 2.5 in pure: scale_not_decided on
       the rate, its cash leg and the PIK rate. Spread: s1 fraction_to_percent 6.25; s2 7.5 in pure scale_not_decided; s3
-      feature_missing; s4 two values, no rule (values_differ carried); s5 a unit that is not a ratio, no rule (no_rule).
+      text_not_read (fix round 1); s6 feature_missing still passes through as its own reason; s4 two values, no rule
+      (values_differ carried); s5 a unit that is not a ratio, no rule (no_rule).
       Maturity: m1 as_filed into value_date; m2 absent.
     model: int_field_normalised
     given:
@@ -2940,7 +2942,8 @@ unit_tests:
             ('A', 'p3', 'pik_rate', 'gp', 'fraction_to_percent', 'rule'),
             ('A', 's1', 'spread', 'gs', 'fraction_to_percent', 'rule'),
             ('A', 's2', 'spread', 'gs', 'fraction_to_percent', 'rule'),
-            ('A', 's3', 'spread', null, null, 'feature_missing'),
+            ('A', 's3', 'spread', null, null, 'text_not_read'),
+            ('A', 's6', 'spread', null, null, 'feature_missing'),
             ('A', 's4', 'spread', null, null, 'no_rule'),
             ('A', 's5', 'spread', null, null, 'no_rule'),
             ('A', 'm1', 'maturity_date', 'gm', 'as_filed', 'rule'),
@@ -2957,6 +2960,7 @@ unit_tests:
             ('A', 's1', 'spread', 'read', 'one_fact', 0.0625, null, 'pure'),
             ('A', 's2', 'spread', 'read', 'one_fact', 7.5, null, 'pure'),
             ('A', 's3', 'spread', 'read', 'one_fact', 0.0625, null, 'pure'),
+            ('A', 's6', 'spread', 'read', 'one_fact', 0.0625, null, 'pure'),
             ('A', 's4', 'spread', 'unresolved', 'values_differ', null, null, null),
             ('A', 's5', 'spread', 'read', 'one_fact', 0.0625, null, 'other'),
             ('A', 'm1', 'maturity_date', 'read', 'one_fact', null, date '2030-06-30', null),
@@ -2992,7 +2996,8 @@ unit_tests:
         - {context_id: p3, field: pik_rate, value: null, value_date: null, status: unresolved, reason: scale_not_decided, rate_kind: null}
         - {context_id: s1, field: spread, value: 6.25, value_date: null, status: normalised, reason: applied, rate_kind: null}
         - {context_id: s2, field: spread, value: null, value_date: null, status: unresolved, reason: scale_not_decided, rate_kind: null}
-        - {context_id: s3, field: spread, value: null, value_date: null, status: unresolved, reason: feature_missing, rate_kind: null}
+        - {context_id: s3, field: spread, value: null, value_date: null, status: unresolved, reason: text_not_read, rate_kind: null}
+        - {context_id: s6, field: spread, value: null, value_date: null, status: unresolved, reason: feature_missing, rate_kind: null}
         - {context_id: s4, field: spread, value: null, value_date: null, status: unresolved, reason: values_differ, rate_kind: null}
         - {context_id: s5, field: spread, value: null, value_date: null, status: unresolved, reason: no_rule, rate_kind: null}
         - {context_id: m1, field: maturity_date, value: null, value_date: 2030-06-30, status: normalised, reason: applied, rate_kind: null}
