@@ -577,6 +577,24 @@ From `docs/owner_review_rate_readings_2026-11-23.md` section 6 and the plan:
     namespace instead (a model change), or leave it.
 11. Pushing slice 4.
 
+### Owner rulings on the list above (2026-11-23, in session)
+
+Recorded, not yet built unless stated. Item numbers are those of the list above.
+
+| Item | Owner ruling | Work it creates |
+|---|---|---|
+| 1 | Wait for printed text. No fund-level PIK-only rule now | None until the text spec |
+| 2 | Cash leg = all-in rate where no PIK rate is read | Model change, 40,410 rows gain a cash leg; residual risk: a PIK that exists but is not tagged overstates cash |
+| 3 | PIK-only coupon: cash leg 0 | None while item 1 stands |
+| 4 | A rule per filer and filing, with evidence from the printed page. Not production's size rule | Dated filer rules for the 767 values (657 in the Ares 2023-09-30 filing) |
+| 5 | Leave both procedures as named differences until slice 5 | None now |
+| 6 | Wait for the printed margin | None until the text spec |
+| 7 | Leave unresolved (0 rows) | None |
+| 8 | Blue Owl keeps no rate until the later spec route; a computed rate is not a filed one | None |
+| 9 | Leave (0 rows) | None |
+| 10 | Read the unit properly in slice 5, with the unit mapping moved to data | Slice 5 |
+| 11 | Push slice 4 | Done with this commit |
+
 ### Rulings made without the owner (slice 4), with the cost if wrong
 
 From the ledger (`progress.md`). Each was made by the controller.
