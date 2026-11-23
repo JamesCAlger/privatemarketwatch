@@ -71,3 +71,85 @@ def test_failed_custom_output_still_audits_only_the_requested_directory(tmp_path
     audit = pd.read_csv(custom.parent / 'input_admission_audit.csv')
     assert list(audit.path) == [str(leaf)]
     assert (custom.parent / 'spread_unit_audit.csv').exists()
+
+
+# --- content identity across platforms -------------------------------------------------
+# Git checks a text file out with CRLF line ends on Windows and LF on Linux. The hash
+# recorded at admission is of the bytes on the admitting machine, so the gate must accept
+# the other platform's form of the same content, and nothing else.
+
+_WINDOWS=b'{\r\n"rate": 1.25,\r\n"note": "a b"\r\n}\r\n'
+_LINUX=_WINDOWS.replace(b'\r\n',b'\n')
+
+
+def _promoted(tmp_path,recorded_bytes):
+    base=tmp_path/'rules';base.mkdir()
+    leaf=base/'fix.json';leaf.write_bytes(recorded_bytes)
+    admission.register_promotion(base,leaf,evidence={'verdict':'PASS'})
+    return base,leaf
+
+
+@pytest.mark.parametrize('recorded,checked_out',[(_WINDOWS,_LINUX),(_LINUX,_WINDOWS),
+    (_WINDOWS,_WINDOWS),(_LINUX,_LINUX)])
+def test_same_content_is_admitted_under_either_line_ending(tmp_path,recorded,checked_out):
+    base,leaf=_promoted(tmp_path,recorded)
+    leaf.write_bytes(checked_out)
+    assert admission.admitted(leaf,base)
+
+
+@pytest.mark.parametrize('recorded',[_WINDOWS,_LINUX])
+@pytest.mark.parametrize('label,edit',[
+    ('one digit',lambda b:b.replace(b'1.25',b'1.26')),
+    ('space inside a value',lambda b:b.replace(b'a b',b'a  b')),
+    ('trailing space',lambda b:b.replace(b'1.25,',b'1.25, ')),
+    ('blank line added',lambda b:b+(b'\r\n' if b'\r\n' in b else b'\n')),
+    ('last line end removed',lambda b:b.rstrip(b'\r\n')),
+    ('carriage return inside a line',lambda b:b.replace(b'"rate":',b'"rate":\r')),
+    ('byte-order mark',lambda b:b'\xef\xbb\xbf'+b),
+    ('key renamed',lambda b:b.replace(b'"rate": 1.25,',b'"rat": 1.25,')),
+])
+def test_any_other_change_is_still_refused_under_either_line_ending(tmp_path,recorded,label,edit):
+    base,leaf=_promoted(tmp_path,recorded)
+    for form in (recorded,recorded.replace(b'\r\n',b'\n'),
+                 recorded.replace(b'\r\n',b'\n').replace(b'\n',b'\r\n')):
+        changed=edit(form)
+        assert changed!=form,label
+        leaf.write_bytes(changed)
+        with pytest.raises(ValueError,match='no longer matches'):
+            admission.admitted(leaf,base)
+
+
+def test_inventoried_legacy_rule_tolerates_line_endings_but_not_an_edit(tmp_path):
+    base=tmp_path/'rules';base.mkdir()
+    leaf=base/'fix.json';leaf.write_bytes(_WINDOWS)
+    (base/'admission_manifest.json').write_text(json.dumps(dict(format_version=2,entries={
+        'fix.json':dict(admission_status='legacy_unverified',sha256=sha(leaf))})))
+    leaf.write_bytes(_LINUX)
+    assert admission.admitted(leaf,base)
+    leaf.write_bytes(_LINUX.replace(b'1.25',b'1.26'))
+    with pytest.raises(ValueError,match='changed after admission inventory'):
+        admission.admitted(leaf,base)
+
+
+def test_line_ending_tolerance_is_limited_to_json(tmp_path):
+    leaf=tmp_path/'fix.csv';leaf.write_bytes(_WINDOWS)
+    recorded=sha(leaf)
+    assert admission.content_matches(leaf,recorded)
+    leaf.write_bytes(_LINUX)
+    assert not admission.content_matches(leaf,recorded)
+    assert not admission.content_matches(leaf,'')
+    assert not admission.content_matches(leaf,None)
+
+
+def test_tracked_fx_quotes_are_admitted_on_this_platform():
+    """The checked-in FX package must pass its own manifest on Windows and on Linux CI."""
+    from pipeline import config
+    package=config.PROJECT_ROOT/'data'/'reference'/'monetary_conversion'
+    assert admission.admitted(package/'quotes.json',package,allow_legacy=False)
+
+
+def test_mixed_line_endings_count_as_the_same_content(tmp_path):
+    """A checkout that leaves some lines CRLF and some LF is still only a line-ending change."""
+    base,leaf=_promoted(tmp_path,_WINDOWS)
+    leaf.write_bytes(_WINDOWS.replace(b'1.25,\r\n',b'1.25,\n'))
+    assert admission.admitted(leaf,base)

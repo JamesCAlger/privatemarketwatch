@@ -1,3 +1,0 @@
-# The rule-admission manifest records the hash of this file as checked out on Windows (CRLF).
-# Check it out with CRLF everywhere so the hash is the same on Linux CI. See pipeline/rule_admission.py.
-data/reference/monetary_conversion/quotes.json text eol=crlf
