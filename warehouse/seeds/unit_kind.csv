@@ -1,0 +1,10 @@
+unit_pattern,unit_kind,note
+iso4217:USD,usd,"The US dollar."
+iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z]),foreign,"Any other ISO 4217 code: three capital letters, written so that iso4217:USD does not match (RE2 has no look-ahead, and a unit matching two rows is an error, tests/unit_kind_one_row_per_unit.sql)."
+shares,shares,"A count of shares or units, written without a prefix (the five funds' filings)."
+xbrli:shares,shares,"The same unit written with the xbrli prefix. No filing of the five funds writes it (slice 5 owner decision 6)."
+pure,pure,"A ratio, written without a prefix (the five funds' filings)."
+xbrli:pure,pure,"The same unit written with the xbrli prefix. No filing of the five funds writes it; the CI fixture's c-8 does."
+utr:Rate,pure,"The unit type registry's rate unit: a ratio (controller ruling, slice 4 Task 3)."
+iso4217:USD/shares,other,"Dollars per share (net asset value per share and similar). Listed on purpose: no amount or rate field reads it."
+utr:Q,other,"The unit type registry's quarter (a duration count). Listed on purpose: no amount or rate field reads it."

@@ -25,10 +25,12 @@
 -- Spec section 5 rule 2, a missing row feature is an error, never "no match": where a rule's other tests let a row
 -- through but a feature it needs is null (the label for the equity-word tests, the read cost for a band, a printed
 -- placement for the sign test), the rule counts as a candidate it cannot decide. If such a candidate is among the
--- top-ranked, the field gets resolution feature_missing and no rule.
+-- top-ranked, the field gets resolution feature_missing and no rule. Then (slice 5 Task 1): two or more top rules that
+-- mix one needing unread text with one that does not are rule_conflict; top rules that all need unread text are
+-- text_not_read (see the top CTE).
 --
--- applies_to, the rows each kind of rule can act on (unit kind is read from the unit as filed, macro unit_kind:
--- iso4217:USD is usd, another iso4217 code is foreign, shares, pure or utr:Rate is pure, anything else other):
+-- applies_to, the rows each kind of rule can act on (unit kind is read from the unit as filed, macro unit_kind over
+-- seeds/unit_kind.csv: usd, foreign, shares, pure, or other):
 --   unit_usd / unit_foreign / unit_shares / unit_pure  the field was read with a number in that unit kind
 --   two_unit_cost                    cost unresolved because it is tagged once in USD and once in another currency
 --                                    with two numbers (macro two_unit_cost_facts)
@@ -427,19 +429,26 @@ with read as (
         , count(*) over (partition by accession, context_id, field, specificity) as same_rank_count
         , bool_or(is_undecidable) over (partition by accession, context_id, field, specificity) as rank_undecidable
         , bool_or(needs_unread_input) over (partition by accession, context_id, field, specificity) as rank_unread_input
+        , bool_and(needs_unread_input) over (partition by accession, context_id, field, specificity)
+            as rank_all_unread_input
         , rank() over (partition by accession, context_id, field order by specificity desc) as rank_at
     from applicable
 )
 
 , top as (
-    -- the winning rule; a conflict when two remain at the top; feature_missing when a top candidate cannot be decided
-    -- for a missing row feature; text_not_read when a top candidate needs an input no model reads yet
+    -- the winning rule, in this order (slice 5 Task 1, item c): feature_missing when a top candidate cannot be decided
+    -- for a missing row feature; a conflict when two or more remain at the top and they mix a rule that needs an input
+    -- no model reads yet with one that does not (reading the text would not settle which rule applies); text_not_read
+    -- when every top candidate needs such an input; the rule when one remains; else a conflict. Before slice 5 the
+    -- unread input was checked before the tie, so a mixed tie read text_not_read (measured 0 such rows on the five
+    -- funds, scripts/slice5/q_t1_mixed_ties.sql).
     select
         accession
         , context_id
         , field
         , case
             when rank_undecidable then 'feature_missing'
+            when same_rank_count > 1 and rank_unread_input and not rank_all_unread_input then 'rule_conflict'
             when rank_unread_input then 'text_not_read'
             when same_rank_count = 1 then 'rule'
             else 'rule_conflict'

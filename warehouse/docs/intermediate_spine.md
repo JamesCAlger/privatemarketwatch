@@ -111,7 +111,12 @@ Rules of use:
    production's `par_scale` gives the listed filing precedence). Two rules still equal after that
    are an error: no rule is chosen and the field is unresolved (`rule_conflict`). Controller ruling
    in slice 3 Task 3, not yet confirmed by the owner; on today's data it decides 462 HPS rows per
-   field (principal, shares), and the beaten rule gives the same result on all of them.
+   field (principal, shares), and the beaten rule gives the same result on all of them. At the top
+   rank (slice 5 Task 1): a missing row feature first (`feature_missing`, rule 2); then two or more
+   top rules that mix one needing printed text no model reads yet (`action_field.unread_input`) with
+   one that does not are `rule_conflict` (reading the text would not settle which applies); top rules
+   that all need such text are `text_not_read`. Before slice 5 a mixed tie read `text_not_read`; 0
+   rows of the five funds were mixed.
 2. A missing row feature is an error, never "no match".
 3. A rule is never edited. It is ended (`valid_to`) and a new one written.
 4. Existing wrapper declarations carry no dates. They load as `assumed_all_quarters`.
@@ -129,7 +134,7 @@ All under `warehouse/models/intermediate/`. One decision each.
 | `int_filing_selected` | fund, report date | Which filing speaks for the quarter |
 | `int_source_row` | accession, context | The role of every context, the rule used, the reason |
 | `int_field_read` | accession, context, field | The filed value and its source, unchanged |
-| `int_field_normalised` | same | The canonical value and the transform applied |
+| `int_field_normalised` | same | The canonical value and the transform applied. A view since slice 5 Task 1: the union of `int_amount_normalised` (amount fields) and `int_rate_normalised` (rate fields; the reading is macro `rate_reading`) |
 | `int_field_corrected` | same | The value after corrections; the filed value stays beside it |
 | `int_observation` | accession, context | One wide row per position, with ids, `is_published`, `is_cash`, scope |
 | `int_reading_finding` | finding | Every unresolved row or field and every failed check |
@@ -224,13 +229,13 @@ reads yet: every row it would decide is unresolved, reason `text_not_read`, unde
 
 | Action | Field | Effect as built |
 |---|---|---|
-| `fraction_to_percent` | PIK rate, spread (global default, ratio unit: `pure` or `utr:Rate`) | Times 100. A value filed above 1 is not rescaled by its size: unresolved `scale_not_decided` (controller ruling), unless a scale rule keeps it (next row) |
+| `fraction_to_percent` | PIK rate, spread (global default, ratio unit: unit kind `pure` in `seeds/unit_kind.csv`, which lists `pure`, `xbrli:pure` and `utr:Rate`) | Times 100. A value filed above 1 is not rescaled by its size: unresolved `scale_not_decided` (controller ruling), unless a scale rule keeps it (next row) |
 | `ratio_value_is_percent` | the rate tag, cash-pay tag, PIK rate or spread as read (D19) | A number filed above 1 in a ratio unit is already a percent: kept as filed. Filer rule per filing and field; decided per row where the print agrees (`int_rate_scale`). A PIK rate or spread so kept names this rule; the all-in rate and cash leg keep their reading's rule and list it in `scale_rule_ids` |
 | `rate_is_all_in` | all-in rate, cash leg, kind | All-in = rate tag times 100, kind `all_in`; cash = all-in less PIK where a PIK rate is read, else cash = all-in (`cash_equals_all_in`, D18; production leaves it empty); PIK above the rate plus 0.01: both unresolved `pik_above_rate`. Filer rule |
 | `rate_is_cash_leg` | all-in rate, cash leg, kind | Cash = rate tag times 100, kind `cash`; all-in = cash plus PIK where a PIK rate is read, else unresolved `cash_leg_without_pik`. Filer rule; no fund of the five declares it |
 | `pik_only_is_coupon` | all-in rate, spread (row with only a PIK tag) | Built (all-in = PIK) but switched off: `unread_input` printed rate type and loan class (controller ruling 2026-11-23, after it gave 841 wrong rates). Rows are `text_not_read`; the PIK rate is still read. Filer rule |
 | `pik_only_is_margin` | all-in rate, spread (row with only a PIK tag) | Built (spread = PIK, rate unresolved) but switched off the same way. Filer rule |
-| `printed_margin_cash_plus_pik` | spread (row with a spread and a PIK rate) | Not built: `unread_input` printed total margin; rows are `text_not_read`. Filer rule |
+| `printed_margin_cash_plus_pik` | spread (row with a spread and a PIK rate) | Not built: `unread_input` printed total margin; rows are `text_not_read`. `seeds/reading_action.csv` labels it `text` since slice 5 Task 1 (it said 4); the label moved no row. Filer rule |
 | `as_filed` | maturity date | The filed ISO date. Global default |
 
 A row with both rate tags keeps both where they agree with the PIK rate within 1e-9, else both are

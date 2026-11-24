@@ -346,7 +346,9 @@ models:
       value_filed beside it, the rule, a status (normalised, absent, unresolved) and a reason. principal_amount stays
       in its filed currency (currency column); principal_amount_usd is in dollars, with fx_rate and fx_rate_date where
       to_usd applied. Key in tests/int_field_normalised_key_unique.sql; every normalised value names a rule
-      (tests/int_field_normalised_names_rule.sql). Unresolved fields have one baseline per field and reason.
+      (tests/int_field_normalised_names_rule.sql). Unresolved fields have one baseline per field and reason. A view
+      since slice 5 Task 1: the union of int_amount_normalised and int_rate_normalised (split out unchanged, proved by a
+      row-for-row snapshot diff); every test of the field values stays here.
     columns:
       - name: accession
         data_tests:
@@ -429,6 +431,33 @@ models:
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: values_differ}, name: baseline_int_field_normalised_unresolved_spread_values_differ}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: text_not_read}, name: baseline_int_field_normalised_unresolved_spread_text_not_read}
       - baseline_normalised_unresolved: {arguments: {field: spread, reason: rule_conflict}, name: baseline_int_field_normalised_unresolved_spread_rule_conflict}
+
+  - name: int_amount_normalised
+    description: >
+      Slice 5 Task 1: the amount half of int_field_normalised (fair_value, cost, principal_amount, principal_amount_usd,
+      shares, pct_of_net_assets), in its columns; the rate columns are null. The tests of the values are on the union
+      view int_field_normalised.
+    columns:
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['fair_value', 'cost', 'principal_amount', 'principal_amount_usd', 'shares', 'pct_of_net_assets']
+
+  - name: int_rate_normalised
+    description: >
+      Slice 5 Task 1: the rate half of int_field_normalised (interest_rate, interest_rate_cash, pik_rate, spread,
+      maturity_date), in its columns; currency and the FX columns are null. It prepares one row of inputs per position
+      and calls macro rate_reading (macros/rate_reading.sql), which a later task calls again on corrected inputs. The
+      tests of the values are on the union view int_field_normalised.
+    columns:
+      - name: field
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['interest_rate', 'interest_rate_cash', 'pik_rate', 'spread', 'maturity_date']
 
   - name: int_rate_legs_check
     description: >
@@ -514,8 +543,8 @@ models:
       - name: is_commitment_line
         description: >
           A position whose only term fact is a filer concept read through a fund rule concept_is_term_fact, not an
-          ownership percent, with no cost fact. A heuristic: true on many rows that are not repeated values (2,271 Blue
-          Owl rows); is_repeated_commitment_value is the narrower flag.
+          ownership percent, with no cost fact. A heuristic: true on many rows that are not repeated values (2,271 rows of
+          one fund); is_repeated_commitment_value is the narrower flag.
         data_tests:
           - not_null
       - name: twin_count
@@ -1903,6 +1932,13 @@ unit_tests:
       that tags the percent itself); a share of net assets in another unit (q3) is NOT touched.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         rows:
           - {accession: A, context_id: u1, field: fair_value, cik: "1", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 100, unit: "iso4217:USD", is_nil: false, fact_id: x1}
@@ -1991,6 +2027,13 @@ unit_tests:
       (count 0.6 of cost) takes it, v2 (0.4 of cost) is NOT touched.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         format: sql
         rows: |
@@ -2100,6 +2143,13 @@ unit_tests:
       filing (it carries a maturity, so it reads as debt) and e3 in another filing of the same fund.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         rows:
           - {accession: U, context_id: e1, field: principal_amount, cik: "5", report_date: 2026-03-31, status: read, reason: one_fact, value_filed: 100000, unit: "iso4217:USD", is_nil: false, fact_id: y1}
@@ -2157,6 +2207,13 @@ unit_tests:
       ")" cell after a number with no opening bracket; s7, an opening bracket whose ")" is not in the next cell.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         rows:
           - {accession: K, context_id: c1, field: cost, cik: "6", report_date: 2026-03-31, status: unresolved, reason: values_differ, value_filed: null, unit: null, is_nil: false, fact_id: null}
@@ -2268,7 +2325,7 @@ unit_tests:
       absent field and an unresolved read each give their status and reason. Fix round 1: fraction_to_percent is built
       for share of net assets only (q1 0.01 becomes 1.0); named on shares it is not built (q2, NOT touched,
       action_not_built); feature_missing from the rule model gives unresolved feature_missing (m1).
-    model: int_field_normalised
+    model: int_amount_normalised
     given:
       - input: ref('int_field_rule')
         format: sql
@@ -2352,10 +2409,6 @@ unit_tests:
           - {currency: EUR, rate_date: 2026-03-27, usd_per_unit: 1.25}
           - {currency: EUR, rate_date: 2026-04-01, usd_per_unit: 9.0}
           - {currency: GBP, rate_date: 2026-03-20, usd_per_unit: 1.3}
-      - input: ref('int_rate_scale')
-        rows: []
-      - input: ref('int_rate_tag_cell')
-        rows: []
     expect:
       rows:
         - {context_id: a1, field: fair_value, value: 100.0, currency: null, status: normalised, reason: applied, fx_rate: null, fx_rate_date: null}
@@ -2395,6 +2448,13 @@ unit_tests:
       tie_break_same_effect is null, not false.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         rows:
           - {accession: W, context_id: t1, field: principal_amount, cik: "4", report_date: 2026-03-31, status: absent, reason: no_fact, value_filed: null, unit: null, is_nil: false, fact_id: null}
@@ -3106,6 +3166,13 @@ unit_tests:
       a1's maturity date; an absent maturity has no rule.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         format: sql
         rows: |
@@ -3185,11 +3252,19 @@ unit_tests:
       does NOT touch d2 (a rate tag beside the PIK tag: still read under fund 4 rate_is_all_in) or d3 (a spread beside
       it: production reads the PIK there as
       part of a floating coupon). Fund 5 declares both readings at the same priority on the same feature: e1 is
-      text_not_read on interest_rate and spread (the unread input is resolved before a conflict), and its PIK rate
+      text_not_read on interest_rate and spread (both top rules need the unread input, so no conflict; a mixed tie is a
+      conflict since slice 5 Task 1, int_field_rule_tie_break_unread_mix), and its PIK rate
       still takes the default. Fund 6:
       pik_only_is_margin matches f1 -> text_not_read. The PIK rate itself always takes fraction_to_percent.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         format: sql
         rows: |
@@ -3265,6 +3340,13 @@ unit_tests:
       does NOT touch g2 (a spread and no PIK rate): the default fraction_to_percent applies.
     model: int_field_rule
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         format: sql
         rows: |
@@ -3308,6 +3390,74 @@ unit_tests:
         - {context_id: g2, field: spread, rule_id: gd_spread_pure, action: fraction_to_percent, resolution: rule}
         - {context_id: g2, field: maturity_date, rule_id: null, action: null, resolution: no_rule}
 
+  - name: int_field_rule_tie_break_unread_mix
+    description: >
+      Slice 5 Task 1, item c: the order of the top-rank decision. h1 (fund 8): a spread and a PIK rate; two fund rules
+      on spread tie at priority 20, printed_margin_cash_plus_pik (needs the printed total margin, unread) and a
+      decidable one (fraction_to_percent, named here as a fund rule for the test only). Reading the text would not
+      settle which rule applies, so the spread is rule_conflict (before slice 5 it read text_not_read). i1 (fund 9): a
+      PIK-only row where both top rules need unread text (pik_only_is_coupon and pik_only_is_margin at priority 30):
+      text_not_read on interest_rate and spread, no conflict. The PIK rates take the default.
+    model: int_field_rule
+    given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
+      - input: ref('int_field_read')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, field, cik, date '2026-03-31' as report_date, status,
+                 'one_fact' as reason, value_filed, null::date as value_date, unit, false as is_nil, 'x' as fact_id
+          from (values
+            ('H', 'h1', 'spread', '8', 'read', 0.05, 'pure'),
+            ('H', 'h1', 'pik_rate', '8', 'read', 0.02, 'pure'),
+            ('I', 'i1', 'pik_rate', '9', 'read', 0.07, 'pure')
+          ) t(acc, ctx, field, cik, status, value_filed, unit)
+      - input: ref('int_context_feature')
+        rows: []
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: fr_margin8, cik: "8", action: printed_margin_cash_plus_pik, parameter: null, sel_accession: null, sel_feature: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:printed_margin_reading"}
+          - {rule_id: fr_pct8, cik: "8", action: fraction_to_percent, parameter: null, sel_accession: null, sel_feature: null, valid_from: null, valid_to: null, priority: 20, origin: "wrapper:reading_rules"}
+          - {rule_id: fr_coupon9, cik: "9", action: pik_only_is_coupon, parameter: null, sel_accession: null, sel_feature: pik_tag_only, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:pik_only_tag_reading"}
+          - {rule_id: fr_margin9, cik: "9", action: pik_only_is_margin, parameter: null, sel_accession: null, sel_feature: pik_tag_only, valid_from: null, valid_to: null, priority: 30, origin: "wrapper:pik_only_tag_reading"}
+      - input: ref('action_field')
+        rows:
+          - {action: printed_margin_cash_plus_pik, field: spread, applies_to: spread_with_pik, unread_input: printed_total_margin}
+          - {action: fraction_to_percent, field: spread, applies_to: unit_pure, unread_input: null}
+          - {action: pik_only_is_coupon, field: interest_rate, applies_to: pik_tag_only, unread_input: printed_rate_type_and_loan_class}
+          - {action: pik_only_is_coupon, field: spread, applies_to: pik_tag_only, unread_input: printed_rate_type_and_loan_class}
+          - {action: pik_only_is_margin, field: interest_rate, applies_to: pik_tag_only, unread_input: printed_rate_type_and_loan_class}
+          - {action: pik_only_is_margin, field: spread, applies_to: pik_tag_only, unread_input: printed_rate_type_and_loan_class}
+      - input: ref('field_rule_default')
+        rows:
+          - {rule_id: gd_pik_rate_pure, field: pik_rate, applies_to: unit_pure, action: fraction_to_percent, parameter: null, priority: 10}
+          - {rule_id: gd_spread_pure, field: spread, applies_to: unit_pure, action: fraction_to_percent, parameter: null, priority: 10}
+      - input: ref('stg_filed_fact')
+        rows: []
+      - input: ref('concept_map')
+        rows: []
+      - input: ref('stg_filed_unit')
+        rows: []
+      - input: ref('stg_filed_fact_placement')
+        rows: []
+      - input: ref('stg_filed_document_row')
+        rows: []
+    expect:
+      rows:
+        - {context_id: h1, field: interest_rate, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: h1, field: pik_rate, rule_id: gd_pik_rate_pure, action: fraction_to_percent, resolution: rule}
+        - {context_id: h1, field: spread, rule_id: null, action: null, resolution: rule_conflict}
+        - {context_id: h1, field: maturity_date, rule_id: null, action: null, resolution: no_rule}
+        - {context_id: i1, field: interest_rate, rule_id: null, action: null, resolution: text_not_read}
+        - {context_id: i1, field: pik_rate, rule_id: gd_pik_rate_pure, action: fraction_to_percent, resolution: rule}
+        - {context_id: i1, field: spread, rule_id: null, action: null, resolution: text_not_read}
+        - {context_id: i1, field: maturity_date, rule_id: null, action: null, resolution: no_rule}
+
   - name: int_field_normalised_rate_legs
     description: >
       Slice 4 Task 3. The interest_rate reading and its cash leg (binary fractions, so the percents are exact).
@@ -3317,8 +3467,15 @@ unit_tests:
       (all-in 12.5, cash 6.25); n7 do not (legs_do_not_add). n8 a cash-pay tag only under rate_is_all_in is the cash
       leg (kind cash). n9 a rate filed as 9.5 in pure: scale_not_decided, not rescaled. n10 a rate tag with no reading:
       no_rule. n11 a rule conflict. n12 no rate at all: absent, kind unresolved.
-    model: int_field_normalised
+    model: int_rate_normalised
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_rule')
         format: sql
         rows: |
@@ -3373,14 +3530,6 @@ unit_tests:
         rows:
           - {action: rate_is_all_in, built_in_slice: "4"}
           - {action: rate_is_cash_leg, built_in_slice: "4"}
-      - input: ref('concept_map')
-        rows: []
-      - input: ref('stg_filed_fact')
-        rows: []
-      - input: ref('stg_filed_unit')
-        rows: []
-      - input: ref('stg_fx_rate')
-        rows: []
       - input: ref('int_rate_scale')
         rows:
           - {accession: A, context_id: n13, field: interest_rate_tag, outcome: kept_as_percent, scale_rule_id: sr}
@@ -3434,8 +3583,15 @@ unit_tests:
       here on hand-made rule rows, because clearing unread_input (text spec) switches it back on. p4 is what a build
       gives now: resolution text_not_read on the rate and spread rows of a PIK-only row -> rate, cash leg and spread
       unresolved text_not_read, no value; the PIK rate is still read and normalised (12.5).
-    model: int_field_normalised
+    model: int_rate_normalised
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_rule')
         format: sql
         rows: |
@@ -3493,14 +3649,6 @@ unit_tests:
           - {action: fraction_to_percent, built_in_slice: "4", built_early_for_field: pct_of_net_assets}
           - {action: pik_only_is_coupon, built_in_slice: "4"}
           - {action: pik_only_is_margin, built_in_slice: "4"}
-      - input: ref('concept_map')
-        rows: []
-      - input: ref('stg_filed_fact')
-        rows: []
-      - input: ref('stg_filed_unit')
-        rows: []
-      - input: ref('stg_fx_rate')
-        rows: []
       - input: ref('int_rate_scale')
         rows:
           - {accession: A, context_id: s7, field: spread, outcome: kept_as_percent, scale_rule_id: sr}
@@ -3548,6 +3696,13 @@ unit_tests:
       tests/rate_scale_rule_selectors.sql) on k7 printed 'S+500' -> NOT kept: basis points only count on a spread.
     model: int_rate_scale
     given:
+      - input: ref('unit_kind')
+        rows:
+          - {unit_pattern: "iso4217:USD", unit_kind: usd}
+          - {unit_pattern: "iso4217:([A-TV-Z][A-Z]{2}|U[A-RT-Z][A-Z]|US[A-CE-Z])", unit_kind: foreign}
+          - {unit_pattern: shares, unit_kind: shares}
+          - {unit_pattern: pure, unit_kind: pure}
+          - {unit_pattern: "utr:Rate", unit_kind: pure}
       - input: ref('int_field_read')
         format: sql
         rows: |

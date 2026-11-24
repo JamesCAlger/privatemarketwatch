@@ -54,7 +54,9 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   `field_rule_default` and `action_field`, the view `stg_fx_rate` (over the fixture's rate file), and
   the tables `int_field_read`, `int_field_rule` and `int_field_normalised`. `cmp_amount` is left out,
   as `cmp_row_set` is: it reads production's holdings; `cmp_rate` likewise (slice 4). Last local run
-  (rate rulings fix round 1, 2026-11-23): `PASS=334 WARN=5 ERROR=0 TOTAL=339`; the new models `int_rate_scale` and
+  (slice 5 Task 1, 2026-11-24): `PASS=348 WARN=5 ERROR=0 TOTAL=353` (rate rulings fix round 1: 339; slice 5 Task 1 adds
+  the seed `unit_kind` and its tests, the two `unit_kind_*` tests, `int_amount_normalised` and `int_rate_normalised` with
+  their field tests; `int_field_normalised` is now a view over them); the models `int_rate_scale` and
   `int_rate_tag_cell` and their tests are selected as `int_*` (slice 4 Task 5: 318). The 5 warnings are the generic unresolved baselines on the fixture's
   deliberate unresolved rate rows (see below). Slice 3 ended at 281.
 - Step 6: `PASS=2` (the two empty comparison models).
@@ -67,7 +69,8 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   against the hash the loader recorded in step 2. `baseline_row_store_changed_since_load` (slice 3): the
   fixture's two row stores against the hashes the loader recorded in step 2 (`stg_row_store_drift`).
   Since slice 4 the two wrapper checks hash the text with CRLF read as LF. Last local run (rate rulings
-  fix round 1, 2026-11-23): `PASS=35 TOTAL=35` (32 unit tests, 3 drift baselines; slice 4 Task 5: 33).
+  fix round 1, 2026-11-23): `PASS=35 TOTAL=35` (32 unit tests, 3 drift baselines; slice 4 Task 5: 33). Slice 5 Task 1
+  (2026-11-24): `PASS=36` (33 unit tests: `int_field_rule_tie_break_unread_mix` added).
 
 ### The drift views and `dbt test --vars`
 
@@ -93,18 +96,19 @@ step 7 tests them, and a full `dbt.ps1 build` rebuilds them with the project's v
   expected dollar value changed from 194.4 to 194.5, step 5 ends `FAIL 1 ci_fixture_expected_amounts`.
 - `tests/ci_fixture_expected_rates.sql` (slice 4): for each fixture position, every rate field
   (`interest_rate`, `interest_rate_cash`, `pik_rate`, `spread`, `maturity_date`) that is not absent with
-  reason `no_fact` (17 of 90: 18 positions), with its status, reason, value or date, `rate_kind`, action and the rule
-  that converted it. Every position must have its five rate rows. The fund reads its rate tag as all-in
-  and declares a PIK-only coupon reading. The rows are there on purpose:
+  reason `no_fact` (19 of 85: 17 positions, 16 in the first fund and 1 in the second, measured slice 5 Task 1; it read 17 of 90 before), with its status, reason, value or date, `rate_kind`, action and the rule
+  that converted it. Every position must have its five rate rows. The first fund reads its rate tag as all-in
+  and declares a PIK-only coupon reading; the second declares no rate reading. The rows are there on purpose:
 
   | Position | What it shows | Expected |
   |---|---|---|
   | c-3 | a rate tag and a PIK tag | all-in 9.0 (`all_in`), cash leg 7.0, PIK 2.0; the legs check (`int_field_normalised_rate_legs`) runs on this row |
-  | c-7 | a rate tag and a spread | all-in 8.0; spread 5.0 (default `fraction_to_percent`); cash leg empty, `no_pik_read` |
-  | c-24 | a rate tag only | all-in 7.0; cash leg empty, `no_pik_read` |
+  | c-7 | a rate tag and a spread | all-in 8.0; spread 5.0 (default `fraction_to_percent`); cash leg 8.0, `cash_equals_all_in` (owner ruling A) |
+  | c-24 | a rate tag only | all-in 7.0; cash leg 7.0, `cash_equals_all_in` (owner ruling A) |
   | c-17 | only a PIK tag (12.50 printed) | all-in rate, cash leg and spread unresolved `text_not_read`, kind `unresolved`; PIK rate 12.5 still read |
   | c-25 | a rate tag filed as 7.00 (a percent) in a ratio unit | all-in rate and cash leg unresolved `scale_not_decided`, no value |
-  | c-8 | a rate tag in the unit written `xbrli:pure` | unresolved `unit_not_pure`: unit kinds are read from the unit text, which knows `pure` and `utr:Rate` only. Pins today's behaviour; none of the five funds writes the prefix |
+  | c-8 | a rate tag in the unit written `xbrli:pure` | all-in 8.0, cash leg 8.0 (`cash_equals_all_in`): unit kinds come from `seeds/unit_kind.csv`, which lists `xbrli:pure` as a ratio (slice 5 Task 1; before, unresolved `unit_not_pure`). None of the five funds writes the prefix |
+  | fund 2, c-2 | a rate tag, from a second fund whose wrapper copy declares no rate reading (slice 5 Task 1) | all-in rate and cash leg unresolved `no_rule`, kind `unresolved`, no value |
   | c-4 | a maturity date | 2030-01-01, `as_filed` (`gd_maturity_date`) |
 
   Shown to bite: with c-3's expected cash leg changed from 7.0 to 7.1, step 5 ends
@@ -117,7 +121,7 @@ c-25) five of them warn.
 
 ## The fixture
 
-All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`. 14 files, about 41 KB.
+All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`, and since slice 5 Task 1 a second fund, cik `0000000002`, with one position. 18 files, about 45 KB.
 
 | File | What |
 |---|---|
@@ -126,9 +130,10 @@ All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`
 | `fixture/raw/bdc_xbrl/1/000000000126000012.xml` | A cover-only 10-Q/A for the same quarter: skipped by filing selection, its context superseded. |
 | `fixture/raw/bdc_xbrl/1/000000000126000001.xml`, `...0002.xml` | Two 10-K originals for 2025-12-31: the quarter is refused (`two_originals_same_quarter`). |
 | `fixture/wrappers/0000000001.json` | The wrapper copy: old-style declarations (rate reading, dollar principal by `fred_h10` (slice 3), a legal-entity member, a label suffix, a cash identifier, a procedure the loader lists as not loaded, an untagged value, a relabel) and five `reading_rules` (fair value and term fact from the fund's own concepts, `subtotal_on_fair_value`, two `position_without_term_fact` with label examples, one dated with `fair_value_zero`). Since slice 4 also `pik_only_tag_reading: coupon`, in the copy only (not in the production stand-in). |
-| `fixture/wrappers/_source.json`, `fixture/production_wrappers/0000000001.json` | The copy record and the production wrapper it stands beside. |
+| `fixture/wrappers/_source.json`, `fixture/production_wrappers/0000000001.json` | The copy record and the production wrapper the copy stands beside (the record also holds the second fund's). |
 | `fixture/row_corrections.csv`, `fixture/row_corrections_by_context.csv` | One row each for the fund, and one for another fund that the loader drops. |
-| `fixture/scope.json` | `findings_scope.ciks`: the one fund. |
+| `fixture/scope.json` | `findings_scope.ciks`: the two funds. |
+| `fixture/raw/bdc_xbrl/2/000000000226000011.xml`, `fixture/wrappers/0000000002.json`, `fixture/production_wrappers/0000000002.json` | Slice 5 Task 1: a second invented fund (cik `0000000002`), one 10-Q at 2026-03-31 with one position (c-2) that carries a rate tag. Its wrapper copy and production stand-in declare nothing, so no rate reading: the rates test expects the rate unresolved `no_rule`. Its hash is in `fixture/wrappers/_source.json`. Its inline document is `fixture/raw/bdc_html/2/000000000226000011.html`. |
 | `fixture/output/` | Column names and types of the holdings file (the columns `stg_holdings` reads) and the header of `fund_financials.csv`. No rows. |
 
 The fixture's bytes are hashed (the drift check, the parser's input hashes), so `.gitattributes` here

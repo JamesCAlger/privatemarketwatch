@@ -31,16 +31,13 @@ coalesce({{ built_in_slice }} = '3' or {{ built_early_for_field }} = {{ field }}
          or ({{ built_in_slice }} = '4' and {{ field }} in {{ rate_output_fields() }}), false)
 {%- endmacro %}
 
-{#- Unit kind of a unit as filed: iso4217:USD is usd, another iso4217 code is foreign, shares, a ratio unit is pure,
-    anything else other. Ratio units: pure, and utr:Rate (the XBRL unit type registry's rate unit; controller ruling,
-    slice 4 Task 3: a ratio unit gets the same kind as pure). No amount field of the five funds is filed in utr:Rate
-    (scripts/slice4/q_t3_amount_units.sql), so adding it moves no amount row. -#}
+{#- Unit kind of a unit as filed (the unit text: numerator, or numerator/denominator), read from seeds/unit_kind.csv
+    (slice 5 Task 1, owner decision 10 of 2026-11-23: the mapping is data). The row whose unit_pattern (RE2) matches the
+    whole text gives the kind: usd, foreign, shares, pure, or other; a text no row matches is other. A text matching two
+    rows fails tests/unit_kind_one_row_per_unit.sql; a unit read for an amount or rate field that no row lists fails
+    tests/unit_kind_read_units_listed.sql. Before slice 5 the same mapping was written here as literals (iso4217:USD
+    usd, another iso4217 code foreign, shares, pure and utr:Rate pure); the seed adds xbrli:shares and xbrli:pure. -#}
 {% macro unit_kind(unit) -%}
-case
-    when {{ unit }} = 'iso4217:USD' then 'usd'
-    when regexp_full_match({{ unit }}, 'iso4217:[A-Z]{3}') then 'foreign'
-    when {{ unit }} = 'shares' then 'shares'
-    when {{ unit }} in ('pure', 'utr:Rate') then 'pure'
-    else 'other'
-end
+coalesce((select min(uk.unit_kind) from {{ ref('unit_kind') }} uk where regexp_full_match({{ unit }}, uk.unit_pattern)),
+         'other')
 {%- endmacro %}

@@ -1,0 +1,4 @@
+{
+  "cik": "0000000002",
+  "note": "Invented production wrapper of the second CI fixture fund (warehouse/ci/README.md; slice 5 Task 1, item f). It declares nothing, so no rate reading. Stands in for data/overrides/bdc_xbrl_wrappers so the loader's drift check has a file to hash; its SHA-256 is in ../wrappers/_source.json."
+}

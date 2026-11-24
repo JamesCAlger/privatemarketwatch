@@ -10,7 +10,13 @@ with converting_rule as (
     select r.rule_id, r.cik, r.origin, r.action, r.target, a.built_in_slice
     from {{ ref('stg_reading_rule') }} r
     join {{ ref('reading_action') }} a on a.action = r.action
-    where a.built_in_slice in ('3', '4') and r.action not like 'concept_is_%'
+    -- slice 5 Task 1, item e: printed_margin_cash_plus_pik is labelled 'text' (not built: its unread input is printed
+    -- text), yet int_field_rule still joins it to action_field to give its rows text_not_read; a rate or amount target
+    -- keeps it, and any such action, under this guard
+    where (a.built_in_slice in ('3', '4')
+           or a.target in ('amount', 'rate', 'interest_rate', 'pik_rate', 'spread', 'principal_amount_usd', 'cost',
+                           'principal_amount', 'shares', 'fair_value'))
+      and r.action not like 'concept_is_%'
       -- owner ruling B (2026-11-23): a scale rule decides the scale of a read number (int_rate_scale), not which rule
       -- converts a field, so it has no action_field row by design
       and r.action <> 'ratio_value_is_percent'

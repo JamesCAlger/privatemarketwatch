@@ -1,5 +1,5 @@
 -- Baseline (review finding I2, slice 2 Task 5). Where one fund concept rule gives a line both its fair value and its
--- term fact (Blue Owl's unfunded-commitment lines, owner decision D11), the term-fact cross-check cannot hold the
+-- term fact (one fund's unfunded-commitment lines, owner decision D11), the term-fact cross-check cannot hold the
 -- line back. These lines are expected to be commitments: zero or negative (fees) fair value, and never a total. A
 -- published position whose fair value AND term fact both come from concept rules must have no positive fair value
 -- and no label segment matching a rule 4 aggregate pattern (seeds/role_pattern.csv, rule_number 4, read here, not

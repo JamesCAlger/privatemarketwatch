@@ -183,7 +183,8 @@ vars:
     # PIK-only actions need the printed rate type and the loan class (action_field.unread_input), so every PIK-only row is
     # text_not_read on interest_rate, its cash leg and spread: Ares 1,195, Apollo 62, Blue Owl 460, HPS 168 = 1,885 (the
     # 628 Blue Owl and HPS rows that tied as rule_conflict now resolve as text_not_read, which the order puts before a
-    # conflict; rule_conflict 0). Before the ruling: rule_conflict 628 (Blue Owl 460, HPS 168; controller ruling,
+    # conflict; rule_conflict 0; slice 5 Task 1 changed the order so that only a tie of rules that ALL need unread text
+    # is text_not_read, a mixed tie is rule_conflict: these 628 tie two unread-text rules and stay). Before the ruling: rule_conflict 628 (Blue Owl 460, HPS 168; controller ruling,
     # waits for the text spec). spread text_not_read 2,425 = 540 + 1,885 (fix round 1, controller ruling; was feature_missing):
     # printed_margin_cash_plus_pik needs the printed total margin, text no model reads yet (action_field.unread_input):
     # Blue Owl 321, Apollo 219. feature_missing stays an error class: no declared pair, ceiling 0 under _other.

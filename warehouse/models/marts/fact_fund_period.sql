@@ -11,8 +11,8 @@
 -- misses the filed line, the total without them ties, and the cash rows equal the filed
 -- cash-equivalents figure within 0.5 pct of the investments line. The other half of the ruling, a
 -- wrapper that declares the basis, is read from the fund rules (macro
--- filed_total_excludes_cash_declared; BCRED declares it, owner decision D16, 2026-11-23). This
--- table is built from production's holdings, which carry no BCRED cash rows, so the declaration
+-- filed_total_excludes_cash_declared; one fund declares it, owner decision D16, 2026-11-23). This
+-- table is built from production's holdings, which carry no cash rows for that fund, so the declaration
 -- moves no difference here; it moves the sum check of the intermediate layer.
 with published as (
     select

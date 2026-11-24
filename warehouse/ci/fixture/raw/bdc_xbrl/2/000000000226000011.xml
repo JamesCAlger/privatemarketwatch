@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Invented filing of a second invented fund (cik 0000000002) for the CI fixture build (warehouse/ci/README.md).
+     Slice 5 Task 1, item f: one 10-Q at 2026-03-31 with one position that carries a rate tag, from a fund whose
+     wrapper copy declares no rate reading (no filed_rate_reading): the all-in rate, its cash leg and its kind are
+     unresolved and have no value (ci_fixture_expected_rates.sql, c-2). The inline document of the same name places
+     every numeric fact. -->
+<xbrl
+  xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:dei="http://xbrl.sec.gov/dei/2025"
+  xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:us-gaap="http://fasb.org/us-gaap/2025"
+  xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <link:schemaRef xlink:href="sfx-20260331.xsd" xlink:type="simple"/>
+    <unit id="usd"><measure>iso4217:USD</measure></unit>
+    <unit id="pct"><measure>pure</measure></unit>
+    <!-- duration for dei: no member, rule 1 not_schedule -->
+    <context id="c-1"><entity><identifier scheme="http://www.sec.gov/CIK">0000000002</identifier></entity>
+        <period><startDate>2026-01-01</startDate><endDate>2026-03-31</endDate></period></context>
+    <!-- rule 9 position: fair value, cost and a rate tag; the fund declares no rate reading -->
+    <context id="c-2"><entity><identifier scheme="http://www.sec.gov/CIK">0000000002</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Omega Corp | Term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+
+    <dei:DocumentType contextRef="c-1" id="d-1">10-Q</dei:DocumentType>
+    <dei:DocumentPeriodEndDate contextRef="c-1" id="d-2">2026-03-31</dei:DocumentPeriodEndDate>
+    <dei:AmendmentFlag contextRef="c-1" id="d-3">false</dei:AmendmentFlag>
+    <dei:EntityRegistrantName contextRef="c-1" id="d-4">Second Fixture Fund (invented)</dei:EntityRegistrantName>
+    <dei:EntityCentralIndexKey contextRef="c-1" id="d-5">0000000002</dei:EntityCentralIndexKey>
+
+    <us-gaap:InvestmentOwnedAtFairValue contextRef="c-2" unitRef="usd" decimals="0" id="f-1">300</us-gaap:InvestmentOwnedAtFairValue>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-2" unitRef="usd" decimals="0" id="f-2">300</us-gaap:InvestmentOwnedAtCost>
+    <us-gaap:InvestmentInterestRate contextRef="c-2" unitRef="pct" decimals="4" id="f-3">0.0600</us-gaap:InvestmentInterestRate>
+</xbrl>

@@ -1,0 +1,4 @@
+{
+  "cik": "0000000002",
+  "note": "Invented wrapper copy of the second CI fixture fund (warehouse/ci/README.md; slice 5 Task 1, item f). It declares nothing, so no rate reading (no filed_rate_reading): the rate tag of c-2 in ../raw/bdc_xbrl/2/000000000226000011.xml has no rule, so interest_rate and its cash leg are unresolved, rate_kind unresolved, no value."
+}

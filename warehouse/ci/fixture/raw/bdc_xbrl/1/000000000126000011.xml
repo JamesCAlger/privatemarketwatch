@@ -185,9 +185,9 @@
          c-25 its rate tag (f-44 above) is filed as 7.00, a percent, in pure: scale_not_decided, unresolved;
          c-4 keeps its maturity date (fact t-1 above), taken as filed.
          Units: the rate facts are in unit pct (pure written without a prefix, as the five funds write it). c-8's rate
-         (f-16) stays in unit pure, written xbrli:pure: the warehouse reads unit kinds from the unit text, so the
-         prefixed spelling is not recognised as a ratio and the rate is unresolved (unit_not_pure). That pins today's
-         behaviour; none of the five funds writes the prefix (slice 4 Task 5 report). -->
+         (f-16) stays in unit pure, written xbrli:pure: until slice 5 the warehouse did not list that spelling, so the
+         rate was unresolved (unit_not_pure); since slice 5 Task 1 seeds/unit_kind.csv lists xbrli:pure as a ratio and
+         the rate is read (all-in 8.00). None of the five funds writes the prefix. -->
 
     <us-gaap:InvestmentInterestRatePaidInKind contextRef="c-3" unitRef="pct" decimals="4" id="f-49">0.0200</us-gaap:InvestmentInterestRatePaidInKind>
     <us-gaap:InvestmentBasisSpreadVariableRate contextRef="c-7" unitRef="pct" decimals="4" id="f-50">0.0500</us-gaap:InvestmentBasisSpreadVariableRate>

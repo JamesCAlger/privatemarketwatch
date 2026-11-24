@@ -18,7 +18,10 @@ seeds:
       field for which the action is already built before its slice (fraction_to_percent is built in slice 3 for
       pct_of_net_assets only, controller ruling slice 3 Task 3 fix round 1; for rates it stays slice 4). An action is
       built for a field when built_in_slice is 3, or built_early_for_field names that field, or (slice 4 Task 3)
-      built_in_slice is 4 and the field is a rate field (macro rate_output_fields).
+      built_in_slice is 4 and the field is a rate field (macro rate_output_fields). printed_margin_cash_plus_pik is
+      'text' since slice 5 Task 1 (it was 4): it is not built, it decides from the printed total margin, which the text
+      spec reads (spec 6.4, action_field.unread_input). Its rows were and are text_not_read, decided in int_field_rule
+      before any action is checked as built, so the label moved no row.
     config:
       column_types:
         built_in_slice: varchar
@@ -187,3 +190,24 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['printed_total_margin', 'printed_rate_type_and_loan_class']
+  - name: unit_kind
+    description: >
+      Written unit text to unit kind (slice 5 Task 1; owner decision 10 of 2026-11-23 and slice 5 decision 6: the
+      mapping is data, keyed by the unit as written, since the filed layer keeps the written unit and not the namespace
+      behind a prefix). unit_pattern is an RE2 pattern matched against the whole unit text (numerator, or
+      numerator/denominator); macro unit_kind returns the kind of the one row that matches, or other when none does.
+      Kinds: usd, foreign, shares, pure, and other for a unit listed on purpose that no amount or rate field reads. A
+      text matching two rows fails tests/unit_kind_one_row_per_unit.sql; a unit int_field_read reads for an amount or
+      rate field that no row lists fails tests/unit_kind_read_units_listed.sql. A filer's own unit (a prefix of its
+      own) is not listed here: no fund appears in a seed.
+    columns:
+      - name: unit_pattern
+        data_tests:
+          - unique
+          - not_null
+      - name: unit_kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['usd', 'foreign', 'shares', 'pure', 'other']
