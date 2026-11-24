@@ -348,6 +348,6 @@ SOFR rows within 0.25 of base plus spread. A test with a ceiling on the miss rat
 |---|---|
 | Subtotal rule in SQL or Python | Closed in slice 2: SQL |
 | Identical labels within a filing (19 pairs in holdings) | Ids come from production in this spec, so not hit yet |
-| Which existing correction stores hold entries for the five funds | List in the plan |
+| Which existing correction stores hold entries for the five funds | Closed in slice 5 Task 2 (2026-11-24): eight stores (the four wrapper keys counted apart), measured from the files in `baseline_corrections_2026-11-24.md` section 1. Loaded: the two row-correction CSVs, the wrapper entries, and (loader version 6) the two agent stores, `agent_b2_corrections` and `agent_investigate_rules`. Their value entries are corrections (kind `value` keyed by a production `row_id`; kind `add_row`); their row-removing rules are recorded in `stg_correction_rule` and applied by no model. Seed `correction_field` maps each correction field, by store, to this layer's field and step |
 | The Ares position (Expereo / Ristretto) whose fair value matches no filed fact | Unexplained |
 | Step 2 rulings (`filed_layer.md` section 7) | Confirmed by the owner 2026-11-19 (D14) |
