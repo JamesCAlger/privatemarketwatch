@@ -43,7 +43,9 @@ BUILD_SELECT = [
     "path:tests/int_source_row_text_patterns.sql", "path:tests/concept_release_unmatched_fixture.sql",
     "path:tests/concept_rule_namespace_gaps_fixture.sql", "path:tests/filed_one_filing_row_per_folder.sql",
 ]
-BUILD_EXCLUDE = ["path:tests/baseline_*.sql"]
+# Generic baseline tests tagged baseline_ceiling (slice 5 Task 3: the correction counts) sit on int_* models, so their
+# path is the models' yml; the tag leaves them out as path:tests/baseline_*.sql leaves out the hand-written ones.
+BUILD_EXCLUDE = ["path:tests/baseline_*.sql", "tag:baseline_ceiling"]
 # 2b. dbt run --empty: the two comparison models the cmp_amount and cmp_rate unit tests read (slice 3 Task 4 fix round
 #     1; cmp_rate since slice 4 Task 4), built with no rows over the stand-ins, only so the unit tests can read their
 #     column types. No test of theirs runs here; cmp_amount and cmp_rate themselves are not built in CI.

@@ -272,6 +272,38 @@ is correct.
 
 CI runs a build on an invented fund, without the repository's data: `ci/README.md`.
 
+## Corrections: applying them to amounts and to the row set (slice 5 Task 3)
+
+The readings loader loads production's corrections (`stg_correction`). Slice 5 applies them on top of the
+normalised values, never in place: each corrected value sits beside the filed and the normalised value,
+and names the correction that set it. Spec: `docs/intermediate_spine.md` section 6.5. Counts:
+`docs/baseline_corrections_2026-11-24.md` section 2.
+
+| Model | What it decides | One row per |
+|---|---|---|
+| `int_correction_target` | Which row each correction acts on (a context id, a production row id, identifier text, or the production bridge) | correction and target |
+| `int_correction_fair_value_cell` | What the printed fair-value cell shows, for a fair value a correction supplies on a row with no fair-value fact | such row |
+| `int_correction_screen` | The outcomes that need no value (deferred field, refused key, wrong type, conflict, printed cell) | correction and target |
+| `int_row_corrected` | The position set after corrections: every position, plus rows a correction makes positions | position row |
+| `int_field_reread` | The conversion chain run again on those rows, before and after the corrections at step `filed` | run, row and field |
+| `int_correction_application` | The outcome of each correction: applied, no_op, rejected, failed, deferred, with a reason | correction and target |
+| `int_field_corrected` | The corrected value of every field, beside the filed and normalised values | position row and field (eleven) |
+
+**The macros behind the chain.** The bodies of `int_field_read`, `int_field_rule`, `int_amount_normalised`,
+`int_rate_scale`, `int_rate_tag_cell` and `int_rate_normalised` live in macros of the same names (a macro is
+a reusable piece of SQL with inputs). Each model calls its macro on its usual inputs; `int_field_reread`
+calls the same macros on the few rows corrections touch, so both runs follow one set of rules.
+
+**Rates are not corrected yet.** A correction of a rate, PIK rate, spread, rate kind or maturity is
+`deferred` (`rate_reading_not_rerun`) until slice 5 Task 4 re-runs the rate reading on corrected inputs.
+
+**The production bridge is a debt.** 67 corrections keyed by identifier text find no position here by
+that text; they find their row through production's holdings file. They must be re-keyed by context
+before this layer can replace production.
+
+Agreement with production is not correctness: applying production's corrections makes the two
+pipelines agree; no check here sees a wrong correction.
+
 ## Where this work lives (since 2026-11-23)
 
 The warehouse work moved from branch `ensemble-fp-experiment` in the main checkout to branch

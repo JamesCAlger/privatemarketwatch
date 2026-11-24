@@ -251,6 +251,14 @@ vars:
     int_field_read_cost_filer_concept: 196
     # Slice 3 Task 4: cost pairs where production's cost differs from cost_reported (a donor proxy). Measured 0.
     cmp_amount_cost_columns_differ: 0
+    # Slice 5 Task 3 (tests/baseline_int_correction_identifier_several.sql): identifier-keyed corrections whose text
+    # matches several positions of the filing (each applies to all of them, as production). Measured 2026-11-24: 3.
+    int_correction_identifier_several: 3
+    # Slice 5 Task 3: the sum check on the corrected published basis (tests/baseline_int_field_corrected_sum_not_tied.sql,
+    # macro sum_not_tied_rows corrected=true). Measured 2026-11-24: 3, the three 2026-09-30 quarters with no filed total yet.
+    # The 8 fund-quarters that miss the filed total on the normalised basis (Ares 3, Apollo 5) all tie once the rows
+    # corrections add are in (see sum_not_tied_corrected_pinned below).
+    int_field_corrected_sum_not_tied: 3
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).
@@ -412,6 +420,77 @@ vars:
     - "spread|values_differ"
     - "spread|text_not_read"
     - "spread|rule_conflict"
+  # Slice 5 Task 3: correction outcomes (int_correction_application, target rows), one ceiling per outcome|reason
+  # (generic test baseline_correction_count), measured 2026-11-24 (docs/baseline_corrections_2026-11-24.md section 2).
+  # The ceilings at 0 are rules: a correction refused for that reason fails the build until it is looked at.
+  # applied: amounts, at step filed, converted or companion. deferred|field_not_held: fields this layer does not hold
+  # (2,174 value corrections, 164 agent position metadata, 202 relabels, one of them on two positions).
+  # deferred|no_companion_column: principal_fx_status (no FX status column). deferred|rate_reading_not_rerun: rate
+  # fields, applied by Task 4. failed|conversion_unresolved 1: an Apollo untagged cost on a filing whose sign rule
+  # (bracketed_unsigned) needs the printed brackets of a value that has no tag (feature_missing); not applied.
+  # no_op|already_absent: withdrawals of a field that holds no value. rejected|bridge_ambiguous 1: a Blue Owl
+  # identifier correction whose production rows name two contexts (owner answer 2026-11-24: the bridge does not pick).
+  # rejected|printed_cell_*: the Apollo zero fair values whose printed cell is not a dash or a zero: 0 of 44.
+  correction_outcome_max:
+    "applied|": 996
+    "no_op|evidence_only": 16
+    "no_op|procedure_not_built": 3
+    "no_op|equal_to_normalised": 94
+    "no_op|already_absent": 4
+    "rejected|target_not_found": 0
+    "rejected|bridge_ambiguous": 1
+    "rejected|target_not_position": 0
+    "rejected|conflict": 0
+    "rejected|expected_value_differs": 0
+    "rejected|printed_cell_not_found": 0
+    "rejected|printed_cell_not_dash_or_zero": 0
+    "failed|value_not_numeric": 0
+    "failed|value_not_date": 0
+    "failed|unit_not_known": 0
+    "failed|no_fx_rate": 0
+    "failed|conversion_unresolved": 1
+    "deferred|field_not_held": 2541
+    "deferred|no_companion_column": 202
+    "deferred|rate_reading_not_rerun": 556
+  # Slice 5 Task 3: key resolutions with a ceiling of their own (int_correction_target rows). production_bridge 67
+  # (Ares 6, Blue Owl 21, Apollo 1, HPS 39; one Blue Owl key names two contexts and is rejected): owner decision 2, a
+  # NAMED DEBT, these corrections find their row through production's holdings file and must be re-keyed by context
+  # before this layer can replace production. not_found 0.
+  correction_target_max:
+    production_bridge: 67
+    not_found: 0
+  # Slice 5 Task 3: contexts corrections make positions, per row reason (int_row_corrected), measured 2026-11-24: the 44
+  # Apollo zero fair values (rule 3), Ares 2 and Apollo 6 held for want of a term fact (rule 9), the 8 Ares row_add
+  # positions (rule 1). Any other promotion fails the build.
+  row_corrected_promoted_max:
+    correction_supplies_fair_value: 44
+    correction_supplies_term: 8
+    correction_adds_row: 8
+  # Slice 5 Task 3: published amount rows a correction changed (value or status), per field
+  # (generic test baseline_corrected_amount_changed), measured 2026-11-24.
+  # fair_value 46: the 44 Apollo zero lines and 2 Apollo row-store fair values (the 8 Ares add_row fair values equal
+  # the filed fact of their context). cost 21: 14 on filed rows (Ares 1 untagged, Apollo 13 row store) and 6 on promoted
+  # rows (Ares 2, Apollo 4), all the value; 1 Blue Owl cost whose currency companion alone moved. principal_amount 295:
+  # 17 values (5 on filed rows: Ares 1, BCRED 1, Apollo 3; 12 on promoted rows) and 278 rows whose currency companion
+  # alone moved. principal_amount_usd 218, shares 224: row-store values (and derived dollar principals of corrected
+  # principals at step filed). Share of net assets: no correction sets it.
+  corrected_amount_changed_max:
+    fair_value: 46
+    cost: 21
+    principal_amount: 295
+    principal_amount_usd: 218
+    shares: 224
+    pct_of_net_assets: 0
+  # Slice 5 Task 3: int_field_corrected rows the conversion rules read differently after a correction at step filed
+  # on another field of the row. A rule, not a measurement: 0.
+  corrected_field_reason_max:
+    rule_rerun_after_filed_correction: 0
+  # Slice 5 Task 3: the fund-quarters the corrected-basis sum check may list (tests/int_field_corrected_sum_not_tied_set.sql),
+  # as cik|report_date, measured 2026-11-24: the three 2026-09-30 quarters with no filed total yet. May shrink freely.
+  sum_not_tied_corrected_pinned:
+    - "0001287750|2026-09-30"
+    - "0001812554|2026-09-30"
+    - "0001837532|2026-09-30"
   cmp_excluded_quarters_pinned:
     - "0001287750|2026-09-30|0001628280-26-067383"
     - "0001812554|2026-09-30|0001812554-26-000060"

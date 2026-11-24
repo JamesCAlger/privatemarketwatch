@@ -135,7 +135,7 @@ All under `warehouse/models/intermediate/`. One decision each.
 | `int_source_row` | accession, context | The role of every context, the rule used, the reason |
 | `int_field_read` | accession, context, field | The filed value and its source, unchanged |
 | `int_field_normalised` | same | The canonical value and the transform applied. A view since slice 5 Task 1: the union of `int_amount_normalised` (amount fields) and `int_rate_normalised` (rate fields; the reading is macro `rate_reading`) |
-| `int_field_corrected` | same | The value after corrections; the filed value stays beside it |
+| `int_field_corrected` | same | The value after corrections; the filed value stays beside it. Built in slice 5 Task 3 with `int_row_corrected` (the position set after corrections) and the models of 6.5 |
 | `int_observation` | accession, context | One wide row per position, with ids, `is_published`, `is_cash`, scope |
 | `int_reading_finding` | finding | Every unresolved row or field and every failed check |
 | `cmp_reproduction` | accession, context, field | This layer against production |
@@ -254,6 +254,63 @@ A transform not on the list fails the build.
 Each correction names the accession, context and field, the new value, whether it replaces the filed
 or the converted value, and the decision or wrapper entry that authorises it. A correction whose
 target row does not exist, or whose filed value is not what it expected, is reported and not applied.
+
+As built in slice 5 Task 3 (2026-11-24), amounts and the row set; rates follow in Task 4.
+
+| Model | Grain | What it decides |
+|---|---|---|
+| `int_correction_target` | correction, accession, context | Which row each correction acts on (key resolution below) |
+| `int_correction_fair_value_cell` | accession, context | The printed fair-value cell of a context a correction gives a fair value at step filed where the context has no fair-value fact, and whether it prints a dash or a zero |
+| `int_correction_screen` | correction, accession, context | The outcomes that need no value: evidence, procedure, refused key, deferred field, value of the wrong type, printed cell, conflict |
+| `int_row_corrected` | accession, context | The position set after corrections: every position, plus contexts a correction makes positions |
+| `int_field_reread` | run, accession, context, field | The conversion chain run again (the same macros as `int_field_read` to `int_rate_normalised`) on promoted rows and on rows with a correction at step filed: before (`raw`) and after (`filed_corrected`) the filed-step corrections replace their field's read |
+| `int_correction_application` | correction, accession, context | The outcome of each correction on each target, with the value before and after |
+| `int_field_corrected` | accession, context, field | The corrected value beside the filed and normalised values (never erase) |
+
+Key resolution, the first that holds: a context id as given (`context`); a production row id through
+production's holdings row (`row_id`, the agent B2 leaf); identifier text equal to the identifier label
+of a position of the same filing (`identifier_native`; several positions: each, as production does);
+production's holdings row of the same filing and identifier, which gives the context
+(`production_bridge`); else `not_found`. **The bridge is a named debt (owner decision 2,
+2026-11-24): 67 corrections (Ares 6, Blue Owl 21, Apollo 1, HPS 39) locate their row through
+production's holdings file and must be re-keyed by context before this layer can replace production.**
+Where production's rows name two contexts the bridge does not pick one: the correction is rejected,
+reason `bridge_ambiguous` (one Blue Owl correction).
+
+Steps (seed `correction_field`): `filed` (the wrapper's untagged values): the value replaces the read
+of its field and the conversion rules run on it, so a foreign principal converts with `to_usd`;
+`converted` (row stores, agent `add_row`): the value replaces the converted value and nothing is
+derived again (production assigns the dollar principal once, before its corrections); `companion`:
+currency of principal, cost and fair value, and the dollar principal's FX rate, land in the currency
+and FX rate columns of that field's row; `reading_input` (rates): deferred until Task 4 re-runs the rate
+reading; `deferred`: fields this layer does not hold.
+
+Outcomes, closed list (`tests/int_correction_outcome_listed.sql`): `applied`; `no_op`
+(`evidence_only`, `procedure_not_built`, `equal_to_normalised`, `already_absent`); `rejected`
+(`target_not_found`, `bridge_ambiguous`, `target_not_position`, `conflict`,
+`expected_value_differs`, `printed_cell_not_found`, `printed_cell_not_dash_or_zero`); `failed`
+(`value_not_numeric`, `value_not_date`, `unit_not_known`, `no_fx_rate`, `conversion_unresolved`);
+`deferred` (`field_not_held`, `no_companion_column`, `rate_reading_not_rerun`). Two corrections that
+set one column of one target to different values are both rejected (`conflict`, decision 7); the
+same value twice is not a conflict, and the one production reads last is named.
+
+Row rule (mirrors `cmp_row_set`'s `needs_correction`): a context becomes a position when a correction
+that passes the screen supplies what its role lacked: a fair value on a context rule 3 left out for no
+fair-value fact (`correction_supplies_fair_value`); a term field on a context held unresolved by rule 7
+or 9 for want of a term fact, not for two scopes (`correction_supplies_term`); or an agent `add_row`
+group's fair value (`correction_adds_row`, rule 1 contexts). No role in `int_source_row` changes.
+
+Printed-cell test (owner answer of 2026-11-24 on decision 4): a fair value at step filed on a context
+with no fair-value fact is applied only where its printed fair-value cell prints a dash or a zero. The
+cell: the one table row holding the context's placed facts; on the table grid (cells laid out by their
+colspans), the cell covering the grid column where the table's other fair-value facts are placed (the
+commonest). It prints a dash or a zero when, with white space, `$`, `(`, `)` and `,` removed, it is a
+single `-`, en dash or em dash, or a zero in digits. Otherwise the correction is rejected
+(`printed_cell_not_found` or `printed_cell_not_dash_or_zero`) and listed row by row. Measured: all 44
+Apollo zero fair values print an em dash.
+
+Agreement with production is not correctness: applying production's corrections makes the two
+pipelines agree; no check here sees a wrong correction.
 
 ## 7. Checks
 

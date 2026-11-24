@@ -49,7 +49,8 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   `path:models/intermediate/int_*.sql`, and four hand-written tests that read no model
   (`int_source_row_text_patterns`, `concept_release_unmatched_fixture`,
   `concept_rule_namespace_gaps_fixture`, `filed_one_filing_row_per_folder`). It excludes
-  `path:tests/baseline_*.sql`. With cautious indirect selection a data test runs only when every model
+  `path:tests/baseline_*.sql` and (slice 5 Task 3) `tag:baseline_ceiling`, the generic baseline tests on the
+  correction models, whose ceilings are measured on real data. With cautious indirect selection a data test runs only when every model
   it reads is selected. Since slice 3 this includes the amounts: the seeds `concept_map`,
   `field_rule_default` and `action_field`, the view `stg_fx_rate` (over the fixture's rate file), and
   the tables `int_field_read`, `int_field_rule` and `int_field_normalised`. `cmp_amount` is left out,
@@ -60,7 +61,9 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   `int_rate_tag_cell` and their tests are selected as `int_*` (slice 4 Task 5: 318). The 5 warnings are the generic unresolved baselines on the fixture's
   deliberate unresolved rate rows (see below). Slice 3 ended at 281. Slice 5 Task 2 (2026-11-24): `PASS=375 WARN=5
   ERROR=0 TOTAL=380` (the seed `correction_field` and its tests, `stg_correction_rule`, `stg_agent_store_drift`, the new
-  `stg_correction` column tests and four hand-written readings tests).
+  `stg_correction` column tests and four hand-written readings tests). Slice 5 Task 3 (2026-11-24): `PASS=411 WARN=5
+  ERROR=0 TOTAL=416` (the seven correction models, their column tests and unit tests, and the hand-written correction
+  tests that read no production file). Step 7 since then: `PASS=43` (six correction unit tests added).
 - Step 6: `PASS=2` (the two empty comparison models).
 - Step 7: all 32 unit tests (dbt build runs a unit test only when its model is built, so the five on
   `cmp_row_set`, `cmp_excluded_quarter`, `cmp_amount` and `cmp_rate` need this step; the int_* ones run twice) and

@@ -972,6 +972,151 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: maturity_date, cause: needs_store_not_loaded, detail: printed_maturity_not_read}, name: baseline_cmp_rate_unpublished_maturity_date_nsnl_printed_maturity_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: unpublished, field: rate_kind, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_unpublished_rate_kind_nsnl_printed_reference_rate_column_not_read}
 
+  # Slice 5 Task 3: corrections applied to amounts and to the row set.
+  - name: int_correction_target
+    description: >
+      Which row each loaded correction acts on. One row per (correction_id, target accession, target context_id); a
+      correction with no target has one row with context_id null. key_resolution: context, row_id, identifier_native,
+      production_bridge (owner decision 2, a NAMED DEBT: the row is found through production's holdings file and must
+      be re-keyed by context before this layer can replace production), not_found. Keys are unique
+      (tests/int_correction_keys_unique.sql).
+    columns:
+      - name: correction_id
+        data_tests:
+          - not_null
+      - name: key_resolution
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [context, row_id, identifier_native, production_bridge, not_found]
+      - name: target_count
+        description: Contexts the key found (for an ambiguous bridge, the contexts production's rows name).
+        data_tests:
+          - not_null
+    data_tests:
+      - baseline_correction_count: {arguments: {column: key_resolution, key: production_bridge, ceiling_var: correction_target_max}, name: baseline_int_correction_target_production_bridge}
+      - baseline_correction_count: {arguments: {column: key_resolution, key: not_found, ceiling_var: correction_target_max}, name: baseline_int_correction_target_not_found}
+
+  - name: int_correction_fair_value_cell
+    description: >
+      The printed fair-value cell of each context a correction gives a fair value at step filed where the context has
+      no fair-value fact, and whether it prints a dash or a zero (owner answer of 2026-11-24 on decision 4; the exact
+      test is in the model's header).
+    columns:
+      - name: prints_dash_or_zero
+        data_tests:
+          - not_null
+
+  - name: int_correction_screen
+    description: >
+      The outcomes of each correction target that need no normalised value (screen_outcome, screen_reason; null when the
+      target goes on to the value stage), and what the correction sets (field_row, value_column).
+    columns:
+      - name: correction_id
+        data_tests:
+          - not_null
+
+  - name: int_row_corrected
+    description: >
+      The position set after corrections: every position of int_source_row, plus each context a correction makes a
+      position (row_reason correction_supplies_fair_value, correction_supplies_term, correction_adds_row). No role in
+      int_source_row changes. Promotions are counted per row reason against a ceiling and checked against the role rules
+      and production's published rows (tests/int_row_corrected_promotion_rules.sql,
+      tests/int_row_corrected_promoted_in_production.sql).
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: role
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [position]
+      - name: row_reason
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [filed, correction_supplies_fair_value, correction_supplies_term, correction_adds_row]
+    data_tests:
+      - baseline_correction_count: {arguments: {column: row_reason, key: correction_supplies_fair_value, ceiling_var: row_corrected_promoted_max}, name: baseline_int_row_corrected_supplies_fair_value}
+      - baseline_correction_count: {arguments: {column: row_reason, key: correction_supplies_term, ceiling_var: row_corrected_promoted_max}, name: baseline_int_row_corrected_supplies_term}
+      - baseline_correction_count: {arguments: {column: row_reason, key: correction_adds_row, ceiling_var: row_corrected_promoted_max}, name: baseline_int_row_corrected_adds_row}
+
+  - name: int_field_reread
+    description: >
+      The conversion chain's macros run again on the contexts corrections make positions and on the filed positions
+      that carry a correction at step filed: run raw (before corrections) and run filed_corrected (after the step filed
+      corrections replace their field's read). Run raw on a filed position equals int_field_normalised
+      (tests/int_field_reread_raw_equals_normalised.sql).
+    columns:
+      - name: run
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [raw, filed_corrected]
+
+  - name: int_correction_application
+    description: >
+      The outcome of each correction on each target: applied, no_op, rejected, failed, deferred, with a reason from the
+      closed list (tests/int_correction_outcome_listed.sql), value_before and value_after as text, and the step it was
+      applied at. Every correction has a row (tests/int_correction_none_dropped.sql); every applied row changes a field
+      int_field_corrected holds (tests/int_correction_applied_changes_field.sql). One ceiling per outcome and reason.
+      Agreement with production is not correctness: no check here sees a wrong correction.
+    columns:
+      - name: outcome
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [applied, no_op, rejected, failed, deferred]
+    data_tests:
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "applied|", ceiling_var: correction_outcome_max}, name: baseline_int_correction_applied}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "no_op|evidence_only", ceiling_var: correction_outcome_max}, name: baseline_int_correction_no_op_evidence_only}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "no_op|procedure_not_built", ceiling_var: correction_outcome_max}, name: baseline_int_correction_no_op_procedure_not_built}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "no_op|equal_to_normalised", ceiling_var: correction_outcome_max}, name: baseline_int_correction_no_op_equal_to_normalised}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "no_op|already_absent", ceiling_var: correction_outcome_max}, name: baseline_int_correction_no_op_already_absent}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|target_not_found", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_target_not_found}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|bridge_ambiguous", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_bridge_ambiguous}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|target_not_position", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_target_not_position}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|conflict", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_conflict}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|expected_value_differs", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_expected_value_differs}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|printed_cell_not_found", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_printed_cell_not_found}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "rejected|printed_cell_not_dash_or_zero", ceiling_var: correction_outcome_max}, name: baseline_int_correction_rejected_printed_cell_not_dash_or_zero}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "failed|value_not_numeric", ceiling_var: correction_outcome_max}, name: baseline_int_correction_failed_value_not_numeric}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "failed|value_not_date", ceiling_var: correction_outcome_max}, name: baseline_int_correction_failed_value_not_date}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "failed|unit_not_known", ceiling_var: correction_outcome_max}, name: baseline_int_correction_failed_unit_not_known}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "failed|no_fx_rate", ceiling_var: correction_outcome_max}, name: baseline_int_correction_failed_no_fx_rate}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "failed|conversion_unresolved", ceiling_var: correction_outcome_max}, name: baseline_int_correction_failed_conversion_unresolved}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "deferred|field_not_held", ceiling_var: correction_outcome_max}, name: baseline_int_correction_deferred_field_not_held}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "deferred|no_companion_column", ceiling_var: correction_outcome_max}, name: baseline_int_correction_deferred_no_companion_column}
+      - baseline_correction_count: {arguments: {column: "outcome || '|' || coalesce(reason, '')", key: "deferred|rate_reading_not_rerun", ceiling_var: correction_outcome_max}, name: baseline_int_correction_deferred_rate_reading_not_rerun}
+
+  - name: int_field_corrected
+    description: >
+      The corrected value of every field of every position after corrections, beside the filed and normalised values
+      (never erase: tests/int_field_corrected_never_erase.sql). Amount fields are corrected here; rate fields are carried
+      unchanged until Task 4. status: normalised, absent, unresolved, corrected, withdrawn.
+    data_tests:
+      - baseline_corrected_amount_changed: {arguments: {field: fair_value}, name: baseline_int_field_corrected_published_fair_value_changed}
+      - baseline_corrected_amount_changed: {arguments: {field: cost}, name: baseline_int_field_corrected_published_cost_changed}
+      - baseline_corrected_amount_changed: {arguments: {field: principal_amount}, name: baseline_int_field_corrected_published_principal_amount_changed}
+      - baseline_corrected_amount_changed: {arguments: {field: principal_amount_usd}, name: baseline_int_field_corrected_published_principal_amount_usd_changed}
+      - baseline_corrected_amount_changed: {arguments: {field: shares}, name: baseline_int_field_corrected_published_shares_changed}
+      - baseline_corrected_amount_changed: {arguments: {field: pct_of_net_assets}, name: baseline_int_field_corrected_published_pct_of_net_assets_changed}
+      - baseline_correction_count: {arguments: {column: reason, key: rule_rerun_after_filed_correction, ceiling_var: corrected_field_reason_max}, name: baseline_int_field_corrected_rule_rerun}
+    columns:
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [normalised, corrected, withdrawn, absent, unresolved]
+
 unit_tests:
   - name: cmp_row_set_catch_all_causes
     description: >
@@ -3825,3 +3970,456 @@ unit_tests:
     expect:
       rows:
         - {context_id: x1, all_in: 10.0, cash: 7.0, pik: 2.0, difference: -1.0}
+
+  - name: int_correction_target_key_routes
+    description: >
+      Slice 5 Task 3. Each key route, in order. k1 names a context the filed layer has (context); k2 names a context it
+      lacks (not_found). b2 names a production row id (row_id: accession and context of that row). i1 names identifier
+      text that matches one position (identifier_native, target_count 1); i2 text that matches two positions of the
+      filing (two rows, target_count 2) and one non-position context with the same label, which is not a target. i3 text
+      that matches no position here and one production row (production_bridge, its src_context_id). i4 text that
+      matches no position and production rows naming two contexts (one row, context null, target_count 2: the bridge
+      does not pick). i5 text found nowhere (not_found). layer_field and step come from the seed row whose store_pattern
+      matches; report_date is the target's when the correction has none (k1).
+    model: int_correction_target
+    given:
+      - input: ref('stg_correction')
+        format: sql
+        rows: |
+          select id as correction_id, store, kind, '1' as cik, acc as accession, ctx as context_id, ident as identifier,
+                 rid as row_id, field, rd::date as report_date
+          from (values
+            ('k1', 'wrapper:untagged_values', 'value', 'A', 'c1', null, null, 'fair_value', null),
+            ('k2', 'row_corrections_by_context', 'value', 'A', 'c9', null, null, 'cost', '2026-03-31'),
+            ('b2', 'agent_b2_corrections', 'value', null, null, null, 'ROW-1', 'pik_rate', '2026-03-31'),
+            ('i1', 'row_corrections', 'value', 'A', null, 'Acme loan', null, 'cost', '2026-03-31'),
+            ('i2', 'row_corrections', 'value', 'A', null, 'Twin loan', null, 'cost', '2026-03-31'),
+            ('i3', 'row_corrections', 'value', 'A', null, 'Bridge Co', null, 'cost', '2026-03-31'),
+            ('i4', 'row_corrections', 'value', 'A', null, 'Two Co', null, 'shares_held', '2026-03-31'),
+            ('i5', 'row_corrections', 'value', 'A', null, 'Nowhere', null, 'cost', '2026-03-31')
+          ) t(id, store, kind, acc, ctx, ident, rid, field, rd)
+      - input: ref('correction_field')
+        rows:
+          - {correction_field: fair_value, store_pattern: "wrapper:untagged_values", layer_field: fair_value, step: filed}
+          - {correction_field: cost, store_pattern: "row_corrections|row_corrections_by_context", layer_field: cost, step: converted}
+          - {correction_field: shares_held, store_pattern: "row_corrections|row_corrections_by_context", layer_field: shares, step: converted}
+          - {correction_field: pik_rate, store_pattern: "row_corrections|agent_b2_corrections", layer_field: pik_rate, step: reading_input}
+      - input: ref('int_source_row')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, role, date '2026-03-31' as report_date
+          from (values
+            ('A', 'c1', 'not_schedule'), ('A', 'c2', 'position'), ('A', 'c3', 'position'), ('A', 'c4', 'position'),
+            ('A', 'c5', 'unresolved'), ('A', 'c6', 'unresolved'), ('A', 'c7', 'position'), ('A', 'c8', 'position')
+          ) t(acc, ctx, role)
+      - input: ref('int_context_feature')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, label as identifier_label
+          from (values
+            ('A', 'c1', null), ('A', 'c2', 'Acme loan'), ('A', 'c3', 'Twin loan'), ('A', 'c4', 'Twin loan'),
+            ('A', 'c5', 'Twin loan'), ('A', 'c6', 'Bridge Co | Non-Affiliated'), ('A', 'c7', 'Two Co 1'),
+            ('A', 'c8', 'Two Co 2')
+          ) t(acc, ctx, label)
+      - input: ref('stg_holdings')
+        format: sql
+        rows: |
+          select rid as row_id, acc as accession_number, ctx as src_context_id, ident as bdc_investment_identifier
+          from (values
+            ('ROW-1', 'A', 'c2', 'Acme loan'),
+            ('ROW-2', 'A', 'c6', 'Bridge Co '),
+            ('ROW-3', 'A', 'c7', 'Two Co'),
+            ('ROW-4', 'A', 'c8', 'Two Co')
+          ) t(rid, acc, ctx, ident)
+    expect:
+      rows:
+        - {correction_id: k1, accession: A, context_id: c1, key_resolution: context, target_count: 1, target_role: not_schedule, layer_field: fair_value, step: filed, report_date: 2026-03-31}
+        - {correction_id: k2, accession: A, context_id: null, key_resolution: not_found, target_count: 0, target_role: null, layer_field: cost, step: converted, report_date: 2026-03-31}
+        - {correction_id: b2, accession: A, context_id: c2, key_resolution: row_id, target_count: 1, target_role: position, layer_field: pik_rate, step: reading_input, report_date: 2026-03-31}
+        - {correction_id: i1, accession: A, context_id: c2, key_resolution: identifier_native, target_count: 1, target_role: position, layer_field: cost, step: converted, report_date: 2026-03-31}
+        - {correction_id: i2, accession: A, context_id: c3, key_resolution: identifier_native, target_count: 2, target_role: position, layer_field: cost, step: converted, report_date: 2026-03-31}
+        - {correction_id: i2, accession: A, context_id: c4, key_resolution: identifier_native, target_count: 2, target_role: position, layer_field: cost, step: converted, report_date: 2026-03-31}
+        - {correction_id: i3, accession: A, context_id: c6, key_resolution: production_bridge, target_count: 1, target_role: unresolved, layer_field: cost, step: converted, report_date: 2026-03-31}
+        - {correction_id: i4, accession: A, context_id: null, key_resolution: production_bridge, target_count: 2, target_role: null, layer_field: shares, step: converted, report_date: 2026-03-31}
+        - {correction_id: i5, accession: A, context_id: null, key_resolution: not_found, target_count: 0, target_role: null, layer_field: cost, step: converted, report_date: 2026-03-31}
+
+  - name: int_correction_fair_value_cell_dash_or_zero
+    description: >
+      Slice 5 Task 3, owner answer of 2026-11-24 on decision 4. The printed fair-value cell of a context with no
+      fair-value fact, found on the table grid by colspans. Table 1's fair-value facts sit at grid column 3 (rows 10
+      and 20). True: d1 an em dash in a cell whose cell index (2) differs from its grid column (3, after a cell spanning
+      two columns); z1 '$ 0.00'. Must NOT be true: n1 '1,576' (a number); n2 'N/A'; n3 a dash in another column while
+      the fair-value column prints '12'; n4 an empty cell; m1 a context whose facts are placed in no row (no printed
+      row, cell null); m2 a context with facts in two rows (not one printed row). A context that has a fair-value fact
+      (h1) or a correction at another step (c1) gets no row.
+    model: int_correction_fair_value_cell
+    given:
+      - input: ref('int_correction_target')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, step, layer_field
+          from (values
+            ('A', 'd1', 'filed', 'fair_value'), ('A', 'z1', 'filed', 'fair_value'), ('A', 'n1', 'filed', 'fair_value'),
+            ('A', 'n2', 'filed', 'fair_value'), ('A', 'n3', 'filed', 'fair_value'), ('A', 'n4', 'filed', 'fair_value'),
+            ('A', 'm1', 'filed', 'fair_value'), ('A', 'm2', 'filed', 'fair_value'), ('A', 'h1', 'filed', 'fair_value'),
+            ('A', 'c1', 'converted', 'fair_value')
+          ) t(acc, ctx, step, layer_field)
+      - input: ref('int_context_feature')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, n as fair_value_fact_count
+          from (values
+            ('A', 'd1', 0), ('A', 'z1', 0), ('A', 'n1', 0), ('A', 'n2', 0), ('A', 'n3', 0), ('A', 'n4', 0),
+            ('A', 'm1', 0), ('A', 'm2', 0), ('A', 'h1', 1), ('A', 'c1', 0)
+          ) t(acc, ctx, n)
+      - input: ref('concept_map')
+        rows:
+          - {concept_map_id: cm_fv, field: fair_value, concept_local: InvestmentOwnedAtFairValue, namespace_pattern: "http://fasb.org/us-gaap/*"}
+          - {concept_map_id: cm_cost, field: cost, concept_local: InvestmentOwnedAtCost, namespace_pattern: "http://fasb.org/us-gaap/*"}
+      - input: ref('stg_filed_fact_placement')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, ri as row_index, ci as cell_index, concept
+          from (values
+            ('A', 'p10', 10, 3, 'us-gaap:InvestmentOwnedAtFairValue'),
+            ('A', 'p20', 20, 3, 'us-gaap:InvestmentOwnedAtFairValue'),
+            ('A', 'p21', 21, 1, 'us-gaap:InvestmentOwnedAtFairValue'),
+            ('A', 'd1', 11, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'z1', 12, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'n1', 13, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'n2', 14, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'n3', 15, 0, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'n4', 16, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'm2', 17, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'm2', 18, 1, 'us-gaap:InvestmentOwnedAtCost'),
+            ('A', 'm1', null, null, 'us-gaap:InvestmentOwnedAtCost')
+          ) t(acc, ctx, ri, ci, concept)
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, 1 as table_index, len(cells) as cell_count, cells, spans as cell_colspans
+          from (values
+            ('A', 10, ['a', '1', '2', '3'], [1, 1, 1, 1]),
+            ('A', 20, ['b', '1', '2', '4'], [1, 1, 1, 1]),
+            ('A', 21, ['c', '9', '', ''], [1, 1, 1, 1]),
+            ('A', 11, ['x', '5', chr(8212)], [2, 1, 1]),
+            ('A', 12, ['y', '5', '', '$ 0.00'], [1, 1, 1, 1]),
+            ('A', 13, ['y', '5', '', '1,576'], [1, 1, 1, 1]),
+            ('A', 14, ['y', '5', '', 'N/A'], [1, 1, 1, 1]),
+            ('A', 15, ['z', chr(8212), '', '12'], [1, 1, 1, 1]),
+            ('A', 16, ['y', '5', '', ''], [1, 1, 1, 1]),
+            ('A', 17, ['y', '5', '', chr(8212)], [1, 1, 1, 1]),
+            ('A', 18, ['y', '5', '', chr(8212)], [1, 1, 1, 1])
+          ) t(acc, ri, cells, spans)
+    expect:
+      rows:
+        - {context_id: d1, printed_row_index: 11, fair_value_column: 3, prints_dash_or_zero: true}
+        - {context_id: z1, printed_row_index: 12, fair_value_column: 3, prints_dash_or_zero: true}
+        - {context_id: n1, printed_row_index: 13, fair_value_column: 3, prints_dash_or_zero: false}
+        - {context_id: n2, printed_row_index: 14, fair_value_column: 3, prints_dash_or_zero: false}
+        - {context_id: n3, printed_row_index: 15, fair_value_column: 3, prints_dash_or_zero: false}
+        - {context_id: n4, printed_row_index: 16, fair_value_column: 3, prints_dash_or_zero: false}
+        - {context_id: m1, printed_row_index: null, fair_value_column: null, prints_dash_or_zero: false}
+        - {context_id: m2, printed_row_index: null, fair_value_column: null, prints_dash_or_zero: false}
+
+  - name: int_correction_screen_outcomes
+    description: >
+      Slice 5 Task 3. One target per screen outcome, in the order the screen reads them: e1 evidence (no_op
+      evidence_only); x1 exception (no_op procedure_not_built); n1 no target (rejected target_not_found); b1 a bridge
+      with two contexts (rejected bridge_ambiguous); r1 a relabel whose expected label is not the context's (rejected
+      expected_value_differs) and r2 one whose expected label is (deferred field_not_held); d1 a name field (deferred
+      field_not_held); s1 the FX status companion (deferred no_companion_column); t1 a PIK rate (deferred
+      rate_reading_not_rerun); v1 a cost that is not a number (failed value_not_numeric); u1 a currency companion 'XYZ'
+      (failed unit_not_known); p1 a fair value at step filed on a context with no fair-value fact whose cell is not
+      found (rejected printed_cell_not_found), p2 one whose cell prints '12' (rejected printed_cell_not_dash_or_zero),
+      p3 one whose cell prints a dash (passes); c1 and c2 set cost 5 and 6 on one target (both rejected conflict); c3
+      and c4 set cost 7 and 7.0 on another (no conflict, both pass); w1 a withdrawal (passes; is_withdrawal).
+    model: int_correction_screen
+    given:
+      - input: ref('int_correction_target')
+        format: sql
+        rows: |
+          select id as correction_id, store, kind, '1' as cik, 'A' as accession, ctx as context_id, field, lf as layer_field,
+                 step, kr as key_resolution, 1 as target_count, role as target_role, date '2026-03-31' as report_date
+          from (values
+            ('e1', 'wrapper:rate_verification_anchors', 'evidence', 'k1', 'interest_rate', null, 'deferred', 'context', 'position'),
+            ('x1', 'wrapper:pik_margin_reading', 'exception', 'k1', 'pik_margin_reading', null, 'deferred', 'context', 'position'),
+            ('n1', 'row_corrections', 'value', null, 'cost', 'cost', 'converted', 'not_found', null),
+            ('b1', 'row_corrections', 'value', null, 'cost', 'cost', 'converted', 'production_bridge', null),
+            ('r1', 'wrapper:relabelled_contexts', 'relabel', 'k1', 'identifier', null, 'deferred', 'context', 'position'),
+            ('r2', 'wrapper:relabelled_contexts', 'relabel', 'k2', 'identifier', null, 'deferred', 'context', 'position'),
+            ('d1', 'row_corrections', 'value', 'k1', 'issuer_name', null, 'deferred', 'context', 'position'),
+            ('s1', 'row_corrections', 'value', 'k1', 'principal_fx_status', null, 'companion', 'context', 'position'),
+            ('t1', 'row_corrections', 'value', 'k1', 'pik_rate', 'pik_rate', 'reading_input', 'context', 'position'),
+            ('v1', 'row_corrections', 'value', 'k1', 'cost', 'cost', 'converted', 'context', 'position'),
+            ('u1', 'row_corrections', 'value', 'k1', 'principal_amount_currency', 'currency', 'companion', 'context', 'position'),
+            ('p1', 'wrapper:untagged_values', 'value', 'f1', 'fair_value', 'fair_value', 'filed', 'context', 'not_schedule'),
+            ('p2', 'wrapper:untagged_values', 'value', 'f2', 'fair_value', 'fair_value', 'filed', 'context', 'not_schedule'),
+            ('p3', 'wrapper:untagged_values', 'value', 'f3', 'fair_value', 'fair_value', 'filed', 'context', 'not_schedule'),
+            ('c1', 'row_corrections', 'value', 'k3', 'cost', 'cost', 'converted', 'context', 'position'),
+            ('c2', 'row_corrections_by_context', 'value', 'k3', 'cost', 'cost', 'converted', 'context', 'position'),
+            ('c3', 'row_corrections', 'value', 'k4', 'cost', 'cost', 'converted', 'context', 'position'),
+            ('c4', 'row_corrections_by_context', 'value', 'k4', 'cost', 'cost', 'converted', 'context', 'position'),
+            ('w1', 'row_corrections', 'value', 'k5', 'shares_held', 'shares', 'converted', 'context', 'position')
+          ) t(id, store, kind, ctx, field, lf, step, kr, role)
+      - input: ref('stg_correction')
+        format: sql
+        rows: |
+          select id as correction_id, val as value, unit as value_unit, expv as expected_value
+          from (values
+            ('e1', '', null::varchar, null::varchar), ('x1', 'not A c', null, null), ('n1', '5', null, null), ('b1', '5', null, null),
+            ('r1', 'New label', null, 'Old label'), ('r2', 'New label', null, 'Label k2'), ('d1', 'Acme', null, null),
+            ('s1', 'converted', null, null), ('t1', '14.0', null, null), ('v1', 'abc', null, null),
+            ('u1', 'XYZ', null, null), ('p1', '0', null, null), ('p2', '0', null, null), ('p3', '0', null, null),
+            ('c1', '5', null, null), ('c2', '6', null, null), ('c3', '7', null, null), ('c4', '7.0', null, null),
+            ('w1', '', null, null)
+          ) t(id, val, unit, expv)
+      - input: ref('correction_field')
+        rows:
+          - {correction_field: principal_fx_status, store_pattern: "row_corrections", layer_field: "", step: companion, companion_of: principal_amount_usd}
+          - {correction_field: principal_amount_currency, store_pattern: "row_corrections", layer_field: currency, step: companion, companion_of: principal_amount}
+          - {correction_field: cost, store_pattern: "row_corrections|row_corrections_by_context", layer_field: cost, step: converted, companion_of: ""}
+      - input: ref('stg_fx_rate')
+        rows:
+          - {currency: EUR, rate_date: 2026-03-27, usd_per_unit: 1.25}
+      - input: ref('int_context_feature')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, label as identifier_label, n as fair_value_fact_count
+          from (values
+            ('k1', 'Label k1', 1), ('k2', 'Label k2', 1), ('k3', 'Label k3', 1), ('k4', 'Label k4', 1),
+            ('k5', 'Label k5', 1), ('f1', 'F1', 0), ('f2', 'F2', 0), ('f3', 'F3', 0)
+          ) t(ctx, label, n)
+      - input: ref('int_correction_fair_value_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, cell as printed_cell, dz as prints_dash_or_zero
+          from (values ('f1', null, false), ('f2', '12', false), ('f3', '-', true)) t(ctx, cell, dz)
+    expect:
+      rows:
+        - {correction_id: e1, screen_outcome: no_op, screen_reason: evidence_only}
+        - {correction_id: x1, screen_outcome: no_op, screen_reason: procedure_not_built}
+        - {correction_id: n1, screen_outcome: rejected, screen_reason: target_not_found}
+        - {correction_id: b1, screen_outcome: rejected, screen_reason: bridge_ambiguous}
+        - {correction_id: r1, screen_outcome: rejected, screen_reason: expected_value_differs}
+        - {correction_id: r2, screen_outcome: deferred, screen_reason: field_not_held}
+        - {correction_id: d1, screen_outcome: deferred, screen_reason: field_not_held}
+        - {correction_id: s1, screen_outcome: deferred, screen_reason: no_companion_column}
+        - {correction_id: t1, screen_outcome: deferred, screen_reason: rate_reading_not_rerun}
+        - {correction_id: v1, screen_outcome: failed, screen_reason: value_not_numeric}
+        - {correction_id: u1, screen_outcome: failed, screen_reason: unit_not_known}
+        - {correction_id: p1, screen_outcome: rejected, screen_reason: printed_cell_not_found}
+        - {correction_id: p2, screen_outcome: rejected, screen_reason: printed_cell_not_dash_or_zero}
+        - {correction_id: p3, screen_outcome: null, screen_reason: null}
+        - {correction_id: c1, screen_outcome: rejected, screen_reason: conflict}
+        - {correction_id: c2, screen_outcome: rejected, screen_reason: conflict}
+        - {correction_id: c3, screen_outcome: null, screen_reason: null}
+        - {correction_id: c4, screen_outcome: null, screen_reason: null}
+        - {correction_id: w1, screen_outcome: null, screen_reason: null}
+
+  - name: int_row_corrected_row_rules
+    description: >
+      Slice 5 Task 3. The row rule. Promoted: f1 not_schedule by rule 3 with no fair-value fact and a fair value that
+      passes the screen (correction_supplies_fair_value); t1 unresolved by rule 9 with no term fact and a principal
+      (correction_supplies_term); a1 not_schedule by rule 1 with an add_row fair value (correction_adds_row); p1 a
+      filed position (filed, no correction ids). Must NOT promote: n1 a cost on a not_schedule rule 3 context (cost
+      supplies neither a fair value nor a term); n2 a principal on a row held unresolved for two scopes; n3 a fair-value
+      withdrawal; n4 a fair value the screen rejected; n5 a fair value on a not_schedule rule 3 context that does carry
+      a fair-value fact (its facts disagree, so rule 3 left it out for another reason). t1's scope is the source row's.
+    model: int_row_corrected
+    given:
+      - input: ref('int_source_row')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, '1' as cik, date '2026-03-31' as report_date, role, rr as role_rule,
+                 scope, false as is_cash, h2 as held_for_two_scopes
+          from (values
+            ('p1', 'position', 9, 'fund', false), ('f1', 'not_schedule', 3, 'fund', false),
+            ('t1', 'unresolved', 9, 'fund', false), ('a1', 'not_schedule', 1, 'fund', false),
+            ('n1', 'not_schedule', 3, 'fund', false), ('n2', 'unresolved', 7, 'JV A; JV B', true),
+            ('n3', 'not_schedule', 3, 'fund', false), ('n4', 'not_schedule', 3, 'fund', false),
+            ('n5', 'not_schedule', 3, 'fund', false)
+          ) t(ctx, role, rr, scope, h2)
+      - input: ref('int_context_feature')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, term as has_term_fact, n as fair_value_fact_count
+          from (values
+            ('p1', true, 1), ('f1', true, 0), ('t1', false, 1), ('a1', false, 1), ('n1', true, 0), ('n2', false, 1),
+            ('n3', true, 0), ('n4', true, 0), ('n5', true, 2)
+          ) t(ctx, term, n)
+      - input: ref('int_correction_screen')
+        format: sql
+        rows: |
+          select id as correction_id, kind, 'A' as accession, ctx as context_id, role as target_role, fr as field_row,
+                 'value' as value_column, w as is_withdrawal, so as screen_outcome
+          from (values
+            ('cf1', 'value', 'f1', 'not_schedule', 'fair_value', false, null),
+            ('ct1', 'value', 't1', 'unresolved', 'principal_amount', false, null),
+            ('ca1', 'add_row', 'a1', 'not_schedule', 'fair_value', false, null),
+            ('ca2', 'add_row', 'a1', 'not_schedule', 'cost', false, null),
+            ('cn1', 'value', 'n1', 'not_schedule', 'cost', false, null),
+            ('cn2', 'value', 'n2', 'unresolved', 'principal_amount', false, null),
+            ('cn3', 'value', 'n3', 'not_schedule', 'fair_value', true, null),
+            ('cn4', 'value', 'n4', 'not_schedule', 'fair_value', false, 'rejected'),
+            ('cn5', 'value', 'n5', 'not_schedule', 'fair_value', false, null),
+            ('cp1', 'value', 'p1', 'position', 'cost', false, null)
+          ) t(id, kind, ctx, role, fr, w, so)
+    expect:
+      rows:
+        - {context_id: p1, role_filed: position, role: position, is_published: true, scope: fund, row_correction_ids: null, row_reason: filed}
+        - {context_id: f1, role_filed: not_schedule, role: position, is_published: true, scope: fund, row_correction_ids: cf1, row_reason: correction_supplies_fair_value}
+        - {context_id: t1, role_filed: unresolved, role: position, is_published: true, scope: fund, row_correction_ids: ct1, row_reason: correction_supplies_term}
+        - {context_id: a1, role_filed: not_schedule, role: position, is_published: true, scope: fund, row_correction_ids: ca1, row_reason: correction_adds_row}
+
+  - name: int_correction_application_outcomes
+    description: >
+      Slice 5 Task 3. The value stage, after the screen. a1 a cost of 200 where the normalised cost is 100 (applied);
+      q1 a cost of 100.4 (no_op equal_to_normalised: dollars differ by less than 1); w1 a withdrawal on an absent cost
+      (no_op already_absent); w2 a withdrawal on a cost of 100 (applied); np a cost on a context that is not a position
+      after corrections (rejected target_not_position); f1 a principal at step filed in EUR whose dollar value has no
+      quote (failed no_fx_rate); f2 a fair value at step filed on a promoted row whose fair value was absent (applied;
+      value_after the converted value 0); u1 a cost currency USD on a cost read in iso4217:USD (no_op
+      equal_to_normalised: int_field_normalised leaves the cost currency empty, the read unit gives it); u2 a principal
+      currency EUR where the normalised currency is USD (applied); s1 a target the screen deferred keeps its outcome.
+    model: int_correction_application
+    given:
+      - input: ref('int_correction_screen')
+        format: sql
+        rows: |
+          select id as correction_id, 'row_corrections' as store, 'value' as kind, '1' as cik, 'A' as accession,
+                 ctx as context_id, fr as field, fr as layer_field, step, 'context' as key_resolution, 1 as target_count,
+                 'position' as target_role, date '2026-03-31' as report_date, fr as field_row, vc as value_column,
+                 w as is_withdrawal, num as value_number, txt as value_text, so as screen_outcome, sr as screen_reason
+          from (values
+            ('a1', 'k1', 'cost', 'converted', 'value', false, 200.0, null, null, null),
+            ('q1', 'k1', 'cost', 'converted', 'value', false, 100.4, null, null, null),
+            ('w1', 'k2', 'cost', 'converted', 'value', true, null::double, null, null, null),
+            ('w2', 'k3', 'cost', 'converted', 'value', true, null, null, null, null),
+            ('np', 'z9', 'cost', 'converted', 'value', false, 5.0, null, null, null),
+            ('f1', 'k4', 'principal_amount', 'filed', 'value', false, 40.0, null, null, null),
+            ('f2', 'p1', 'fair_value', 'filed', 'value', false, 0.0, null, null, null),
+            ('u1', 'k1', 'cost', 'companion', 'currency', false, null, 'USD', null, null),
+            ('u2', 'k4', 'principal_amount', 'companion', 'currency', false, null, 'EUR', null, null),
+            ('s1', 'k1', 'issuer_name', 'deferred', null, false, null, null, 'deferred', 'field_not_held')
+          ) t(id, ctx, fr, step, vc, w, num, txt, so, sr)
+      - input: ref('int_row_corrected')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, rr as row_reason
+          from (values ('k1', 'filed'), ('k2', 'filed'), ('k3', 'filed'), ('k4', 'filed'),
+                       ('p1', 'correction_supplies_fair_value')) t(ctx, rr)
+      - input: ref('int_field_normalised')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, field, value, currency, null::double as fx_rate, status
+          from (values
+            ('k1', 'cost', 100.0, null, 'normalised'), ('k2', 'cost', null, null, 'absent'),
+            ('k3', 'cost', 100.0, null, 'normalised'), ('k4', 'principal_amount', 10.0, 'USD', 'normalised')
+          ) t(ctx, field, value, currency, status)
+      - input: ref('int_field_read')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, field, unit
+          from (values ('k1', 'cost', 'iso4217:USD'), ('k3', 'cost', 'iso4217:USD'),
+                       ('k4', 'principal_amount', 'iso4217:USD')) t(ctx, field, unit)
+      - input: ref('int_field_reread')
+        format: sql
+        rows: |
+          select run, 'A' as accession, ctx as context_id, field, value, null::varchar as currency, null::double as fx_rate,
+                 status, reason, unit as read_unit
+          from (values
+            ('raw', 'p1', 'fair_value', null::double, 'absent', 'no_fact', null),
+            ('filed_corrected', 'p1', 'fair_value', 0.0, 'normalised', 'applied', 'iso4217:USD'),
+            ('filed_corrected', 'k4', 'principal_amount', 40.0, 'normalised', 'applied', 'iso4217:EUR'),
+            ('filed_corrected', 'k4', 'principal_amount_usd', null, 'unresolved', 'no_fx_rate', null)
+          ) t(run, ctx, field, value, status, reason, unit)
+    expect:
+      rows:
+        - {correction_id: a1, outcome: applied, reason: null, value_before: "100.0", value_after: "200.0", applied_at_step: converted}
+        - {correction_id: q1, outcome: no_op, reason: equal_to_normalised, value_before: "100.0", value_after: "100.4", applied_at_step: null}
+        - {correction_id: w1, outcome: no_op, reason: already_absent, value_before: null, value_after: null, applied_at_step: null}
+        - {correction_id: w2, outcome: applied, reason: null, value_before: "100.0", value_after: null, applied_at_step: converted}
+        - {correction_id: np, outcome: rejected, reason: target_not_position, value_before: null, value_after: null, applied_at_step: null}
+        - {correction_id: f1, outcome: failed, reason: no_fx_rate, value_before: "10.0", value_after: "40.0", applied_at_step: null}
+        - {correction_id: f2, outcome: applied, reason: null, value_before: null, value_after: "0.0", applied_at_step: filed}
+        - {correction_id: u1, outcome: no_op, reason: equal_to_normalised, value_before: USD, value_after: USD, applied_at_step: null}
+        - {correction_id: u2, outcome: applied, reason: null, value_before: USD, value_after: EUR, applied_at_step: companion}
+        - {correction_id: s1, outcome: deferred, reason: field_not_held, value_before: null, value_after: null, applied_at_step: null}
+
+  - name: int_field_corrected_applies_values
+    description: >
+      Slice 5 Task 3. How applied corrections land, never erasing. k1: a converted cost (corrected, value 200, value
+      normalised 100 kept beside it); its principal untouched (normalised, no correction id). k2: a withdrawn shares
+      count (withdrawn, value null). k3: a principal at step filed in EUR on a filed position: the principal and the
+      dollar principal take run filed_corrected (corrected; reasons correction_filed and
+      derived_from_corrected_principal; the rule of that run); the cost the run did not change keeps its value and
+      status. k4: a principal currency companion alone (value unchanged, currency EUR, status corrected, reason
+      companion_corrected). p1: a promoted row, before corrections from run raw: its fair value set at step filed
+      (corrected 0) and its cost from the raw run (normalised 50, no correction). k5: two applied corrections of one
+      value: the one from row_corrections_by_context is named.
+    model: int_field_corrected
+    given:
+      - input: ref('int_row_corrected')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, '1' as cik, date '2026-03-31' as report_date, rr as row_reason
+          from (values ('k1', 'filed'), ('k2', 'filed'), ('k3', 'filed'), ('k4', 'filed'), ('k5', 'filed'),
+                       ('p1', 'correction_supplies_fair_value')) t(ctx, rr)
+      - input: ref('int_field_normalised')
+        format: sql
+        rows: |
+          select 'A' as accession, ctx as context_id, field, '1' as cik, date '2026-03-31' as report_date, vf as value_filed,
+                 v as value, cur as currency, null::double as fx_rate, null::date as value_date, null::varchar as rate_kind,
+                 'as_filed' as action, 'gd' as rule_id, st as status, rs as reason
+          from (values
+            ('k1', 'cost', 100.0, 100.0, null, 'normalised', 'applied'),
+            ('k1', 'principal_amount', 90.0, 90.0, 'USD', 'normalised', 'applied'),
+            ('k2', 'shares', 3.0, 3.0, null, 'normalised', 'applied'),
+            ('k3', 'principal_amount', null, null, null, 'absent', 'no_fact'),
+            ('k3', 'principal_amount_usd', null, null, null, 'absent', 'no_fact'),
+            ('k3', 'cost', 30.0, 30.0, null, 'normalised', 'applied'),
+            ('k4', 'principal_amount', 10.0, 10.0, 'USD', 'normalised', 'applied'),
+            ('k5', 'cost', 1.0, 1.0, null, 'normalised', 'applied')
+          ) t(ctx, field, vf, v, cur, st, rs)
+      - input: ref('int_field_reread')
+        format: sql
+        rows: |
+          select run, 'A' as accession, ctx as context_id, field, vf as value_filed, v as value, cur as currency,
+                 fx as fx_rate, null::date as value_date, null::varchar as rate_kind, act as action, rid as rule_id,
+                 st as status, rs as reason
+          from (values
+            ('raw', 'p1', 'fair_value', null::double, null::double, null, null::double, null, null, 'absent', 'no_fact'),
+            ('raw', 'p1', 'cost', 50.0, 50.0, null, null, 'as_filed', 'gd', 'normalised', 'applied'),
+            ('filed_corrected', 'p1', 'fair_value', 0.0, 0.0, null, null, 'as_filed', 'gd', 'normalised', 'applied'),
+            ('filed_corrected', 'p1', 'cost', 50.0, 50.0, null, null, 'as_filed', 'gd', 'normalised', 'applied'),
+            ('filed_corrected', 'k3', 'principal_amount', 40.0, 40.0, 'EUR', null, 'as_filed', 'gdf', 'normalised', 'applied'),
+            ('filed_corrected', 'k3', 'principal_amount_usd', 40.0, 50.0, null, 1.25, 'to_usd', 'fx', 'normalised', 'applied'),
+            ('filed_corrected', 'k3', 'cost', 30.0, 30.0, null, null, 'as_filed', 'gd', 'normalised', 'applied')
+          ) t(run, ctx, field, vf, v, cur, fx, act, rid, st, rs)
+      - input: ref('int_correction_application')
+        format: sql
+        rows: |
+          select id as correction_id, st as store, 'A' as accession, ctx as context_id, fr as field_row, vc as value_column,
+                 step, 'applied' as outcome, w as is_withdrawal, num as number_after, txt as currency_after
+          from (values
+            ('c1', 'row_corrections', 'k1', 'cost', 'value', 'converted', false, 200.0, null),
+            ('c2', 'row_corrections', 'k2', 'shares', 'value', 'converted', true, null::double, null),
+            ('c3', 'wrapper:untagged_values', 'k3', 'principal_amount', 'value', 'filed', false, 40.0, null),
+            ('c4', 'row_corrections', 'k4', 'principal_amount', 'currency', 'companion', false, null, 'EUR'),
+            ('c5', 'wrapper:untagged_values', 'p1', 'fair_value', 'value', 'filed', false, 0.0, null),
+            ('c6a', 'row_corrections', 'k5', 'cost', 'value', 'converted', false, 2.0, null),
+            ('c6b', 'row_corrections_by_context', 'k5', 'cost', 'value', 'converted', false, 2.0, null)
+          ) t(id, st, ctx, fr, vc, step, w, num, txt)
+    expect:
+      rows:
+        - {context_id: k1, field: cost, value_normalised: 100.0, value: 200.0, status: corrected, reason: correction_converted, correction_id: c1}
+        - {context_id: k1, field: principal_amount, value_normalised: 90.0, value: 90.0, status: normalised, reason: applied, correction_id: null}
+        - {context_id: k2, field: shares, value_normalised: 3.0, value: null, status: withdrawn, reason: correction_withdrawn, correction_id: c2}
+        - {context_id: k3, field: principal_amount, value_normalised: null, value: 40.0, status: corrected, reason: correction_filed, correction_id: c3}
+        - {context_id: k3, field: principal_amount_usd, value_normalised: null, value: 50.0, status: corrected, reason: derived_from_corrected_principal, correction_id: c3}
+        - {context_id: k3, field: cost, value_normalised: 30.0, value: 30.0, status: normalised, reason: applied, correction_id: null}
+        - {context_id: k4, field: principal_amount, value_normalised: 10.0, value: 10.0, status: corrected, reason: companion_corrected, correction_id: c4}
+        - {context_id: p1, field: fair_value, value_normalised: null, value: 0.0, status: corrected, reason: correction_filed, correction_id: c5}
+        - {context_id: p1, field: cost, value_normalised: 50.0, value: 50.0, status: normalised, reason: applied, correction_id: null}
+        - {context_id: k5, field: cost, value_normalised: 1.0, value: 2.0, status: corrected, reason: correction_converted, correction_id: c6b}

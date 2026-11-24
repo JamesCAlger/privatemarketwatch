@@ -1,7 +1,8 @@
 # Baseline: corrections (slice 5), 2026-11-24
 
-Sections 2 onward are written by Tasks 5 and 6. Nothing in section 1 applies a correction; it says what the stores
-hold, what the loader loads and where production applies each.
+Section 2 is written by Task 3 (the outcomes of applying the corrections to amounts and to the row set); sections 3
+onward by Tasks 5 and 6. Nothing in section 1 applies a correction; it says what the stores hold, what the loader
+loads and where production applies each.
 
 Agreement with production, where this file reports it, shows the two pipelines agree. It does not show either is
 right: no check here sees a wrong correction or a value both pipelines read the same wrong way.
@@ -198,3 +199,104 @@ PIK. The loader maps the three to this layer's names: `pik_rate` 14.0, `interest
   `stg_readings_manifest` (loader version 6, one more table). `correction_field` is new.
 - Build `PASS=732 WARN=106 ERROR=0 TOTAL=838` (8dc29093: 704 / 106 / 810; 28 new nodes, all pass; no warning
   count moved).
+
+## 2. Outcomes of the corrections on amounts and on the row set (slice 5 Task 3)
+
+Measured 2026-11-24 on the build of this task (branch `warehouse-slice5`). Models and rules: `intermediate_spine.md`
+section 6.5. Queries: `warehouse/scripts/slice5/q_t3_*.sql`. Rates are not applied here: every rate correction is
+`deferred|rate_reading_not_rerun` until Task 4. Applying production's corrections makes the two pipelines agree; it does
+not check a correction against the filing.
+
+### 2.1 Outcomes per store and fund (target rows; `q_t3_outcomes.sql`)
+
+| Store | Outcome | Reason | Ares | BCRED | Blue Owl | Apollo | HPS | Total |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| agent_b2_corrections | deferred | rate_reading_not_rerun | 3 | | | | | 3 |
+| agent_investigate_rules | applied | | 16 | | | | | 16 |
+| agent_investigate_rules | deferred | field_not_held | 164 | | | | | 164 |
+| agent_investigate_rules | no_op | equal_to_normalised | 32 | | | | | 32 |
+| row_corrections | applied | | 26 | | 67 | 407 | 119 | 619 |
+| row_corrections | deferred | field_not_held | 37 | 16 | 79 | 277 | 13 | 422 |
+| row_corrections | deferred | no_companion_column | | | | 106 | | 106 |
+| row_corrections | deferred | rate_reading_not_rerun | 130 | 3 | 21 | 56 | 45 | 255 |
+| row_corrections | no_op | already_absent | | | 4 | | | 4 |
+| row_corrections | no_op | equal_to_normalised | 2 | | 1 | 6 | | 9 |
+| row_corrections | rejected | bridge_ambiguous | | | 1 | | | 1 |
+| row_corrections_by_context | applied | | | 7 | 127 | 25 | 139 | 298 |
+| row_corrections_by_context | deferred | field_not_held | 186 | 925 | 35 | 241 | 366 | 1,753 |
+| row_corrections_by_context | deferred | no_companion_column | | 2 | 44 | 3 | 47 | 96 |
+| row_corrections_by_context | deferred | rate_reading_not_rerun | | 157 | | | 141 | 298 |
+| row_corrections_by_context | no_op | equal_to_normalised | | 41 | 5 | 4 | 3 | 53 |
+| wrapper | applied | | 6 | 1 | | 56 | | 63 |
+| wrapper | deferred | field_not_held (relabels) | | | 202 | | | 202 |
+| wrapper | failed | conversion_unresolved | | | | 1 | | 1 |
+| wrapper | no_op | evidence_only | 16 | | | | | 16 |
+| wrapper | no_op | procedure_not_built | | | | | 3 | 3 |
+
+Totals (target rows; 4,414 rows for 4,411 corrections, three identifier keys match two positions each): applied 996,
+deferred 3,299 (field_not_held 2,541, rate_reading_not_rerun 556, no_companion_column 202), no_op 117
+(equal_to_normalised 94, evidence_only 16, already_absent 4, procedure_not_built 3), rejected 1 (bridge_ambiguous),
+failed 1 (conversion_unresolved). Rejected for any other reason: 0 (target_not_found, target_not_position, conflict,
+expected_value_differs, printed_cell_*). Each pair has its own ceiling (`correction_outcome_max`).
+
+- `failed|conversion_unresolved` (1): an Apollo untagged cost (41,554,000, 2024-06-30). Its filing is listed under the
+  fund's sign rule `bracketed_unsigned`, which needs the printed brackets of the value; an untagged value has no
+  placement, so the rule is `feature_missing` and the cost stays as before (absent). Not applied, not forced.
+- The brief expected about 2,375 deferred (2,173 values and 202 relabels): measured field_not_held 2,541 = 2,174 value
+  corrections (Task 2 moved `maturity_precision` to deferred) + 164 agent position metadata + 202 relabels + 1 second
+  target of a two-position identifier key.
+
+### 2.2 The production bridge (owner decision 2: a NAMED DEBT)
+
+67 identifier-keyed corrections find no position here by their text and locate their row through production's
+holdings file (Ares 6, Blue Owl 21, Apollo 1, HPS 39). **They must be re-keyed by context before this layer can
+replace production.** Ceiling 67. Outcomes: applied 20 (Blue Owl 3, HPS 17), deferred 41 (fields not held 22, rates
+19), no_op 5, rejected 1: one Blue Owl `shares_held` withdrawal whose production rows name two contexts; the bridge does
+not pick one (`bridge_ambiguous`). The 6 Ares and 1 Apollo bridged corrections land on rows held unresolved here (rates
+and an industry text, all deferred); the two Ares rows become positions through their wrapper principals (2.4).
+
+### 2.3 The 44 Apollo zero fair values (owner answer of 2026-11-24 on decision 4)
+
+Test (`int_correction_fair_value_cell`): the one table row holding the context's placed facts; cells laid on the grid
+by their colspans; the cell covering the grid column where the table's other fair-value facts sit (the commonest). It
+prints a dash or a zero when, with white space, `$`, `(`, `)` and `,` removed, it is a single `-`, en dash or em dash,
+or a zero in digits. Result: **all 44 print an em dash; 44 applied, 0 not applied** (ceilings 0 on
+`printed_cell_not_found` and `printed_cell_not_dash_or_zero`). Unit test `int_correction_fair_value_cell_dash_or_zero`
+includes the false cases ('1,576', 'N/A', '12' with a dash in another column, an empty cell, no printed row, two rows).
+
+Rollups (`q_t3_rollups.sql`): the subtotals decided through the fund rule subtotal_on_fair_value with a zero line
+beneath them by label: Chemicals Heubach (2024-12-31, 2025-03-31), Media Material+ (same two quarters), Public
+Partnerships (five quarters). In all ten, after the zero lines are added, the rollup's fair value and its cost both
+equal the sum of the positions beneath (gap 0); the zero lines carry the missing cost (Heubach 9,545,000 and 9,431,000;
+Material+ 1,576,000 twice; Public Partnerships 50,000). The rollups stay aggregates. In the other quarters the filing
+prints no rollup over these lines (no rule-6 row shares their label).
+
+### 2.4 Contexts corrections make positions (`int_row_corrected`, `q_t3_promotions.sql`)
+
+| Row reason | Contexts | Fund, role | Fair value | Cost |
+|---|---:|---|---:|---:|
+| correction_supplies_fair_value | 44 | Apollo, not_schedule rule 3 | 0 | 64.7m (the lines' filed cost) |
+| correction_supplies_term | 8 | Ares 2 (2022-09-30), Apollo 6; unresolved rule 9; a wrapper principal | 319.0m | 283.6m (one cost failed, 2.1) |
+| correction_adds_row | 8 | Ares row_add (2025-03-31, 2025-06-30); not_schedule rule 1 | 127.5m (the filed fact) | 145.5m |
+
+Every one has a production row on the published basis (`tests/int_row_corrected_promoted_in_production.sql`, 0) and
+the role its reason allows (`tests/int_row_corrected_promotion_rules.sql`; rule 1 is allowed for add_row only).
+
+### 2.5 Published amounts that changed (`q_t3_changed_values.sql`)
+
+| Field | Rows | Of which the value | Change in value |
+|---|---:|---:|---:|
+| fair_value | 46 | 46 | +3,272,000 (2 Apollo row-store values; the 44 zero lines add 0) |
+| cost | 21 | 20 | +250.8m on 6 promoted rows (Ares 145.4m, Apollo 105.4m), +0.4m Ares untagged, -6.3m on 13 Apollo row-store rows; 1 Blue Owl row whose currency alone moved |
+| principal_amount | 295 | 17 | 12 promoted rows (+379.7m), 5 filed rows (Ares +52.8m, BCRED +1.9m, Apollo +50.6m); 278 rows whose currency alone moved |
+| principal_amount_usd | 218 | | row-store values and the dollar value of corrected principals (the EUR and GBP Apollo principals now convert: +51.7m) |
+| shares | 224 | | row-store values and 15 withdrawals |
+
+The 8 Ares add_row fair values and costs equal the filed facts of their contexts (no_op).
+
+### 2.6 Sum check on the corrected basis
+
+The normalised-basis check lists 11 fund-quarters (8 miss the filed total, 3 have none). On the corrected published
+basis all 8 tie (Ares 2022-09-30, 2025-03-31, 2025-06-30; Apollo 2023-09-30, 2024-06-30, 2024-09-30, 2025-03-31,
+2026-03-31): only the three 2026-09-30 quarters without a filed total remain (ceiling 3, pinned set). That the totals
+tie shows the added rows close the gap; it does not show each row's value is right.
