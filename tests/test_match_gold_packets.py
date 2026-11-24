@@ -1,5 +1,5 @@
 """Tests for scripts/match_gold/build_packets.py chain packet sampler."""
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 
 import pytest
 import pandas as pd
@@ -279,6 +279,51 @@ def test_drift_break_packet_has_two_rows(tmp_path):
     assert len(packet["rows"]) >= 1
 
 
+def _relative_batch_paths(prompt, batch_dir, pid):
+    """Batch-relative paths left in a prompt once the absolute ones are taken out.
+
+    On POSIX the absolute path '/tmp/.../batch/packets/<pid>.json' contains
+    'packets/<pid>.json' as a substring, so a plain substring check trips on a correct
+    prompt. Removing only the batch root (the reverted ea00c64e edit) leaves
+    '/packets/<pid>.json' behind, which still contains it. So remove each WHOLE
+    absolute path the builder emits, then look for both separator forms of the
+    relative ones. ``batch_dir`` may be any PurePath flavour.
+    """
+    bare = prompt
+    for absolute in (batch_dir / "packets" / f"{pid}.json", batch_dir / "verdicts" / f"{pid}.json",
+                     batch_dir / "filings" / pid):
+        bare = bare.replace(str(absolute), "<ABSOLUTE>")
+    left = []
+    for parts in (("packets", f"{pid}.json"), ("verdicts", f"{pid}.json"), ("filings", pid),
+                  ("scripts", "review_agent", "evidence_cli.py")):
+        for sep in ("/", "\\"):
+            rel = sep.join(parts)
+            if parts[0] == "scripts":
+                rel = "python " + rel
+            if rel in bare:
+                left.append(rel)
+    return left
+
+
+@pytest.mark.parametrize("flavour,root", [
+    (PurePosixPath, "/tmp/pytest-of-runner/pytest-0/test_x0/batch"),
+    (PureWindowsPath, r"C:\Users\runner\AppData\Local\Temp\pytest-0\test_x0\batch"),
+])
+def test_relative_path_check_sees_relative_paths_on_both_platforms(flavour, root):
+    """The check passes a correct absolute prompt and fails a relative one, for POSIX and
+    Windows paths alike (pure string logic, so both flavours run on either OS)."""
+    batch_dir, pid = flavour(root), "MGP-chain-0001"
+    good = (f'## Your packet\n"{batch_dir / "packets" / f"{pid}.json"}"\n'
+            f'A bundle file exists under {batch_dir / "filings" / pid} for each accession.\n'
+            f'    "/usr/bin/python3" "/repo/scripts/review_agent/evidence_cli.py" --bundle '
+            f'"{batch_dir / "filings" / pid / "0000000001-25-000001.json"}" overview\n'
+            f'Write EXACTLY one JSON file to: "{batch_dir / "verdicts" / f"{pid}.json"}"\n')
+    assert _relative_batch_paths(good, batch_dir, pid) == []
+    for relative in (f"packets/{pid}.json", f"packets\\{pid}.json", f"verdicts/{pid}.json",
+                     f"filings/{pid}", "python scripts/review_agent/evidence_cli.py"):
+        assert _relative_batch_paths(good + f'\nAlso read "{relative}"\n', batch_dir, pid) == [relative]
+
+
 def test_prompt_paths_are_absolute_and_resolvable(tmp_path):
     """A Codex worker runs `codex exec -C <scratch runroot>`, so relative prompt paths
     resolve against nothing. Every path a prompt hands the worker must be absolute and
@@ -310,10 +355,9 @@ def test_prompt_paths_are_absolute_and_resolvable(tmp_path):
     for pid in wl["packet_id"]:
         prompt = (batch_dir / "prompts" / f"{pid}.md").read_text("utf-8")
 
-        # No path is relative to the batch dir any more.
-        for rel in (f"packets/{pid}.json", f"verdicts/{pid}.json", f"filings/{pid}",
-                    "python scripts/review_agent/evidence_cli.py"):
-            assert rel not in prompt, f"{pid}: relative path {rel!r} left in prompt"
+        # No path is relative to the batch dir any more (write_batch emits the resolved dir).
+        left = _relative_batch_paths(prompt, batch_dir.resolve(), pid)
+        assert left == [], f"{pid}: relative path(s) {left!r} left in prompt"
 
         # The packet the worker is told to read exists at the absolute path given.
         packet_path = re.search(r'## Your packet\n"([^"\n]+)"\n', prompt).group(1)
