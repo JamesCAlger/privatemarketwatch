@@ -13313,7 +13313,13 @@ def test_commonwealth_credit_partners_hierarchy_extracts_revolving_credit_line()
 
 @pytest.mark.slow
 @pytest.mark.staging_sql
-def test_commonwealth_credit_partners_hierarchy_extracts_equity_shorthand():
+def test_commonwealth_credit_partners_equity_shorthand_is_left_to_a_row_correction():
+    """A real member of the 2024-06-30 10-Q (accession 0000950170-24-096491) with no
+    'Debt/Equity Investments,' prefix. Since d33a2e31 (2026-10-19) the wrapper's hierarchy
+    pattern requires that prefix, so the wrapper does NOT split this member; corrections keyed
+    to the row's context supply the issuer and instrument instead (owner decision 2026-11-24:
+    record what happens, do not restore the pattern). If the wrapper is later taught this form,
+    this test fails: update it and retire the row corrections together."""
     raw = "CTM Acquisition LLC Equity, Media & Entertainment"
     df = pd.DataFrame([{
         "cik": "0001841514",
@@ -13344,8 +13350,21 @@ def test_commonwealth_credit_partners_hierarchy_extracts_equity_shorthand():
 
     assert len(result) == 1
     row = result.iloc[0]
-    assert row["issuer_name"] == "CTM Acquisition LLC"
-    assert row["instrument_description"] == "Equity"
+    # The wrapper leaves the industry and the instrument inside the name.
+    assert row["issuer_name"] == raw
+    assert row["instrument_description"] != "Equity"
+
+    # The row corrections that carry the right values for this one context.
+    from pipeline import config
+    corrections = pd.read_csv(
+        config.PROJECT_ROOT / "data" / "overrides" / "row_corrections_by_context.csv", dtype=str,
+        keep_default_na=False)
+    mine = corrections[(corrections["accession_number"] == "0000950170-24-096491")
+                       & (corrections["bdc_investment_identifier"] == raw)]
+    supplied = dict(zip(mine["field"], mine["value"]))
+    assert supplied.get("issuer_name") == "CTM Acquisition LLC"
+    assert supplied.get("instrument_description") == "Equity"
+    assert supplied.get("asset_category") == "EQUITY_COMMON"
 
 
 @pytest.mark.slow

@@ -19,25 +19,6 @@ def test_cash_category_requires_the_existing_cash_partition():
     assert ('asset_category_enum',1) in _enforce_schema(holdings([dict(asset_category='cash_equivalent')]))
 
 
-def test_repaired_cash_rule_adds_individual_positions_with_unchanged_fv():
-    path=ROOT/'data/overrides/agent_investigate_rules/1715933/1715933_2025q2_add_cash_short_term_investments.json'
-    rule=json.loads(path.read_text())
-    assert validate_rule(rule)==[]
-    result,audits=apply_rules(holdings([]).iloc[:0], [rule])
-    assert len(result)==2 and result.fair_value.sum()==401562086
-    assert set(result.asset_category)=={'CASH'}
-    assert set(result.issuer_name)=={'First American Government Obligation Fund, Yield 4.26%, Class X (FGXXX)',
-        'U.S. Treasury Bill, Yield 4.30%, Maturity Date 10/28/25'}
-    assert audits[0]['rows_added']==2
-    replay,_=apply_rules(result,[rule])
-    assert len(replay)==2
-    # An equal-valued corporate loan is not the recovered Treasury bill.
-    unrelated=holdings([dict(report_date='2025-06-30',issuer_name='Acme senior loan',
-        bdc_investment_identifier='Acme senior loan',fair_value=394466500)])
-    with_loan,_=apply_rules(unrelated,[rule])
-    assert len(with_loan)==3
-
-
 @pytest.mark.needs_cache
 def test_cash_identities_are_the_two_individual_cached_rows():
     from lxml import html

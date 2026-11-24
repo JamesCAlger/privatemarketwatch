@@ -15818,3 +15818,10 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Fix: those files, the retired files with no recorded hash, and the 12 `.review.json` records are restored byte for byte to their content before bf8b37a7. `.gitattributes` now leaves `.review.json` records to git's normal handling. The eight B2 retired corrections and the FX package keep CRLF bytes (their hashes were recorded on CRLF; checked file by file).
 - Guard: `tests/test_hash_bound_files.py` now checks every retired file against the hash its review record names, on every platform.
 - Also on this branch: `tests/test_match_gold_packets.py` relative-path check corrected for POSIX paths (the product behaviour was right).
+
+## 2026-11-24: three out-of-date tests brought in line with owner rulings (test code only)
+
+- `tests/test_financial_migration.py::test_final_writer_rate_income_donors_and_registry_replay_are_one_contract` switches `COST_PROXY_ENABLED` on, as `test_identity_finalization` does. The proxy has been off in production since the owner ruling of 2026-10-11 (69f9daac); this test was missed then and keeps covering the switched-on path.
+- `tests/test_cash_category_repairs.py::test_repaired_cash_rule_adds_individual_positions_with_unchanged_fv` deleted. Its rule (TCW Direct Lending VII cash rows at 2025-06-30, no source context) was pulled on 2026-10-19 (69d640ed, D-212); the other two tests in the file stay.
+- `tests/test_unified_holdings.py`: the Commonwealth "CTM Acquisition LLC Equity, Media & Entertainment" test is renamed and now records what happens: the wrapper pattern (prefix required since d33a2e31) does not split this real 2024-06-30 member, and corrections keyed to its context supply issuer, instrument and asset category. The identifier is real, not a stale fixture. The wrapper was not changed.
+- No pipeline code, wrapper or data changed. With these, the cache-free CI suite is expected to pass in full; that is confirmed only by the pull request run.
