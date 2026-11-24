@@ -64,6 +64,18 @@ ERROR=0 TOTAL=796`):
 | 6 | Owner decision 10 (2026-11-23) says "read the unit properly ... mapping moved to data". The filed layer keeps the unit as written (`pure`, `utr:Rate`); it does not keep the namespace behind a prefix. | A seed keyed by the written unit, with `xbrli:pure` and `xbrli:shares` rows, and a test that fails when a filing uses a unit text the seed does not list. 0 rows move on the five funds (no filing writes the prefix) | Reading by namespace needs a parser change (filed layer version 4) and a re-parse of all 86 filings: a separate piece of work |
 | 7 | If a context-keyed and an identifier-keyed correction ever set the same field of one row differently (0 today) | Conflict: neither applied, both `rejected`, ceiling 0 | Production lets the context-keyed one win (it is read second). Copying that hides a disagreement between two stores |
 
+**Owner answers, 2026-11-24 (in session: "do it"). These bind every task.**
+
+The owner took the recommendation on all seven decisions, with two additions put to him beforehand:
+
+- Decision 2 (the `production_bridge` for 67 corrections): approved, AND it is a named debt. The hand-off must
+  say that these corrections locate their row through production's holdings file and must be re-keyed by context
+  before this layer can replace production. Their count has its own ceiling.
+- Decision 4 (the 44 Apollo zero fair values): approved, AND Task 3 first checks the printed cell of each of the
+  44. Apply only those whose cell prints a dash or a zero (state the exact test); the others are not applied,
+  are reported row by row, and are counted under their own reason and ceiling. Where a task's text below says
+  "apply all 44", this answer overrides it.
+
 **What this slice will not show.**
 
 - That a correction is right. Applying production's corrections makes the two pipelines agree; it does not check
