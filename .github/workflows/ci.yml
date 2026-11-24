@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, ensemble-fp-experiment]
+    branches: [main, dev]
   pull_request:
 
 concurrency:
