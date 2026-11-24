@@ -12,6 +12,8 @@ from tests.test_index_returns import _make_matches,_compute
 
 
 def test_final_writer_rate_income_donors_and_registry_replay_are_one_contract(tmp_path,monkeypatch):
+    # the cost proxy is off in production by owner ruling 2026-10-11; this test covers the switched-on path
+    monkeypatch.setattr('pipeline.config.COST_PROXY_ENABLED',True)
     frame=holdings([
         dict(row_id='R1',report_date='2025-12-31',cost='0',fair_value='100',principal_amount='100'),
         dict(row_id='R2',report_date='2026-03-31',cost='',fair_value='110',principal_amount='100')])
