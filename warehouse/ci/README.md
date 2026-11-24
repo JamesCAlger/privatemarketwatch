@@ -19,12 +19,12 @@ In CI: `python ci/run_fixture_build.py --work "$RUNNER_TEMP/warehouse_ci"` (from
 | Step | Command | Writes to the work folder |
 |---|---|---|
 | 1 | the filed parser on `fixture/raw/` (`--raw`, `--out`, `--scope-file`) | `filed/` |
-| 2 | the readings loader on `fixture/wrappers/`, `fixture/production_wrappers/` and the two fixture row stores | `readings/` |
+| 2 | the readings loader on `fixture/wrappers/`, `fixture/production_wrappers/`, the two fixture row stores and (slice 5 Task 2) the two fixture agent store folders | `readings/` |
 | 3 | an empty Parquet file with the column names and types in `fixture/output/private_markets_holdings.columns.csv`, and a header-only `fund_financials.csv` | `output/` |
 | 4 | `dbt run --select stg_v05_scope stg_holdings stg_fund_financials` | `ci.duckdb` |
 | 5 | `dbt build`, selection below, `--indirect-selection cautious` | `ci.duckdb`, `target/`, `logs/` |
 | 6 | `dbt run --empty --select cmp_row_set cmp_excluded_quarter` | same |
-| 7 | `dbt test --select test_type:unit path:tests/baseline_production_wrapper_changed.sql path:tests/baseline_wrapper_copy_changed_since_load.sql path:tests/baseline_row_store_changed_since_load.sql` | same |
+| 7 | `dbt test --select test_type:unit path:tests/baseline_production_wrapper_changed.sql path:tests/baseline_wrapper_copy_changed_since_load.sql path:tests/baseline_row_store_changed_since_load.sql path:tests/baseline_agent_store_changed_since_load.sql` | same |
 
 Step 6 (slice 3): `--empty` makes dbt build the two comparison models with no rows. They read the
 pipeline's `data/output/`, which CI does not have, so their data cannot be built here. The unit test
@@ -58,7 +58,9 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   the seed `unit_kind` and its tests, the two `unit_kind_*` tests, `int_amount_normalised` and `int_rate_normalised` with
   their field tests; `int_field_normalised` is now a view over them); the models `int_rate_scale` and
   `int_rate_tag_cell` and their tests are selected as `int_*` (slice 4 Task 5: 318). The 5 warnings are the generic unresolved baselines on the fixture's
-  deliberate unresolved rate rows (see below). Slice 3 ended at 281.
+  deliberate unresolved rate rows (see below). Slice 3 ended at 281. Slice 5 Task 2 (2026-11-24): `PASS=375 WARN=5
+  ERROR=0 TOTAL=380` (the seed `correction_field` and its tests, `stg_correction_rule`, `stg_agent_store_drift`, the new
+  `stg_correction` column tests and four hand-written readings tests).
 - Step 6: `PASS=2` (the two empty comparison models).
 - Step 7: all 32 unit tests (dbt build runs a unit test only when its model is built, so the five on
   `cmp_row_set`, `cmp_excluded_quarter`, `cmp_amount` and `cmp_rate` need this step; the int_* ones run twice) and
@@ -70,7 +72,10 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   fixture's two row stores against the hashes the loader recorded in step 2 (`stg_row_store_drift`).
   Since slice 4 the two wrapper checks hash the text with CRLF read as LF. Last local run (rate rulings
   fix round 1, 2026-11-23): `PASS=35 TOTAL=35` (32 unit tests, 3 drift baselines; slice 4 Task 5: 33). Slice 5 Task 1
-  (2026-11-24): `PASS=36` (33 unit tests: `int_field_rule_tie_break_unread_mix` added).
+  (2026-11-24): `PASS=36` (33 unit tests: `int_field_rule_tie_break_unread_mix` added). Slice 5 Task 2: `PASS=37`
+  (`baseline_agent_store_changed_since_load` added: the fixture's two agent store folders against the hashes the loader
+  recorded in step 2, `stg_agent_store_drift`; rebuilt over an edited copy it fails, 2 rows for one edited and one
+  added file).
 
 ### The drift views and `dbt test --vars`
 
@@ -132,6 +137,8 @@ All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`
 | `fixture/wrappers/0000000001.json` | The wrapper copy: old-style declarations (rate reading, dollar principal by `fred_h10` (slice 3), a legal-entity member, a label suffix, a cash identifier, a procedure the loader lists as not loaded, an untagged value, a relabel) and five `reading_rules` (fair value and term fact from the fund's own concepts, `subtotal_on_fair_value`, two `position_without_term_fact` with label examples, one dated with `fair_value_zero`). Since slice 4 also `pik_only_tag_reading: coupon`, in the copy only (not in the production stand-in). |
 | `fixture/wrappers/_source.json`, `fixture/production_wrappers/0000000001.json` | The copy record and the production wrapper the copy stands beside (the record also holds the second fund's). |
 | `fixture/row_corrections.csv`, `fixture/row_corrections_by_context.csv` | One row each for the fund, and one for another fund that the loader drops. |
+| `fixture/agent_b2_corrections/0000000001/` | Slice 5 Task 2: one B2 leaf of each kind the loader reads, `all_pik_normalization` (keyed by an invented production row id) and `comparative_period_filter`. |
+| `fixture/agent_investigate_rules/1/` | Slice 5 Task 2: one `row_add` rule (one position, context c-91, not in the fixture filing: the corrections are loaded, not applied), one `row_exclusion` rule, and two files the loader skips and hashes (`_retired_*`, `*.proposed.json`). |
 | `fixture/scope.json` | `findings_scope.ciks`: the two funds. |
 | `fixture/raw/bdc_xbrl/2/000000000226000011.xml`, `fixture/wrappers/0000000002.json`, `fixture/production_wrappers/0000000002.json` | Slice 5 Task 1: a second invented fund (cik `0000000002`), one 10-Q at 2026-03-31 with one position (c-2) that carries a rate tag. Its wrapper copy and production stand-in declare nothing, so no rate reading: the rates test expects the rate unresolved `no_rule`. Its hash is in `fixture/wrappers/_source.json`. Its inline document is `fixture/raw/bdc_html/2/000000000226000011.html`. |
 | `fixture/output/` | Column names and types of the holdings file (the columns `stg_holdings` reads) and the header of `fund_financials.csv`. No rows. |

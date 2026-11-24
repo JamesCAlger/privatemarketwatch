@@ -1,0 +1,9 @@
+{
+  "cik": "0000000001",
+  "mechanism": "extraction_gap",
+  "fix_class": "all_pik_normalization",
+  "scope": {"quarters": ["2026-03-31"]},
+  "template": {"row_selector": {"row_id": "ROW-0000000000000001"}, "cash_rate": 0.0, "pik_rate": 12.0, "set_interest_to_cash": true},
+  "evidence_citations": [{"table_index": 1, "row_index": 1, "quoted_text": "Invented CI fixture leaf: 12.00 % PIK"}],
+  "rationale": "Invented CI fixture leaf (slice 5 Task 2): one all-PIK row keyed by a production row id."
+}

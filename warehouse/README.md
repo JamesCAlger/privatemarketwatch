@@ -57,7 +57,12 @@ How each filer is read, and the fixes made to single rows, as two tables. A load
 (`warehouse/readings_loader/`) copies them from the new pipeline's wrappers (`warehouse/wrappers/<cik>.json`) and
 the two row-correction files into `warehouse/data/readings/`. dbt reads them as source `readings` (staging views
 `stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`, `stg_wrapper_drift`, `stg_row_store_drift`). Spec:
-`docs/intermediate_spine.md`.
+`docs/intermediate_spine.md`. Since loader version 6 (slice 5 Task 2) it also reads production's two agent stores,
+`data/overrides/agent_b2_corrections` and `agent_investigate_rules` (`readings_loader/agent_stores.py`): their value
+entries become corrections (`stg_correction` kinds `value` keyed by a production `row_id`, and `add_row`), their
+row-removing rules become rows of `stg_correction_rule`, which no model applies. Seed `correction_field` maps each
+correction field, by store, to this layer's field and the step it acts at. Inventory:
+`docs/baseline_corrections_2026-11-24.md` section 1.
 
 **Where fund rules are edited.** Owner decision 2026-11-19: the new pipeline keeps its own copy of each v0.5
 fund's wrapper in `warehouse/wrappers/`, taken byte for byte from production's `data/overrides/bdc_xbrl_wrappers/`
@@ -73,7 +78,9 @@ the hash is of the text with CRLF line endings read as LF, so line endings alone
 `_source.json` updated, and `baseline_wrapper_copy_changed_since_load` (ceiling 0) fails it when a copy was
 edited after the last load (run `load_readings.ps1` again). The two row-correction stores are checked the same
 way (`stg_row_store_drift`, var `row_store_files`): `baseline_row_store_changed_since_load` (ceiling 0) fails the
-build when a store changed after the last load.
+build when a store changed after the last load. The agent stores likewise (`stg_agent_store_drift`, var
+`agent_store_dirs`): every file of a scope fund, loaded or skipped, is text-hashed; `baseline_agent_store_changed_since_load`
+(ceiling 0) fails the build on a file edited, added, removed or retired after the last load.
 
 **Standard concepts.** The XBRL concepts every filer uses (fair value, cost, principal, shares, share of net
 assets, rate, spread, PIK rate, maturity, ownership percent) are defined once, in `seeds/concept_map.csv`: local

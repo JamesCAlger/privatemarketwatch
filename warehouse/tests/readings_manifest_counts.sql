@@ -4,6 +4,8 @@ with counted as (
     union all
     select 'correction', count(*) from {{ ref('stg_correction') }}
     union all
+    select 'correction_rule', count(*) from {{ ref('stg_correction_rule') }}
+    union all
     select 'not_loaded', count(*) from {{ ref('stg_reading_not_loaded') }}
     union all
     -- the loader's own table; stg_wrapper_drift hashes the files at build time and no longer reads it

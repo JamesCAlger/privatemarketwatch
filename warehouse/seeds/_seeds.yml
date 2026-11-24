@@ -211,3 +211,37 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['usd', 'foreign', 'shares', 'pure', 'other']
+  - name: correction_field
+    description: >
+      Slice 5 Task 2: each field a loaded correction sets (stg_correction.field), by store, mapped to this layer's
+      field and to the step at which the correction acts (spec intermediate_spine.md section 11; slice 5 plan, terms).
+      store_pattern is an RE2 pattern matched against the whole store name; one correction matches exactly one row
+      (tests/readings_correction_field_mapped.sql), so a new field or store fails the build until a row is added. The
+      store is part of the key because the step differs by store: a wrapper untagged value is filed (production fills
+      it at parse time, conversion runs on it); the same field in a row store is converted (production replaces the
+      published value). Steps: filed, converted, reading_input (an input of the rate reading, which re-runs),
+      companion (travels with the field in companion_of; layer_field is then a column of that field's row: currency,
+      fx_rate), deferred (this layer does not hold the field; the correction waits for the text spec, slice 5
+      decision 3). layer_field: the int_field_normalised field, or the column for a companion and for rate_kind; empty
+      when the layer holds nothing. note: where production applies it.
+    columns:
+      - name: correction_field
+        data_tests: [not_null]
+      - name: store_pattern
+        data_tests: [not_null]
+      - name: step
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['filed', 'converted', 'reading_input', 'companion', 'deferred']
+      - name: companion_of
+        data_tests:
+          - not_null:
+              config:
+                where: "step = 'companion'"
+      - name: layer_field
+        data_tests:
+          - not_null:
+              config:
+                where: "step in ('filed', 'converted', 'reading_input')"

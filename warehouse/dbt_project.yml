@@ -49,6 +49,12 @@ vars:
   row_store_files:
     row_corrections: "../data/overrides/row_corrections.csv"
     row_corrections_by_context: "../data/overrides/row_corrections_by_context.csv"
+  # Agent store drift (stg_agent_store_drift, slice 5 Task 2): the two agent stores the readings loader reads (loader
+  # version 6), their scope funds' files hashed at build time against the loader's manifest. Same folders as
+  # readings_loader/cli.py AGENT_STORES. Relative to warehouse/.
+  agent_store_dirs:
+    agent_b2_corrections: "../data/overrides/agent_b2_corrections"
+    agent_investigate_rules: "../data/overrides/agent_investigate_rules"
   # Filing selection (int_filing_selected): a candidate filing is full when it has at least this percent of the
   # position facts of the fullest candidate for the same fund and date. A placeholder from the pilot: every
   # amendment seen so far was empty or at least 98 pct full (spec intermediate_spine.md 6.1).
@@ -131,6 +137,9 @@ vars:
     # Slice 3 Task 1, item b: a row-correction store changed since the readings loader read it (the loaded
     # corrections are stale). A rule, not a measurement.
     row_store_changed_since_load: 0
+    # Slice 5 Task 2: a file of a scope fund in the two agent stores changed, appeared or went since the readings loader
+    # read it (the loaded agent corrections and rules are stale). A rule, not a measurement.
+    agent_store_changed_since_load: 0
     # Slice 3 Task 1, item c: rows a fund rule position_without_term_fact made positions in a fund-quarter production
     # lacks (cmp_excluded_quarter). Measured 2026-11-22: 0.
     fund_rule_release_in_excluded_quarter: 0

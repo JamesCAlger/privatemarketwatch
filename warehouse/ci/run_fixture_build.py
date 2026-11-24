@@ -52,10 +52,12 @@ EMPTY_UNIT_TEST_INPUTS = ["cmp_row_set", "cmp_excluded_quarter"]
 #    models need this step; the int_* ones run again, which costs seconds) and the one baseline whose ceiling is a
 #    rule, not a measurement: production_wrapper_changed (0), here on the fixture's wrapper copy and its stand-in, and
 #    wrapper_copy_changed_since_load (0), the fixture's copy against the hash the loader recorded in step (b), and
-#    row_store_changed_since_load (0), the fixture's two row stores against the hashes recorded in step (b).
+#    row_store_changed_since_load (0), the fixture's two row stores against the hashes recorded in step (b), and
+#    agent_store_changed_since_load (0), the fixture's two agent store folders likewise (slice 5 Task 2).
 TEST_SELECT = ["test_type:unit", "path:tests/baseline_production_wrapper_changed.sql",
                "path:tests/baseline_wrapper_copy_changed_since_load.sql",
-               "path:tests/baseline_row_store_changed_since_load.sql"]
+               "path:tests/baseline_row_store_changed_since_load.sql",
+               "path:tests/baseline_agent_store_changed_since_load.sql"]
 
 
 def _inside(path, folder):
@@ -124,7 +126,9 @@ def main(argv=None):
     _run("load readings", [sys.executable, "-m", "readings_loader", "--out", work / "readings", "--scope-file", scope,
                            "--wrappers", FIXTURE / "wrappers", "--production-wrappers", FIXTURE / "production_wrappers",
                            "--row-corrections", FIXTURE / "row_corrections.csv",
-                           "--row-corrections-by-context", FIXTURE / "row_corrections_by_context.csv"], WAREHOUSE, env)
+                           "--row-corrections-by-context", FIXTURE / "row_corrections_by_context.csv",
+                           "--agent-b2-corrections", FIXTURE / "agent_b2_corrections",
+                           "--agent-investigate-rules", FIXTURE / "agent_investigate_rules"], WAREHOUSE, env)
     # Schema-only stand-ins for data/output: read only to give the unit tests' input views their column types.
     output = work / "output"
     output.mkdir()
@@ -143,6 +147,10 @@ def main(argv=None):
         # the row-store drift view hashes these files at build time (stg_row_store_drift); the same files step (b) loads
         "row_store_files": {"row_corrections": (FIXTURE / "row_corrections.csv").as_posix(),
                             "row_corrections_by_context": (FIXTURE / "row_corrections_by_context.csv").as_posix()},
+        # the agent-store drift view hashes these folders' files at build time (stg_agent_store_drift); the same folders
+        # step (b) loads
+        "agent_store_dirs": {"agent_b2_corrections": (FIXTURE / "agent_b2_corrections").as_posix(),
+                             "agent_investigate_rules": (FIXTURE / "agent_investigate_rules").as_posix()},
         # stg_fx_rate reads this small committed rate file (same columns as the FRED H.10 file production uses)
         "fx_rate_file": (FIXTURE / "fx_rates.csv").as_posix(),
         # switches on tests/ci_fixture_expected_roles.sql (the role each fixture context must get),

@@ -64,7 +64,7 @@ def _rule(cik, key, rule_class, target, action, parameter="", priority=FILER, **
 def _correction(cik, key, accession, context_id, field, value, kind, **cols):
     row = {c: "" for c in CORRECTION_COLUMNS}
     row.update(cik=cik, accession=accession, context_id=context_id, field=field, value=value,
-               kind=kind, store=f"wrapper:{key}")
+               kind=kind, store=f"wrapper:{key}", source_file=f"wrappers/{cik}.json")
     row.update(cols)
     row["correction_id"] = content_id(row, CORRECTION_COLUMNS, "correction_id")
     return row
