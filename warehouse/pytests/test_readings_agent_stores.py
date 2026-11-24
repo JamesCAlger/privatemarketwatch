@@ -126,16 +126,28 @@ def test_unknown_rule_type_stops_the_load(tmp_path):
         agent_stores.read_agent_store("agent_investigate_rules", tmp_path, [FUND])
 
 
-def test_retired_pulled_proposed_and_review_files_are_skipped_but_hashed(tmp_path):
-    for name in ("_retired_x.json", "x.proposed.json", "x.review.json"):
+def test_retired_pulled_and_proposed_files_are_skipped_but_hashed(tmp_path):
+    # a retired file named .review. is skipped as retired (production skips it too)
+    for name in ("_retired_x.json", "x.proposed.json", "_retired_y.review.json"):
         _write(tmp_path, "1", name, "not even json")
     _write(tmp_path, "_pulled_1_2026", "r.json", "not json")  # a pulled folder at the top: not a fund folder
     _write(tmp_path, "2", "r.json", "not json")  # another fund: not read at all
+    _write(tmp_path, "2", "z.review.json", "not json")  # another fund's live review file: not read at all
     corrections, rules, hashes, skipped = agent_stores.read_agent_store("agent_investigate_rules", tmp_path, [FUND])
     assert corrections == [] and rules == []
     assert sorted(skipped) == sorted(hashes) == [
-        "agent_investigate_rules/1/_retired_x.json", "agent_investigate_rules/1/x.proposed.json",
-        "agent_investigate_rules/1/x.review.json"]
+        "agent_investigate_rules/1/_retired_x.json", "agent_investigate_rules/1/_retired_y.review.json",
+        "agent_investigate_rules/1/x.proposed.json"]
+
+
+@pytest.mark.parametrize("store_name", ["agent_investigate_rules", "agent_b2_corrections"])
+def test_a_live_review_file_stops_the_load(tmp_path, store_name):
+    # slice 5 Task 3 (controller ruling): production has no rule that skips a .review. file, so a live one is a
+    # surprise, and a surprise is a LoadError, never a silent skip
+    folder = "1" if store_name == "agent_investigate_rules" else FUND
+    _write(tmp_path, folder, "x.review.json", {"rule_type": "row_exclusion", "predicate_sql": "true"})
+    with pytest.raises(LoadError, match=r"\.review\."):
+        agent_stores.read_agent_store(store_name, tmp_path, [FUND])
 
 
 def test_an_admission_manifest_stops_the_load(tmp_path):

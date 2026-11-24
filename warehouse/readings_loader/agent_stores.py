@@ -16,8 +16,9 @@ are loaded into the table correction_rule for the record and applied by no model
 
 Which files are read: <store>/<dir>/<file>.json one level down, as production globs (*/*.json). A file is skipped,
 as pipeline/rule_admission.py admitted skips it, when its name or its folder starts with '_' (retired, pulled) or its
-name contains '.proposed.'; also when its name contains '.review.' (a review record, not a leaf; production has no
-such rule, and no live file is named so today). A store with an admission_manifest.json is a LoadError: production
+name contains '.proposed.'. A live file whose name contains '.review.' is a LoadError (slice 5 Task 3, controller
+ruling; until then it was skipped): production has no such rule and would load it. A retired '_' file named .review. is
+still skipped as retired. A store with an admission_manifest.json is a LoadError: production
 would then admit by that manifest, which this loader does not read. Every other surprise is a LoadError, never a skip:
 an unknown fix class or rule type, a template key not understood, a position without src_context_id.
 """
@@ -42,14 +43,18 @@ def _cik10(raw):
 
 
 def skip_reason(path):
-    """Why a file of a store is not loaded, or '' when it is. path: the file; its folder is the fund folder."""
+    """Why a file of a store is not loaded, or '' when it is. path: the file; its folder is the fund folder.
+
+    A live (not retired) file whose name contains '.review.' is a LoadError (slice 5 Task 3, controller ruling):
+    production has no rule that skips it, so it would load it; skipping it here would be a silent surprise."""
     name = path.name
     if name.startswith("_") or path.parent.name.startswith("_"):
         return "retired or pulled (name or folder starts with _)"
     if ".proposed." in name.lower():
         return "proposal (.proposed. in the name)"
     if ".review." in name.lower():
-        return "review record (.review. in the name)"
+        raise LoadError(f"{path.parent.name}/{name}: a live file named .review.; production would load it, "
+                        "this loader does not know what it holds")
     return ""
 
 
