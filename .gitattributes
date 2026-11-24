@@ -4,3 +4,5 @@
 # out the bytes exactly as committed. Add a path here BEFORE committing a new hash-bound file.
 data/reference/monetary_conversion/** -text
 data/overrides/**/_retired_*.json -text
+# Review records beside retired files are not hash-bound: leave them to git's normal handling.
+data/overrides/**/_retired_*.review.json !text

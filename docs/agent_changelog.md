@@ -15811,3 +15811,10 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Rejected alternative: making each check tolerate line ends. A first version did that in the admission gate; it was reverted because a second byte-exact check (the FX source hash) sat behind it and a third in the retired-corrections contract. Fixing the bytes once covers all of them and leaves the tamper checks byte-exact.
 - New rule for authors: add a path to `.gitattributes` as `-text` BEFORE committing a new hash-bound file. `tests/test_hash_bound_files.py` fails by name if a file in the FX admission manifest or a quote source lacks the attribute, and loads the tracked FX package through the real admission and source-hash checks on every platform.
 - Not covered: hash-bound files outside those two patterns (not searched for exhaustively); existing checkouts keep whatever line ends 0002011498's retired file already has until it is checked out again.
+
+## 2026-11-24: correction to the hash-bound files change (four retired rules restored to LF bytes)
+
+- Defect in the 2026-11-23 change (bf8b37a7): it re-committed every `_retired_*.json` file with CRLF bytes, assuming all recorded hashes were taken on Windows. Three retired investigate rules (1803498 cash exclusion, 1838126 bare-axis exclusion, 2011498 subsidiary look-through) and the 1803498 JV look-through original were recorded on LF bytes, so `tests/test_retired_retention_rules.py` failed and `pipeline/programme/rule_snapshot.py` would have refused them.
+- Fix: those files, the retired files with no recorded hash, and the 12 `.review.json` records are restored byte for byte to their content before bf8b37a7. `.gitattributes` now leaves `.review.json` records to git's normal handling. The eight B2 retired corrections and the FX package keep CRLF bytes (their hashes were recorded on CRLF; checked file by file).
+- Guard: `tests/test_hash_bound_files.py` now checks every retired file against the hash its review record names, on every platform.
+- Also on this branch: `tests/test_match_gold_packets.py` relative-path check corrected for POSIX paths (the product behaviour was right).

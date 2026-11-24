@@ -39,3 +39,21 @@ def test_files_named_in_the_fx_admission_manifest_are_never_line_end_converted()
                             capture_output=True, text=True, check=True, timeout=60)
     converted = [line for line in result.stdout.splitlines() if not line.endswith(": text: unset")]
     assert not converted, "add these to .gitattributes as -text: " + "; ".join(converted)
+
+
+def _retired_records():
+    """(retired file, recorded sha256) for every review record that names its file's original hash."""
+    overrides = config.PROJECT_ROOT / "data" / "overrides"
+    found = []
+    for review in sorted(overrides.rglob("_retired_*.review.json")):
+        recorded = json.loads(review.read_text(encoding="utf-8-sig")).get("original_sha256")
+        retired = review.with_name(review.name[: -len(".review.json")] + ".json")
+        if recorded and retired.is_file():
+            found.append(pytest.param(retired, recorded, id=retired.relative_to(overrides).as_posix()))
+    return found
+
+
+@pytest.mark.parametrize("retired,recorded", _retired_records())
+def test_every_retired_file_still_has_the_bytes_its_review_recorded(retired, recorded):
+    """Some were recorded on CRLF bytes and some on LF; git must hand back whichever it was."""
+    assert sha(retired) == recorded
