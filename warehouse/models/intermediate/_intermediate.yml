@@ -717,10 +717,13 @@ models:
       # Slice 4 Task 1, item d: a detail with its own ceiling (cmp_amount_detail_max) is left out of its cause's count.
       # Slice 5 Task 5: the correction_loaded_value_not_matched detail is gone (both rows equal after correction); the
       # 14 principal_empty_class_not_equity rows and the two new currency conventions have their own ceilings.
-      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: not_yet_explained, detail: principal_empty_class_not_equity}, name: baseline_cmp_amount_published_principal_amount_not_yet_explained_principal_empty_class_not_equity}
-      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: not_yet_explained, detail: principal_empty_class_not_equity}, name: baseline_cmp_amount_published_principal_amount_usd_not_yet_explained_principal_empty_class_not_equity}
+      # Slice 5 Task 6 Part A (Task 5 review): the 14 rows become owner_review principal_emptied_before_section_reclass,
+      # the filled-currency detail becomes old_wrong, and the one unconverted cost row gets its own ceiling.
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: cost, cause: needs_correction, detail: correction_failed_conversion_unresolved}, name: baseline_cmp_amount_published_cost_needs_correction_correction_failed_conversion_unresolved}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount, cause: owner_review, detail: principal_emptied_before_section_reclass}, name: baseline_cmp_amount_published_principal_amount_owner_review_principal_emptied_before_section_reclass}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_usd, cause: owner_review, detail: principal_emptied_before_section_reclass}, name: baseline_cmp_amount_published_principal_amount_usd_owner_review_principal_emptied_before_section_reclass}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: convention, detail: untagged_principal_currency_blank_in_production}, name: baseline_cmp_amount_published_principal_amount_currency_convention_untagged_principal_currency_blank}
-      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: convention, detail: filled_principal_currency_blank_in_production}, name: baseline_cmp_amount_published_principal_amount_currency_convention_filled_principal_currency_blank}
+      - baseline_cmp_amount_cause: {arguments: {basis: published, field: principal_amount_currency, cause: old_wrong, detail: filled_principal_currency_blank_in_production}, name: baseline_cmp_amount_published_principal_amount_currency_old_wrong_filled_principal_currency_blank}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: old_wrong}, name: baseline_cmp_amount_published_shares_old_wrong}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: new_wrong}, name: baseline_cmp_amount_published_shares_new_wrong}
       - baseline_cmp_amount_cause: {arguments: {basis: published, field: shares, cause: convention}, name: baseline_cmp_amount_published_shares_convention}
@@ -959,6 +962,8 @@ models:
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_identifier_text_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: rate_only_context_not_adopted}, name: baseline_cmp_rate_published_pik_rate_nsnl_rate_only_context_not_adopted}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: pik_rate, cause: needs_store_not_loaded, detail: whole_coupon_pik_not_read}, name: baseline_cmp_rate_published_pik_rate_nsnl_whole_coupon_pik_not_read}
+      # Slice 5 Task 6 Part A (Task 5 review): the two spreads of the owner item have their own ceiling.
+      - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: owner_review, detail: pik_correction_leaves_spread_unread}, name: baseline_cmp_rate_published_spread_owner_review_pik_correction_leaves_spread_unread}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: identifier_text_not_read}, name: baseline_cmp_rate_published_spread_nsnl_identifier_text_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: printed_rate_type_and_loan_class_not_read}, name: baseline_cmp_rate_published_spread_nsnl_printed_rate_type_and_loan_class_not_read}
       - baseline_cmp_rate_cause: {arguments: {basis: published, field: spread, cause: needs_store_not_loaded, detail: printed_reference_rate_column_not_read}, name: baseline_cmp_rate_published_spread_nsnl_printed_reference_rate_column_not_read}
@@ -3130,8 +3135,8 @@ unit_tests:
       same layout but the two sides share a sign -> NOT (not_yet_explained). x3 no cost read, a filer fact whose local
       name contains the standard cost name in a non-standard namespace -> new_wrong filer_concept_not_read; x4 an
       unrelated filer fact -> NOT. x5 principal empty in production, currency kept, class COMMON_EQUITY -> convention;
-      x6 the same signature with class STRUCTURED_CREDIT and no class correction -> NOT convention (not_yet_explained
-      principal_empty_class_not_equity); x7 the same with a loaded index-class correction -> old_wrong
+      x6 the same signature with class STRUCTURED_CREDIT and no class correction -> NOT convention (since slice 5 Task 6:
+      owner_review principal_emptied_before_section_reclass); x7 the same with a loaded index-class correction -> old_wrong
       principal_emptied_then_reclassified. x8 shares with a label-keyed loaded correction that production names ->
       needs_correction; share of net assets that production names corrected with no loaded correction ->
       needs_store_not_loaded. x9 a count moved to principal here, kept as shares in production -> owner_review
@@ -3164,6 +3169,10 @@ unit_tests:
       with its currency empty -> convention filled_principal_currency_blank_in_production; x20 (no fill, no correction)
       stays NOT. x26 a cost correction failed here, production holds the value -> needs_correction
       correction_failed_conversion_unresolved.
+      Slice 5 Task 6 Part A (Task 5 review): x6 is owner_review principal_emptied_before_section_reclass (was
+      not_yet_explained principal_empty_class_not_equity); x25 is old_wrong (was convention). x27 the same as x24 but the
+      correction carries a unit (iso4217:USD) -> NOT untagged_principal_currency_blank_in_production (it falls to
+      not_yet_explained correction_applied_value_differs).
     model: cmp_amount
     given:
       - input: ref('cmp_row_set')
@@ -3194,6 +3203,7 @@ unit_tests:
           - {basis: published, accession: A, context_id: x24, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: x25, cik: "1", report_date: 2026-03-31, side: both}
           - {basis: published, accession: A, context_id: x26, cik: "1", report_date: 2026-03-31, side: both}
+          - {basis: published, accession: A, context_id: x27, cik: "1", report_date: 2026-03-31, side: both}
       - input: ref('cmp_excluded_quarter')
         rows:
           - {cik: "1", report_date: 2026-09-30}
@@ -3224,6 +3234,7 @@ unit_tests:
           - {accession_number: A, src_context_id: x24, principal_amount: 52800000, principal_amount_usd: 52800000, principal_amount_currency: null}
           - {accession_number: A, src_context_id: x25, principal_amount: 60800000, principal_amount_usd: 60800000, principal_amount_currency: null, src_filled_fields: "cost,fair_value,principal_amount"}
           - {accession_number: A, src_context_id: x26, cost_reported: 41554000, cost: 41554000}
+          - {accession_number: A, src_context_id: x27, principal_amount: 52800000, principal_amount_usd: 52800000, principal_amount_currency: null}
       - input: ref('int_field_corrected')
         rows:
           - {accession: A, context_id: x1, field: fair_value, value: 282, value_filed: -282, action: bracketed_unsigned, status: normalised, reason: applied}
@@ -3269,6 +3280,8 @@ unit_tests:
           - {accession: A, context_id: x25, field: principal_amount, value: 60800000, currency: USD, value_filed: 60800000, action: as_filed, status: normalised, reason: applied}
           - {accession: A, context_id: x25, field: principal_amount_usd, value: 60800000, value_filed: 60800000, action: as_filed, status: normalised, reason: applied}
           - {accession: A, context_id: x26, field: cost, value: null, status: absent, reason: no_fact}
+          - {accession: A, context_id: x27, field: principal_amount, value: 52800000, currency: USD, action: as_filed, status: corrected, reason: applied, correction_id: u27}
+          - {accession: A, context_id: x27, field: principal_amount_usd, value: 52800000, action: as_filed, status: corrected, reason: applied, correction_id: u27}
       - input: ref('int_correction_application')
         rows:
           - {correction_id: c8, kind: value, field: shares_held, accession: A, context_id: x8, outcome: applied, reason: null, applied_at_step: converted}
@@ -3277,10 +3290,12 @@ unit_tests:
           - {correction_id: c23, kind: value, field: principal_amount, accession: A, context_id: x23, outcome: applied, reason: null, applied_at_step: converted}
           - {correction_id: u24, kind: value, field: principal_amount, accession: A, context_id: x24, outcome: applied, reason: null, applied_at_step: filed}
           - {correction_id: f26, kind: value, field: cost, accession: A, context_id: x26, outcome: failed, reason: conversion_unresolved, applied_at_step: null}
+          - {correction_id: u27, kind: value, field: principal_amount, accession: A, context_id: x27, outcome: applied, reason: null, applied_at_step: filed}
       - input: ref('stg_correction')
         rows:
           - {correction_id: k7, kind: value, field: index_classification, accession: A, context_id: x7, identifier: null}
           - {correction_id: u24, kind: value, field: principal_amount, accession: A, context_id: x24, identifier: null, value: "52800000", value_unit: null}
+          - {correction_id: u27, kind: value, field: principal_amount, accession: A, context_id: x27, identifier: null, value: "52800000", value_unit: "iso4217:USD"}
       - input: ref('stg_filed_fact')
         rows:
           - {accession: A, context_id: x3, concept_namespace: "http://filer.example/2026", concept_local: CostConceptCredit, value_numeric: 500}
@@ -3345,9 +3360,9 @@ unit_tests:
         - {context_id: x5, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x6, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x6, field: cost, outcome: both_empty, cause: null, cause_detail: null}
-        - {context_id: x6, field: principal_amount, outcome: production_empty, cause: not_yet_explained, cause_detail: principal_empty_class_not_equity}
+        - {context_id: x6, field: principal_amount, outcome: production_empty, cause: owner_review, cause_detail: principal_emptied_before_section_reclass}
         - {context_id: x6, field: principal_amount_currency, outcome: equal, cause: null, cause_detail: null}
-        - {context_id: x6, field: principal_amount_usd, outcome: production_empty, cause: not_yet_explained, cause_detail: principal_empty_class_not_equity}
+        - {context_id: x6, field: principal_amount_usd, outcome: production_empty, cause: owner_review, cause_detail: principal_emptied_before_section_reclass}
         - {context_id: x6, field: shares, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x6, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x7, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
@@ -3465,7 +3480,7 @@ unit_tests:
         - {context_id: x25, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x25, field: cost, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x25, field: principal_amount, outcome: equal, cause: null, cause_detail: null}
-        - {context_id: x25, field: principal_amount_currency, outcome: production_empty, cause: convention, cause_detail: filled_principal_currency_blank_in_production}
+        - {context_id: x25, field: principal_amount_currency, outcome: production_empty, cause: old_wrong, cause_detail: filled_principal_currency_blank_in_production}
         - {context_id: x25, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
         - {context_id: x25, field: shares, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x25, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
@@ -3476,6 +3491,13 @@ unit_tests:
         - {context_id: x26, field: principal_amount_usd, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x26, field: shares, outcome: both_empty, cause: null, cause_detail: null}
         - {context_id: x26, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x27, field: fair_value, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x27, field: cost, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x27, field: principal_amount, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x27, field: principal_amount_currency, outcome: production_empty, cause: not_yet_explained, cause_detail: correction_applied_value_differs}
+        - {context_id: x27, field: principal_amount_usd, outcome: equal, cause: null, cause_detail: null}
+        - {context_id: x27, field: shares, outcome: both_empty, cause: null, cause_detail: null}
+        - {context_id: x27, field: pct_of_net_assets, outcome: both_empty, cause: null, cause_detail: null}
 
   - name: int_repeated_commitment_value_structure
     description: >

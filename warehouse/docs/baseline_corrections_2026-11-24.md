@@ -451,7 +451,7 @@ cause from the closed list.
 | cmp_amount, cmp_rate | `needs_correction|correction_<outcome>_<reason>` | covering corrections are loaded on the row and none is used here (rejected, failed or deferred) |
 | cmp_amount, cmp_rate | `not_yet_explained|correction_applied_value_differs` | a correction applied on the field, production holds another value, no other rule says why (checked last) |
 | cmp_amount | `convention|untagged_principal_currency_blank_in_production` | the currency of a principal set at step filed by a correction with no unit, production's currency empty |
-| cmp_amount | `convention|filled_principal_currency_blank_in_production` | production's dedupe filled the principal from a sibling context (src_filled_fields) and left its currency empty |
+| cmp_amount | `convention|filled_principal_currency_blank_in_production` (since Task 6 Part A: `old_wrong`, section 4.6) | production's dedupe filled the principal from a sibling context (src_filled_fields) and left its currency empty |
 | cmp_rate | `owner_review|pik_correction_leaves_spread_unread` | a PIK correction applied makes the spread text_not_read while the value before equals production's |
 | cmp_rate | `needs_store_not_loaded|same_identifier_context_fill_not_built` | production filled the rate (src_filled_fields), the row is no taker here, and a context of the filing with the same label carries a rate fact and no fair value |
 | cmp_rate | `needs_store_not_loaded|rate_only_context_not_adopted` (changed) | now only where the row is not a taker this layer paired |
@@ -631,6 +631,20 @@ tranche) may be right for the wrong reason, and only the owner can say whether t
 ruling the rows keep `not_yet_explained|principal_empty_class_not_equity`, now under a detail ceiling of their own (14
 each), so the not_yet_explained cause ceiling is 0 on every field.
 
+**Ruling (controller, 2026-11-25, Task 6 Part A).** The 14 + 14 rows are now `owner_review`, detail
+`principal_emptied_before_section_reclass`, with a detail ceiling of 14 on principal and 14 on dollar principal. The
+`not_yet_explained|principal_empty_class_not_equity` detail and its ceilings are gone. The owner question is the one
+above, next to D17: is a CLO equity "Units" amount a par or a unit count?
+
+What the trace established: the step that empties the principal (the file and lines in points 1 to 3). What no run
+established:
+
+- each row's first class (COMMON_EQUITY is inferred, not observed);
+- whether the later re-class to STRUCTURED_CREDIT comes from the printed section (`apply_structured_sections`) or from
+  `_stabilize_classification` / `_restore_deterministic_classification_rules` (`pipeline/unified_holdings.py` lines
+  1519-1520), which run near the same point. The outcome for these rows is the same either way; the mechanism name is
+  not proven.
+
 ### 4.5 Proofs
 
 - Snapshot before the task against the full build after it (`scripts/slice5/compare_snapshots.py`, 47 relations): every
@@ -641,3 +655,22 @@ each), so the not_yet_explained cause ceiling is 0 on every field.
   because the needs_correction tests now count 0). Python tests 175 passed.
 - Unit tests: `cmp_row_set_catch_all_causes`, `cmp_row_set_early_causes`, `cmp_amount_cause_rules`,
   `cmp_rate_cause_rules` updated to the new inputs, with new rows for each new rule and its false case.
+
+### 4.6 Review fixes (slice 5 Task 6 Part A, 2026-11-25)
+
+The Task 5 review approved with minors. These fixes change labels and tests only; no value of this layer changes.
+
+| Fix | What changed | Rows |
+|---|---|---:|
+| 1 | The 14 BCRED rows: `not_yet_explained|principal_empty_class_not_equity` becomes `owner_review|principal_emptied_before_section_reclass` (controller ruling; section 4.4). Detail ceiling 14 on principal and 14 on dollar principal; the old detail and its ceilings go | 14 + 14 |
+| 2 | `filled_principal_currency_blank_in_production` moves from `convention` to `old_wrong` (controller ruling): production's dedupe copied the value without its unit. Ares c-1728, c-1776. Detail ceiling 2 kept | 2 |
+| 2 | `convention|untagged_principal_currency_blank_in_production` stays, listed as **unverified**: both pipelines assume USD for a principal with no unit, and no filing print was read to confirm it | 3 |
+| 3 | Own detail ceilings for `needs_correction|correction_failed_conversion_unresolved` (cost, 1; the Apollo cost C_f9b16d68) and `owner_review|pik_correction_leaves_spread_unread` (spread, 2). The cost `needs_correction` and spread `owner_review` cause ceilings go from 1 and 2 to 0 | 1, 2 |
+| 4 | Unit test `cmp_amount_cause_rules` row x27: a principal set at step filed by a correction that carries a unit (iso4217:USD) is NOT `untagged_principal_currency_blank_in_production` | test only |
+| 5 | New build test `tests/cmp_row_set_production_row_once.sql`: no production row is compared with two rows of this layer (ceiling 0). Measured 0 | 0 |
+
+Cause ceilings: a detail with its own ceiling never counts in its cause's ceiling, so the currency `old_wrong` (0) and
+`convention` (671) and the principal `owner_review` (166) cause ceilings did not need to change.
+
+Parked, recorded only: `correction_applied_value_differs` is checked after the mechanism rules and tests only the
+field's own correction id. A corrected row that a mechanism rule explains is not flagged by it. 0 rows affected today.

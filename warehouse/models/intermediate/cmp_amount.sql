@@ -29,12 +29,13 @@
 --   convention|untagged_principal_currency_blank_in_production  the currency: a principal set at step filed by a
 --        correction with no unit (a wrapper untagged value), production's currency empty. Production fills the value
 --        at parse time with no unit, so its currency stays blank; this layer's conversion reads a value with no unit as
---        dollars and writes USD.
---   convention|filled_principal_currency_blank_in_production  the currency, production's currency empty, and its
+--        dollars and writes USD. Unverified: both pipelines assume USD for a principal with no unit (Task 5 review).
+--   old_wrong|filled_principal_currency_blank_in_production  the currency, production's currency empty, and its
 --        src_filled_fields names principal_amount: production's dedupe copied the principal value from a sibling context
 --        of the same identifier (pipeline/bdc_filings.py _deduplicate_bdc_holdings) without its unit, so its currency
 --        stays blank (and it converts the value as dollars); this layer reads the principal on its own context with its
---        unit. Seen on the two adopted pairs whose production row keeps the giver's context id.
+--        unit. Seen on the two adopted pairs whose production row keeps the giver's context id. Old wrong since the
+--        Task 5 review (controller ruling 2026-11-25; was convention): the copy drops the unit.
 --   needs_correction|correction_<outcome>_<reason>  covering corrections are loaded on the row and none is used here
 --        (rejected, failed or deferred, the outcome and reason of the first). Ceiling 0 on every field.
 --   not_yet_explained|correction_applied_value_differs  a correction applied on this field and production holds
@@ -61,11 +62,13 @@
 --        those, where a loaded correction sets the row's index class or asset category: production emptied the
 --        principal under its first class (the class step comes before row corrections in unified_holdings.py) and the
 --        correction re-classed the row as debt without restoring the filed par (fix round 1, item 1).
---   not_yet_explained|principal_empty_class_not_equity  the same signature, a class that is not equity or fund, and no
---        loaded class correction (fix round 1, item 1). Traced in slice 5 Task 5 (baseline_corrections section 4.4):
---        the 14 rows (one fund's "Units" lines) are emptied under their first class (COMMON_EQUITY, from the label word "Units") and then
---        re-classed STRUCTURED_CREDIT by the printed section (pipeline/printed_sections.py apply_structured_sections,
---        after the class step). The cause waits for a controller ruling; the detail is unchanged until then.
+--   owner_review|principal_emptied_before_section_reclass  the same signature, a class that is not equity or fund, and
+--        no loaded class correction (fix round 1, item 1; was not_yet_explained|principal_empty_class_not_equity until
+--        the Task 5 review, controller ruling 2026-11-25). Traced in slice 5 Task 5 (baseline_corrections section 4.4):
+--        the 14 rows (one fund's "Units" lines) are emptied under their first class (COMMON_EQUITY, from the label word
+--        "Units") and then re-classed STRUCTURED_CREDIT by the printed section (pipeline/printed_sections.py
+--        apply_structured_sections, after the class step). Owner review: whether such "Units" are a par or a unit count
+--        is the owner's question (next to D17).
 --   convention|count_principal_currency_blank_in_production  a principal taken from a share count: production leaves
 --        its currency blank (and converts it as dollars), this layer writes USD.
 --   old_wrong|pct_size_bound_keeps_fraction  share of net assets: production stores the filed fraction unscaled (its
@@ -354,7 +357,7 @@ with both_rows as (
                 then 'convention|untagged_principal_currency_blank_in_production'
             when field = 'principal_amount_currency' and outcome = 'production_empty'
                  and regexp_matches(src_filled_fields, '(^|[,;])principal_amount([,;]|$)')
-                then 'convention|filled_principal_currency_blank_in_production'
+                then 'old_wrong|filled_principal_currency_blank_in_production'
             when has_loaded_correction and not loaded_correction_used
                 then 'needs_correction|correction_' || unused_outcome
             when production_corrected and not has_loaded_correction
@@ -387,7 +390,7 @@ with both_rows as (
             when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
                  and production_principal is null and production_currency is not null
                  and new_principal_action = 'as_filed'
-                then 'not_yet_explained|principal_empty_class_not_equity'
+                then 'owner_review|principal_emptied_before_section_reclass'
             when field = 'principal_amount_currency' and outcome = 'production_empty'
                  and new_principal_action = 'par_tagged_as_units' and currency_new = 'USD'
                 then 'convention|count_principal_currency_blank_in_production'

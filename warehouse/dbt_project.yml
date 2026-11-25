@@ -294,10 +294,14 @@ vars:
   #   C_f9b16d68-f444-4e30-b9e0-a3259fb1f0f8 (the untagged cost 41,554,000 this layer cannot sign without its print,
   #   section 2.1; production holds it). principal and dollar principal not_yet_explained 0 here: the 14 BCRED rows have
   #   their own detail ceiling below. The 5 new currency conventions have detail ceilings below, so convention stays 671.
+  # Slice 5 Task 6, Part A (Task 5 review fixes, 2026-11-25): the Apollo cost row has its own detail ceiling below, so
+  #   the cost needs_correction cause ceiling is 1 -> 0. The 14 BCRED rows are owner_review under their own detail, so
+  #   principal and dollar principal owner_review stay 166. The 2 filled-currency rows are old_wrong under their own
+  #   detail, so currency old_wrong stays 0 and convention stays 671 (detail rows never count in their cause).
   cmp_amount_max:
     published:
       fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 1, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       principal_amount: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 0}
       principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 671, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
       principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 0}
@@ -317,23 +321,29 @@ vars:
   # correction is a EUR / GBP principal; production converted it, this layer did not convert a correction. Slice 5
   # Task 5: gone (the detail is no longer produced; the corrected principal converts through to_usd and both rows are
   # equal). Slice 5 Task 5, measured 2026-11-25:
-  #   not_yet_explained|principal_empty_class_not_equity 14 on principal and dollar principal: the BCRED Units rows
-  #     2025-06-30 to 2026-06-30 (was in the cause ceiling). Traced (section 4.4), cause waits for a controller ruling.
+  #   owner_review|principal_emptied_before_section_reclass 14 on principal and dollar principal: the BCRED Units rows
+  #     2025-06-30 to 2026-06-30. Traced (section 4.4). Was not_yet_explained|principal_empty_class_not_equity until the
+  #     Task 5 review (controller ruling 2026-11-25: par or unit count is the owner's question, next to D17).
   #   convention|untagged_principal_currency_blank_in_production 3: Ares 0001287750-22-000052
   #     i37db8a34619644da93106ca0e70ab374_I20220930 and i6cfa6b6a64b94b83856418b04b8626a0_I20220930 (promoted by their
   #     wrapper principals), 0001287750-23-000010 ie6a91f4a72834ea4b64f0579f8515441_I20221231 (equal before: both
-  #     currencies empty; the corrected principal now carries USD).
-  #   convention|filled_principal_currency_blank_in_production 2: Ares 0001287750-25-000020 c-1728 and
-  #     0001287750-25-000038 c-1776 (the adopted pairs; production's dedupe filled the principal onto c-1727 / c-1775).
+  #     currencies empty; the corrected principal now carries USD). Unverified: both pipelines assume USD.
+  #   old_wrong|filled_principal_currency_blank_in_production 2: Ares 0001287750-25-000020 c-1728 and
+  #     0001287750-25-000038 c-1776 (the adopted pairs; production's dedupe filled the principal onto c-1727 / c-1775
+  #     without its unit). Was convention until the Task 5 review (controller ruling 2026-11-25).
+  #   needs_correction|correction_failed_conversion_unresolved 1 on cost: Apollo 0000950170-24-094137 C_f9b16d68 (Task 6
+  #     Part A: own detail ceiling; was in the cause ceiling).
   cmp_amount_detail_max:
     published:
+      cost:
+        "needs_correction|correction_failed_conversion_unresolved": 1
       principal_amount:
-        "not_yet_explained|principal_empty_class_not_equity": 14
+        "owner_review|principal_emptied_before_section_reclass": 14
       principal_amount_currency:
         "convention|untagged_principal_currency_blank_in_production": 3
-        "convention|filled_principal_currency_blank_in_production": 2
+        "old_wrong|filled_principal_currency_blank_in_production": 2
       principal_amount_usd:
-        "not_yet_explained|principal_empty_class_not_equity": 14
+        "owner_review|principal_emptied_before_section_reclass": 14
   # Comparison of rates with production (cmp_rate, slice 4 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_rate_cause.sql), measured 2026-11-23 (docs/baseline_rates_2026-11-23.md). The two bases
   # are never summed. not_yet_explained 0 and new_wrong 0 everywhere (new_wrong was 3 before the controller ruling of
@@ -353,13 +363,14 @@ vars:
   # cash, kind: printed_reference_rate_column_not_read) and the three HPS cash legs c-934, c-912, c-903 (owner ruling A,
   # cash_equals_all_in). spread owner_review 2: pik_correction_leaves_spread_unread, Apollo 0000950170-24-031479
   # C_1de7bac0-e623-43c0-baa0-84f215e548a2 and 0000950170-24-058684 C_a98dfaae-3949-4d9e-8d76-c18c1c405aa5 (Task 4
-  # review, minor 3; owner item).
+  # review, minor 3; owner item). Since slice 5 Task 6 Part A those 2 have their own detail ceiling in
+  # cmp_rate_detail_max, so the spread owner_review cause ceiling is 2 -> 0.
   cmp_rate_max:
     published:
       interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
       interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
       pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 2, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
     unpublished:
@@ -431,6 +442,7 @@ vars:
         "needs_store_not_loaded|rate_only_context_not_adopted": 0
         "needs_store_not_loaded|whole_coupon_pik_not_read": 44
       spread:
+        "owner_review|pik_correction_leaves_spread_unread": 2
         "needs_store_not_loaded|identifier_text_not_read": 25
         "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 287
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 413
