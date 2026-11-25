@@ -31,6 +31,10 @@ with expected_role as (
         , ('0000000001-26-000011', 'c-24', 'position', 9, false, true, 'fund')
         , ('0000000001-26-000011', 'c-25', 'position', 9, false, true, 'fund')
         , ('0000000001-26-000011', 'c-26', 'unresolved', 4, false, false, 'fund')
+        -- slice 5 Task 6: two contexts that only a correction makes positions (ci_fixture_expected_corrections.sql);
+        -- their filed role does not change
+        , ('0000000001-26-000011', 'c-27', 'not_schedule', 3, false, false, 'fund')
+        , ('0000000001-26-000011', 'c-91', 'not_schedule', 1, false, false, 'fund')
         , ('0000000001-26-000012', 'c-1', 'superseded', 0, false, false, 'fund')
         , ('0000000001-26-000001', 'c-1', 'superseded', 0, false, false, 'fund')
         , ('0000000001-26-000002', 'c-1', 'superseded', 0, false, false, 'fund')

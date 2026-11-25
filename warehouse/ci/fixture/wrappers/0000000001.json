@@ -1,6 +1,6 @@
 {
   "cik": "0000000001",
-  "note": "Invented wrapper copy of the CI fixture fund (warehouse/ci/README.md), the counterpart of warehouse/wrappers/<cik>.json. It holds the production wrapper's declarations plus fund rules of each kind the loader and the row-role models read. Contexts named here are in ../raw/bdc_xbrl/1/000000000126000011.xml. pik_only_tag_reading (slice 4 Task 5) is in this copy only, not in the production stand-in: it puts c-17, a PIK-only row, under pik_only_is_coupon, which needs printed text not read yet (text_not_read).",
+  "note": "Invented wrapper copy of the CI fixture fund (warehouse/ci/README.md), the counterpart of warehouse/wrappers/<cik>.json. It holds the production wrapper's declarations plus fund rules of each kind the loader and the row-role models read. Contexts named here are in ../raw/bdc_xbrl/1/000000000126000011.xml. pik_only_tag_reading (slice 4 Task 5) is in this copy only, not in the production stand-in: it puts c-17, a PIK-only row, under pik_only_is_coupon, which needs printed text not read yet (text_not_read). The second untagged value (c-27 fair_value 0, slice 5 Task 6) is also in this copy only: it makes c-27 a position (correction_supplies_fair_value).",
   "source_encodings": {
     "filed_rate_reading": ["all_in"],
     "pik_only_tag_reading": ["coupon"],
@@ -9,7 +9,7 @@
     "reporting_entity_suffixes": ["Fixture JV LLC"],
     "cash_identifiers": ["Fixture Sweep Account"],
     "rate_only_contexts": ["adopt_adjacent"],
-    "untagged_values": ["0000000001-26-000011 c-4 principal_amount 500"],
+    "untagged_values": ["0000000001-26-000011 c-4 principal_amount 500", "0000000001-26-000011 c-27 fair_value 0"],
     "relabelled_contexts": ["0000000001-26-000011 c-19 :: Mu Fund LP | LP interest :: Mu Fund LP | LP interest (relabelled)"]
   },
   "reading_rules": [

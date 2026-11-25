@@ -1,7 +1,8 @@
 # Baseline: corrections (slice 5), 2026-11-24
 
 Section 2 is written by Task 3 (the outcomes of applying the corrections to amounts and to the row set), section 3
-by Task 4 (rates), section 4 by Task 5 (the comparison with production on the corrected values). Nothing in section 1 applies a correction; it says what the stores hold, what the loader
+by Task 4 (rates), section 4 by Task 5 (the comparison with production on the corrected values), section 5 by Task 6
+(measurements for a later consolidation of corrections into filer rules). Nothing in section 1 applies a correction; it says what the stores hold, what the loader
 loads and where production applies each.
 
 Agreement with production, where this file reports it, shows the two pipelines agree. It does not show either is
@@ -674,3 +675,188 @@ Cause ceilings: a detail with its own ceiling never counts in its cause's ceilin
 
 Parked, recorded only: `correction_applied_value_differs` is checked after the mechanism rules and tests only the
 field's own correction id. A corrected row that a mechanism rule explains is not flagged by it. 0 rows affected today.
+
+## 5. Measurements for consolidation (slice 5 Task 6)
+
+Measured 2026-11-25 on the build at 282283ad (branch `warehouse-slice5`). Measure only: nothing here changes a model,
+a ceiling or a correction. The owner asked for these counts as input to a later exercise: turning repeated
+corrections that each name one row into reusable filer rules. Queries in `warehouse/scripts/slice5/`, run with
+`warehouse/scripts/slice2/run_sql.py`. Funds: Ares 0001287750, BCRED 0001803498, Blue Owl 0001812554, Apollo
+0001837532, HPS 0001838126.
+
+Two words used throughout:
+
+- **Pinned**: the correction names one filing (accession) and one row in it (a context id, an identifier text or a
+  production row id). It can only ever fix that row.
+- **Reusable**: it names no row. It is a filer-level rule (all quarters) or a dated rule (a quarter or a range of
+  quarters) that selects rows by a condition, so it can fix rows in filings that do not exist yet.
+
+### 5.1 Pinned versus reusable
+
+**Loaded corrections** (`stg_correction`, `q_t6_pinned_summary.sql`; per field: `q_t6_pinned_reusable.sql`). All
+4,411 are pinned; 0 are reusable. No store the loader reads can hold a reusable entry: each is keyed by a row.
+
+| Fund | Store | Kind | Corrections | Fields | Filings | Pinned | Reusable |
+|---|---|---|---:|---:|---:|---:|---:|
+| Ares | row_corrections | value | 195 | 14 | 16 | 195 | 0 |
+| Ares | row_corrections_by_context | value | 186 | 2 | 11 | 186 | 0 |
+| Ares | wrapper untagged_values | value | 6 | 2 | 2 | 6 | 0 |
+| Ares | wrapper rate_verification_anchors | evidence | 16 | 2 | 8 | 16 | 0 |
+| Ares | agent_investigate_rules (row_add, 8 positions) | add_row | 212 | 30 | 2 | 212 | 0 |
+| Ares | agent_b2_corrections (by production row id) | value | 3 | 3 | - | 3 | 0 |
+| BCRED | row_corrections | value | 18 | 6 | 6 | 18 | 0 |
+| BCRED | row_corrections_by_context | value | 1,132 | 14 | 12 | 1,132 | 0 |
+| BCRED | wrapper untagged_values | value | 1 | 1 | 1 | 1 | 0 |
+| Blue Owl | row_corrections | value | 171 | 15 | 13 | 171 | 0 |
+| Blue Owl | row_corrections_by_context | value | 211 | 6 | 11 | 211 | 0 |
+| Blue Owl | wrapper relabelled_contexts | relabel | 202 | 1 | 1 | 202 | 0 |
+| Apollo | row_corrections | value | 852 | 17 | 14 | 852 | 0 |
+| Apollo | row_corrections_by_context | value | 273 | 10 | 14 | 273 | 0 |
+| Apollo | wrapper untagged_values | value | 57 | 3 | 14 | 57 | 0 |
+| HPS | row_corrections | value | 177 | 8 | 11 | 177 | 0 |
+| HPS | row_corrections_by_context | value | 696 | 16 | 14 | 696 | 0 |
+| HPS | wrapper pik_margin_reading | exception | 3 | 1 | 3 | 3 | 0 |
+| **Total** | | | **4,411** | | | **4,411** | **0** |
+
+**Agent rules** (`stg_correction_rule` and the add_row groups, `q_t6_pinned_rules.sql`; each read by hand). Of the
+14 live investigator rules (12 exclusions, 2 row_add) and the 2 B2 leaves:
+
+| Class | Rules | Which |
+|---|---:|---|
+| Reusable, all quarters (a condition on the row) | 6 | BCRED 2 (cash rows; footnote figures on the issuer), Blue Owl 2 (issuer-only roll-forward rows; one named vehicle's issuer-only rows), Ares 1 (issuer-only supplemental rows), Apollo 1 (industry and instrument subtotal rows) |
+| Reusable, dated (a condition, one quarter) | 2 | Blue Owl 2025-12-31 (bare-axis roll-forward leaks); B2 comparative-period filter, Ares 2025-12-31 |
+| Pinned exclusion (names rows) | 5 | Ares 2025-09-30 (two row ids), Ares 2023-06-30 and 2024-03-31 (one member text each), Blue Owl 2026-03-31 (a context list, plus a range-axis condition), Apollo 2023-09-30 (one identifier and one fair value) |
+| Pinned addition | 2 | Ares row_add 2025-03-31 and 2025-06-30, 4 listed positions each |
+| Pinned value fix | 1 | B2 all-PIK fix, Ares, one production row id (3 value corrections) |
+
+Same as measured 2026-11-24 (the plan's appendix and Task 6 brief): 4,196 corrections then, plus the 215 agent
+corrections loaded since (212 add_row, 3 B2), all pinned; the rule classes are unchanged. Note: the 8 reusable rules
+are all row removals and are not applied by this layer (decision D20); its row roles reproduce what they remove.
+
+### 5.2 Repeats: the same fix to the same position in more than one quarter
+
+Scope: the 3,978 value corrections (kind `value`: the two row stores, the wrapper untagged values, the B2 leaf). Each
+is placed on production's holdings row it keys, as production applies it (context id: accession and context;
+identifier: accession and trimmed identifier; B2: production row id). That row gives the quarter (its report date;
+wrapper entries carry no date of their own) and the position. All 3,978 find a production row.
+
+Definitions:
+
+- **Same position**, two measures. (1) Production's `position_id` of the target row. It links quarters within one
+  production build only; ids are not stable across builds (AGENTS.md). (2) The same fund and the same identifier text
+  (trimmed) of the target row.
+- **Same fix**: the same field and the same value. An empty value means "withdraw". A number is compared rounded
+  (dollar fields to the dollar, every other number to 6 decimals; the comparison tolerances are 1 dollar and well
+  below 1e-6). Text is compared trimmed. The unit is not part of the fix. Comparing the exact text instead gives the
+  same counts (`q_t6_repeats_exact.sql`).
+- A **position-field** is one position and one field. It is **in a repeat** when one fix value is applied to it in two
+  or more quarters. **Corrections in a repeat** counts every correction inside such a group, each once.
+- Counted across stores: a fix made by the context store in one quarter and by the identifier store in the next is
+  one repeat. Counted inside each store instead, Apollo has 2 more position-fields and 2 fewer corrections in a repeat
+  (two position-fields corrected by both stores); every other fund is the same (`q_t6_repeats_fund.sql`, `within_store`).
+
+**Per fund, measure (1) position id** (`q_t6_repeats_fund.sql`, `across_stores`):
+
+| Fund | Value corrections | Position-fields corrected | ...in 2+ quarters | ...same fix in 2+ quarters | Corrections in a repeat |
+|---|---:|---:|---:|---:|---:|
+| Ares | 390 | 284 | 74 | 67 | 165 |
+| BCRED | 1,151 | 960 | 152 | 152 | 344 |
+| Blue Owl | 382 | 298 | 57 | 40 | 106 |
+| Apollo | 1,182 | 857 | 180 | 161 | 462 |
+| HPS | 873 | 314 | 168 | 155 | 655 |
+| **Total** | **3,978** | **2,713** | **631** | **575** | **1,732** |
+
+**Per fund, measure (2) identifier text** (same query):
+
+| Fund | Position-fields corrected | ...in 2+ quarters | ...same fix in 2+ quarters | Corrections in a repeat |
+|---|---:|---:|---:|---:|
+| Ares | 281 | 77 | 73 | 176 |
+| BCRED | 931 | 136 | 136 | 332 |
+| Blue Owl | 309 | 52 | 41 | 100 |
+| Apollo | 1,006 | 130 | 124 | 294 |
+| HPS | 373 | 209 | 190 | 635 |
+| **Total** | **2,900** | **604** | **564** | **1,537** |
+
+The two measures disagree both ways. Identifier text finds fewer repeats where the text changes between quarters
+(Apollo: 1,006 position-fields by text against 857 by id). It finds more at HPS (209 against 168 corrected in 2+
+quarters), probably where production gives one loan a new id in a later quarter. Neither reason was checked row by row.
+
+**Per fund and store, measure (1)** (`q_t6_repeats_store.sql`; repeats counted inside each store; per field:
+`q_t6_repeats.sql`):
+
+| Fund | Store | Value corrections | Position-fields | Same fix in 2+ quarters | Corrections in a repeat |
+|---|---|---:|---:|---:|---:|
+| Ares | row_corrections | 195 | 164 | 17 | 44 |
+| Ares | row_corrections_by_context | 186 | 111 | 50 | 121 |
+| Ares | wrapper untagged_values | 6 | 6 | 0 | 0 |
+| Ares | agent_b2_corrections | 3 | 3 | 0 | 0 |
+| BCRED | row_corrections | 18 | 19 | 0 | 0 |
+| BCRED | row_corrections_by_context | 1,132 | 940 | 152 | 344 |
+| BCRED | wrapper untagged_values | 1 | 1 | 0 | 0 |
+| Blue Owl | row_corrections | 171 | 132 | 17 | 53 |
+| Blue Owl | row_corrections_by_context | 211 | 166 | 23 | 53 |
+| Apollo | row_corrections | 852 | 635 | 114 | 307 |
+| Apollo | row_corrections_by_context | 273 | 174 | 45 | 144 |
+| Apollo | wrapper untagged_values | 57 | 50 | 2 | 9 |
+| HPS | row_corrections | 177 | 68 | 26 | 114 |
+| HPS | row_corrections_by_context | 696 | 246 | 129 | 541 |
+
+(BCRED's 18 identifier corrections reach 19 position-fields: one identifier matches two positions.)
+
+**By what the field is** (`q_t6_repeats_step.sql`, measure (1), across stores). The step comes from seed
+`correction_field`: `deferred` is a field this layer does not hold yet (names, industry, classes, reference-rate
+text); the others are fields it holds (amounts, rates, currency and FX companions).
+
+| Fund | Corrections in a repeat, field held here | Corrections in a repeat, field not held (deferred) |
+|---|---:|---:|
+| Ares | 38 | 127 |
+| BCRED | 36 | 308 |
+| Blue Owl | 78 | 28 |
+| Apollo | 163 | 299 |
+| HPS | 295 | 360 |
+| **Total** | **610** | **1,122** |
+
+The largest single groups (store and field, corrections in a repeat): HPS industry 226 of 227; BCRED reference-rate
+source and type 130 each (of 348); Apollo principal currency 93 (identifier store); Apollo issuer name 84; Ares issuer
+name 78; HPS coupon type 75, shares 74, spread 72.
+
+### 5.3 Against the plan's appendix (measured 2026-11-24)
+
+The plan gave, by position id over all value corrections: Ares 67 / 165, BCRED 152 / 344, Blue Owl 40 / 106,
+Apollo 159 / 447, HPS 155 / 645 (position-fields with the same fix in 2+ quarters / corrections in a repeat); 1,707 of
+3,975. The only entries added since are the 3 B2 corrections (Ares; none in a repeat). Ares, BCRED and Blue Owl
+agree exactly. Apollo and HPS differ by 25 corrections and 2 position-fields; all of it is two differences of
+definition, each measured:
+
+| Difference | How measured | Apollo | HPS |
+|---|---|---:|---:|
+| This measure (above) | `q_t6_repeats_fund.sql` | 161 / 462 | 155 / 655 |
+| The appendix took the quarter from the correction's own date, so the wrapper untagged values (no date) could not repeat. Here they take the date of their row | `q_t6_repeats_storedate.sql` | 159 / 453 | 155 / 655 |
+| The appendix kept one fix per position-field. Here every fix that repeats counts: Apollo has 2 position-fields with two repeating fixes (6 corrections outside the larger group), HPS 3 (10) | `q_t6_repeats_diag4.sql` | 159 / 447 | 155 / 645 |
+
+After both, every fund equals the appendix: 1,707 corrections. Two other explanations were tested and ruled out:
+the rounding of numbers (`q_t6_repeats_exact.sql`) and placing the row through this layer's key resolution instead of
+production's (`q_t6_repeats_target.sql`); both give the counts above unchanged. Checks that did not explain it and are
+kept for the record: `q_t6_repeats_diag.sql` (by key route and reach), `q_t6_repeats_diag2.sql` (untrimmed
+identifiers), `q_t6_repeats_diag3.sql` (published-basis production rows only).
+
+The definitions here are kept (wrapper entries dated by their row; every repeating fix counted) because both count
+real repeats the appendix left out.
+
+### 5.4 What these definitions miss
+
+- A fix whose value changes each quarter because the underlying amount moves (a corrected principal, a rate reset)
+  is not "the same fix", though the mechanism is the same. The "in 2+ quarters" column counts these; the gap between
+  it and "same fix" (631 against 575 by position id) is an upper bound on them.
+- A position whose id changes between quarters (matching breaks, a relabel) splits one repeat into two on measure
+  (1). Measure (2) catches some of these and misses others.
+- Identifier text that changes between quarters hides a repeat on measure (2).
+- A correction keyed by identifier that hits several rows counts once per position (BCRED: one correction, two
+  positions).
+- Production's position ids are from one build (2026-11-16) and not stable across builds: the counts by id hold for
+  that build only.
+- The measure says nothing about whether a reusable rule could replace a repeat, or whether a repeated fix is right.
+  That is the later exercise. A repeat may also be a sign that the reading itself is wrong for that filer (for
+  example, 226 of HPS's 227 industry corrections repeat), which a filer rule would fix more cleanly than a correction.
+
+Agreement with production is not correctness: these are production's own corrections, counted, not checked.

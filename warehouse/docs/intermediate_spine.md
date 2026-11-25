@@ -3,9 +3,12 @@
 Status: written 2026-11-19. Built so far: slice 1 (readings loader), slice 2 (filing selection,
 row roles, comparison of the row set with production) and slice 3 (amounts: field read, conversion,
 comparison of amounts with production; 2026-11-22) and slice 4 (rates: the rate tags, PIK rate,
-spread and maturity date read, converted and compared with production; 2026-11-23). Not built:
-corrections, observations. Counts: `baseline_readings_2026-11-19.md`, `baseline_roles_2026-11-19.md`,
-`baseline_amounts_2026-11-22.md`, `baseline_rates_2026-11-23.md`.
+spread and maturity date read, converted and compared with production; 2026-11-23) and slice 5
+(corrections: loaded, resolved to a row, applied beside the filed and converted values, one outcome
+per correction, compared with production again; 2026-11-25). Not built: observations
+(`int_observation`) and findings (slice 6). Counts: `baseline_readings_2026-11-19.md`,
+`baseline_roles_2026-11-19.md`, `baseline_amounts_2026-11-22.md`, `baseline_rates_2026-11-23.md`,
+`baseline_corrections_2026-11-24.md`.
 Step 3 of the data-model redesign (`design.md`). Follows `filed_layer.md` (step 2).
 
 Passing every test in this spec shows the layer is consistent, repeatable and agrees with the old
@@ -53,6 +56,22 @@ Added 2026-11-23, after slice 3:
 | D17 | A principal that is a unit count (the 166 `owner_review` principals of slice 3: 107 on production's equity and fund classes, 59 moved from a share count by `par_tagged_as_units` where production kept shares) is to be empty, as in production. Not built: the test that separates these rows in production is its text class, which this layer does not read until the text spec. Measured 2026-11-23: no label or term-fact feature separates them (every one of the 166 has a term fact; the narrow equity-word test finds 57 of them and also 24 equal rows and the 14 BCRED structured-credit rows). They stay `owner_review` in `cmp_amount` until the text spec supplies the class; then the rule is general ("no principal on an equity or fund class"), not a list of rows. |
 | D18 | Owner ruling A, 2026-11-23 (slice 4 owner item 2): under `rate_is_all_in`, where no PIK rate is read, the cash leg equals the all-in rate (reason `cash_equals_all_in`). Production leaves it empty. Only where the all-in rate itself is normalised. Residual risk: a PIK that exists but is not tagged gives an overstated cash leg. Controller ruling R1 (2026-11-23): not where the rate tag's own printed cell contains the word PIK on its own (regexp `(^|[^a-z])pik([^a-z]|$)` on the lowercased cell, `int_rate_tag_cell`): there the cash leg is unresolved, `pik_printed_not_tagged`. |
 | D19 | Owner ruling B, 2026-11-23 (slice 4 owner item 4): a rate, PIK rate or spread filed above 1 in a ratio unit is kept as a percent only under a fund scale rule (action `ratio_value_is_percent` in the fund's wrapper copy) naming the filing, the field and the printed form, with measured evidence and an author. Not production's size rule. Applied per row where the row's own printed number agrees (`int_rate_scale`); other rows stay `scale_not_decided`. Tests: every decided row re-checked against the print, no stale rule, no stored rate built on an undecided number. |
+
+Added 2026-11-24, before slice 5 (the owner took the recommendation on all seven questions of the slice 5
+plan, Part 1, in session: "do it", with two additions put to him beforehand). Earlier, 2026-11-23: publish the
+Apollo zero-value position beneath its two rollups at 0, as production does by a correction (built under D23),
+and trace the 14 BCRED structured-credit principals once (D27).
+
+| # | Decision |
+|---|---|
+| D20 | Load the two agent stores. Their value entries are corrections: the 8 Ares positions an investigator `row_add` rule adds (kind `add_row`) and the one B2 rate fix (kind `value`, keyed by a production `row_id`). Their row-removing rules (12 investigator exclusions, the B2 comparative filter) are recorded in `stg_correction_rule` and applied by no model: they are written in production's column names, and this layer's row roles reproduce what they remove. |
+| D21 | An identifier-keyed correction that matches no position here finds its row through production's holdings row of the same filing and identifier (`production_bridge`), with its own ceiling (67). Addition: this is a NAMED DEBT. These corrections locate their row through production's holdings file and must be re-keyed by context before this layer can replace production. |
+| D22 | A correction on a field this layer does not hold yet (names, classes, industry, reference-rate text, relabels) gets a fifth outcome, `deferred`, beside applied, no_op, rejected and failed. |
+| D23 | The Apollo wrapper's 44 zero fair values are applied as one store, one mechanism (no row list). Addition: only where the printed fair-value cell prints a dash or a zero (the printed-cell test in 6.5); the others are rejected, listed row by row, under their own reason and ceiling. Measured: all 44 print an em dash. |
+| D24 | Ares `rate_only_contexts adopt_adjacent` is built as a general rule (`adopt_adjacent_rate_context`, from structure only). HPS whole-coupon PIK stays a named difference: it needs the printed coupon grammar and production's loan class. |
+| D25 | Units are read through a seed keyed by the written unit text (`seeds/unit_kind.csv`, with `xbrli:pure` and `xbrli:shares` rows); a filing whose unit text the seed does not list fails the build. Reading by namespace (a parser change) is separate work. |
+| D26 | If a context-keyed and an identifier-keyed correction set the same field of one row to different values, neither applies: both `rejected`, reason `conflict`, ceiling 0. Production lets the context-keyed one win; copying that would hide a disagreement between two stores. |
+| D27 | (2026-11-23) The 14 BCRED structured-credit principals production empties: one time-limited trace; if the step is not found, record them as production's error. Result (slice 5 Task 5): found (`baseline_corrections_2026-11-24.md` section 4.4). By controller ruling they are `owner_review`, `principal_emptied_before_section_reclass`: whether a CLO equity "Units" amount is a par or a unit count is the owner's question, next to D17. |
 
 Earlier decisions that still apply: BDCs only, five funds first, per-fund build as the unit, Parquet
 and DuckDB, old pipeline keeps running (2026-11-18).
@@ -347,6 +366,22 @@ rate rules on them. Selected by the wrapper declaration `rate_only_contexts: ado
 list of contexts. Measured: 7 pairs, all Ares. The HPS whole-coupon PIK is not built (it needs the printed coupon
 grammar and production's loan class): a named difference.
 
+As built at the end of slice 5 (2026-11-25; counts in `baseline_corrections_2026-11-24.md`):
+
+- Keys: `context`, `row_id`, `identifier_native`, `production_bridge` (67 corrections, a named debt, D21), else
+  `not_found`.
+- Steps: `filed`, `converted`, `companion`, `reading_input`, `deferred` (seed `correction_field`).
+- Outcomes on 4,414 correction targets (4,411 corrections): applied 1,508; no_op 154; rejected 1
+  (`bridge_ambiguous`); failed 8 (1 `conversion_unresolved`, 7 `rate_reading_unresolved`); deferred 2,743. Each
+  outcome and reason has a ceiling; a correction with no outcome fails the build.
+- Row rule: 60 contexts become positions (`correction_supplies_fair_value` 44, `correction_supplies_term` 8,
+  `correction_adds_row` 8). No role in `int_source_row` changes.
+- Never erase: `int_field_corrected` keeps the filed and normalised values beside the corrected one and names the
+  `correction_id`.
+- The comparison models (`cmp_row_set`, `cmp_amount`, `cmp_rate`) read the corrected values since Task 5.
+- Not built: the expected-value check of the first paragraph above, except for relabels (the row stores carry no
+  expected value); the 13 recorded agent row rules are applied by no model (D20).
+
 
 Agreement with production is not correctness: applying production's corrections makes the two
 pipelines agree; no check here sees a wrong correction.
@@ -444,6 +479,6 @@ SOFR rows within 0.25 of base plus spread. A test with a ceiling on the miss rat
 |---|---|
 | Subtotal rule in SQL or Python | Closed in slice 2: SQL |
 | Identical labels within a filing (19 pairs in holdings) | Ids come from production in this spec, so not hit yet |
-| Which existing correction stores hold entries for the five funds | Closed in slice 5 Task 2 (2026-11-24): eight stores (the four wrapper keys counted apart), measured from the files in `baseline_corrections_2026-11-24.md` section 1. Loaded: the two row-correction CSVs, the wrapper entries, and (loader version 6) the two agent stores, `agent_b2_corrections` and `agent_investigate_rules`. Their value entries are corrections (kind `value` keyed by a production `row_id`; kind `add_row`); their row-removing rules are recorded in `stg_correction_rule` and applied by no model. Seed `correction_field` maps each correction field, by store, to this layer's field and step |
+| Which existing correction stores hold entries for the five funds | Closed in slice 5 Task 2 (2026-11-24): eight stores (the four wrapper keys counted apart), measured from the files in `baseline_corrections_2026-11-24.md` section 1. Loaded: the two row-correction CSVs, the wrapper entries, and (loader version 6) the two agent stores, `agent_b2_corrections` and `agent_investigate_rules`. Their value entries are corrections (kind `value` keyed by a production `row_id`; kind `add_row`); their row-removing rules are recorded in `stg_correction_rule` and applied by no model. Seed `correction_field` maps each correction field, by store, to this layer's field and step. Store list: section 1.1 of that file; per fund, store and kind: section 5.1 (slice 5 Task 6). Stores read and judged not to be holdings corrections: `bdc_aggregate_row_overrides.json` (a check), `agent_anchor/`, a `.proposed` section bridge, `fund_highlights_wrappers/`, `position_id_registry/retirements.csv` |
 | The Ares position (Expereo / Ristretto) whose fair value matches no filed fact | Unexplained |
 | Step 2 rulings (`filed_layer.md` section 7) | Confirmed by the owner 2026-11-19 (D14) |

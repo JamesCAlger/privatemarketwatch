@@ -312,6 +312,42 @@ before this layer can replace production.
 Agreement with production is not correctness: applying production's corrections makes the two
 pipelines agree; no check here sees a wrong correction.
 
+## Corrections: what is applied and what is recorded (slice 5)
+
+**Where corrections come from.** Production fixes some values by hand. The fixes sit in "correction
+stores": two CSV files of row corrections, entries in the fund wrappers (untagged values, relabels), and
+two agent stores (positions an agent adds, one rate fix). The readings loader copies them into one table,
+read by the staging view `stg_correction` (a view is a saved query; dbt rebuilds it on every build). Each
+row says: in this filing, on this row (a context id, an identifier text or a production row id), set this
+field to this value. The list of stores is in `docs/baseline_corrections_2026-11-24.md` section 1.
+
+**Five outcomes.** Every correction gets exactly one outcome on each row it acts on, in the model
+`int_correction_application`, with a reason:
+
+| Outcome | Meaning | Example reason |
+|---|---|---|
+| `applied` | The value was used | (none) |
+| `no_op` | Nothing to change: the row already holds the value, or the correction is a note | `equal_to_normalised` |
+| `rejected` | It cannot be applied as written | `target_not_found`: no such row |
+| `failed` | It was tried and could not be executed | `no_fx_rate`: a foreign amount with no exchange rate |
+| `deferred` | It sets a field this layer does not hold yet (names, classes, industry) | `field_not_held` |
+
+Nothing is dropped. A test fails the build if a loaded correction has no outcome, and each outcome and
+reason has a ceiling (the build fails if its count grows).
+
+**A correction never erases a filed value.** The corrected value is a new column beside the old ones.
+`int_field_corrected` holds, for each field, the filed value, the converted value before corrections
+(`value_normalised`) and the corrected value, and names the `correction_id` that set it. So you can always
+see what the filing said, what the rules made of it, and what the correction changed. If a correction is
+later found wrong, removing it from the store and reloading (`load_readings.ps1`) brings the earlier
+value back on the next build.
+
+**Agreement, not proof.** These are production's own corrections. Applying them makes this layer agree
+with production, and the comparison models (`cmp_amount`, `cmp_rate`, `cmp_row_set`) then show far fewer
+differences. That is agreement between two pipelines. It does not check any correction against the
+filing: a wrong correction is applied the same way on both sides and shows as equal. A passing build is
+not a statement that the data is correct.
+
 ## Where this work lives (since 2026-11-23)
 
 The warehouse work moved from branch `ensemble-fp-experiment` in the main checkout to branch

@@ -119,6 +119,18 @@
     <context id="c-26"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
         <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Total Rho Corp | Term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
         </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- slice 5 Task 6, corrections (ci_fixture_expected_corrections.sql): rule 3 not_schedule (a principal, no fair-value
+         fact; the printed fair-value cell is a dash). The wrapper copy's untagged value supplies fair value 0, which
+         makes it a position (correction_supplies_fair_value) -->
+    <context id="c-27"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><us-gaap:InvestmentIdentifierAxis.domain>Sigma Corp | Delayed draw term loan</us-gaap:InvestmentIdentifierAxis.domain></xbrldi:typedMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
+    <!-- slice 5 Task 6, corrections: rule 1 not_schedule (an issuer axis member, no investment identifier member; it
+         carries the cost only). The agent row_add rule (agent_investigate_rules/1/recover_fixture_position.json) adds
+         the position on it (correction_adds_row) -->
+    <context id="c-91"><entity><identifier scheme="http://www.sec.gov/CIK">0000000001</identifier><segment>
+        <xbrldi:explicitMember dimension="ffx:IssuerAxis">ffx:GammaIncMember</xbrldi:explicitMember>
+        </segment></entity><period><instant>2026-03-31</instant></period></context>
 
     <dei:DocumentType contextRef="c-1" id="d-1">10-Q</dei:DocumentType>
     <dei:DocumentPeriodEndDate contextRef="c-1" id="d-2">2026-03-31</dei:DocumentPeriodEndDate>
@@ -192,4 +204,7 @@
     <us-gaap:InvestmentInterestRatePaidInKind contextRef="c-3" unitRef="pct" decimals="4" id="f-49">0.0200</us-gaap:InvestmentInterestRatePaidInKind>
     <us-gaap:InvestmentBasisSpreadVariableRate contextRef="c-7" unitRef="pct" decimals="4" id="f-50">0.0500</us-gaap:InvestmentBasisSpreadVariableRate>
     <us-gaap:InvestmentInterestRatePaidInKind contextRef="c-17" unitRef="pct" decimals="4" id="f-51">0.1250</us-gaap:InvestmentInterestRatePaidInKind>
+    <!-- slice 5 Task 6, corrections: c-27's principal (no fair-value fact) and c-91's cost -->
+    <us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c-27" unitRef="usd" decimals="0" id="f-52">300</us-gaap:InvestmentOwnedBalancePrincipalAmount>
+    <us-gaap:InvestmentOwnedAtCost contextRef="c-91" unitRef="usd" decimals="0" id="f-53">100</us-gaap:InvestmentOwnedAtCost>
 </xbrl>
