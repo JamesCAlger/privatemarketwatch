@@ -823,6 +823,10 @@ From the ledger (`progress.md`, every `Ruling:` line). Each was made by the cont
 
 ### Left for slice 6
 
+Owner clarification of D5 (2026-11-25, spec D28): every unresolved row or field is either corrected (it leaves the
+list) or deliberately marked as ignored with a reason. The review list is a work queue that goes to zero, not a
+report. Slice 6 needs a place to record the "ignored" decision.
+
 - `int_observation`: one row per position, date and field, the published value with its rule and correction
   (spec section 6, the model after the corrections).
 - Findings: a correction that did not apply (rejected, failed), an unresolved field and an unresolved row become

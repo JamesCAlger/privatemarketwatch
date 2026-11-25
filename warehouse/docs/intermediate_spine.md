@@ -72,6 +72,7 @@ and trace the 14 BCRED structured-credit principals once (D27).
 | D25 | Units are read through a seed keyed by the written unit text (`seeds/unit_kind.csv`, with `xbrli:pure` and `xbrli:shares` rows); a filing whose unit text the seed does not list fails the build. Reading by namespace (a parser change) is separate work. |
 | D26 | If a context-keyed and an identifier-keyed correction set the same field of one row to different values, neither applies: both `rejected`, reason `conflict`, ceiling 0. Production lets the context-keyed one win; copying that would hide a disagreement between two stores. |
 | D27 | (2026-11-23) The 14 BCRED structured-credit principals production empties: one time-limited trace; if the step is not found, record them as production's error. Result (slice 5 Task 5): found (`baseline_corrections_2026-11-24.md` section 4.4). By controller ruling they are `owner_review`, `principal_emptied_before_section_reclass`: whether a CLO equity "Units" amount is a par or a unit count is the owner's question, next to D17. |
+| D28 | (2026-11-25, the owner on D5, for the avoidance of doubt) An unresolved row or field ends in one of two states: corrected, so it disappears from the list, or deliberately marked as ignored with a recorded reason. Nothing stays on the list undecided. Slice 6 must hold the "ignored" mark as data (who, when, why), not as a raised ceiling. |
 
 Earlier decisions that still apply: BDCs only, five funds first, per-fund build as the unit, Parquet
 and DuckDB, old pipeline keeps running (2026-11-18).
