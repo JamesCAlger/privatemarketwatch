@@ -160,7 +160,51 @@ What it shows:
 4. Not measured: how many labels the pattern would split wrongly (the size of the stored-splits store). That needs
    a pattern per fund checked against tags and against production's names: the first task of T1.
 
-## 7. Owner decisions needed before T1
+### 6.1 Second measurement: a candidate pattern against production's names (2026-11-25)
+
+`scripts/text/q_t1_pattern_fit.sql` (samples: `q_t1_label_vs_production.sql`). A pattern per fund written by hand
+from samples: drop the affiliation segment and the trailing row number; split at the last pipe, at Apollo's
+"Investment Type" marker or first instrument phrase, at the last " - " (BCRED, HPS) or the last comma (Ares, Blue
+Owl) when the tail names an instrument word; else at the longest tail already seen as an instrument text for the
+fund (the dictionary anchor). Compared with production's issuer and instrument as letters and digits only.
+
+| Fund | Distinct labels | Both agree | Issuer differs | Instrument differs | Production corrected (issuer / instrument) |
+|---|---:|---:|---:|---:|---|
+| Ares | 4,926 | 4,845 | 42 | 41 | 79 / 34 |
+| BCRED | 4,375 | 4,318 | 50 | 9 | 24 / 5 |
+| Blue Owl | 2,790 | 2,730 | 202 | 25 | 14 / 46 |
+| Apollo | 4,155 | 4,047 | 8 | 5 | 83 / 48 |
+| HPS | 2,248 | 2,235 | 8 | 6 | 9 / 2 |
+| Total | 18,494 | 18,175 (98.3%) | 310 | 86 | 209 / 135 |
+
+"Differs" counts labels production did not correct. Read from the examples, they are four kinds:
+
+1. Production relabels the row: 200 of Blue Owl's 202 are the wrapper's relabelled contexts (the 202 parked
+   relabel corrections). Not a split problem; they close when relabels are applied before the split.
+2. The candidate pattern is too crude: a count with thousands commas ("Warrant to purchase up to 1,088,780 units")
+   split at the wrong comma; a short anchor ("LLC First lien senior secured loan"). Fixable in the pattern.
+3. The filer's label is malformed: "Investment Type Investment Type", "Frist Lien", a pipe in the wrong place, a
+   whole table row written into the label ("..., 0.0932, SOFR (M), 0.05, 45590, ..."). These are the real stored
+   splits.
+4. Production is wrong and the candidate right: "Cadence - Southwick, Inc." is one company; production splits it
+   into issuer "Cadence" and instrument "Southwick, Inc.".
+
+Size of the stored-splits store, on this evidence: the low hundreds across five funds and four years (kind 3,
+plus the part of production's 344 corrected labels that are label problems). Small enough for the design.
+
+Limits of this measurement:
+
+- Apollo's issuer test is weak: it only checks that production's issuer ends the text before the instrument. The
+  label is "Industry Brand Issuer ..." with no separators ("Aerospace & Defense Kaman Kaman Corp"). Where the
+  industry ends and the brand ends is not measured, and it is where production holds 83 corrections. It is the
+  hard part of T1. The printed page may print the three in separate cells; not checked.
+- Agreement with production is not correctness (kind 4). Nothing was compared with a page.
+- The pattern was written by hand in one pass, not proposed by an agent and not checked on unseen quarters.
+
+## 7. Decisions before T1
+
+Applied on the controller's recommendation under the owner's standing delegation (2026-11-25, "run the first
+measurement once done"); the owner has not confirmed them one by one and may overturn any.
 
 | # | Question | Recommendation | Cost if wrong |
 |---|---|---|---|
