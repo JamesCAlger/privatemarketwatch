@@ -783,6 +783,7 @@ From the ledger (`progress.md`, every `Ruling:` line). Each was made by the cont
 | 5 | The 14 BCRED principals become `owner_review`, `principal_emptied_before_section_reclass` (done in Task 6 Part A) | A label |
 | 5 | Currency detail `filled_principal_currency_blank_in_production` (2) becomes `old_wrong`; `untagged_principal_currency_blank_in_production` (3) stays `convention`, listed as unverified | A label |
 | 5 | The Apollo cost that differs from production is a recorded exception to D1, owner item (c) | One cost differs |
+| 6 | The wider repeat definitions (the quarter taken from the production row; every repeating fix counted) are the main measure, 1,732; the plan appendix's narrower ones, 1,707, are stated beside them and reconcile exactly | The owner reads 1,732 where 1,707 was meant |
 
 ### Deferred (minor, from the slice 5 ledger)
 
@@ -797,6 +798,12 @@ From the ledger (`progress.md`, every `Ruling:` line). Each was made by the cont
   0001859919 come into scope); the brief's "6 published rows" was 5.
 - Task 5 review: `correction_applied_value_differs` is checked after the mechanism rules and tests only the field's
   own correction id (0 rows affected today); the reviewer's snapshot comparison used the implementer's files.
+- Final review: `owner_review|principal_emptied_before_section_reclass` keeps the old signature as its condition
+  (nothing checks the section re-class happened; ceiling 14 stops growth, not a swap); `needs_store_not_loaded` is
+  also used for production steps not built here (for example the dedupe fill), a pattern older than this slice; the
+  README Corrections section says "removing it from the store and reloading" of stores that are production's and
+  read-only; the Blue Owl exclusion that selects one identifier is classed reusable by hand; the CI fixture has no
+  failed correction; the over- and under-counts of the repeat measure (baseline 5.4).
 
 ### Left for slice 6
 

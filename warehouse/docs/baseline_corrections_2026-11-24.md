@@ -851,8 +851,8 @@ real repeats the appendix left out.
 - A position whose id changes between quarters (matching breaks, a relabel) splits one repeat into two on measure
   (1). Measure (2) catches some of these and misses others.
 - Identifier text that changes between quarters hides a repeat on measure (2).
-- A correction keyed by identifier that hits several rows counts once per position (BCRED: one correction, two
-  positions).
+- A correction keyed by identifier that hits several rows counts once per position: 6 corrections land on two
+  positions (BCRED 1, Blue Owl 5; `q_final_repeats_several.sql`).
 - Production's position ids are from one build (2026-11-16) and not stable across builds: the counts by id hold for
   that build only.
 - The measure says nothing about whether a reusable rule could replace a repeat, or whether a repeated fix is right.
@@ -860,3 +860,11 @@ real repeats the appendix left out.
   example, 226 of HPS's 227 industry corrections repeat), which a filer rule would fix more cleanly than a correction.
 
 Agreement with production is not correctness: these are production's own corrections, counted, not checked.
+- Found by the final review (2026-11-25, `q_final_repeats_outcome.sql`). Of the 1,732 corrections in a repeat, 76
+  change nothing in this layer (70 equal to the value already read, 6 withdrawals of a field already empty) and 7 are
+  failed: they are not candidates for a filer rule here. The "field held here" count of 610 includes 72 FX-status
+  corrections this layer defers; FX status is not a field it holds. "Same fix" groups by the correction's own field
+  name, so two store names for one field, or a rate written once as a fraction and once as a percent, split one
+  repeat into two (an undercount).
+- The CI fixture has no failed correction: its expected-values test fails on any outcome it does not list, so a
+  passing run shows the fixture produces none.
