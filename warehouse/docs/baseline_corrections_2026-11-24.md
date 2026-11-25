@@ -395,3 +395,25 @@ spread step name); `int_row_corrected` (2 Ares rows, correction ids only); `int_
 fields (rate 75, cash leg 176, PIK 164, spread 288, maturity 11; no amount row); `int_field_normalised` and
 `int_rate_normalised` 25 rows, all on the 7 takers; `cmp_rate` 22 rows, the takers
 (`q_t4_field_corrected_diff_fields.sql`).
+
+### 3.6 After the review (2026-11-25)
+
+Independent review: approved with minors; it reproduced sections 3.1 to 3.4 and the 7 pairs with its own query.
+
+- Rows corrections moved away from production (left out of 3.3): 8 cash legs and 2 spreads matched production before
+  correction and differ after. Over all corrected rows 17 cash legs differ from production, every one set equal to the
+  all-in rate under owner ruling A where production leaves it empty. The task's stop condition (more than 10 corrected
+  rows whose cash leg or kind differs with no production rule to explain it) is not met only because ruling A is the
+  explanation.
+- The 2 spreads (Apollo 0000950170-24-031479 C_1de7bac0, 0000950170-24-058684 C_a98dfaae): a corrected PIK rate makes
+  the row one whose spread rule needs the printed total margin, so the spread goes from 4.5 to `text_not_read`, as on
+  every filed row with a PIK rate and that rule. Production keeps 4.5. A named difference for Task 5 and an owner
+  item: keep the spread as before when only the PIK rate is corrected, or leave it unread like its filed peers. The
+  test `int_field_corrected_never_erase` was loosened by an exception for these rows.
+- Ceilings for `rate_only_context_not_adopted` lowered to the measured counts: rate 2, kind 2, cash leg, PIK and
+  spread 0 (`q_t4_not_adopted_left.sql`). The rows left: Ares 0001287750-25-000038 c-1268 (adopted; the difference is
+  the PIK-only reading; the detail is stale) and Ares 0001287750-25-000007 c-1544 (production has a rate 9.23; the
+  structural rule finds no pair in that filing; not examined). Both for Task 5.
+- The pairing reads the trailing digits of the context id. Run on every fund with no rule filter it finds one
+  spurious Apollo pair between two UUID context ids; production's rule has the same flaw. Harmless while only Ares
+  declares the rule; check before a fund with UUID context ids declares it.

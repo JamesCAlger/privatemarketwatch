@@ -359,7 +359,7 @@ vars:
         "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 405
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
-        "needs_store_not_loaded|rate_only_context_not_adopted": 6
+        "needs_store_not_loaded|rate_only_context_not_adopted": 2
         "needs_store_not_loaded|whole_coupon_pik_not_read": 0
       interest_rate_cash:
         "convention|cash_equals_all_in_owner_ruling": 31242
@@ -368,18 +368,18 @@ vars:
         "needs_store_not_loaded|printed_pik_not_read": 67
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 76
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
-        "needs_store_not_loaded|rate_only_context_not_adopted": 1
+        "needs_store_not_loaded|rate_only_context_not_adopted": 0
         "needs_store_not_loaded|whole_coupon_pik_not_read": 44
       pik_rate:
         "needs_store_not_loaded|identifier_text_not_read": 9
-        "needs_store_not_loaded|rate_only_context_not_adopted": 2
+        "needs_store_not_loaded|rate_only_context_not_adopted": 0
         "needs_store_not_loaded|whole_coupon_pik_not_read": 44
       spread:
         "needs_store_not_loaded|identifier_text_not_read": 19
         "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 287
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 413
         "needs_store_not_loaded|printed_total_margin_not_read": 479
-        "needs_store_not_loaded|rate_only_context_not_adopted": 4
+        "needs_store_not_loaded|rate_only_context_not_adopted": 0
       maturity_date:
         "needs_store_not_loaded|identifier_text_not_read": 1
         "needs_store_not_loaded|printed_maturity_not_read": 43996
@@ -388,7 +388,7 @@ vars:
         "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 405
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
         "needs_store_not_loaded|production_corrected_no_loaded_store": 1
-        "needs_store_not_loaded|rate_only_context_not_adopted": 6
+        "needs_store_not_loaded|rate_only_context_not_adopted": 2
         "needs_store_not_loaded|whole_coupon_pik_not_read": 0
     unpublished:
       interest_rate:
