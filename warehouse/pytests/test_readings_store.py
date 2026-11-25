@@ -50,7 +50,7 @@ def _inputs(tmp_path):
     wrappers.mkdir()
     (wrappers / "0000000001.json").write_text(json.dumps({"source_encodings": {
         "filed_rate_reading": ["all_in"],
-        "rate_only_contexts": ["adopt_adjacent"],
+        "gics_industry_carry_back": ["through 2025-09-30"],  # a procedure key (not_loaded)
         "untagged_values": ["0000000001-26-000001 c-9 cost 7"],
     }}), encoding="utf-8")
     rows = _csv(tmp_path, "c.csv", ["1,2026-03-31,0000000001-26-000001,Acme,cost,100,why,where,me,2026-11-01,c-1"])

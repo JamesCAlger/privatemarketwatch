@@ -275,7 +275,7 @@ prints no rollup over these lines (no rule-6 row shares their label).
 
 | Row reason | Contexts | Fund, role | Fair value | Cost |
 |---|---:|---|---:|---:|
-| correction_supplies_fair_value | 44 | Apollo, not_schedule rule 3 | 0 | 64.7m (the lines' filed cost) |
+| correction_supplies_fair_value | 44 | Apollo, not_schedule rule 3 | 0 | 74.7m (the lines' filed cost; corrected in Task 4 from 64.7m, `q_t4_zero_lines_cost.sql`) |
 | correction_supplies_term | 8 | Ares 2 (2022-09-30), Apollo 6; unresolved rule 9; a wrapper principal | 319.0m | 283.6m (one cost failed, 2.1) |
 | correction_adds_row | 8 | Ares row_add (2025-03-31, 2025-06-30); not_schedule rule 1 | 127.5m (the filed fact) | 145.5m |
 
@@ -300,3 +300,98 @@ The normalised-basis check lists 11 fund-quarters (8 miss the filed total, 3 hav
 basis all 8 tie (Ares 2022-09-30, 2025-03-31, 2025-06-30; Apollo 2023-09-30, 2024-06-30, 2024-09-30, 2025-03-31,
 2026-03-31): only the three 2026-09-30 quarters without a filed total remain (ceiling 3, pinned set). That the totals
 tie shows the added rows close the gap; it does not show each row's value is right.
+
+## 3. Corrections on rates, and the adjacent rate context (slice 5 Task 4)
+
+Measured 2026-11-25 on the full build (`PASS=806 WARN=131 ERROR=0 TOTAL=937`; 175 Python tests). Agreement with
+production is not correctness: the reading re-runs production's corrections, it does not check them.
+
+### 3.1 Outcomes of the 556 rate corrections (`q_t4_outcomes.sql`)
+
+Task 3 held these as deferred, `rate_reading_not_rerun`; that pair is gone from the closed list.
+
+| Field | Applied | No-op, equal | No-op, already absent | Failed, `rate_reading_unresolved` |
+|---|---:|---:|---:|---:|
+| interest_rate | 56 | 2 | 0 | 7 |
+| interest_rate_cash | 1 | 0 | 0 | 0 |
+| rate_kind | 17 | 29 | 0 | 0 |
+| pik_rate | 160 | 1 | 3 | 0 |
+| spread | 267 | 0 | 2 | 0 |
+| maturity_date | 11 | 0 | 0 | 0 |
+| Total | 512 | 32 | 5 | 7 |
+
+All corrections after this task: applied 1,508, deferred 2,743 (field not held 2,541, no companion column 202), no-op
+154, failed 8, rejected 1.
+
+How a rate correction is applied: a corrected rate, cash-pay rate, PIK rate or kind replaces that input and the rate
+reading (macro `rate_reading`) runs again on the corrected inputs (`int_rate_corrected_input`, `int_rate_corrected`);
+the all-in rate, cash leg and kind are its output. A corrected spread or maturity replaces the converted value. A row
+whose corrected reading fails the legs check is failed and keeps its values as before.
+
+The 7 failed: Blue Owl, one position in seven filings (rate 12.0 corrected onto a row with a 6.0 PIK rate and no fund
+rate reading). No rule reads the corrected rate, so the row is kept as before. Failed for `legs_do_not_add`,
+`pik_above_rate`, `kind_not_decidable`: 0 each (ceilings 0).
+
+### 3.2 Published rate rows a correction changed (`q_t4_rate_changed.sql`)
+
+| Field | Rows | Detail |
+|---|---:|---|
+| interest_rate | 59 | 44 corrected, 15 withdrawn |
+| interest_rate_cash | 154 | 1 corrected cash-pay input, 144 legs derived again, 9 left absent by a withdrawn rate |
+| pik_rate | 160 | 147 corrected, 13 withdrawn |
+| spread | 128 | 111 converted, 14 withdrawn, 1 derived again, 2 left `text_not_read` (a corrected PIK rate makes the row need the printed total margin) |
+| maturity_date | 9 | 9 converted |
+
+### 3.3 Against production's values (`q_t4_needs_correction.sql`, `q_t4_needs_correction_left.sql`)
+
+Of the published rate rows `cmp_rate` calls `needs_correction` (it still reads the normalised values; Task 5 moves it):
+
+| Field | Rows | Equal to production after correction |
+|---|---:|---:|
+| interest_rate | 51 | 50 |
+| interest_rate_cash | 68 | 64 |
+| rate_kind | 45 | 44 |
+| pik_rate | 158 | 158 |
+| spread | 123 | 123 |
+| maturity_date | 9 | 9 |
+
+The 6 left, all HPS, for Task 5 to give a cause:
+
+- 0001838126-25-000017 c-157 (rate, cash leg, kind): production reads the 13.5 spread tag as a fixed coupon
+  (`interest_rate:from_spread_tag`), a reading this layer does not have. The PIK correction is applied.
+- Three cash legs (0001628280-26-020206 c-934, 0001628280-26-033248 c-912, 0001838126-25-000073 c-903): this layer sets
+  the cash leg equal to the all-in rate (owner ruling A); production leaves it empty.
+
+### 3.4 The adjacent rate context (`int_rate_adjacent`, `q_t4_adjacent.sql`, `q_t4_adjacent_production.sql`)
+
+Owner decision 5: built as a structural rule (action `adopt_adjacent_rate_context`), selected by the fund's wrapper
+declaration, never a list of contexts. 7 pairs, all Ares (ceiling 7), as the slice 4 approximation counted.
+
+| Quarter | Taker | Giver | Facts taken | Against production |
+|---|---|---|---|---|
+| 2023-12-31 | c-1206 | c-1205 | rate, PIK, spread | all equal |
+| 2025-03-31 | c-1728 | c-1727 | rate, PIK, spread | values equal; production keeps the giver's context id (row-set pair below) |
+| 2025-06-30 | c-1268 | c-1267 | PIK only | PIK equal; rate empty here (`text_not_read`, as every PIK-only row), production 10.25 |
+| 2025-06-30 | c-1446 | c-1445 | rate, spread | equal; cash leg set here, empty in production (owner ruling A) |
+| 2025-06-30 | c-1776 | c-1775 | rate, PIK, spread | values equal; production keeps the giver's context id |
+| 2025-09-30 | c-1475 | c-1474 | rate, spread | equal; cash leg set here, empty in production |
+| 2025-09-30 | c-165 | c-164 | rate, spread | equal; cash leg set here, empty in production |
+
+The two pairs where production keeps the giver's context id are the 2 new-only and 2 production-only
+`rate_only_context_pair` rows of `cmp_row_set`, which did not change. Ceilings raised for the takers, each row named in
+`dbt_project.yml`: `text_not_read` +1 on rate, cash leg and spread (c-1268); cash equals all-in +3 (31,239 to 31,242).
+The printed rows of the pairs were not opened.
+
+HPS whole-coupon PIK: not built (needs printed text and the loan class; text spec). The 3 wrapper entries stay `no_op`,
+`procedure_not_built`.
+
+### 3.5 Proofs
+
+Snapshot before the task against the build after it (`scripts/slice5/compare_snapshots.py`, 43 relations): 32
+unchanged, among them `cmp_amount`, `cmp_row_set`, `int_amount_normalised`, `int_source_row`, `fact_observation`.
+Changed: seeds `action_field` and `reading_action` (+1 row each, the new action) and `correction_field` (spread is
+`converted`); `int_correction_screen` and `int_correction_application` (the 556); `int_correction_target` (269, the
+spread step name); `int_row_corrected` (2 Ares rows, correction ids only); `int_field_corrected` 714 rows, all rate
+fields (rate 75, cash leg 176, PIK 164, spread 288, maturity 11; no amount row); `int_field_normalised` and
+`int_rate_normalised` 25 rows, all on the 7 takers; `cmp_rate` 22 rows, the takers
+(`q_t4_field_corrected_diff_fields.sql`).

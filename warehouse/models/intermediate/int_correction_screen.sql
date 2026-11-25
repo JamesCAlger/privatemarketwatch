@@ -23,10 +23,10 @@
 --   rejected  expected_value_differs   a relabel whose expected label is not the context's identifier label
 --   deferred  field_not_held           step deferred (names, classes, industry, relabels, the agent position metadata)
 --   deferred  no_companion_column      a companion this layer has no column for
---   deferred  rate_reading_not_rerun   a rate field (interest_rate, its cash leg, rate_kind, pik_rate, spread,
---                                      maturity_date): applied by Task 4, which re-runs the rate reading on corrected
---                                      inputs. Until then no rate value changes
---   failed    value_not_numeric        an amount or FX rate whose value is not a number
+--   (slice 5 Task 4: rate corrections go on to the value stage; Task 3 held them as deferred rate_reading_not_rerun)
+--   failed    value_not_numeric        an amount, rate or FX rate whose value is not a number
+--   failed    value_not_date           a maturity date whose value is not an ISO date (YYYY-MM-DD)
+--   failed    value_not_known          a rate kind other than all_in or cash (production's two explicit kinds)
 --   failed    unit_not_known           a currency (value_unit, or a currency companion's value) that is not USD and not
 --                                      a currency of stg_fx_rate
 --   rejected  printed_cell_not_found   a fair value at step filed on a context with no fair-value fact whose printed
@@ -71,6 +71,9 @@ with target as (
         , t.kind in ('value', 'add_row') and coalesce(trim(t.value), '') = '' as is_withdrawal
         , try_cast(trim(t.value) as double) as value_number
         , upper(trim(t.value)) as value_text
+        -- slice 5 Task 4: a maturity date's value as a date (production's store writes YYYY-MM-DD)
+        , case when regexp_full_match(trim(t.value), '[0-9]{4}-[0-9]{2}-[0-9]{2}') then try_cast(trim(t.value) as date) end
+            as value_date
         , cf.identifier_label
         , cf.fair_value_fact_count
     from target t
@@ -89,9 +92,12 @@ with target as (
                 then 'rejected|expected_value_differs'
             when d.step = 'deferred' then 'deferred|field_not_held'
             when d.step = 'companion' and d.value_column is null then 'deferred|no_companion_column'
-            when d.field_row in {{ rate_output_fields() }} then 'deferred|rate_reading_not_rerun'
-            when d.value_column in ('value', 'fx_rate') and not d.is_withdrawal and d.value_number is null
-                then 'failed|value_not_numeric'
+            when d.field_row = 'maturity_date' and d.value_column = 'value' and not d.is_withdrawal
+                 and d.value_date is null then 'failed|value_not_date'
+            when d.value_column = 'rate_kind' and not d.is_withdrawal and lower(trim(d.value)) not in ('all_in', 'cash')
+                then 'failed|value_not_known'
+            when d.value_column in ('value', 'fx_rate') and d.field_row <> 'maturity_date' and not d.is_withdrawal
+                 and d.value_number is null then 'failed|value_not_numeric'
             when d.value_column = 'currency' and not d.is_withdrawal
                  and d.value_text not in (select currency from known_currency) then 'failed|unit_not_known'
             when d.value_unit is not null and upper(trim(d.value_unit)) not in (select currency from known_currency)
@@ -114,6 +120,8 @@ with target as (
         , case
             when is_withdrawal then '<withdrawn>'
             when value_column = 'currency' then value_text
+            when value_column = 'rate_kind' then lower(trim(value))
+            when field_row = 'maturity_date' then cast(value_date as varchar)
             else cast(value_number as varchar)
           end as value_key
     from first_screen
@@ -158,6 +166,7 @@ select
     , is_withdrawal
     , value_number
     , value_text
+    , value_date
     , printed_cell
     , split_part(coalesce(first_key, conflict_key), '|', 1) as screen_outcome
     , split_part(coalesce(first_key, conflict_key), '|', 2) as screen_reason

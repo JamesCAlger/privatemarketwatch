@@ -240,9 +240,10 @@ reads yet: every row it would decide is unresolved, reason `text_not_read`, unde
 
 A row with both rate tags keeps both where they agree with the PIK rate within 1e-9, else both are
 unresolved `legs_do_not_add` (production keeps the first fact in the instance; 0 rows on the five
-funds). No rate is derived from a base rate plus a spread (section 10). Two wrapper procedures are
-measured, not built: `rate_only_contexts adopt_adjacent` (Ares) and `pik_margin_reading whole_coupon`
-(HPS).
+funds). No rate is derived from a base rate plus a spread (section 10). Of the two wrapper procedures
+slice 4 measured, `rate_only_contexts adopt_adjacent` (Ares) is built in slice 5 Task 4 as the
+structural rule `adopt_adjacent_rate_context` (section 6.5, Rates); `pik_margin_reading whole_coupon`
+(HPS) is not built (owner decision 5).
 
 The value-size readings in the wrappers (`par_tagged_as_units` row modes) are loaded as they are and
 listed for review. They decide from the size of a number.
@@ -255,7 +256,7 @@ Each correction names the accession, context and field, the new value, whether i
 or the converted value, and the decision or wrapper entry that authorises it. A correction whose
 target row does not exist, or whose filed value is not what it expected, is reported and not applied.
 
-As built in slice 5 Task 3 (2026-11-24), amounts and the row set; rates follow in Task 4.
+As built in slice 5 Task 3 (2026-11-24), amounts and the row set; rates in Task 4 (below, Rates).
 
 | Model | Grain | What it decides |
 |---|---|---|
@@ -282,15 +283,16 @@ of its field and the conversion rules run on it, so a foreign principal converts
 `converted` (row stores, agent `add_row`): the value replaces the converted value and nothing is
 derived again (production assigns the dollar principal once, before its corrections); `companion`:
 currency of principal, cost and fair value, and the dollar principal's FX rate, land in the currency
-and FX rate columns of that field's row; `reading_input` (rates): deferred until Task 4 re-runs the rate
-reading; `deferred`: fields this layer does not hold.
+and FX rate columns of that field's row; `reading_input` (rate, cash leg, PIK rate, kind): the rate
+reading runs again on the corrected inputs (Task 4, below); `deferred`: fields this layer does not hold.
 
 Outcomes, closed list (`tests/int_correction_outcome_listed.sql`): `applied`; `no_op`
 (`evidence_only`, `procedure_not_built`, `equal_to_normalised`, `already_absent`); `rejected`
 (`target_not_found`, `bridge_ambiguous`, `target_not_position`, `conflict`,
 `expected_value_differs`, `printed_cell_not_found`, `printed_cell_not_dash_or_zero`); `failed`
-(`value_not_numeric`, `value_not_date`, `unit_not_known`, `no_fx_rate`, `conversion_unresolved`);
-`deferred` (`field_not_held`, `no_companion_column`, `rate_reading_not_rerun`). Two corrections that
+(`value_not_numeric`, `value_not_date`, `value_not_known`, `unit_not_known`, `no_fx_rate`,
+`conversion_unresolved`, `legs_do_not_add`, `pik_above_rate`, `kind_not_decidable`,
+`rate_reading_unresolved`); `deferred` (`field_not_held`, `no_companion_column`). Two corrections that
 set one column of one target to different values are both rejected (`conflict`, decision 7); the
 same value twice is not a conflict, and the one production reads last is named.
 
@@ -308,6 +310,43 @@ commonest). It prints a dash or a zero when, with white space, `$`, `(`, `)` and
 single `-`, en dash or em dash, or a zero in digits. Otherwise the correction is rejected
 (`printed_cell_not_found` or `printed_cell_not_dash_or_zero`) and listed row by row. Measured: all 44
 Apollo zero fair values print an em dash.
+
+Rates (slice 5 Task 4, 2026-11-24). Three more models:
+
+| Model | Grain | What it decides |
+|---|---|---|
+| `int_rate_adjacent` | taker accession, context | Which position takes the rate facts of its neighbouring rate-only context (the fund rule `adopt_adjacent_rate_context`) |
+| `int_rate_corrected_input` | run, accession, context | The inputs of the rate reading on each position a rate correction acts on, before and after the corrections |
+| `int_rate_corrected` | run, accession, context, field | The rate reading on those inputs, the change each correction makes, and why a corrected row fails |
+
+Rate corrections are reading inputs, as in production (applied before `financial_finalization.prepare_artifact`
+derives the legs and the kind). A corrected `interest_rate` replaces the read of the interest-rate tag, a corrected
+`interest_rate_cash` the cash-pay tag, a corrected `pik_rate` the PIK rate (a withdrawal empties the read). The rules
+are chosen again on the corrected reads and the reading (macro `rate_reading`) runs again. A corrected kind that
+differs from the kind before decides the reading of `interest_rate` on its row: the row's rule is the correction (its
+`correction_id` is the `rule_id`), with the action of the kind it states: `rate_is_all_in` (a row with a rate tag),
+`pik_only_is_coupon` (kind all_in, no rate tag, a PIK rate: all-in = PIK), `rate_is_cash_leg` (kind cash, a rate
+tag); otherwise `kind_not_decidable`. Spread and maturity corrections are step `converted` (seed `correction_field`;
+the spread was `reading_input` before Task 4): they replace the published value, no leg is derived from them.
+Outcomes added: `failed` `value_not_known` (a kind other than all_in or cash), `legs_do_not_add`, `pik_above_rate`,
+`kind_not_decidable`, `rate_reading_unresolved` (the corrected value cannot be read under the row's rules); a failed
+row keeps its rate fields as before. `deferred` `rate_reading_not_rerun` no longer exists. A correction that changes
+no input (a value equal to the input before, a kind equal to the kind before) is `no_op`.
+
+The owner's rate rulings hold on corrected inputs: a PIK-only row stays `text_not_read` unless a correction supplies a
+rate or an explicit kind; the cash leg equals the all-in rate where no PIK rate is read, except where the rate tag's
+printed cell prints a PIK (`pik_printed_not_tagged`; the print is the filed one, no correction changes it); a
+corrected number is a percent (never a ratio above 1). A correction that supplies the missing input makes the reading
+decidable.
+
+`adopt_adjacent_rate_context` (owner decision 5): within one filing and period, a context with rate facts and no fair
+value, cost or principal (giver) and a context with a fair value and a principal and no rate fact (taker), context
+numbers one apart, the same first 16 letters and digits of the identifier (at least 8), one candidate on each side under
+that key. The taker reads the giver's rate, cash-pay rate, PIK rate and spread facts; `int_rate_normalised` chooses its
+rate rules on them. Selected by the wrapper declaration `rate_only_contexts: adopt_adjacent` (loader version 7), never a
+list of contexts. Measured: 7 pairs, all Ares. The HPS whole-coupon PIK is not built (it needs the printed coupon
+grammar and production's loan class): a named difference.
+
 
 Agreement with production is not correctness: applying production's corrections makes the two
 pipelines agree; no check here sees a wrong correction.

@@ -21,7 +21,9 @@ import hashlib
 # new table correction_rule (recorded, not applied). Correction rows gain row_id, add_group_id and source_file, so every
 # correction_id changes (the id hashes every column). The manifest gains agent_store_sha256 (text hash of every file
 # of a scope fund in the two stores, loaded or skipped) and agent_store_skipped (why a file was not loaded).
-LOADER_VERSION = "6"
+# 7: slice 5 Task 4. source_encodings.rate_only_contexts 'adopt_adjacent' is a rule row (rule_class convention, target
+# interest_rate, action adopt_adjacent_rate_context) instead of a not_loaded row. Other rows and ids are unchanged.
+LOADER_VERSION = "7"
 
 RULE_COLUMNS = [
     "rule_id", "cik", "valid_from", "valid_to", "validity_basis", "sel_accession", "sel_axis",

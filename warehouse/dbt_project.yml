@@ -201,12 +201,15 @@ vars:
     int_field_normalised_unresolved_interest_rate_scale_not_decided: 6
     int_field_normalised_unresolved_interest_rate_values_differ: 1
     int_field_normalised_unresolved_interest_rate_rule_conflict: 0
-    int_field_normalised_unresolved_interest_rate_text_not_read: 1885
+    # Slice 5 Task 4: +1 on each of the three text_not_read ceilings (1,886, 1,886, 2,426): Ares 0001287750-25-000038
+    # c-1268 takes only a PIK rate from its neighbouring rate-only context (int_rate_adjacent), so it is a PIK-only row
+    # like the others (production reads 10.25 all-in under its pik_only reading). Measured 2026-11-25.
+    int_field_normalised_unresolved_interest_rate_text_not_read: 1886
     int_field_normalised_unresolved_interest_rate_cash_pik_above_rate: 15
     int_field_normalised_unresolved_interest_rate_cash_scale_not_decided: 6
     int_field_normalised_unresolved_interest_rate_cash_values_differ: 1
     int_field_normalised_unresolved_interest_rate_cash_rule_conflict: 0
-    int_field_normalised_unresolved_interest_rate_cash_text_not_read: 1885
+    int_field_normalised_unresolved_interest_rate_cash_text_not_read: 1886
     # Controller ruling R1 (2026-11-23, fix round 1 of the rate rulings): cash legs left unresolved because the rate's
     # printed cell names a PIK that no tag carries (int_rate_tag_cell.prints_pik). Measured 2026-11-23: 69 (Ares 37,
     # BCRED 7, Apollo 3, HPS 22; 67 published, 2 unpublished).
@@ -214,7 +217,7 @@ vars:
     int_field_normalised_unresolved_pik_rate_scale_not_decided: 0
     int_field_normalised_unresolved_spread_scale_not_decided: 0
     int_field_normalised_unresolved_spread_values_differ: 5
-    int_field_normalised_unresolved_spread_text_not_read: 2425
+    int_field_normalised_unresolved_spread_text_not_read: 2426
     int_field_normalised_unresolved_spread_rule_conflict: 0
     # Positions whose rate reading is a rule conflict (tests/baseline_int_field_rule_rate_conflict.sql): 0 since the ruling
     # of 2026-11-23 (was the 628 above, all
@@ -254,6 +257,13 @@ vars:
     # Slice 5 Task 3 (tests/baseline_int_correction_identifier_several.sql): identifier-keyed corrections whose text
     # matches several positions of the filing (each applies to all of them, as production). Measured 2026-11-24: 3.
     int_correction_identifier_several: 3
+    # Slice 5 Task 4 (carried from the Task 3 review; tests/baseline_int_correction_identifier_production_context.sql):
+    # identifier-keyed corrections matched natively whose production rows of the same filing and identifier name a
+    # context other than the one matched here. Measured 2026-11-24: 2 (Blue Owl, both on fields not held, deferred).
+    int_correction_identifier_production_context: 2
+    # Slice 5 Task 4 (tests/baseline_int_rate_adjacent_pairs.sql): taker positions that take the rate facts of their
+    # neighbouring rate-only context (int_rate_adjacent, owner decision 5). Measured 2026-11-24: 7, all Ares.
+    int_rate_adjacent_pairs: 7
     # Slice 5 Task 3: the sum check on the corrected published basis (tests/baseline_int_field_corrected_sum_not_tied.sql,
     # macro sum_not_tied_rows corrected=true). Measured 2026-11-24: 3, the three 2026-09-30 quarters with no filed total yet.
     # The 8 fund-quarters that miss the filed total on the normalised basis (Ares 3, Apollo 5) all tie once the rows
@@ -338,7 +348,10 @@ vars:
   # Controller ruling R1 (fix round 1): 69 cash legs whose rate cell prints a PIK no tag carries are no longer set. In
   # cmp_rate the 67 published ones moved to needs_store_not_loaded|printed_pik_not_read (from needs_correction 64 and
   # identifier_text_not_read 3: cash needs_correction 132 -> 68, identifier_text 55 -> 52); the 2 unpublished ones left
-  # the convention detail (8,863 -> 8,861) and are both_empty.
+  # the convention detail (8,863 -> 8,861) and are both_empty. Published 31,242 since slice 5 Task 4 (measured
+  # 2026-11-25): three Ares positions that take a rate and no PIK rate from their neighbouring rate-only context
+  # (int_rate_adjacent; 0001287750-25-000038 c-1446, 0001287750-25-000046 c-1475 and c-165) now have an all-in rate, so
+  # a cash leg too.
   cmp_rate_detail_max:
     published:
       interest_rate:
@@ -349,7 +362,7 @@ vars:
         "needs_store_not_loaded|rate_only_context_not_adopted": 6
         "needs_store_not_loaded|whole_coupon_pik_not_read": 0
       interest_rate_cash:
-        "convention|cash_equals_all_in_owner_ruling": 31239
+        "convention|cash_equals_all_in_owner_ruling": 31242
         "needs_store_not_loaded|identifier_text_not_read": 52
         # controller ruling R1 (2026-11-23): cash legs left empty because the rate cell prints a PIK no tag carries
         "needs_store_not_loaded|printed_pik_not_read": 67
@@ -431,12 +444,18 @@ vars:
   # no_op|already_absent: withdrawals of a field that holds no value. rejected|bridge_ambiguous 1: a Blue Owl
   # identifier correction whose production rows name two contexts (owner answer 2026-11-24: the bridge does not pick).
   # rejected|printed_cell_*: the Apollo zero fair values whose printed cell is not a dash or a zero: 0 of 44.
+  # Slice 5 Task 4, measured 2026-11-24 (docs/baseline_corrections_2026-11-24.md section 3): the 556 rate corrections
+  # Task 3 held as deferred|rate_reading_not_rerun (that pair is gone from the closed list) now have outcomes: applied
+  # 512 (996 -> 1,508), no_op equal 32 (94 -> 126: 29 kinds equal to the kind before, 2 rates, 1 PIK rate), no_op
+  # already_absent 5 (4 -> 9: withdrawals of a PIK rate 3 and a spread 2 that held none), failed rate_reading_unresolved
+  # 7 (Blue Owl rates on rows with no fund rate reading: no rule reads the corrected rate, rows kept as before).
+  # failed legs_do_not_add, pik_above_rate, kind_not_decidable, value_not_known: 0, rules.
   correction_outcome_max:
-    "applied|": 996
+    "applied|": 1508
     "no_op|evidence_only": 16
     "no_op|procedure_not_built": 3
-    "no_op|equal_to_normalised": 94
-    "no_op|already_absent": 4
+    "no_op|equal_to_normalised": 126
+    "no_op|already_absent": 9
     "rejected|target_not_found": 0
     "rejected|bridge_ambiguous": 1
     "rejected|target_not_position": 0
@@ -451,7 +470,23 @@ vars:
     "failed|conversion_unresolved": 1
     "deferred|field_not_held": 2541
     "deferred|no_companion_column": 202
-    "deferred|rate_reading_not_rerun": 556
+    "failed|value_not_known": 0
+    "failed|legs_do_not_add": 0
+    "failed|pik_above_rate": 0
+    "failed|kind_not_decidable": 0
+    "failed|rate_reading_unresolved": 7
+  # Slice 5 Task 4: published rate rows a correction changed (value, date, kind or status), per field (generic test
+  # baseline_corrected_amount_changed with ceiling_var corrected_rate_changed_max), measured 2026-11-24.
+  # interest_rate 59 (44 corrected, 15 withdrawn); interest_rate_cash 154 (1 corrected cash-pay input, 144 legs
+  # derived again, 9 left absent by a withdrawn rate); pik_rate 160 (147 corrected, 13 withdrawn); spread 128 (111
+  # converted, 14 withdrawn, 1 derived again, 2 left text_not_read: a corrected PIK rate makes the row spread_with_pik,
+  # whose rule needs the printed total margin); maturity_date 9.
+  corrected_rate_changed_max:
+    interest_rate: 59
+    interest_rate_cash: 154
+    pik_rate: 160
+    spread: 128
+    maturity_date: 9
   # Slice 5 Task 3: key resolutions with a ceiling of their own (int_correction_target rows). production_bridge 67
   # (Ares 6, Blue Owl 21, Apollo 1, HPS 39; one Blue Owl key names two contexts and is rejected): owner decision 2, a
   # NAMED DEBT, these corrections find their row through production's holdings file and must be re-keyed by context

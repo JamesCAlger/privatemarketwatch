@@ -1,9 +1,24 @@
 -- Decides the corrected value of every field of every position after corrections (slice 5 Task 3; spec 6.5, D1: never
 -- erase). One row per (accession, context_id, field): every row of int_row_corrected times the eleven fields of
 -- int_field_normalised. value_filed and value_normalised stay beside value; no filed or normalised value is changed in
--- place. This task fills the amount fields (fair_value, cost, principal_amount, principal_amount_usd, shares,
--- pct_of_net_assets); the rate fields (interest_rate, interest_rate_cash, pik_rate, spread, maturity_date) are carried
--- through unchanged until Task 4.
+-- place. Task 3 filled the amount fields (fair_value, cost, principal_amount, principal_amount_usd, shares,
+-- pct_of_net_assets); Task 4 the rate fields (interest_rate with rate_kind, interest_rate_cash, pik_rate, spread,
+-- maturity_date):
+--   step converted        a spread (value) or a maturity date (value_date) is replaced as for an amount; a withdrawal
+--                         empties it (status withdrawn)
+--   step reading_input    on a position whose corrected inputs change the reading and do not fail it
+--                         (int_rate_corrected run corrected, row_failure null), every rate field takes the value, date,
+--                         kind, action, rule_id, status and reason of that reading where they differ from before. The
+--                         field whose own input a correction set (interest_rate: the rate tag, else the kind;
+--                         interest_rate_cash: the cash-pay tag; pik_rate: the PIK rate): status corrected, reason
+--                         correction_reading_input (a withdrawal: withdrawn, correction_withdrawn), correction_id that
+--                         correction. Any other rate field the reading now gives differently (the legs derived again):
+--                         the reading's status (corrected where normalised) and its own reason (applied,
+--                         cash_equals_all_in, pik_printed_not_tagged, text_not_read, ...), correction_id the row's lowest
+--                         applied reading-input correction. Under a corrected kind the interest_rate row names that
+--                         correction as its rule_id, with the action of the kind (int_rate_corrected_input). A converted
+--                         spread or maturity on the same row wins over the reading for its own field
+--   a failed row          (row_failure) keeps its rate fields as before: never stored
 --
 -- Before corrections (the _normalised columns, and value, status and reason where nothing applies): a filed position's
 -- row of int_field_normalised; a context corrections make a position, int_field_reread run raw (its filed facts under the
@@ -26,7 +41,9 @@
 -- production wins (row_corrections_by_context, then the lowest correction_id); both are applied in
 -- int_correction_application. correction_id names the correction that set value (or, on a companion-only change, the
 -- companion; on a rule re-run, the lowest correction_id at step filed on the row); null where nothing applied. status:
--- normalised, absent or unresolved (as before corrections), corrected, withdrawn.
+-- normalised, absent or unresolved (as before corrections), corrected, withdrawn; a rate leg derived again from
+-- corrected inputs that ends without a value keeps the reading's status (unresolved or absent) and names the correction
+-- (tests/int_field_corrected_never_erase.sql allows exactly that).
 -- fx_rate_normalised and fx_rate (the dollar principal's FX rate) are added beside the brief's columns: the FX rate
 -- companion (principal_fx_rate_to_usd) lands there.
 -- (Join filters sit in CTEs, not in a join's ON clause: a filter there makes DuckDB plan a nested-loop join.)
@@ -68,9 +85,41 @@ with position as (
 )
 
 , main_converted as (
-    select accession, context_id, field_row as field, correction_id, is_withdrawal, number_after
+    -- slice 5 Task 4: step converted only (step reading_input is the rate reading run again, below); a maturity date
+    -- sets value_date
+    select accession, context_id, field_row as field, correction_id, is_withdrawal, number_after, date_after
     from applied
-    where pick = 1 and value_column = 'value' and step <> 'filed'
+    where pick = 1 and value_column = 'value' and step = 'converted'
+)
+
+, rate_rerun as (
+    -- slice 5 Task 4: the rate reading on the corrected inputs, on a position where an input changed and the reading
+    -- does not fail (int_rate_corrected; a failed row keeps its rate fields as before: never stored)
+    select *
+    from {{ ref('int_rate_corrected') }}
+    where run = 'corrected' and row_failure is null and (it_changed or ct_changed or pk_changed or kind_changed)
+)
+
+, rate_own as (
+    -- the applied correction of the field row's own input: interest_rate the rate tag (else the kind),
+    -- interest_rate_cash the cash-pay tag, pik_rate the PIK rate
+    select
+        accession
+        , context_id
+        , field_row as field
+        , min(correction_id) filter (where value_column = 'value' and pick = 1) as value_id
+        , bool_or(is_withdrawal) filter (where value_column = 'value' and pick = 1) as value_withdrawal
+        , min(correction_id) filter (where value_column = 'rate_kind' and pick = 1) as kind_id
+    from applied
+    where step = 'reading_input'
+    group by 1, 2, 3
+)
+
+, rate_row as (
+    select accession, context_id, min(correction_id) as first_rate_id
+    from applied
+    where step = 'reading_input'
+    group by 1, 2
 )
 
 , main_filed as (
@@ -139,6 +188,18 @@ with position as (
         , mc.correction_id as converted_id
         , mc.is_withdrawal as converted_withdrawal
         , mc.number_after as converted_value
+        , mc.date_after as converted_date
+        , rr.field is not null as has_rate_rerun
+        , rr.value as rerun_value
+        , rr.value_date as rerun_value_date
+        , rr.rate_kind as rerun_rate_kind
+        , rr.action as rerun_action
+        , rr.rule_id as rerun_rule_id
+        , rr.status as rerun_status
+        , rr.reason as rerun_reason
+        , coalesce(ro.value_id, ro.kind_id) as rate_own_id
+        , ro.value_id is not null and ro.value_withdrawal as rate_own_withdrawal
+        , rw.first_rate_id
         , mf.correction_id as filed_id
         , mfp.correction_id as filed_principal_id
         , f.first_filed_id
@@ -165,6 +226,9 @@ with position as (
     left join filed_after fa on fa.accession = b.accession and fa.context_id = b.context_id and fa.field = b.field
     left join companion_currency cc on cc.accession = b.accession and cc.context_id = b.context_id and cc.field = b.field
     left join companion_fx cx on cx.accession = b.accession and cx.context_id = b.context_id and cx.field = b.field
+    left join rate_rerun rr on rr.accession = b.accession and rr.context_id = b.context_id and rr.field = b.field
+    left join rate_own ro on ro.accession = b.accession and ro.context_id = b.context_id and ro.field = b.field
+    left join rate_row rw on rw.accession = b.accession and rw.context_id = b.context_id
 )
 
 , stepped as (
@@ -178,6 +242,11 @@ with position as (
             filed_value is distinct from value_normalised or filed_status is distinct from status_normalised
             or filed_currency is distinct from currency_normalised or filed_fx_rate is distinct from fx_rate_normalised
           ) as filed_changed
+        -- slice 5 Task 4: the rate reading on corrected inputs gives this field another value, date, kind or status
+        , has_rate_rerun and (
+            rerun_value is distinct from value_normalised or rerun_value_date is distinct from value_date_normalised
+            or rerun_rate_kind is distinct from rate_kind_normalised or rerun_status is distinct from status_normalised
+          ) as rate_changed
     from combined
 )
 
@@ -190,8 +259,9 @@ select
     , value_filed
     , value_normalised
     , case
-        when converted_id is not null and converted_withdrawal then null
+        when converted_id is not null and (converted_withdrawal or field = 'maturity_date') then null
         when converted_id is not null then converted_value
+        when rate_changed then rerun_value
         else after_filed_value
       end as value
     , currency_normalised
@@ -201,20 +271,37 @@ select
         else after_filed_currency
       end as currency
     , value_date_normalised
-    , value_date_normalised as value_date
+    , case
+        when converted_id is not null and field = 'maturity_date' then converted_date
+        when converted_id is not null then value_date_normalised
+        when rate_changed then rerun_value_date
+        else value_date_normalised
+      end as value_date
     , rate_kind_normalised
-    , rate_kind_normalised as rate_kind
+    , case when rate_changed then rerun_rate_kind else rate_kind_normalised end as rate_kind
     , fx_rate_normalised
     , case
         when fx_id is not null and fx_withdrawal then null
         when fx_id is not null then fx_after
         else after_filed_fx_rate
       end as fx_rate
-    , case when has_filed_run then filed_action else action_normalised end as action
-    , case when has_filed_run then filed_rule_id else rule_id_normalised end as rule_id
+    , case
+        when converted_id is null and rate_changed then rerun_action
+        when has_filed_run then filed_action
+        else action_normalised
+      end as action
+    , case
+        when converted_id is null and rate_changed then rerun_rule_id
+        when has_filed_run then filed_rule_id
+        else rule_id_normalised
+      end as rule_id
     , case
         when converted_id is not null and converted_withdrawal then 'withdrawn'
         when converted_id is not null then 'corrected'
+        when rate_changed and rate_own_withdrawal then 'withdrawn'
+        when rate_changed and rerun_status = 'normalised' then 'corrected'
+        -- a leg derived again from corrected inputs that ends without a value keeps the reading's status and reason
+        when rate_changed then rerun_status
         when filed_changed then 'corrected'
         when currency_id is not null or fx_id is not null then 'corrected'
         else status_normalised
@@ -222,6 +309,10 @@ select
     , case
         when converted_id is not null and converted_withdrawal then 'correction_withdrawn'
         when converted_id is not null then 'correction_converted'
+        when rate_changed and rate_own_withdrawal then 'correction_withdrawn'
+        when rate_changed and rate_own_id is not null and rerun_status = 'normalised' then 'correction_reading_input'
+        -- a leg derived again keeps the reading's own reason (applied, cash_equals_all_in, pik_printed_not_tagged, ...)
+        when rate_changed then rerun_reason
         when filed_changed and filed_id is not null then 'correction_filed'
         when filed_changed and filed_principal_id is not null then 'derived_from_corrected_principal'
         when filed_changed then 'rule_rerun_after_filed_correction'
@@ -230,6 +321,7 @@ select
       end as reason
     , case
         when converted_id is not null then converted_id
+        when rate_changed then coalesce(rate_own_id, first_rate_id)
         when filed_changed then coalesce(filed_id, filed_principal_id, first_filed_id)
         when currency_id is not null then currency_id
         when fx_id is not null then fx_id

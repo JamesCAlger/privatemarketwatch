@@ -107,6 +107,12 @@ with prod as (
 
 , filer_not_loaded as (
     select distinct cik, wrapper_key from {{ ref('stg_reading_not_loaded') }}
+    -- slice 5 Task 4: the rate_only_contexts declaration is loaded as the rule adopt_adjacent_rate_context (loader
+    -- version 7) instead of a not_loaded row; it still marks the fund as declaring it, so no row's cause moves here.
+    -- Task 5 decides how the comparison reads the pairs the rule now adopts.
+    union
+    select distinct cik, 'rate_only_contexts' from {{ ref('stg_reading_rule') }}
+    where action = 'adopt_adjacent_rate_context'
 )
 
 , featured as (

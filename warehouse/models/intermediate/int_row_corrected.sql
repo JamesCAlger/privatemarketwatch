@@ -15,10 +15,10 @@
 --                                   or a zero (owner answer 2026-11-24 on decision 4, int_correction_fair_value_cell)
 --   correction_supplies_term        (ii) the role is unresolved by rule 7 or 9 for want of a term fact (no term fact,
 --                                   not held for two scopes) and a correction supplies a term field (principal_amount,
---                                   shares, interest_rate, spread, pik_rate, maturity_date). The rate fields are
---                                   deferred until Task 4 (screen reason rate_reading_not_rerun), so today only a
---                                   principal or a share count can supply it. Measured: 2 rows of one fund (2022-09-30) and
---                                   6, each through a wrapper principal
+--                                   shares, interest_rate, spread, pik_rate, maturity_date). Measured: 2 rows of one
+--                                   fund (2022-09-30) and 6, each through a wrapper principal. Since slice 5 Task 4
+--                                   the rate corrections pass the screen too: they promote no further context, but
+--                                   the two 2022-09-30 rows now also list their rate corrections in row_correction_ids
 -- The first that holds, in that order, names row_reason; a filed position has row_reason 'filed'. scope is the
 -- context's scope in int_source_row ('fund' unless a scope rule names an entity); is_published follows the existing
 -- rule (scope 'fund'); is_cash is int_source_row's. row_correction_ids lists the corrections that supplied what the

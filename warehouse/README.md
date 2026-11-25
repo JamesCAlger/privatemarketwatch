@@ -288,14 +288,22 @@ and names the correction that set it. Spec: `docs/intermediate_spine.md` section
 | `int_field_reread` | The conversion chain run again on those rows, before and after the corrections at step `filed` | run, row and field |
 | `int_correction_application` | The outcome of each correction: applied, no_op, rejected, failed, deferred, with a reason | correction and target |
 | `int_field_corrected` | The corrected value of every field, beside the filed and normalised values | position row and field (eleven) |
+| `int_rate_adjacent` | Which position takes the rate facts of its neighbouring rate-only context (Ares rule, owner decision 5) | taker row |
+| `int_rate_corrected_input` | The rate reading's inputs on each position a rate correction acts on, before and after the corrections | run and position row |
+| `int_rate_corrected` | The rate reading on those inputs, what each correction changes, and why a corrected row fails | run, row and rate field |
 
 **The macros behind the chain.** The bodies of `int_field_read`, `int_field_rule`, `int_amount_normalised`,
 `int_rate_scale`, `int_rate_tag_cell` and `int_rate_normalised` live in macros of the same names (a macro is
 a reusable piece of SQL with inputs). Each model calls its macro on its usual inputs; `int_field_reread`
 calls the same macros on the few rows corrections touch, so both runs follow one set of rules.
 
-**Rates are not corrected yet.** A correction of a rate, PIK rate, spread, rate kind or maturity is
-`deferred` (`rate_reading_not_rerun`) until slice 5 Task 4 re-runs the rate reading on corrected inputs.
+**Rates are corrected by running the rate reading again (slice 5 Task 4).** A corrected rate, cash leg, PIK
+rate or rate kind replaces an input of the rate reading, and `int_rate_corrected` runs the reading again on the
+corrected inputs, so the cash leg and the kind follow from them (as in production, where the corrections come
+before the step that derives the legs). A corrected kind decides the reading on its row and becomes the row's
+rule. A spread or maturity correction replaces the published value. A corrected row whose legs do not add, or
+whose corrected value no rule can read, is `failed` and nothing is stored. `int_rate_adjacent` builds the Ares
+rule that gives a position the rate facts filed on its neighbouring rate-only context.
 
 **The production bridge is a debt.** 67 corrections keyed by identifier text find no position here by
 that text; they find their row through production's holdings file. They must be re-keyed by context

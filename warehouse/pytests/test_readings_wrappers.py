@@ -72,10 +72,28 @@ def test_identifier_format_is_one_source_rule():
 
 
 def test_procedure_keys_are_listed_not_loaded():
-    rules, corrections, not_loaded = _flat({"rate_only_contexts": ["adopt_adjacent"], "gics_industry_carry_back": ["through 2025-09-30"]})
+    rules, corrections, not_loaded = _flat({"gics_industry_carry_back": ["through 2025-09-30"]})
     assert rules == [] and corrections == []
-    assert sorted(n["wrapper_key"] for n in not_loaded) == ["gics_industry_carry_back", "rate_only_contexts"]
+    assert [n["wrapper_key"] for n in not_loaded] == ["gics_industry_carry_back"]
     assert all(n["reason"] == "needs_procedure" for n in not_loaded)
+
+
+def test_rate_only_contexts_adopt_adjacent_is_a_filer_rule():
+    # slice 5 Task 4: the structural rule built in int_rate_adjacent, selected by the declaration alone (no list of
+    # contexts), so it applies to every filing of the fund
+    rules, corrections, not_loaded = _flat({"rate_only_contexts": ["adopt_adjacent"]})
+    r = _one(rules)
+    assert (r["target"], r["action"], r["rule_class"], r["priority"]) == (
+        "interest_rate", "adopt_adjacent_rate_context", "convention", 20)
+    assert r["origin"] == "wrapper:rate_only_contexts" and r["parameter"] == "" and r["sel_accession"] == ""
+    assert corrections == [] and not_loaded == []
+
+
+def test_rate_only_contexts_other_entry_names_its_own_action():
+    # an entry other than adopt_adjacent becomes an action the seed does not list; dbt's relationship test on
+    # stg_reading_rule.action fails the build, so it is never silently applied
+    rules, _, _ = _flat({"rate_only_contexts": ["keep_separate"]})
+    assert _one(rules)["action"] == "keep_separate_rate_context"
 
 
 def test_pik_margin_reading_splits_into_procedure_and_exceptions():

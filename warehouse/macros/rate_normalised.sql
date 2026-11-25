@@ -1,6 +1,19 @@
 {#- The body of model int_rate_normalised, moved here unchanged (slice 5 Task 3) so that int_field_reread can run it on
-    the rows corrections make positions. The model's header says what it decides. Inputs: rule_rel, read_rel, scale_rel, tag_cell_rel. -#}
+    the rows corrections make positions. The model's header says what it decides. Inputs: rule_rel, read_rel, scale_rel,
+    tag_cell_rel. Slice 5 Task 4 split it in two, unchanged: rate_reading_input prepares the inputs of the reading (one
+    row per position, the input contract of macro rate_reading), so that int_rate_corrected_input can replace some of
+    them with corrections; rate_normalised runs the reading on them. -#}
 {% macro rate_normalised(rule_rel, read_rel, scale_rel, tag_cell_rel) -%}
+with reading_input as (
+{{ rate_reading_input(rule_rel, read_rel, scale_rel, tag_cell_rel) }}
+)
+
+select * from ({{ rate_reading('reading_input') }})
+{%- endmacro %}
+
+{#- The inputs of the rate reading, one row per position (slice 5 Task 4: the first part of rate_normalised, moved here
+    unchanged). Returns a query (a WITH clause and a select). -#}
+{% macro rate_reading_input(rule_rel, read_rel, scale_rel, tag_cell_rel) -%}
 with rule as (
     select * from {{ rule_rel }}
 )
@@ -150,5 +163,5 @@ with rule as (
     left join {{ tag_cell_rel }} tc on tc.accession = r.accession and tc.context_id = r.context_id
 )
 
-select * from ({{ rate_reading('reading_input') }})
+select * from reading_input
 {%- endmacro %}
