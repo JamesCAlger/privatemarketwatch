@@ -754,6 +754,22 @@ yet.
 | e | 7 Blue Owl rate corrections no rule can read (`failed`): the rows keep their rate fields as before. Production has no rate on them either | Left failed, both sides empty |
 | f | Push branch `warehouse-slice5` and open the pull request into `dev` | Not pushed |
 
+### Owner answers on items a to f (2026-11-25, after the slice)
+
+Detail and evidence: `docs/baseline_corrections_2026-11-24.md` section 6. Branch `warehouse-slice5-owner-items`,
+cut from `warehouse-slice5`. This block supersedes the "State now" column of the table above.
+
+| # | Owner answer | State now |
+|---|---|---|
+| a | Asked how production got 4.5: it is the filed spread tag times 100 (the PIK rate 4.5 is a correction). No change asked | Left unread, ceiling 2, until the printed text is read |
+| b | "check" | Checked on all 14: principal equals cost to the dollar, USD, a maturity date. A dollar amount. Now `old_wrong` `principal_emptied_before_section_reclass`, 14 + 14. The header reads "Par Amount/Units" and does not settle it; footnote (1) not read |
+| c | Asked why this value and not the others; fix agreed | Fixed: a value a correction supplies is not put to the printed-sign test. The cost applies and equals production. Ceilings now 0. applied 1,509, failed 7 |
+| d | "understood" | Unchanged: 67 corrections, a named debt |
+| e | Asked for an example (Aptive Environmental, Blue Owl, 12.00% (6.00% PIK)) | Left failed. Candidate for the consolidation exercise: a Blue Owl reading for a fixed coupon tagged as a spread |
+| f | "yes" | Pushed; pull request 22 into `dev`. CI: `warehouse`, `python-tests`, `frontend-build` passed; the Vercel preview deployment failed (not examined) |
+
+Results on that branch (2026-11-25): `.warehousedbt.ps1 build` `PASS=833 WARN=113 ERROR=0 TOTAL=946`; `warehouse/pytests` 175 passed. The CI fixture was not run locally (it names nothing changed here); the pull request run covers it. Ceiling raised: published costs changed by a correction 21 to 22 (the Apollo cost, named in `dbt_project.yml`).
+
 Also open, not owner questions yet:
 
 - HPS whole-coupon PIK is not built (D24): a named difference, 44 cash legs and 44 PIK rates.
@@ -817,7 +833,8 @@ From the ledger (`progress.md`, every `Ruling:` line). Each was made by the cont
 ## RESUME HERE (updated 2026-11-25, after slice 5)
 
 Slice 5 (corrections) is built and committed on branch `warehouse-slice5` (worktree
-`.claude/worktrees/warehouse-dbt`), NOT pushed. Read "State after slice 5" above. Next: the owner's answers on
+`.claude/worktrees/warehouse-dbt`), pushed, pull request 22 into `dev`. The owner answered items a to f on 2026-11-25
+("Owner answers on items a to f" above; the changes are on branch `warehouse-slice5-owner-items`). Earlier text: next were the owner's answers on
 the six open items there (a to f; f is the push and the pull request into `dev`), then slice 6
 (`int_observation`, findings, the first-run review list). Branches come off `dev`, not `main` (AGENTS.md).
 

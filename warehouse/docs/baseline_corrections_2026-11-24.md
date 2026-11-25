@@ -868,3 +868,65 @@ Agreement with production is not correctness: these are production's own correct
   repeat into two (an undercount).
 - The CI fixture has no failed correction: its expected-values test fails on any outcome it does not list, so a
   passing run shows the fixture produces none.
+
+## 6. Owner decisions of 2026-11-25 on the open items (after the slice)
+
+The owner read items (a) to (f) of HANDOFF "State after slice 5". Answers: (b) check, (c) fix, (d) understood,
+(f) yes (pushed, pull request 22 into `dev`). (a) and (e) were explained; no change asked. Work on branch
+`warehouse-slice5-owner-items`, cut from `warehouse-slice5`.
+
+### 6.1 Item b: the 14 BCRED "Units" principals are a dollar amount (`q_owner_b_units.sql`, `q_owner_b_header.sql`)
+
+Four positions over 2025-06-30 to 2026-06-30: Balboa Bay Loan Funding 2025-3, Ltd.; HPS Freshwater Warehouse Parent,
+Ltd.; Pikes Peak Bravo; Regatta Kilo. On all 14 rows:
+
+- the tagged principal equals the tagged cost to the dollar (ratio 1.000);
+- the principal is tagged in USD and the row has a maturity date;
+- the amount grows from quarter to quarter as the position is funded (Pikes Peak Bravo 563, 1,406, 4,960, in
+  thousands).
+
+The printed column header is "Par Amount/Units (1)" on every row: it does not say which of the two a row holds, so
+the header does not settle it. The three facts above do: a share-like count would not equal cost to the dollar on
+every row and quarter. Production empties the principal under the row's first class (COMMON_EQUITY, from the label
+word "Units") and then re-classes the row STRUCTURED_CREDIT (section 4.4), so it drops a value under a class it
+rejects. The cause is now `old_wrong|principal_emptied_before_section_reclass` (was `owner_review`), 14 on principal
+and 14 on dollar principal, same rows, same ceilings. Not checked: the filer's footnote (1).
+
+### 6.2 Item c: a value a correction supplies is not put to the printed-sign test
+
+The one cost that differed from production (Apollo 0000950170-24-094137 C_f9b16d68, 41,554,000) is an untagged value
+the wrapper supplies, in a filing under the fund rule `bracketed_unsigned` (the sign of a cost or fair value is read
+from the printed brackets). An untagged value has no printed placement in the filed layer, so the rule could not be
+decided (`feature_missing`) and the correction failed (`conversion_unresolved`). Change (macro `field_rule`,
+`sign_unplaced`): a read whose reason is `filed_by_correction` is left out of the sign test. The correction states
+the number with its sign; there is no tagged sign for the print to overrule. Production does the same (it fills the
+value and holds 41,554,000).
+
+Guards: `tests/int_correction_filed_value_keeps_sign.sql` (a fair value or cost applied at step filed equals the
+correction's number); `failed|conversion_unresolved` and the cost detail
+`needs_correction|correction_failed_conversion_unresolved` are now ceilings of 0, so a new failure of this kind
+stops the build. A tagged fair value or cost with no printed placement in such a filing is still `feature_missing`:
+the baseline counts of that resolution did not move.
+
+Result: applied 1,508 -> 1,509, failed 8 -> 7 (the 7 Blue Owl rates). No published cost differs from production.
+Agreement with production is not correctness: the 41,554,000 is production's own correction, not checked against
+the page here.
+
+### 6.3 Items a and e: explained, not changed
+
+- (a) Production's spread 4.5 on the two Apollo rows (VEPF VII Holdings, L.P.) is the filed spread tag times 100; its
+  PIK rate 4.5 is a correction. Here the PIK correction makes the spread rule need the printed total margin, so the
+  spread is unread. Left as is until the printed text is read.
+- (e) The 7 failed Blue Owl rate corrections are one position in seven filings: Aptive Environmental, LLC, first lien
+  senior secured loan (for example 0001812554-24-000014 c-1192). Printed "12.00 % ( 6.00 % PIK)". The filer tags the
+  12 percent coupon under the spread concept and the PIK rate 6; there is no rate tag. The correction sets the rate
+  to 12 without saying how to read it, and Blue Owl has no fund rate reading, so no rate is stored, here or in
+  production. A candidate for the consolidation exercise: a Blue Owl reading for a fixed coupon tagged as a spread
+  (all-in 12, PIK 6, cash 6) would replace the seven corrections and read the same pattern on other rows.
+
+### 6.4 Results (2026-11-25)
+
+Full build `PASS=833 WARN=113 ERROR=0 TOTAL=946` (was 830 / 115 / 0 / 945: one new test; the two ceilings now at 0
+pass instead of warning). `warehouse/pytests` 175 passed. The CI fixture was not run locally. One ceiling raised:
+`corrected_amount_changed_max` cost 21 -> 22, the Apollo cost (`q_owner_c_cost_row.sql`: outcome applied, value
+41,554,000). The first build stopped on that ceiling, which is how the row was found.

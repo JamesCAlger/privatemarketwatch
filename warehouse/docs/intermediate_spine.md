@@ -379,6 +379,9 @@ As built at the end of slice 5 (2026-11-25; counts in `baseline_corrections_2026
 - Never erase: `int_field_corrected` keeps the filed and normalised values beside the corrected one and names the
   `correction_id`.
 - The comparison models (`cmp_row_set`, `cmp_amount`, `cmp_rate`) read the corrected values since Task 5.
+- Owner decisions 2026-11-25 (baseline section 6): a fair value or cost a correction supplies at step filed is not
+  put to the printed-sign test, so the Apollo cost applies (applied 1,509, failed 7, `conversion_unresolved` 0); the 14
+  BCRED principals of D27 are `old_wrong` (production empties them under a class it then rejects).
 - Not built: the expected-value check of the first paragraph above, except for relabels (the row stores carry no
   expected value); the 13 recorded agent row rules are applied by no model (D20).
 

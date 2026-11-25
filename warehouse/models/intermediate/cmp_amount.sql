@@ -62,13 +62,15 @@
 --        those, where a loaded correction sets the row's index class or asset category: production emptied the
 --        principal under its first class (the class step comes before row corrections in unified_holdings.py) and the
 --        correction re-classed the row as debt without restoring the filed par (fix round 1, item 1).
---   owner_review|principal_emptied_before_section_reclass  the same signature, a class that is not equity or fund, and
+--   old_wrong|principal_emptied_before_section_reclass  the same signature, a class that is not equity or fund, and
 --        no loaded class correction (fix round 1, item 1; was not_yet_explained|principal_empty_class_not_equity until
---        the Task 5 review, controller ruling 2026-11-25). Traced in slice 5 Task 5 (baseline_corrections section 4.4):
---        the 14 rows (one fund's "Units" lines) are emptied under their first class (COMMON_EQUITY, from the label word
---        "Units") and then re-classed STRUCTURED_CREDIT by the printed section (pipeline/printed_sections.py
---        apply_structured_sections, after the class step). Owner review: whether such "Units" are a par or a unit count
---        is the owner's question (next to D17).
+--        the Task 5 review, then owner_review until the owner's decision of 2026-11-25, item b). Traced in slice 5
+--        Task 5 (baseline_corrections section 4.4): the 14 rows (one fund's "Units" lines) are emptied under their
+--        first class (COMMON_EQUITY, from the label word "Units") and then re-classed STRUCTURED_CREDIT by the printed
+--        section (pipeline/printed_sections.py apply_structured_sections, after the class step): production empties
+--        the principal under a class it then rejects. Checked on all 14 (baseline section 6): the tagged principal
+--        equals the tagged cost to the dollar, is in USD and the row has a maturity date. The printed column header is
+--        "Par Amount/Units", which does not say which of the two a row holds.
 --   convention|count_principal_currency_blank_in_production  a principal taken from a share count: production leaves
 --        its currency blank (and converts it as dollars), this layer writes USD.
 --   old_wrong|pct_size_bound_keeps_fraction  share of net assets: production stores the filed fraction unscaled (its
@@ -390,7 +392,7 @@ with both_rows as (
             when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
                  and production_principal is null and production_currency is not null
                  and new_principal_action = 'as_filed'
-                then 'owner_review|principal_emptied_before_section_reclass'
+                then 'old_wrong|principal_emptied_before_section_reclass'
             when field = 'principal_amount_currency' and outcome = 'production_empty'
                  and new_principal_action = 'par_tagged_as_units' and currency_new = 'USD'
                 then 'convention|count_principal_currency_blank_in_production'

@@ -101,12 +101,15 @@ with read as (
 
 , sign_unplaced as (
     -- fair value or cost of a listed filing that the sign test would read but that has no printed placement: the
-    -- feature (its printed brackets) is missing
+    -- feature (its printed brackets) is missing. Not a value a correction supplies (int_field_reread run
+    -- filed_corrected, reason filed_by_correction): the correction states the number with its sign, so the sign test
+    -- has nothing to decide on it (owner decision 2026-11-25, item c)
     select r.accession, r.context_id, r.field
     from read r
     semi join listed_sign_filing l on l.accession = r.accession and l.cik = r.cik
     anti join sign_placement p on p.accession = r.accession and p.context_id = r.context_id and p.field = r.field
     where r.field in ('fair_value', 'cost') and r.unit_kind is not null and r.value_filed <> 0
+      and r.reason is distinct from 'filed_by_correction'
 )
 
 , whole_filing as (
