@@ -109,8 +109,13 @@ vars:
     # new_wrong and owner_review: 0 since Task 6 (the 54 and the 45 + 34 were the 133 rows released by fund rules, D15).
     cmp_published_new_wrong: 0
     cmp_published_convention: 31
-    cmp_published_needs_store_not_loaded: 12
-    cmp_published_needs_correction: 52
+    # Slice 5 Task 5 (measured 2026-11-25): this side is the corrected row set (int_row_corrected), so the 52
+    # needs_correction rows (contexts corrections make positions: 44 Apollo zero lines, 8 term contexts) and the 8 Ares
+    # production_row_added rows (the add_row positions) are on both sides; the 4 rate_only_context_pair rows (2 Ares
+    # adopted pairs whose production row keeps the giver's context id) are joined through int_rate_adjacent. 12 -> 0,
+    # 52 -> 0. A correction left on a production-only row is needs_correction|correction_not_promoted (0).
+    cmp_published_needs_store_not_loaded: 0
+    cmp_published_needs_correction: 0
     cmp_published_owner_review: 0
     # 2: BCRED Box Co-Invest (0001803498-25-000062 c-1259) and Blue Owl LSI Financing (0001812554-26-000027 c-1013;
     # detail relabel_loaded since Task 5: a relabel is on file in the wrapper copy, why production omits the row is not known).
@@ -281,16 +286,22 @@ vars:
   #   count_principal_currency_blank_in_production. shares needs_correction 219 (production names shares_held);
   #   shares owner_review 48 = 34 par_tagged + 14 units_tagged (unpublished 15 par_tagged). Share of net assets
   #   old_wrong 2 (unpublished): pct_size_bound_keeps_fraction.
+  # Slice 5 Task 5 (measured 2026-11-25, docs/baseline_corrections_2026-11-24.md section 4): this side is the corrected
+  #   value (int_field_corrected). Every former needs_correction row is equal (fair value 2, cost 14, principal 5,
+  #   currency 282, dollar principal 194, shares 219 -> 0). The 62 rows on both sides since this task (52 promoted
+  #   contexts, 8 add_row positions, 2 adopted pairs) are equal on fair value, principal, dollar principal, shares and
+  #   share of net assets; cost needs_correction 1: correction_failed_conversion_unresolved, Apollo 0000950170-24-094137
+  #   C_f9b16d68-f444-4e30-b9e0-a3259fb1f0f8 (the untagged cost 41,554,000 this layer cannot sign without its print,
+  #   section 2.1; production holds it). principal and dollar principal not_yet_explained 0 here: the 14 BCRED rows have
+  #   their own detail ceiling below. The 5 new currency conventions have detail ceilings below, so convention stays 671.
   cmp_amount_max:
     published:
-      fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 14, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 5, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 14}
-      principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 671, needs_correction: 282, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
-      # not_yet_explained 14 (slice 4 Task 1, item d; was 16): principal_empty_class_not_equity only. The 2
-      # correction_loaded_value_not_matched rows have their own ceiling in cmp_amount_detail_max below.
-      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 194, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 14}
-      shares: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 219, needs_store_not_loaded: 0, production_stale: 0, owner_review: 48, not_yet_explained: 0}
+      fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      cost: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 1, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      principal_amount: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 0}
+      principal_amount_currency: {old_wrong: 0, new_wrong: 0, convention: 671, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 59, not_yet_explained: 0}
+      principal_amount_usd: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 166, not_yet_explained: 0}
+      shares: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 48, not_yet_explained: 0}
       pct_of_net_assets: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
     unpublished:
       fair_value: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
@@ -303,11 +314,26 @@ vars:
   # Cause details with a ceiling of their own (slice 4 Task 1, item d), per basis and field, keyed 'cause|detail'.
   # tests/generic/baseline_cmp_amount_cause.sql counts such a detail in its own test and leaves it out of its cause's
   # count above. correction_loaded_value_not_matched 2 (final fix wave F2): two Apollo dollar principals whose loaded
-  # correction is a EUR / GBP principal; production converted it, this layer does not convert a correction.
+  # correction is a EUR / GBP principal; production converted it, this layer did not convert a correction. Slice 5
+  # Task 5: gone (the detail is no longer produced; the corrected principal converts through to_usd and both rows are
+  # equal). Slice 5 Task 5, measured 2026-11-25:
+  #   not_yet_explained|principal_empty_class_not_equity 14 on principal and dollar principal: the BCRED Units rows
+  #     2025-06-30 to 2026-06-30 (was in the cause ceiling). Traced (section 4.4), cause waits for a controller ruling.
+  #   convention|untagged_principal_currency_blank_in_production 3: Ares 0001287750-22-000052
+  #     i37db8a34619644da93106ca0e70ab374_I20220930 and i6cfa6b6a64b94b83856418b04b8626a0_I20220930 (promoted by their
+  #     wrapper principals), 0001287750-23-000010 ie6a91f4a72834ea4b64f0579f8515441_I20221231 (equal before: both
+  #     currencies empty; the corrected principal now carries USD).
+  #   convention|filled_principal_currency_blank_in_production 2: Ares 0001287750-25-000020 c-1728 and
+  #     0001287750-25-000038 c-1776 (the adopted pairs; production's dedupe filled the principal onto c-1727 / c-1775).
   cmp_amount_detail_max:
     published:
+      principal_amount:
+        "not_yet_explained|principal_empty_class_not_equity": 14
+      principal_amount_currency:
+        "convention|untagged_principal_currency_blank_in_production": 3
+        "convention|filled_principal_currency_blank_in_production": 2
       principal_amount_usd:
-        "not_yet_explained|correction_loaded_value_not_matched": 2
+        "not_yet_explained|principal_empty_class_not_equity": 14
   # Comparison of rates with production (cmp_rate, slice 4 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_rate_cause.sql), measured 2026-11-23 (docs/baseline_rates_2026-11-23.md). The two bases
   # are never summed. not_yet_explained 0 and new_wrong 0 everywhere (new_wrong was 3 before the controller ruling of
@@ -321,20 +347,27 @@ vars:
   # cmp_rate_detail_max below, so the cause ceiling here counts only rows with any other detail: 0. Totals before the
   # split (published): rate 600, cash 177, pik 55, spread 1,202, maturity 43,997, kind 600; unpublished: rate 8, cash 8,
   # spread 23, maturity 8,082, kind 8. A new detail of this cause fails the build until it gets its own ceiling.
+  # Slice 5 Task 5 (measured 2026-11-25, docs/baseline_corrections_2026-11-24.md section 4): this side is the corrected
+  # value (int_field_corrected). needs_correction 0 everywhere (published rate 51, cash 68, PIK 158, spread 123, maturity
+  # 9, kind 45; unpublished spread 142, maturity 2): every such row is equal, except HPS 0001838126-25-000017 c-157 (rate,
+  # cash, kind: printed_reference_rate_column_not_read) and the three HPS cash legs c-934, c-912, c-903 (owner ruling A,
+  # cash_equals_all_in). spread owner_review 2: pik_correction_leaves_spread_unread, Apollo 0000950170-24-031479
+  # C_1de7bac0-e623-43c0-baa0-84f215e548a2 and 0000950170-24-058684 C_a98dfaae-3949-4d9e-8d76-c18c1c405aa5 (Task 4
+  # review, minor 3; owner item).
   cmp_rate_max:
     published:
-      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 51, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
-      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 68, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
-      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 158, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 123, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 9, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 45, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
+      pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 2, not_yet_explained: 0}
+      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 1, not_yet_explained: 0}
     unpublished:
       interest_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       interest_rate_cash: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       pik_rate: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 142, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
-      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 2, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      spread: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
+      maturity_date: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
       rate_kind: {old_wrong: 0, new_wrong: 0, convention: 0, needs_correction: 0, needs_store_not_loaded: 0, production_stale: 0, owner_review: 0, not_yet_explained: 0}
   # Per-detail ceilings of needs_store_not_loaded (slice 4 Task 5, repair d; the cmp_amount_detail_max pattern), keyed
   # 'cause|detail', measured 2026-11-23 (scripts/slice4/q_t4_mechanism_checks.sql). The text_not_read detail is set by
@@ -352,22 +385,45 @@ vars:
   # 2026-11-25): three Ares positions that take a rate and no PIK rate from their neighbouring rate-only context
   # (int_rate_adjacent; 0001287750-25-000038 c-1446, 0001287750-25-000046 c-1475 and c-165) now have an all-in rate, so
   # a cash leg too.
+  # Slice 5 Task 5 (measured 2026-11-25; every added row is listed by scripts/slice5/q_t5_rate_added_rows.sql and in
+  # docs/baseline_corrections_2026-11-24.md section 4.3). Rows on both sides since this task (contexts corrections make
+  # positions, adopted pairs) and rows the corrected value moved:
+  #   identifier_text_not_read: rate, cash, kind +4 (Apollo zero lines 0000950170-25-038785 C_88ea35be,
+  #     0000950170-25-068013 C_bf986cb5, 0000950170-25-105984 C_d6337c02, 0001193125-25-277723 C_d9ee996c: production
+  #     reads 10.43 from the identifier text); spread and maturity +6 (Apollo term contexts 0000950170-23-061985
+  #     C_a04db2b3, 0000950170-24-094137 C_f9b16d68, 0000950170-24-124223 C_1f7ecfaa and C_872a2779,
+  #     0000950170-25-068013 C_a68b516e, 0001193125-26-215667 C_6b014dad).
+  #   printed_rate_type_and_loan_class_not_read: rate, kind +1 (Ares 0001287750-25-000038 c-1268, a PIK-only taker; was
+  #     the stale rate_only_context_not_adopted).
+  #   printed_reference_rate_column_not_read: rate, cash, kind +1 (HPS 0001838126-25-000017 c-157: production reads the
+  #     13.5 spread tag as a fixed coupon; was needs_correction).
+  #   same_identifier_context_fill_not_built (new): rate, kind 1 (Ares 0001287750-25-000007 c-1544: production's dedupe
+  #     filled the rate 9.23 from c-1543, same label, rate only; was rate_only_context_not_adopted).
+  #   rate_only_context_not_adopted: rate, kind 2 -> 0. production_corrected_no_loaded_store: rate, cash, kind 1 -> 0
+  #     (the Ares B2 row, loaded since loader 6, now equal).
+  #   cash_equals_all_in_owner_ruling: 31,242 -> 31,254 (+18 -6): 3 HPS cash legs that were needs_correction (c-934,
+  #     c-912, c-903), 8 cash legs a correction sets (Ares c-1047, c-1051, c-752, c-765; Apollo C_039efe54, C_b66364fa,
+  #     C_0aeabb67; HPS c-922), 7 Apollo zero lines; 6 cash legs leave it (a corrected rate is withdrawn, both empty).
+  #   printed_pik_not_read: cash 67 -> 3 (64 now equal: the corrected PIK rate gives the cash leg).
+  #   printed_total_margin_not_read: spread 479 -> 478 (one now equal).
+  #   printed_maturity_not_read: maturity 43,996 -> 44,000 (Ares 0001287750-22-000052 two term contexts, c-1728, c-1776).
   cmp_rate_detail_max:
     published:
       interest_rate:
-        "needs_store_not_loaded|identifier_text_not_read": 73
-        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 405
-        "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
-        "needs_store_not_loaded|production_corrected_no_loaded_store": 1
-        "needs_store_not_loaded|rate_only_context_not_adopted": 2
+        "needs_store_not_loaded|identifier_text_not_read": 77
+        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 406
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 113
+        "needs_store_not_loaded|production_corrected_no_loaded_store": 0
+        "needs_store_not_loaded|rate_only_context_not_adopted": 0
+        "needs_store_not_loaded|same_identifier_context_fill_not_built": 1
         "needs_store_not_loaded|whole_coupon_pik_not_read": 0
       interest_rate_cash:
-        "convention|cash_equals_all_in_owner_ruling": 31242
-        "needs_store_not_loaded|identifier_text_not_read": 52
+        "convention|cash_equals_all_in_owner_ruling": 31254
+        "needs_store_not_loaded|identifier_text_not_read": 56
         # controller ruling R1 (2026-11-23): cash legs left empty because the rate cell prints a PIK no tag carries
-        "needs_store_not_loaded|printed_pik_not_read": 67
-        "needs_store_not_loaded|printed_reference_rate_column_not_read": 76
-        "needs_store_not_loaded|production_corrected_no_loaded_store": 1
+        "needs_store_not_loaded|printed_pik_not_read": 3
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 77
+        "needs_store_not_loaded|production_corrected_no_loaded_store": 0
         "needs_store_not_loaded|rate_only_context_not_adopted": 0
         "needs_store_not_loaded|whole_coupon_pik_not_read": 44
       pik_rate:
@@ -375,20 +431,21 @@ vars:
         "needs_store_not_loaded|rate_only_context_not_adopted": 0
         "needs_store_not_loaded|whole_coupon_pik_not_read": 44
       spread:
-        "needs_store_not_loaded|identifier_text_not_read": 19
+        "needs_store_not_loaded|identifier_text_not_read": 25
         "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 287
         "needs_store_not_loaded|printed_reference_rate_column_not_read": 413
-        "needs_store_not_loaded|printed_total_margin_not_read": 479
+        "needs_store_not_loaded|printed_total_margin_not_read": 478
         "needs_store_not_loaded|rate_only_context_not_adopted": 0
       maturity_date:
-        "needs_store_not_loaded|identifier_text_not_read": 1
-        "needs_store_not_loaded|printed_maturity_not_read": 43996
+        "needs_store_not_loaded|identifier_text_not_read": 7
+        "needs_store_not_loaded|printed_maturity_not_read": 44000
       rate_kind:
-        "needs_store_not_loaded|identifier_text_not_read": 73
-        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 405
-        "needs_store_not_loaded|printed_reference_rate_column_not_read": 112
-        "needs_store_not_loaded|production_corrected_no_loaded_store": 1
-        "needs_store_not_loaded|rate_only_context_not_adopted": 2
+        "needs_store_not_loaded|identifier_text_not_read": 77
+        "needs_store_not_loaded|printed_rate_type_and_loan_class_not_read": 406
+        "needs_store_not_loaded|printed_reference_rate_column_not_read": 113
+        "needs_store_not_loaded|production_corrected_no_loaded_store": 0
+        "needs_store_not_loaded|rate_only_context_not_adopted": 0
+        "needs_store_not_loaded|same_identifier_context_fill_not_built": 1
         "needs_store_not_loaded|whole_coupon_pik_not_read": 0
     unpublished:
       interest_rate:

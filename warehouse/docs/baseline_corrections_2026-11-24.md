@@ -1,7 +1,7 @@
 # Baseline: corrections (slice 5), 2026-11-24
 
-Section 2 is written by Task 3 (the outcomes of applying the corrections to amounts and to the row set); sections 3
-onward by Tasks 5 and 6. Nothing in section 1 applies a correction; it says what the stores hold, what the loader
+Section 2 is written by Task 3 (the outcomes of applying the corrections to amounts and to the row set), section 3
+by Task 4 (rates), section 4 by Task 5 (the comparison with production on the corrected values). Nothing in section 1 applies a correction; it says what the stores hold, what the loader
 loads and where production applies each.
 
 Agreement with production, where this file reports it, shows the two pipelines agree. It does not show either is
@@ -417,3 +417,227 @@ Independent review: approved with minors; it reproduced sections 3.1 to 3.4 and 
 - The pairing reads the trailing digits of the context id. Run on every fund with no rule filter it finds one
   spurious Apollo pair between two UUID context ids; production's rule has the same flaw. Harmless while only Ares
   declares the rule; check before a fund with UUID context ids declares it.
+
+## 4. The comparison on the corrected values, and the BCRED trace (slice 5 Task 5)
+
+Measured 2026-11-25 on the build of this task (branch `warehouse-slice5`). Queries: `warehouse/scripts/slice5/q_t5_*.sql`.
+Before = the build at da17b7e9 (snapshot `scratch/2026-11-25_slice5_t5/snap`, `*_before.parquet`). Agreement with
+production shows that the two pipelines apply the same corrections the same way. It does not show a correction is right.
+
+### 4.1 What changed in the three comparison models
+
+A comparison model (`cmp_*`) is a table that sets this layer beside production row by row and gives every difference a
+cause from the closed list.
+
+- `cmp_row_set` reads the corrected row set (`int_row_corrected`) instead of the filed one (`int_source_row`). The
+  features that explain a one-sided row (role, rule, reason, cash flags) are still those of `int_source_row`. New
+  columns: `row_reason`, `row_correction_ids`, `production_context_id`. This layer's total for the filed-total tie is the
+  corrected fair value.
+- An adopted rate-only pair (`int_rate_adjacent`, Task 4) whose production row keeps the giver's context id: where
+  production has a row at the giver and none at the taker, its row is compared with this layer's taker.
+  `production_context_id` keeps production's id; `cmp_amount` and `cmp_rate` join production on it. A pair rule, not a
+  list. It joins the 2 Ares pairs of section 3.4 (c-1728 / c-1727, c-1776 / c-1775).
+- `cmp_amount` and `cmp_rate` read `int_field_corrected` instead of `int_field_normalised`. New columns:
+  `value_normalised` (the value before corrections; `currency_normalised` for the currency, `date_normalised` and
+  `text_normalised` for maturity and kind in `cmp_rate`) and `correction_id`.
+- The old correction causes are gone: `needs_correction|correction_loaded_applied`, `needs_correction|correction_loaded`,
+  `not_yet_explained|correction_loaded_value_not_matched`, `not_yet_explained|correction_loaded_not_named`, and in
+  `cmp_row_set` `needs_correction|correction_supplies_value_or_term`. Corrections are now read from
+  `int_correction_application` (the outcome of each correction on its target). New rules, each with a unit test row
+  that takes it and one that must not:
+
+| Model | Cause and detail | Rule |
+|---|---|---|
+| cmp_amount, cmp_rate | `needs_correction|correction_<outcome>_<reason>` | covering corrections are loaded on the row and none is used here (rejected, failed or deferred) |
+| cmp_amount, cmp_rate | `not_yet_explained|correction_applied_value_differs` | a correction applied on the field, production holds another value, no other rule says why (checked last) |
+| cmp_amount | `convention|untagged_principal_currency_blank_in_production` | the currency of a principal set at step filed by a correction with no unit, production's currency empty |
+| cmp_amount | `convention|filled_principal_currency_blank_in_production` | production's dedupe filled the principal from a sibling context (src_filled_fields) and left its currency empty |
+| cmp_rate | `owner_review|pik_correction_leaves_spread_unread` | a PIK correction applied makes the spread text_not_read while the value before equals production's |
+| cmp_rate | `needs_store_not_loaded|same_identifier_context_fill_not_built` | production filled the rate (src_filled_fields), the row is no taker here, and a context of the filing with the same label carries a rate fact and no fair value |
+| cmp_rate | `needs_store_not_loaded|rate_only_context_not_adopted` (changed) | now only where the row is not a taker this layer paired |
+| cmp_row_set | `needs_correction|correction_not_promoted` | a correction on a production-only row that did not make it a position (renamed from the old detail; 0 rows) |
+
+The `cmp_rate` comment that said the adjacent rule is "not built here" is corrected.
+
+### 4.2 Before and after
+
+Re-measured before on the current build: every `needs_correction` count equals the brief's 2026-11-24 starting
+count. `rate_only_context_not_adopted` was already down to rate 2, kind 2 (Task 4; the brief's rate 6, cash 1, PIK 2,
+spread 4, kind 6 are from before Task 4).
+
+`cmp_row_set` (one-sided rows):
+
+| Basis, side | Cause and detail | Before | After |
+|---|---|---:|---:|
+| published, production only | needs_correction, correction_supplies_value_or_term | 52 | 0 |
+| published, production only | needs_store_not_loaded, production_row_added | 8 | 0 |
+| published, both sides | needs_store_not_loaded, rate_only_context_pair | 4 (2 + 2) | 0 |
+| published, new only | convention, cash_published_d7_seed_pattern | 31 | 31 |
+| published, new only | not_yet_explained, none / relabel_loaded | 1 / 1 | 1 / 1 |
+| unpublished, new only | convention (two details) | 30 | 30 |
+
+62 rows are on both sides since this task: 44 Apollo zero lines and 8 term contexts (corrections make them
+positions), 8 Ares add_row positions, 2 adopted pairs.
+
+`cmp_amount`, published (unpublished unchanged):
+
+| Field | Cause and detail | Before | After |
+|---|---|---:|---:|
+| fair value | needs_correction (both details) | 2 | 0 |
+| cost | needs_correction (both details) | 14 | 0 |
+| cost | needs_correction, correction_failed_conversion_unresolved | 0 | 1 |
+| principal | needs_correction (both details) | 5 | 0 |
+| principal | not_yet_explained, principal_empty_class_not_equity | 14 | 14 |
+| currency | needs_correction (both details) | 282 | 0 |
+| currency | convention, count_principal_currency_blank_in_production | 671 | 671 |
+| currency | convention, untagged_principal_currency_blank_in_production | 0 | 3 |
+| currency | convention, filled_principal_currency_blank_in_production | 0 | 2 |
+| dollar principal | needs_correction (both details) | 194 | 0 |
+| dollar principal | not_yet_explained, correction_loaded_value_not_matched | 2 | 0 |
+| dollar principal | not_yet_explained, principal_empty_class_not_equity | 14 | 14 |
+| shares | needs_correction, correction_loaded_applied | 219 | 0 |
+| every field | owner_review, old_wrong | unchanged | unchanged |
+
+`cmp_rate`:
+
+| Basis | Field | Cause and detail | Before | After |
+|---|---|---|---:|---:|
+| published | rate | needs_correction | 51 | 0 |
+| published | rate | identifier_text_not_read | 73 | 77 |
+| published | rate | printed_rate_type_and_loan_class_not_read | 405 | 406 |
+| published | rate | printed_reference_rate_column_not_read | 112 | 113 |
+| published | rate | production_corrected_no_loaded_store | 1 | 0 |
+| published | rate | rate_only_context_not_adopted | 2 | 0 |
+| published | rate | same_identifier_context_fill_not_built | 0 | 1 |
+| published | cash leg | needs_correction | 68 | 0 |
+| published | cash leg | convention, cash_equals_all_in_owner_ruling | 31,242 | 31,254 |
+| published | cash leg | identifier_text_not_read | 52 | 56 |
+| published | cash leg | printed_pik_not_read | 67 | 3 |
+| published | cash leg | printed_reference_rate_column_not_read | 76 | 77 |
+| published | cash leg | production_corrected_no_loaded_store | 1 | 0 |
+| published | PIK rate | needs_correction | 158 | 0 |
+| published | spread | needs_correction | 123 | 0 |
+| published | spread | identifier_text_not_read | 19 | 25 |
+| published | spread | printed_total_margin_not_read | 479 | 478 |
+| published | spread | owner_review, pik_correction_leaves_spread_unread | 0 | 2 |
+| published | maturity | needs_correction | 9 | 0 |
+| published | maturity | identifier_text_not_read | 1 | 7 |
+| published | maturity | printed_maturity_not_read | 43,996 | 44,000 |
+| published | kind | needs_correction | 45 | 0 |
+| published | kind | as rate (identifier text 77, printed rate type 406, reference column 113, not adopted 0, same identifier 1, production corrected 0) | | |
+| unpublished | spread | needs_correction | 142 | 0 |
+| unpublished | maturity | needs_correction | 2 | 0 |
+
+`not_yet_explained` and `new_wrong`: 0 on every field and basis except the 14 + 14 BCRED rows (unchanged, own detail
+ceiling, section 4.4) and the 2 `cmp_row_set` rows (unchanged). `needs_correction`: 0 everywhere except the one Apollo
+cost. No published fair value, cost or principal that was equal before this slice differs now
+(`q_t5_cause_moves.sql`: no equal row on those fields gained a cause).
+
+### 4.3 The rows behind each change (all opened)
+
+Former needs_correction rows (`q_t5_amount_explore.sql`, `q_t5_rate_explore.sql`): amounts 716, all equal after
+correction, including the 2 Apollo dollar principals of `correction_loaded_value_not_matched`, which now convert through
+`to_usd` on the corrected EUR / GBP principal. Rates: 454 published and 144 unpublished; all equal or both empty
+except HPS 0001838126-25-000017 c-157 (rate, cash leg, kind) and three HPS cash legs.
+
+Every open row whose field carries an applied correction (`q_t5_applied_open.sql`, 22 rows, all opened):
+
+| Rows | Cause | Why |
+|---|---|---|
+| 3 currency rows: Ares 0001287750-22-000052 i37db8a34... and i6cfa6b6a... (2022-09-30), 0001287750-23-000010 ie6a91f4a... (2022-12-31) | convention, untagged_principal_currency_blank_in_production | wrapper untagged principals with no unit (e.g. 52,800,000). Production fills them at parse time with no unit, so its currency is blank (dollar principal 52.8m, equal); this layer writes USD |
+| 17 cash legs (Ares c-1046, c-1047, c-1048, c-1051, c-752, c-765; Apollo C_039efe54, C_b66364fa, C_18280e10, C_0aeabb67, C_4b74c7c2, C_53b7bfb4, C_9b863965; HPS c-934, c-912, c-922, c-903) | convention, cash_equals_all_in_owner_ruling | owner ruling A: the cash leg is the all-in rate where no PIK rate is read; production leaves it empty. The rate itself equals production's on every one |
+| 2 Apollo spreads (0000950170-24-031479 C_1de7bac0, 0000950170-24-058684 C_a98dfaae) | owner_review, pik_correction_leaves_spread_unread | value before 4.5 = production 4.5; the corrected PIK rate makes the row's spread rule need the printed total margin. Owner item: keep the spread as before when only the PIK rate is corrected, or leave it unread like its filed peers |
+
+No row reaches `correction_applied_value_differs` (0 on every field).
+
+Carried items from Task 4 (`q_t5_carried.sql`):
+
+- HPS c-157: rate (production 13.5), cash leg (7.15) and kind: `needs_store_not_loaded|printed_reference_rate_column_not_read`.
+  Production's src_transforms has `interest_rate:from_spread_tag;basis_spread:fixed_coupon`: it read 'no reference
+  rate' in the printed column and moved the 13.5 spread tag to the rate. This layer has no such reading. The PIK
+  correction (6.35) is applied and equal. The existing detail names the mechanism exactly; ceilings +1.
+- The three HPS cash legs (c-934, c-912, c-903): `convention|cash_equals_all_in_owner_ruling`; the corrected rate is
+  equal (9.36, 9.17, 9.81).
+- The two Apollo spreads: as above.
+- Ares 0001287750-25-000038 c-1268: now `printed_rate_type_and_loan_class_not_read` on rate and kind, as every PIK-only
+  row. The rule `rate_only_context_not_adopted` now skips a taker this layer paired. PIK 10.25 equal.
+- Ares 0001287750-25-000007 c-1544: `needs_store_not_loaded|same_identifier_context_fill_not_built` (rate, kind). Read
+  production's row and contexts c-1538 to c-1550 (`q_t5_c1544.sql`): c-1543 has the same label ("Rawlings Sporting Goods
+  ... First lien senior secured loan"), carries only the rate fact 0.0923 and no fair value; c-1544 carries the spread,
+  fair value and principal and no rate. Production's `adopt_rate_only_contexts` does not pair them (its taker must
+  have no rate field; c-1544 has a spread), but its dedupe (`pipeline/bdc_filings.py` `_deduplicate_bdc_holdings`,
+  lines 1231-1393) groups rows by identifier and fills a missing value from a sibling row: src_filled_fields
+  `interest_rate`. This layer's structural rule needs a taker with no rate fact, so it does not take the rate.
+- The 7 failed Blue Owl rate corrections: rate, cash leg and kind both empty (production has no rate either); PIK
+  6.0 equal. No cause needed.
+
+Rows on both sides since this task (`q_t5_new_both_open.sql`, all 40 open rows opened):
+
+| Rows | Cause | Note |
+|---|---|---|
+| fair value, principal, dollar principal, shares, share of net assets on all 62 rows | equal | the 8 add_row positions are equal on every field |
+| Apollo 0000950170-24-094137 C_f9b16d68 cost (production 41,554,000) | needs_correction, correction_failed_conversion_unresolved | the untagged cost this layer cannot sign without its print (section 2.1). Production applies it |
+| Ares 2022-09-30 two term contexts, currency | convention, untagged_principal_currency_blank_in_production | as above |
+| Ares c-1728, c-1776 (pairs), currency | convention, filled_principal_currency_blank_in_production | production's row is the giver's (c-1727, c-1775); its dedupe filled cost, fair value and principal from the taker (src_filled_fields) without the unit, so the currency is blank and the dollar principal equals the principal |
+| 4 Apollo zero lines: rate, cash leg, kind | identifier_text_not_read | production reads 10.43 from the identifier text |
+| 7 Apollo zero lines: cash leg | convention, cash_equals_all_in_owner_ruling | ruling A |
+| 6 Apollo term contexts: spread, maturity | identifier_text_not_read | production reads them from the identifier text |
+| Ares 2022-09-30 two term contexts, c-1728, c-1776: maturity | printed_maturity_not_read | production reads the date from the printed row |
+
+Every row added to a raised detail ceiling is listed by `q_t5_rate_added_rows.sql`; the cash-leg convention moved
+31,242 -> 31,254: +3 HPS (were needs_correction), +8 cash legs a correction now sets (Ares c-1047, c-1051, c-752,
+c-765; Apollo C_039efe54, C_b66364fa, C_0aeabb67; HPS c-922), +7 Apollo zero lines, -6 cash legs now both empty (a
+withdrawn rate: Apollo C_6d0842cd, C_7b0708ee, C_3ec10678, C_ae5fc255, C_dc8a4e86; Ares c-764).
+
+### 4.4 BCRED trace (owner decision 2026-11-23)
+
+Work time: 11:43 to 11:45 on 2026-11-25 by the session clock (well inside the 60-minute limit). The 14 rows
+(`q_t5_bcred_rows.sql`): BCRED 2025-06-30 to 2026-06-30, labels "<vehicle> - Units" (Regatta Kilo, HPS Freshwater
+Warehouse Parent, Pikes Peak Bravo, Balboa Bay Loan Funding 2025-3); production class STRUCTURED_CREDIT, asset category
+EQUITY_COMMON, principal and dollar principal empty, currency USD kept, no correction, src_transforms has no
+`principal_amount:from_shares_tag`.
+
+Found. The step and its condition:
+
+1. `pipeline/classification.py` `_sql_classify_bdc_asset` (lines 440-453): the instrument text "Units" matches the
+   equity keyword list `_BDC_EQUITY_KEYWORDS` (line 152, "units") before the field heuristic, so asset_category is
+   EQUITY_COMMON. `_sql_classify_index` (line 531): EQUITY_COMMON and a corporate issuer gives COMMON_EQUITY.
+2. `pipeline/unified_holdings.py` lines 1346-1355, in the class step (`_index_class`, line 1232): `CASE WHEN
+   _index_class IN ('COMMON_EQUITY', 'PREFERRED_EQUITY', 'PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND',
+   'REAL_ESTATE_FUND', 'HEDGE_FUND') THEN NULL ELSE principal_amount END` (and the same for principal_amount_usd). The
+   currency is not emptied, which is the signature seen.
+3. `pipeline/printed_sections.py` `apply_structured_sections` (lines 135-140), called later at unified_holdings.py line
+   1529: rows printed under the BCRED heading "Structured Finance Obligations" (wrapper
+   `dispatch.structured_credit_sections`, `structured_re`) are set to index_classification STRUCTURED_CREDIT. BCRED's
+   wrapper has no `equity_re`, so asset_category stays EQUITY_COMMON from step 1. Nothing restores the principal
+   ("principal is left as it is", line 149).
+
+So production empties the principal under its first class and then re-classes the row, the same pattern as
+`old_wrong|principal_emptied_then_reclassified` (there the re-class is a correction). The only principal-emptying
+statement in the production code read (unified_holdings.py, printed_sections.py, financial_finalization.py,
+financial_conventions.py, agent_promoted.py, agent_rule.py, holdings_finalizer.py) is lines 1350 and 1355.
+
+Not verified: that each of the 14 rows had `_index_class` COMMON_EQUITY at line 1232 (not run; inferred from the label
+word and from the principal being empty while that is the only emptying step), and that each sits under the
+structured heading on its page (inferred from the final class STRUCTURED_CREDIT, which the class step would not give
+these labels).
+
+Cause: **waits for a controller ruling** between `old_wrong` (production's emptying is an ordering side effect: its own
+final class is not one it empties), `owner_review` (the rows are CLO equity units; owner decision D17 says a principal
+that is a unit count on an equity class is to be empty; whether the "Par Amount/Units" tag here is a par or a unit
+count is that question) and `convention`. Recommendation: `owner_review`, detail
+`principal_emptied_before_section_reclass`, beside D17, because production's result (no principal on an equity
+tranche) may be right for the wrong reason, and only the owner can say whether these units are a par. Until the
+ruling the rows keep `not_yet_explained|principal_empty_class_not_equity`, now under a detail ceiling of their own (14
+each), so the not_yet_explained cause ceiling is 0 on every field.
+
+### 4.5 Proofs
+
+- Snapshot before the task against the full build after it (`scripts/slice5/compare_snapshots.py`, 47 relations): every
+  `int_*` table, `int_field_normalised`, the dimensions, facts and seeds unchanged (0 / 0). Changed: `cmp_amount`
+  (499,905 -> 500,339 rows: +434 = 62 rows x 7 fields, causes moved), `cmp_rate` (428,490 -> 428,862: +372 = 62 x 6),
+  `cmp_row_set` (71,542 -> 71,540: 64 one-sided rows became 62 rows on both sides).
+- Full build `PASS=827 WARN=115 ERROR=0 TOTAL=942` (before: 806 / 131 / 0 / 937; 5 new detail tests; warnings fall
+  because the needs_correction tests now count 0). Python tests 175 passed.
+- Unit tests: `cmp_row_set_catch_all_causes`, `cmp_row_set_early_causes`, `cmp_amount_cause_rules`,
+  `cmp_rate_cause_rules` updated to the new inputs, with new rows for each new rule and its false case.
