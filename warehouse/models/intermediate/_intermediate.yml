@@ -1297,13 +1297,21 @@ models:
 
   - name: int_page_cell_column
     description: >
-      One row per non-empty cell below the header of a schedule table with a header: the leaf column whose zone holds
-      the cell's first column (null when none does) and the cell's simple shape. Published positions whose printed row
-      has no cell under any column have a baseline ceiling (tests/baseline_int_page_position_no_column.sql).
+      One row per non-empty cell below the header of a schedule table with a header: its column and the rule that gave
+      it (column_rule: zone, prefix_of_next for a currency marker before a number, trailing_footnote for the unheaded
+      footnote-mark column, none_row_width_differs, none_left_of_first_leaf), and the cell's simple shape. Published
+      positions whose printed row has no cell under any column, and placed field facts given no column, have baseline
+      ceilings (tests/baseline_int_page_position_no_column.sql, tests/baseline_int_page_field_fact_no_column.sql).
     columns:
       - name: accession
         data_tests:
           - not_null
+      - name: column_rule
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [zone, prefix_of_next, trailing_footnote, none_row_width_differs, none_left_of_first_leaf]
       - name: shape
         data_tests:
           - not_null
@@ -1313,10 +1321,15 @@ models:
 
   - name: int_page_column_filing
     description: >
-      The column unit of a filing, one row per (accession, header_signature): tables, data cells by shape, and the
-      filed facts placed under it counted by concept. Counts only; the next slice bundles it.
+      The column unit of a filing, one row per (accession, table_signature, header_signature) since fix round 1, so the
+      fund's schedule, a joint venture's and an unfunded-commitment table are separate units: tables, data cells by
+      shape (shares leave footnote marks out; their count is separate), and the filed facts placed under it counted by
+      concept. Counts only; the next slice bundles it.
     columns:
       - name: accession
+        data_tests:
+          - not_null
+      - name: table_signature
         data_tests:
           - not_null
       - name: header_signature
@@ -1326,11 +1339,35 @@ models:
         data_tests:
           - not_null
 
+  - name: int_page_schedule
+    description: >
+      Fix round 1. One row per schedule table: its table_signature (leaf signatures in order), its normalised title and
+      schedule_seq, the schedule it belongs to within the filing. A new schedule starts at a header change, a new title,
+      or a non-schedule table in between (rules in the model's header). Headings do not carry across schedules.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: table_index
+        data_tests:
+          - not_null
+      - name: schedule_seq
+        data_tests:
+          - not_null
+
   - name: int_page_heading
     description: >
       One row per heading row (no facts, exactly one non-empty cell, below the header of a schedule table with a
-      header), with plain features (is_continued, next_row_kind, seen_in_prior_filing). No meaning is assigned.
+      header), its schedule, the run of consecutive headings it belongs to (run_length, run_position,
+      depth_from_bottom; blank rows and a repeated header at a page break do not end a run), and plain features
+      (is_continued, next_row_kind, seen_in_prior_filing). No meaning is assigned.
     columns:
+      - name: schedule_seq
+        data_tests:
+          - not_null
+      - name: depth_from_bottom
+        data_tests:
+          - not_null
       - name: accession
         data_tests:
           - not_null
@@ -1349,12 +1386,20 @@ models:
 
   - name: int_position_heading
     description: >
-      For each position with a printed row, the nearest 4 heading rows above it in the same filing, carried across the
-      page tables in document row order, with rank, distance in rows and whether the heading is in the same table.
+      For each position with a printed row and each heading depth 0 to 3, the nearest heading above it at that depth
+      in the same schedule (not reset by a deeper heading in between), carried across the schedule's page tables, with
+      rank by distance, distance in rows and whether the heading is in the same table (fix round 1; was the nearest 4).
     columns:
       - name: context_id
         data_tests:
           - not_null
+      - name: heading_depth
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3]
+                quote: false
       - name: heading_rank
         data_tests:
           - not_null
@@ -5163,7 +5208,8 @@ unit_tests:
       row above: one_line. T2 two candidates on consecutive rows: two_candidates. T3 one candidate and a line below with
       2 cells: line_below. T4 a group line above ("Interest" covering 3 of the 5 header cells): group_line_above. T5 a
       title above covering every header cell: not a group line, one_line. T6 no candidate: none. T7 two candidates not
-      on consecutive rows: ambiguous. T8 holds no position: no row. Width is modal (T1 3, T4 7).
+      on consecutive rows: ambiguous. T8 holds no position: no row. Width is modal (T1 3, T4 7). title_text (fix
+      round 1): T5's title row above its header; T1's row above is empty, so null.
     model: int_page_table
     given:
       - input: ref('int_page_position')
@@ -5207,13 +5253,13 @@ unit_tests:
           ) t(ti, ri, rit, fc, cells, cs, rs)
     expect:
       rows:
-        - {table_index: 1, width: 3, position_rows: 1, header_status: one_line, header_form: one_line, header_row_index: 11, sub_header_row_index: null, header_last_row_in_table: 1}
-        - {table_index: 2, width: 3, position_rows: 1, header_status: two_lines, header_form: two_candidates, header_row_index: 20, sub_header_row_index: 21, header_last_row_in_table: 1}
-        - {table_index: 3, width: 3, position_rows: 1, header_status: two_lines, header_form: line_below, header_row_index: 30, sub_header_row_index: 31, header_last_row_in_table: 1}
-        - {table_index: 4, width: 7, position_rows: 1, header_status: two_lines, header_form: group_line_above, header_row_index: 40, sub_header_row_index: 41, header_last_row_in_table: 1}
-        - {table_index: 5, width: 7, position_rows: 1, header_status: one_line, header_form: one_line, header_row_index: 51, sub_header_row_index: null, header_last_row_in_table: 1}
-        - {table_index: 6, width: 3, position_rows: 1, header_status: none, header_form: none, header_row_index: null, sub_header_row_index: null, header_last_row_in_table: null}
-        - {table_index: 7, width: 3, position_rows: 1, header_status: ambiguous, header_form: ambiguous, header_row_index: null, sub_header_row_index: null, header_last_row_in_table: null}
+        - {table_index: 1, width: 3, position_rows: 1, header_status: one_line, header_form: one_line, header_row_index: 11, sub_header_row_index: null, header_last_row_in_table: 1, title_text: null}
+        - {table_index: 2, width: 3, position_rows: 1, header_status: two_lines, header_form: two_candidates, header_row_index: 20, sub_header_row_index: 21, header_last_row_in_table: 1, title_text: null}
+        - {table_index: 3, width: 3, position_rows: 1, header_status: two_lines, header_form: line_below, header_row_index: 30, sub_header_row_index: 31, header_last_row_in_table: 1, title_text: null}
+        - {table_index: 4, width: 7, position_rows: 1, header_status: two_lines, header_form: group_line_above, header_row_index: 40, sub_header_row_index: 41, header_last_row_in_table: 1, title_text: null}
+        - {table_index: 5, width: 7, position_rows: 1, header_status: one_line, header_form: one_line, header_row_index: 51, sub_header_row_index: null, header_last_row_in_table: 1, title_text: Schedule of investments}
+        - {table_index: 6, width: 3, position_rows: 1, header_status: none, header_form: none, header_row_index: null, sub_header_row_index: null, header_last_row_in_table: null, title_text: null}
+        - {table_index: 7, width: 3, position_rows: 1, header_status: ambiguous, header_form: ambiguous, header_row_index: null, sub_header_row_index: null, header_last_row_in_table: null, title_text: null}
 
   - name: int_page_column_leaves
     description: >
@@ -5255,12 +5301,16 @@ unit_tests:
         - {table_index: 2, column_index: 0, col_start: 0, zone_end: 5, header_text: Investments (1)(19), sub_header_text: null, header_signature: investments}
         - {table_index: 2, column_index: 1, col_start: 6, zone_end: 11, header_text: Par Amount/Units (1), sub_header_text: null, header_signature: paramount/units}
 
-  - name: int_page_cell_column_dollar_then_number
+  - name: int_page_cell_column_rules
     description: >
-      Text slice P3. Leaves "reference" (zone 2-5) and "paramount/units" (zone 6-11). A "$" at column 6 and the number
-      after it at column 7 both get "paramount/units"; a footnote mark at 9 too. A cell at column 0, left of the first
-      leaf, gets no column. The header row (row_in_table 0) and a table without a header give no rows. Each cell's
-      shape: percent, empty_marker, number, date, footnote_mark, text.
+      Text slice P3, rules revised in fix round 1. Leaves "reference" (printed 2-3, zone 2-5) and "paramount/units"
+      (printed 6-8, zone 6-11). zone: '4.75%' at 2, '5/8/2030' at 3, 'SOFR +' at 4 (text in the gap stays in the zone).
+      prefix_of_next: '$' at 6 then '60,260' (same column); 'A$' at 4, inside the zone of "reference", then '9,900' at 6:
+      the marker takes the number's column "paramount/units" (the case the zone rule got wrong). A marker followed by
+      text ('£' then 'N/A') stays in its zone. trailing_footnote: '(2)(11)' at 9, past the printed columns of
+      "paramount/units", goes to the unheaded '#footnote_marks' column. none_left_of_first_leaf: 'Acme' at 0.
+      none_row_width_differs: a row whose width is not the table's gives no column, even to a cell inside a zone. The
+      header row and a table without a header give no rows.
     model: int_page_cell_column
     given:
       - input: ref('int_page_table')
@@ -5272,110 +5322,171 @@ unit_tests:
         format: sql
         rows: |
           select 'A' as accession, ti as table_index, ri as row_index, rit as row_in_table, ci as cell_index,
-                 cs as col_start, txt as text, 0 as row_fact_count
+                 cs as col_start, txt as text, 0 as row_fact_count, ok as row_width_ok
           from (values
-            (1, 10, 0, 0, 6, 'Par'),
-            (1, 11, 1, 0, 0, 'Acme'), (1, 11, 1, 1, 2, '4.75%'), (1, 11, 1, 2, 6, '$'), (1, 11, 1, 3, 7, '60,260'),
-            (1, 12, 2, 0, 3, '5/8/2030'), (1, 12, 2, 1, 9, '(2)(11)'), (1, 12, 2, 2, 4, 'SOFR +'),
-            (2, 20, 1, 0, 0, 'x')
-          ) t(ti, ri, rit, ci, cs, txt)
+            (1, 10, 0, 0, 6, 'Par', true),
+            (1, 11, 1, 0, 0, 'Acme', true), (1, 11, 1, 1, 2, '4.75%', true), (1, 11, 1, 2, 6, '$', true),
+            (1, 11, 1, 3, 7, '60,260', true),
+            (1, 12, 2, 0, 3, '5/8/2030', true), (1, 12, 2, 1, 4, 'SOFR +', true), (1, 12, 2, 2, 9, '(2)(11)', true),
+            (1, 13, 3, 0, 4, 'A$', true), (1, 13, 3, 1, 6, '9,900', true), (1, 13, 3, 2, 7, '£', true),
+            (1, 13, 3, 3, 8, 'N/A', true),
+            (1, 14, 4, 0, 7, '100', false),
+            (2, 20, 1, 0, 0, 'x', true)
+          ) t(ti, ri, rit, ci, cs, txt, ok)
       - input: ref('int_page_column')
         format: sql
         rows: |
-          select 'A' as accession, 1 as table_index, cs as col_start, z as zone_end, ix as column_index,
+          select 'A' as accession, 1 as table_index, cs as col_start, ce as col_end, z as zone_end, ix as column_index,
                  sig as header_signature
-          from (values (2, 5, 0, 'reference'), (6, 11, 1, 'paramount/units')) t(cs, z, ix, sig)
+          from (values (2, 3, 5, 0, 'reference'), (6, 8, 11, 1, 'paramount/units')) t(cs, ce, z, ix, sig)
     expect:
       rows:
-        - {row_index: 11, cell_index: 0, column_col_start: null, header_signature: null, shape: text}
-        - {row_index: 11, cell_index: 1, column_col_start: 2, header_signature: reference, shape: percent}
-        - {row_index: 11, cell_index: 2, column_col_start: 6, header_signature: paramount/units, shape: empty_marker}
-        - {row_index: 11, cell_index: 3, column_col_start: 6, header_signature: paramount/units, shape: number}
-        - {row_index: 12, cell_index: 0, column_col_start: 2, header_signature: reference, shape: date}
-        - {row_index: 12, cell_index: 1, column_col_start: 6, header_signature: paramount/units, shape: footnote_mark}
-        - {row_index: 12, cell_index: 2, column_col_start: 2, header_signature: reference, shape: text}
+        - {row_index: 11, cell_index: 0, column_rule: none_left_of_first_leaf, column_col_start: null, header_signature: null, shape: text}
+        - {row_index: 11, cell_index: 1, column_rule: zone, column_col_start: 2, header_signature: reference, shape: percent}
+        - {row_index: 11, cell_index: 2, column_rule: prefix_of_next, column_col_start: 6, header_signature: paramount/units, shape: empty_marker}
+        - {row_index: 11, cell_index: 3, column_rule: zone, column_col_start: 6, header_signature: paramount/units, shape: number}
+        - {row_index: 12, cell_index: 0, column_rule: zone, column_col_start: 2, header_signature: reference, shape: date}
+        - {row_index: 12, cell_index: 1, column_rule: zone, column_col_start: 2, header_signature: reference, shape: text}
+        - {row_index: 12, cell_index: 2, column_rule: trailing_footnote, column_col_start: null, header_signature: "#footnote_marks", shape: footnote_mark}
+        - {row_index: 13, cell_index: 0, column_rule: prefix_of_next, column_col_start: 6, header_signature: paramount/units, shape: text}
+        - {row_index: 13, cell_index: 1, column_rule: zone, column_col_start: 6, header_signature: paramount/units, shape: number}
+        - {row_index: 13, cell_index: 2, column_rule: zone, column_col_start: 6, header_signature: paramount/units, shape: text}
+        - {row_index: 13, cell_index: 3, column_rule: zone, column_col_start: 6, header_signature: paramount/units, shape: text}
+        - {row_index: 14, cell_index: 0, column_rule: none_row_width_differs, column_col_start: null, header_signature: null, shape: number}
+
+  - name: int_page_schedule_boundaries
+    description: >
+      Text slice P, fix round 1. Filing A: t1 and t2 share a header and have no title (schedule 1). t3 has the same
+      header and the title "JV Schedule (continued)", the first title in the filing: schedule 2. t4's title "JV  schedule"
+      normalises to the same key: still 2. t5's header differs: 3. t7 has t5's header but a non-schedule table (t6) lies
+      between: 4. t8 has no header and no title: continues 4.
+    model: int_page_schedule
+    given:
+      - input: ref('int_page_table')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, '1' as cik, date '2026-03-31' as report_date, tt as title_text
+          from (values
+            (1, null::varchar), (2, null), (3, 'JV Schedule (continued)'), (4, 'JV  schedule'), (5, null), (7, null),
+            (8, null)
+          ) t(ti, tt)
+      - input: ref('int_page_column')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, ix as column_index, sig as header_signature
+          from (values
+            (1, 0, 'a'), (1, 1, 'b'), (2, 0, 'a'), (2, 1, 'b'), (3, 0, 'a'), (3, 1, 'b'), (4, 0, 'a'), (4, 1, 'b'),
+            (5, 0, 'a'), (5, 1, 'c'), (7, 0, 'a'), (7, 1, 'c')
+          ) t(ti, ix, sig)
+    expect:
+      rows:
+        - {table_index: 1, table_signature: a|b, title_key: null, starts_schedule: true, schedule_seq: 1}
+        - {table_index: 2, table_signature: a|b, title_key: null, starts_schedule: false, schedule_seq: 1}
+        - {table_index: 3, table_signature: a|b, title_key: jvschedule, starts_schedule: true, schedule_seq: 2}
+        - {table_index: 4, table_signature: a|b, title_key: jvschedule, starts_schedule: false, schedule_seq: 2}
+        - {table_index: 5, table_signature: a|c, title_key: null, starts_schedule: true, schedule_seq: 3}
+        - {table_index: 7, table_signature: a|c, title_key: null, starts_schedule: true, schedule_seq: 4}
+        - {table_index: 8, table_signature: null, title_key: null, starts_schedule: false, schedule_seq: 4}
 
   - name: int_page_heading_detection
     description: >
-      Text slice P4. Filing A: "Biotechnology" and "First Lien Debt (continued)" (no facts, one non-empty cell) are
-      headings; the next row of the first is a heading, of the second a position. A row with one cell but a fact (a
-      subtotal) and a row with two cells and no facts are not headings. "Energy" is last in its table (end_of_table).
-      The header row is not a heading. Filing B (the same fund, the next quarter): "Energy" was a heading in A (seen),
-      "Media" was not. A's headings have no prior filing (null). Filing C's table has no header: no rows.
+      Text slice P4, runs added in fix round 1. Filing A, schedule 1 (tables 1 and 2): "Biotechnology" and "First Lien
+      Debt (continued)" are consecutive headings, one run of 2 (depths 1 and 0); a row with one cell but a fact (a
+      subtotal) and a row with two cells and no facts are not headings and end runs. "Energy" ends table 1; table 2's
+      header line and a blank row lie between it and "Energy (continued)", which still form one run (page break). Table 3
+      is schedule 2: its heading starts a new run. The header row is not a heading. Filing B, the next quarter: "Energy"
+      was a heading in A (seen), "Media" was not. Filing C's table has no header: no rows.
     model: int_page_heading
     given:
       - input: ref('int_page_table')
         format: sql
         rows: |
-          select acc as accession, 1 as table_index, cik, rd::date as report_date, st as header_status,
+          select acc as accession, ti as table_index, cik, rd::date as report_date, st as header_status,
                  l as header_last_row_in_table
           from (values
-            ('A', '1', '2026-03-31', 'one_line', 0), ('B', '1', '2026-06-30', 'one_line', 0),
-            ('C', '2', '2026-03-31', 'none', null::integer)
-          ) t(acc, cik, rd, st, l)
+            ('A', 1, '1', '2026-03-31', 'one_line', 0), ('A', 2, '1', '2026-03-31', 'one_line', 0),
+            ('A', 3, '1', '2026-03-31', 'one_line', 0), ('B', 1, '1', '2026-06-30', 'one_line', 0),
+            ('C', 1, '2', '2026-03-31', 'none', null::integer)
+          ) t(acc, ti, cik, rd, st, l)
+      - input: ref('int_page_schedule')
+        format: sql
+        rows: |
+          select acc as accession, ti as table_index, seq as schedule_seq
+          from (values ('A', 1, 1), ('A', 2, 1), ('A', 3, 2), ('B', 1, 1), ('C', 1, 1)) t(acc, ti, seq)
       - input: ref('int_page_cell')
         format: sql
         rows: |
-          select acc as accession, 1 as table_index, ri as row_index, rit as row_in_table, ci as cell_index,
+          select acc as accession, ti as table_index, ri as row_index, rit as row_in_table, ci as cell_index,
                  cs as col_start, txt as text, fc as row_fact_count
           from (values
-            ('A', 10, 0, 0, 0, 'Co', 0), ('A', 10, 0, 1, 5, 'FV', 0),
-            ('A', 11, 1, 0, 0, 'Biotechnology', 0),
-            ('A', 12, 2, 0, 0, 'First Lien Debt (continued)', 0),
-            ('A', 13, 3, 0, 0, 'Acme', 2), ('A', 13, 3, 1, 5, '100', 2),
-            ('A', 14, 4, 0, 5, '1,234', 1),
-            ('A', 15, 5, 0, 0, 'Note', 0), ('A', 15, 5, 1, 3, 'x', 0),
-            ('A', 16, 6, 0, 0, 'Energy', 0),
-            ('B', 10, 0, 0, 0, 'Co', 0), ('B', 10, 0, 1, 5, 'FV', 0),
-            ('B', 11, 1, 0, 0, 'Energy', 0), ('B', 12, 2, 0, 0, 'Media', 0),
-            ('C', 11, 1, 0, 0, 'Lonely', 0)
-          ) t(acc, ri, rit, ci, cs, txt, fc)
+            ('A', 1, 10, 0, 0, 0, 'Co', 0), ('A', 1, 10, 0, 1, 5, 'FV', 0),
+            ('A', 1, 11, 1, 0, 0, 'Biotechnology', 0),
+            ('A', 1, 12, 2, 0, 0, 'First Lien Debt (continued)', 0),
+            ('A', 1, 13, 3, 0, 0, 'Acme', 2), ('A', 1, 13, 3, 1, 5, '100', 2),
+            ('A', 1, 14, 4, 0, 5, '1,234', 1),
+            ('A', 1, 15, 5, 0, 0, 'Note', 0), ('A', 1, 15, 5, 1, 3, 'x', 0),
+            ('A', 1, 16, 6, 0, 0, 'Energy', 0),
+            ('A', 2, 20, 0, 0, 0, 'Co', 0), ('A', 2, 20, 0, 1, 5, 'FV', 0),
+            ('A', 2, 22, 2, 0, 0, 'Energy (continued)', 0),
+            ('A', 2, 23, 3, 0, 0, 'Beta', 2), ('A', 2, 23, 3, 1, 5, '200', 2),
+            ('A', 3, 30, 0, 0, 0, 'Co', 0), ('A', 3, 31, 1, 0, 0, 'Other schedule', 0),
+            ('B', 1, 10, 0, 0, 0, 'Co', 0), ('B', 1, 10, 0, 1, 5, 'FV', 0),
+            ('B', 1, 11, 1, 0, 0, 'Energy', 0), ('B', 1, 12, 2, 0, 0, 'Media', 0),
+            ('C', 1, 11, 1, 0, 0, 'Lonely', 0)
+          ) t(acc, ti, ri, rit, ci, cs, txt, fc)
       - input: ref('int_page_position')
         rows:
           - {accession: A, row_index: 13, placement_status: one_row}
+          - {accession: A, row_index: 23, placement_status: one_row}
     expect:
       rows:
-        - {accession: A, row_index: 11, text: Biotechnology, is_continued: false, next_row_kind: heading, seen_in_prior_filing: null}
-        - {accession: A, row_index: 12, text: First Lien Debt (continued), is_continued: true, next_row_kind: position, seen_in_prior_filing: null}
-        - {accession: A, row_index: 16, text: Energy, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: null}
-        - {accession: B, row_index: 11, text: Energy, is_continued: false, next_row_kind: heading, seen_in_prior_filing: true}
-        - {accession: B, row_index: 12, text: Media, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: false}
+        - {accession: A, row_index: 11, text: Biotechnology, schedule_seq: 1, run_length: 2, run_position: 1, depth_from_bottom: 1, is_continued: false, next_row_kind: heading, seen_in_prior_filing: null}
+        - {accession: A, row_index: 12, text: First Lien Debt (continued), schedule_seq: 1, run_length: 2, run_position: 2, depth_from_bottom: 0, is_continued: true, next_row_kind: position, seen_in_prior_filing: null}
+        - {accession: A, row_index: 16, text: Energy, schedule_seq: 1, run_length: 2, run_position: 1, depth_from_bottom: 1, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: null}
+        - {accession: A, row_index: 22, text: Energy (continued), schedule_seq: 1, run_length: 2, run_position: 2, depth_from_bottom: 0, is_continued: true, next_row_kind: position, seen_in_prior_filing: null}
+        - {accession: A, row_index: 31, text: Other schedule, schedule_seq: 2, run_length: 1, run_position: 1, depth_from_bottom: 0, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: null}
+        - {accession: B, row_index: 11, text: Energy, schedule_seq: 1, run_length: 2, run_position: 1, depth_from_bottom: 1, is_continued: false, next_row_kind: heading, seen_in_prior_filing: true}
+        - {accession: B, row_index: 12, text: Media, schedule_seq: 1, run_length: 2, run_position: 2, depth_from_bottom: 0, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: false}
 
-  - name: int_position_heading_carry
+  - name: int_position_heading_by_depth
     description: >
-      Text slice P4. Filing A headings at rows 5 and 8 (table 1), 20 (table 2), 30 to 33 (table 3). p1 (row 9, table 1)
-      gets 8 then 5. p2 (row 25, table 2) gets 20, then 8 and 5 carried from table 1. p3 (row 40, table 4, no heading of
-      its own) gets the nearest four, 33 to 30, none in its table. p4 (row 3) has no heading above: no rows. p5 is not
-      placed: no rows. p6 in filing B gets only B's heading.
+      Text slice P4, rewritten in fix round 1. Schedule 1: a run "Section" (depth 1) over "Ind1" (depth 0) at rows 5-6,
+      a lone "Ind2" (depth 0) at row 10, then in table 2 a run "Section2" over "Ind3" at rows 20-21. p1 (row 8) gets
+      Ind1 and Section. p2 (row 12) gets Ind2 at depth 0 and still Section at depth 1, 7 rows up (the section the old
+      nearest-four cap lost behind sibling headings). p3 (row 25, table 2) gets Ind3 and Section2; Section is not taken.
+      Schedule 2 (table 3): p5 (row 40) gets only schedule 2's heading at row 35; p6 (row 33, above it) gets nothing,
+      although schedule 1 has headings above it. p7 is not placed: no rows.
     model: int_position_heading
     given:
       - input: ref('int_page_position')
         format: sql
         rows: |
-          select acc as accession, ctx as context_id, true as is_published, ri as row_index, ti as table_index,
+          select 'A' as accession, ctx as context_id, true as is_published, ri as row_index, ti as table_index,
                  st as placement_status
           from (values
-            ('A', 'p1', 9, 1, 'one_row'), ('A', 'p2', 25, 2, 'one_row'), ('A', 'p3', 40, 4, 'one_row'),
-            ('A', 'p4', 3, 1, 'one_row'), ('A', 'p5', null::integer, null::integer, 'not_placed'),
-            ('B', 'p6', 9, 1, 'one_row')
-          ) t(acc, ctx, ri, ti, st)
+            ('p1', 8, 1, 'one_row'), ('p2', 12, 1, 'one_row'), ('p3', 25, 2, 'one_row'), ('p5', 40, 3, 'one_row'),
+            ('p6', 33, 3, 'one_row'), ('p7', null::integer, null::integer, 'not_placed')
+          ) t(ctx, ri, ti, st)
+      - input: ref('int_page_schedule')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, seq as schedule_seq
+          from (values (1, 1), (2, 1), (3, 2)) t(ti, seq)
       - input: ref('int_page_heading')
         format: sql
         rows: |
-          select acc as accession, ri as row_index, ti as table_index, 0 as col_start, 'H' || ri as text,
-                 false as is_continued
+          select 'A' as accession, seq as schedule_seq, ri as row_index, ti as table_index, 0 as col_start, txt as text,
+                 false as is_continued, rl as run_length, d as depth_from_bottom
           from (values
-            ('A', 5, 1), ('A', 8, 1), ('A', 20, 2), ('A', 30, 3), ('A', 31, 3), ('A', 32, 3), ('A', 33, 3), ('B', 7, 1)
-          ) t(acc, ri, ti)
+            (1, 5, 1, 'Section', 2, 1), (1, 6, 1, 'Ind1', 2, 0), (1, 10, 1, 'Ind2', 1, 0),
+            (1, 20, 2, 'Section2', 2, 1), (1, 21, 2, 'Ind3', 2, 0), (2, 35, 3, 'JV Ind', 1, 0)
+          ) t(seq, ri, ti, txt, rl, d)
     expect:
       rows:
-        - {context_id: p1, heading_rank: 1, heading_row_index: 8, distance_rows: 1, same_table: true}
-        - {context_id: p1, heading_rank: 2, heading_row_index: 5, distance_rows: 4, same_table: true}
-        - {context_id: p2, heading_rank: 1, heading_row_index: 20, distance_rows: 5, same_table: true}
-        - {context_id: p2, heading_rank: 2, heading_row_index: 8, distance_rows: 17, same_table: false}
-        - {context_id: p2, heading_rank: 3, heading_row_index: 5, distance_rows: 20, same_table: false}
-        - {context_id: p3, heading_rank: 1, heading_row_index: 33, distance_rows: 7, same_table: false}
-        - {context_id: p3, heading_rank: 2, heading_row_index: 32, distance_rows: 8, same_table: false}
-        - {context_id: p3, heading_rank: 3, heading_row_index: 31, distance_rows: 9, same_table: false}
-        - {context_id: p3, heading_rank: 4, heading_row_index: 30, distance_rows: 10, same_table: false}
-        - {context_id: p6, heading_rank: 1, heading_row_index: 7, distance_rows: 2, same_table: true}
+        - {context_id: p1, heading_depth: 0, heading_rank: 1, heading_row_index: 6, distance_rows: 2, same_table: true}
+        - {context_id: p1, heading_depth: 1, heading_rank: 2, heading_row_index: 5, distance_rows: 3, same_table: true}
+        - {context_id: p2, heading_depth: 0, heading_rank: 1, heading_row_index: 10, distance_rows: 2, same_table: true}
+        - {context_id: p2, heading_depth: 1, heading_rank: 2, heading_row_index: 5, distance_rows: 7, same_table: true}
+        - {context_id: p3, heading_depth: 0, heading_rank: 1, heading_row_index: 21, distance_rows: 4, same_table: true}
+        - {context_id: p3, heading_depth: 1, heading_rank: 2, heading_row_index: 20, distance_rows: 5, same_table: true}
+        - {context_id: p5, heading_depth: 0, heading_rank: 1, heading_row_index: 35, distance_rows: 5, same_table: true}

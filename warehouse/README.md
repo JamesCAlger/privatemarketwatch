@@ -360,10 +360,11 @@ and decide no field value. Counts and judgement calls: `docs/baseline_page_struc
 | `int_page_table` | Which printed tables are schedule tables (they hold a position row), their width, their header line(s) |
 | `int_page_cell` | The true column of every non-empty cell: colspans summed, a rowspan from the row above resolved |
 | `int_page_column` | The column units under each header (two-line headers give "interest/cash"), with a signature |
-| `int_page_cell_column` | Which column each data cell is in, and the cell's shape (number, percent, date, text, ...) |
-| `int_page_column_filing` | Per filing and signature: tables, cells by shape, tagged facts by concept (the unit later bundled) |
-| `int_page_heading` | Heading rows: no facts, one non-empty cell, below the header. No meaning assigned |
-| `int_position_heading` | The nearest 4 heading rows above each position, carried across page tables |
+| `int_page_schedule` | Which page tables form one schedule (the fund's, a joint venture's, unfunded commitments) |
+| `int_page_cell_column` | Which column each data cell is in, by which rule (a currency marker joins the number after it; no column on a row laid out unlike the table), and the cell's shape |
+| `int_page_column_filing` | Per filing, table header and column: tables, cells by shape, tagged facts by concept (the unit later bundled) |
+| `int_page_heading` | Heading rows: no facts, one non-empty cell, below the header; the run of headings each sits in and its depth from the bottom. No meaning assigned |
+| `int_position_heading` | For each depth 0 to 3, the nearest heading above each position in its schedule |
 
 A schedule printed over many pages is many tables, each with its own header. Baseline tests count
 positions with no printed row, rows whose width is not the table's, tables with no header, and tables

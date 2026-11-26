@@ -26,6 +26,9 @@
 --   none       / none              no candidate: no header, so no column units for the table.
 --   ambiguous  / ambiguous         any other count or layout: no header is taken rather than guessing.
 -- header_last_row_in_table: row_in_table of the last header line (null without a header); rows below it are data rows.
+-- title_text (fix round 1): the rows of the table above its first header line that have no facts and some text, each
+-- row's non-empty cells joined by a space, rows joined by ' | ' in order. Null without a header or without such rows.
+-- Read by int_page_schedule to find where one schedule ends and the next begins.
 with position_row as (
     select distinct accession, table_index, row_index, row_in_table
     from {{ ref('int_page_position') }}
@@ -167,6 +170,7 @@ with position_row as (
     left join group_line g on g.accession = s.accession and g.table_index = s.table_index
 )
 
+, result as (
 select
     d.accession
     , d.table_index
@@ -201,3 +205,23 @@ join filing f on f.accession = d.accession
 join width w on w.accession = d.accession and w.table_index = d.table_index
 join (select accession, table_index, count(*) as n_rows from table_row group by 1, 2) n
     on n.accession = d.accession and n.table_index = d.table_index
+)
+
+, title as (
+    -- the text rows above the first header line: each row's non-empty cells joined by a space, rows joined by ' | '
+    select
+        r.accession
+        , r.table_index
+        , string_agg(
+            array_to_string(list_filter(list_transform(dr.cells, x -> {{ page_text('x') }}), x -> x <> ''), ' '),
+            ' | ' order by dr.row_in_table) as title_text
+    from result r
+    join {{ ref('stg_filed_document_row') }} dr
+        on dr.accession = r.accession and dr.table_index = r.table_index and dr.row_index < r.header_row_index
+    where dr.fact_count = 0 and len(list_filter(dr.cells, x -> {{ page_text('x') }} <> '')) > 0
+    group by 1, 2
+)
+
+select r.*, ti.title_text
+from result r
+left join title ti on ti.accession = r.accession and ti.table_index = r.table_index
