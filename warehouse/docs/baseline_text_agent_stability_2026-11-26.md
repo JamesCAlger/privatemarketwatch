@@ -105,3 +105,44 @@ volume. Revisit if the volume grows by orders of magnitude (it would not at 61 f
 
 Limits: both at effort `low`, one prompt; not tuned for either model. The subagent runs above used default
 settings and a different shape (one agent reading all items), so the two tables are not the same test.
+
+## The misses, classified (owner request, 2026-11-26)
+
+All eight runs (four subagent, four API) on the 144 strong-label items: 19 items were missed by at least one run.
+Listed by `scripts/text/agent_stability/dump_failures.py`; production's own values on the rows behind them checked
+with `scripts/text/q_fail_production_check.sql` and `q_fail_legend.sql`. Classified by the controller from the item's
+context; no page was read by a person.
+
+Correction to the sections above: the one item every run missed is NOT Apollo's "Interest Rate" header. It is Blue
+Owl's sub-header "Cash" (item 04803e70249f). Apollo's header (587ee81cdbd6) was missed by 2 of 8 runs.
+
+| Class | Items | Which | Runs that missed |
+|---|---:|---|---|
+| A. Model wrong: the context decides it, the label is right | 6 | Ares "Purchases / Sales / Redemptions (cost)" called cost (3); HPS "4.75%" beside "SF +" called reference plus spread; Apollo "K+500, 0.50% Floor" called spread only; Apollo header "Interest Rate (13)" over "S+500, 0.75% Floor" cells called interest rate | Haiku on all 6; Sonnet once, on the Apollo header |
+| B. Model gave no usable answer where the label is clear ("cannot tell" or an unparsable reply) | 5 | BCRED "Software (continued)"; Blue Owl "6.00" under "Interest / PIK"; Ares "Fair Value", "Amortized Cost", "Principal" | Haiku only |
+| C. Bundle too thin or faulty: the label is right but the context given cannot show it | 2 | Blue Owl sub-header "Cash" (it holds the spread over the reference rate; the bundle lacked the group header "Interest" and the "S+" cell on the same row): 8 of 8 runs wrong. Apollo "N+475": the masking that replaces numbers by N also swallowed the rate code "N" | Both models |
+| D. The question has no single right answer (unit or options) | 5 | Blue Owl group header "Interest" over three sub-columns; BCRED "10.00% PIK" in the interest-rate column (a PIK rate and the all-in rate at once); Blue Owl "Fair value as of <date>" in the affiliate roll-forward table, not the schedule (3) | Haiku on 2, Sonnet on 3 |
+| E. Reference label or production wrong | 1 | Apollo "5.38% Cash plus 5.38% PIK": labelled "all-in rate including PIK", but the cell states the two legs, not an all-in rate. Haiku's "cannot tell" is the defensible answer | Haiku (counted as a miss, wrongly) |
+
+By model, misses that are the model's own fault (classes A and B): Haiku 11 items; Sonnet 1 item, once in eight runs.
+
+Production errors found while checking these rows (not test items; production's values, compared with the filer's
+own footnote legend):
+
+- Apollo rate codes K, T, N. The filings' footnotes define K as KORIBOR, T as TONAR and "NOK" as NIBOR. Production
+  holds SOFR on those rows: K 9, T 6, N 3 (18 rows).
+- Apollo rows whose label says L+, P+ or E+ but production holds SOFR: 12, 8 and 1. Not settled: the label may be
+  stale (slice A) or production wrong.
+- Apollo "X% Cash plus Y% PIK" is read two ways by production: "5.38% Cash plus 5.38% PIK" as 10.76 all-in (the
+  sum), "12.50% Cash plus 6.25% PIK" as 12.50 all-in with a 6.25 cash leg (2 rows each). The same wording cannot
+  mean both; which is right needs the page or the credit agreement.
+
+What follows for slice R:
+
+1. Class C is the bundle's job: carry the group header with a sub-header, the other rate cells of the same row, and
+   do not mask rate codes. The page models already hold all three.
+2. Class D is the unit's and the options' job: ask about leaf columns only; only tables that hold positions (slice
+   P does this, which removes the roll-forward tables and with them 3 class D and 3 class A items); add an option
+   for "cash leg plus PIK leg stated separately" and say how a rate that is wholly PIK is to be answered.
+3. Classes A and B are the model's: 11 of 12 are Haiku.
+4. Class E and the production errors become comparison causes (`old_wrong`) when slice R compares with production.
