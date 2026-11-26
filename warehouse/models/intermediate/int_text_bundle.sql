@@ -19,12 +19,14 @@
 --                       position rows, ties to the smaller text; null when none.
 --   top_cells           the 12 most frequent distinct non-empty texts of the column on position rows: {text, rows}.
 --   shapes              the column's shapes (int_text_shape_unit), most frequent first, ties by shape key, at most 40:
---                       {shape, rows, code, first_report_date, last_report_date, legs}. legs: the shape-legs evidence
---                       (int_text_check_shape_legs) for a parts-stating shape: every (printed number, tagged field) pair
---                       compared, zero matches kept (fix round 2), over the four tagged fields interest_rate,
---                       interest_rate_cash, pik_rate, spread: {number, field, compared, equal, equal_bps}, by number then
---                       field; null for other shapes. shapes_total: how many shapes the column has.
---   legs_help           one fixed sentence per term of legs (n1, n2, compared, equal, equal_bps).
+--                       {shape, rows, code, first_report_date, last_report_date, rows_no_tags, legs}. legs: the shape-legs
+--                       evidence (int_text_check_shape_legs) for every shape with a number (round 3; before, only shapes
+--                       stating parts): every (printed number, tagged field) pair over interest_rate,
+--                       interest_rate_cash, pik_rate and spread, zero matches kept: {number, field, compared, equal,
+--                       equal_bps, tag_in_this_cell}, by number then field; null for a shape with no number.
+--                       rows_no_tags: the shape's rows with none of the four tags. shapes_total: how many shapes.
+--   legs_help           one fixed sentence per term of legs (n1, n2, compared, equal, equal_bps, tag_in_this_cell,
+--                       rows_no_tags).
 --   example_rows        for each of the 3 most frequent shapes, one full printed row: the row of that shape whose text
 --                       equals the shape's most frequent text, latest report date first, then smaller accession, then
 --                       smaller row_index. {shape, report_date, cells: [{header, group_header, text}]} over every leaf
@@ -114,14 +116,10 @@ with unit as (
 )
 
 , legs as (
-    select lb.shape_key
-        , list({'number': lb.number_label, 'field': f.tag_field, 'compared': coalesce(l.compared, 0),
-                'equal': coalesce(l.equal, 0), 'equal_bps': coalesce(l.equal_bps, 0)}
-               order by lb.number_label, f.tag_field) as legs
-    from (select distinct shape_key, number_label from {{ ref('int_text_check_shape_legs') }}) lb
-    cross join (select unnest(['interest_rate', 'interest_rate_cash', 'pik_rate', 'spread']) as tag_field) f
-    left join {{ ref('int_text_check_shape_legs') }} l
-        on l.shape_key = lb.shape_key and l.number_label = lb.number_label and l.tag_field = f.tag_field
+    select shape_key, min(shape_rows) as shape_rows, min(rows_no_tags) as rows_no_tags
+        , list({'number': number_label, 'field': tag_field, 'compared': compared, 'equal': equal, 'equal_bps': equal_bps,
+                'tag_in_this_cell': tag_in_this_cell} order by number_label, tag_field) as legs
+    from {{ ref('int_text_check_shape_legs') }}
     group by 1
 )
 
@@ -129,7 +127,8 @@ with unit as (
     select s.unit_key, min(s.shapes_total) as shapes_total
         , list({'shape': left(s.shape, {{ text_chars }}), 'rows': s.cell_count, 'code': s.code,
                 'first_report_date': cast(s.first_report_date as varchar),
-                'last_report_date': cast(s.last_report_date as varchar), 'legs': g.legs} order by s.rk) as shapes
+                'last_report_date': cast(s.last_report_date as varchar), 'rows_no_tags': g.rows_no_tags, 'legs': g.legs}
+               order by s.rk) as shapes
     from shape_ranked s
     left join legs g on g.shape_key = s.shape_key
     where s.rk <= 40
@@ -221,7 +220,7 @@ with unit as (
             'top_cells': tc.top_cells,
             'shapes': sl.shapes,
             'shapes_total': sl.shapes_total,
-            'legs_help': 'n1, n2, ...: the first, second, ... number printed in the cell, in order; n1+n2 is their sum. compared: rows of the shape where that number and that tagged field both exist. equal: of those, rows where the number equals the tagged value (within 0.005). equal_bps: rows where the number divided by 100 equals the tagged value (a spread printed in basis points).',
+            'legs_help': 'n1, n2, ...: the first, second, ... number printed in the cell, in order; n1+n2 is their sum. compared: rows of the shape where that number and that tagged field both exist. equal: of those, rows where the number equals the tagged value (within 0.005). equal_bps: rows where the number divided by 100 equals the tagged value (a spread printed in basis points). tag_in_this_cell: compared rows where that tag is placed in this very cell (the filer tagged a number of the cell being read). rows_no_tags (on the shape): rows with none of the four tags, where no evidence is possible.',
             'example_rows': er.example_rows,
             'tag_profile': tp.tag_profile,
             'legend': lg.legend,

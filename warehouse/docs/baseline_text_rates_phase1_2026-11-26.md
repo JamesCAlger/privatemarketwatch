@@ -491,3 +491,23 @@ State counts (`scripts/text/q_r8_worklist.sql`), covered / covered_unchecked / p
 Full build (`dbt.ps1 build --threads 2`): `PASS=996 WARN=123 ERROR=0 TOTAL=1119`. CI fixture (local, new folder): step 4
 `PASS=3`; build `PASS=589 WARN=5 ERROR=0 TOTAL=594`; empty run `PASS=2`; unit-test and drift step `PASS=62`. pytests:
 180 passed. Baseline ceilings unchanged (2,272 / 43,437 / 4 / 12).
+
+## 14. Round 3: leg evidence for every shape with a number (2026-11-26)
+
+`int_text_check_shape_legs` now compares every printed number of every shape holding a `#` (not only shapes stating a
+PIK part) with the tagged spread, all-in rate, cash rate and PIK rate on the same position, as percent and as basis
+points, every (number, field) pair kept with zero matches; n1+n2 only where the shape states a cash and a PIK part.
+New columns: `tag_in_this_cell` (the tag's own fact is placed in the cell being read: still evidence of which number
+the filer tagged), `equal_in_this_cell`, and per shape `shape_rows` and `rows_no_tags` (no tag of the four: no evidence
+possible). The bundle's legs carry `tag_in_this_cell` and each shape `rows_no_tags`; `legs_help` defines both. Unit test
+`int_text_check_shape_legs_plain_shape` ("S+#, #% Floor": n1 equals the spread as basis points with the tag in this
+cell, n2 equals a spread tag that holds the floor, one row with no tags). Shapes with evidence (a number compared with
+a tag on at least one row), before -> after, and the positions they cover (`scripts/text/q_r9_legs_coverage.sql`):
+Ares 2 -> 6 of 42 shapes, 1,263 -> 28,891 of 42,548 positions (its 36 other shapes, "SOFR (Q)" and the like, print no
+number); BCRED 12 -> 94 of 95, 826 -> 46,704 of 46,918; Blue Owl 5 -> 32 of 49, 157 -> 14,823 of 19,097; Apollo 30 -> 60
+of 65, 231 -> 7,783 of 8,028; HPS 13 -> 35 of 35, 542 -> 13,294 of 13,294. Examples (`q_r9_legs_apollo.sql`): Apollo
+"S+#, #% Floor" (3,875 and 2,339 positions): n1 equals the spread tag as basis points on 3,858 of 3,859 and 2,337 of
+2,338 compared rows, the tag in this cell; HPS "SF+#%" n1 = spread on 4,940 of 4,940; BCRED "SOFR+#%" n1 = spread on every
+row. Full build `PASS=997 WARN=123 ERROR=0 TOTAL=1120`; CI fixture step 4 `PASS=3`, build `PASS=590 WARN=5 ERROR=0
+TOTAL=595`, empty run `PASS=2`, unit-test and drift step `PASS=63`; pytests 180 passed. Bundles: 31, 346,031 bytes, all
+31 hashes changed (every shape with a number gained legs).

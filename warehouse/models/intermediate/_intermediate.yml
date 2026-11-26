@@ -1618,8 +1618,9 @@ models:
 
   - name: int_text_check_shape_legs
     description: >
-      Per parts-stating shape (PIK and two or more numbers), printed number and tag field: how often the number equals the
-      tagged rate, cash, PIK or spread on the same row (also as basis points; tags before corrections). Evidence for a
+      Per shape with a number (round 3; before, only parts-stating shapes), printed number and tag field: how often the
+      number equals the tagged rate, cash rate, PIK rate or spread on the same row (also as basis points; tags before
+      corrections), zero matches kept, with tag_in_this_cell and, per shape, shape_rows and rows_no_tags. Evidence for a
       parse, not a verdict.
     columns:
       - name: shape_key
@@ -6134,6 +6135,49 @@ unit_tests:
       rows:
         - {cik: "1", rows: 15, usable: 13, pik_present: 1, inputs_missing: 1, within: 12, centre_1: 4.30, is_sofr_like: true, sofr: 4.40, cluster_state: pass}
         - {cik: "2", rows: 3, usable: 3, pik_present: 0, inputs_missing: 0, within: 3, centre_1: 4.0, is_sofr_like: true, sofr: 4.40, cluster_state: too_few_rows}
+  - name: int_text_check_shape_legs_plain_shape
+    description: >
+      Text slice R round 3. A plain shape "S+#, #% Floor" (no PIK, so no n1+n2). p1 "S+525, 0.50% Floor" carries the
+      spread tag 5.25 placed in this very cell and an all-in rate 9.00: n1 equals the spread as basis points, tag in this
+      cell. p2 "S+500, 0.75% Floor": its spread tag is 0.75 (the floor) and sits in another cell: n2 equals it as percent.
+      p3 "S+450, 1.00% Floor" has no tag at all: counted in rows_no_tags. Every pair of n1, n2 with the four fields is
+      listed; cash rate and PIK rate compared 0.
+    model: int_text_check_shape_legs
+    given:
+      - input: ref('int_text_shape_unit')
+        rows:
+          - {shape_key: k, unit_key: u, shape: "S+#, #% Floor", shape_key_text: "S+#, #% FLOOR"}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, ri as row_index, 1 as table_index, 5::hugeint as col_start, '1' as cik,
+                 date '2026-03-31' as report_date, true as is_published, 1::bigint as positions, 'T' as table_signature,
+                 'h' as header_signature, 'u' as unit_key, txt as text, 1::bigint as n_cells, 'S+#, #% Floor' as shape,
+                 'S+#, #% FLOOR' as shape_key_text, 'S' as code, true as rate_text, ff as fact_fields,
+                 len(ff)::bigint as fact_count
+          from (values (1, 'S+525, 0.50% Floor', ['spread']), (2, 'S+500, 0.75% Floor', []::varchar[]),
+                       (3, 'S+450, 1.00% Floor', []::varchar[])) t(ri, txt, ff)
+      - input: ref('int_page_position')
+        rows:
+          - {accession: A, context_id: p1, placement_status: one_row, row_index: 1}
+          - {accession: A, context_id: p2, placement_status: one_row, row_index: 2}
+          - {accession: A, context_id: p3, placement_status: one_row, row_index: 3}
+      - input: ref('int_field_normalised')
+        rows:
+          - {accession: A, context_id: p1, field: spread, value: 5.25, status: normalised}
+          - {accession: A, context_id: p1, field: interest_rate, value: 9.0, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p2, field: spread, value: 0.75, status: normalised}
+    expect:
+      rows:
+        - {number_label: n1, tag_field: interest_rate, compared: 1, equal: 0, equal_bps: 0, tag_in_this_cell: 0, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n1, tag_field: interest_rate_cash, compared: 0, equal: 0, equal_bps: 0, tag_in_this_cell: 0, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n1, tag_field: pik_rate, compared: 0, equal: 0, equal_bps: 0, tag_in_this_cell: 0, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n1, tag_field: spread, compared: 2, equal: 0, equal_bps: 1, tag_in_this_cell: 1, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n2, tag_field: interest_rate, compared: 1, equal: 0, equal_bps: 0, tag_in_this_cell: 0, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n2, tag_field: interest_rate_cash, compared: 0, equal: 0, equal_bps: 0, tag_in_this_cell: 0, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n2, tag_field: pik_rate, compared: 0, equal: 0, equal_bps: 0, tag_in_this_cell: 0, shape_rows: 3, rows_no_tags: 1}
+        - {number_label: n2, tag_field: spread, compared: 2, equal: 1, equal_bps: 0, tag_in_this_cell: 1, shape_rows: 3, rows_no_tags: 1}
+
   - name: int_text_reference_rate_read_statuses
     description: >
       Text slice R phase 1. The fund's read_printed_column rule names "Ref. Rate", the sub-header of a two-line leaf under
