@@ -1,0 +1,75 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": "U.S. Prime Rate"
+  },
+  {
+   "code": "S",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": "Sterling Overnight Interbank Average Rate"
+  },
+  {
+   "code": "CA",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": "Canadian Overnight Repo Rate Average"
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": "Euro Interbank Offer Rate"
+  }
+ ],
+ "note": "Spread tags equal the first number in every coded shape (547 of 547 for SOFR). The bare '#%' shape (2 rows) matches the spread tag, but the example row shows 10.00% with an Interest Rate cell of '10.00% PIK', so it is a fixed PIK rate. I labeled it pik_rate_pct, though the evidence for that is thinner than for the coded shapes."
+}

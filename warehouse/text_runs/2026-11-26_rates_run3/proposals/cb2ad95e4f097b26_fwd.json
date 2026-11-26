@@ -1,0 +1,27 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.95,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The column holds the all-in coupon. The interest_rate tag sits in the cell for every '#%' row, and n1 equals it on all 3813 rows. In '#% (incl. #% PIK)', n1 is the all-in rate and n2 equals the tagged pik_rate on all 73 rows. In '#% PIK', n1 equals the tagged pik_rate on all 45 rows, so the whole rate is PIK. No codes appear in this column."
+}

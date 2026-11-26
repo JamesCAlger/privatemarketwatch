@@ -1,0 +1,291 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "SF+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SF+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SN+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SF+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "B+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "SN+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "C+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SN+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl #% PIK)",
+   "roles": [
+    "fixed_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "L+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "N+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "BS+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SORA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "ST+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "N+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SORA+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "ST+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "TN+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "B+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "B+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "BB+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#% (incl #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SF+#% (incl #%PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SF+#% (incl. #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SF",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SN",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "B",
+   "reference_rate": "BBSY",
+   "basis": "legend",
+   "note": "Legend: BBSW through 2024-12-31 filing; BBSY from 2024-12-31 onward (latest). Both are Australian bank bill rates."
+  },
+  {
+   "code": "C",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": "Legend: CDOR in filings through 2025-12-31; CORRA from 2025-06-30 onward (latest)."
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "N",
+   "reference_rate": "NIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "BS",
+   "reference_rate": "Bloomberg Short Term Bank Yield Index",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SORA",
+   "reference_rate": "SORA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "ST",
+   "reference_rate": "STIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "TN",
+   "reference_rate": "TONA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "BB",
+   "reference_rate": "BKBM",
+   "basis": "legend",
+   "note": "Bank Bill Benchmark Rate (New Zealand)."
+  }
+ ],
+ "note": "Spread tags equal n1 in the cell, and for the 'incl # PIK' shapes pik_rate equals n2 while the spread equals n1, so n1 is the full spread. For 'X+#% PIK' shapes the number equals the tagged pik_rate, so I read it as a PIK spread. Bare '#%' has no tagged PIK, and interest_rate and spread tags match it, so it is a fixed rate."
+}

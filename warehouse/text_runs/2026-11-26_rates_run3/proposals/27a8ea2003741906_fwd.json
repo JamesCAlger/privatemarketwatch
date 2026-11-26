@@ -1,0 +1,20 @@
+{
+ "column_holds": "pct_of_net_assets",
+ "column_confidence": 0.97,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pct_of_net_assets"
+   ]
+  },
+  {
+   "shape": "—%",
+   "roles": [
+    "other_number"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header reads Percentage of Members' Equity, and the filer's tags place pct_of_net_assets in 1416 of this column's cells. The spread comparison matches only 4 of 1397 rows, so n1 is not a spread. The '—%' shape is a dash, meaning zero or under 0.05%, with no digit to classify; I marked it other_number, though it is effectively a nil percentage of net assets."
+}

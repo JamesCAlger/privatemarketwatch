@@ -15,7 +15,7 @@ TAG_TO_COLUMN = {"spread": {"spread", "rate_terms"}, "interest_rate": {"all_in_r
                  "pct_of_net_assets": {"pct_of_net_assets"}}
 ROLE_TO_FIELD = {"spread_bps": ("spread", "equal_bps"), "spread_pct": ("spread", "equal"),
                  "all_in_rate_pct": ("interest_rate", "equal"), "cash_rate_pct": ("interest_rate_cash", "equal"),
-                 "pik_rate_pct": ("pik_rate", "equal")}
+                 "pik_rate_pct": ("pik_rate", "equal"), "pik_spread_pct": ("pik_rate", "equal")}
 NAMES = {"sofr": "SOFR", "secured overnight financing rate": "SOFR", "euribor": "EURIBOR",
          "euro interbank offered rate": "EURIBOR", "sonia": "SONIA", "sterling overnight index average": "SONIA",
          "libor": "LIBOR", "prime": "PRIME", "corra": "CORRA", "canadian overnight repo rate average": "CORRA"}

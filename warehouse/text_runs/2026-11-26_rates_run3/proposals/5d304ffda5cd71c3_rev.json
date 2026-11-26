@@ -1,0 +1,27 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "In the main shape '#%', n1 equals the tagged interest_rate in 6561 of 6561 rows, and the tag sits in this cell, so the column is the all-in rate. In '#% (incl #% PIK)', n1 is the total (all-in) and n2 matches the tagged pik_rate (3 of 3). A bare '#% PIK' cell matches the pik_rate tag (63 of 63), so it is a fixed PIK rate."
+}

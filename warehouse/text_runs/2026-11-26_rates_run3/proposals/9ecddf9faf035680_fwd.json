@@ -1,0 +1,225 @@
+{
+ "column_holds": "reference_rate_code",
+ "column_confidence": 0.96,
+ "shapes": [
+  {
+   "shape": "SOFR (Q)",
+   "roles": []
+  },
+  {
+   "shape": "SOFR (M)",
+   "roles": []
+  },
+  {
+   "shape": "LIBOR (Q)",
+   "roles": []
+  },
+  {
+   "shape": "SOFR (S)",
+   "roles": []
+  },
+  {
+   "shape": "LIBOR (M)",
+   "roles": []
+  },
+  {
+   "shape": "Base Rate (Q)",
+   "roles": []
+  },
+  {
+   "shape": "CORRA (Q)",
+   "roles": []
+  },
+  {
+   "shape": "Euribor (Q)",
+   "roles": []
+  },
+  {
+   "shape": "LIBOR (S)",
+   "roles": []
+  },
+  {
+   "shape": "CDOR (Q)",
+   "roles": []
+  },
+  {
+   "shape": "SONIA (Q)",
+   "roles": []
+  },
+  {
+   "shape": "SOFR (A)",
+   "roles": []
+  },
+  {
+   "shape": "SONIA (S)",
+   "roles": []
+  },
+  {
+   "shape": "Euribor (S)",
+   "roles": []
+  },
+  {
+   "shape": "SONIA (M)",
+   "roles": []
+  },
+  {
+   "shape": "Euribor (M)",
+   "roles": []
+  },
+  {
+   "shape": "CORRA (M)",
+   "roles": []
+  },
+  {
+   "shape": "CDOR (M)",
+   "roles": []
+  },
+  {
+   "shape": "Base Rate (M)",
+   "roles": []
+  },
+  {
+   "shape": "NIBOR (Q)",
+   "roles": []
+  },
+  {
+   "shape": "BBSY (Q)",
+   "roles": []
+  },
+  {
+   "shape": "BKBM (Q)",
+   "roles": []
+  },
+  {
+   "shape": "CORRA (S)",
+   "roles": []
+  },
+  {
+   "shape": "SOFR (B)",
+   "roles": []
+  },
+  {
+   "shape": "CDOR (S)",
+   "roles": []
+  },
+  {
+   "shape": "TONA (Q)",
+   "roles": []
+  },
+  {
+   "shape": "Base Rate (S)",
+   "roles": []
+  },
+  {
+   "shape": "TONA (S)",
+   "roles": []
+  },
+  {
+   "shape": "BBSY (M)",
+   "roles": []
+  },
+  {
+   "shape": "BBSY (S)",
+   "roles": []
+  },
+  {
+   "shape": "BKBM (M)",
+   "roles": []
+  },
+  {
+   "shape": "CAD Base Rate (Q)",
+   "roles": []
+  },
+  {
+   "shape": "CORRA (A)",
+   "roles": []
+  },
+  {
+   "shape": "LIBOR (A)",
+   "roles": []
+  },
+  {
+   "shape": "NIBOR (M)",
+   "roles": []
+  },
+  {
+   "shape": "SOFR (W)",
+   "roles": []
+  }
+ ],
+ "codes": [
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "common_usage",
+   "note": "Suffix in parentheses (Q/M/S/A/B/W) likely denotes reset frequency (quarterly, monthly, semi-annual, annual, etc.)."
+  },
+  {
+   "code": "LIBOR",
+   "reference_rate": "LIBOR",
+   "basis": "common_usage",
+   "note": ""
+  },
+  {
+   "code": "Base Rate",
+   "reference_rate": "Base Rate (prime/base rate)",
+   "basis": "common_usage",
+   "note": "Generic base/prime rate; the specific benchmark is not stated."
+  },
+  {
+   "code": "CORRA",
+   "reference_rate": "CORRA",
+   "basis": "common_usage",
+   "note": ""
+  },
+  {
+   "code": "Euribor",
+   "reference_rate": "EURIBOR",
+   "basis": "common_usage",
+   "note": ""
+  },
+  {
+   "code": "CDOR",
+   "reference_rate": "CDOR",
+   "basis": "common_usage",
+   "note": "Canadian Dollar Offered Rate."
+  },
+  {
+   "code": "SONIA",
+   "reference_rate": "SONIA",
+   "basis": "common_usage",
+   "note": ""
+  },
+  {
+   "code": "NIBOR",
+   "reference_rate": "NIBOR",
+   "basis": "common_usage",
+   "note": "Norwegian Interbank Offered Rate."
+  },
+  {
+   "code": "BBSY",
+   "reference_rate": "BBSY",
+   "basis": "common_usage",
+   "note": "Australian bank bill swap rate."
+  },
+  {
+   "code": "BKBM",
+   "reference_rate": "BKBM",
+   "basis": "common_usage",
+   "note": "New Zealand bank bill benchmark."
+  },
+  {
+   "code": "TONA",
+   "reference_rate": "TONA",
+   "basis": "common_usage",
+   "note": "Tokyo Overnight Average Rate."
+  },
+  {
+   "code": "CAD Base Rate",
+   "reference_rate": "Canadian base rate (CAD prime)",
+   "basis": "common_usage",
+   "note": ""
+  }
+ ],
+ "note": "The column holds only the reference rate name plus a parenthetical letter, with no numbers. Coupon and spread are in separate columns. No legend was provided."
+}

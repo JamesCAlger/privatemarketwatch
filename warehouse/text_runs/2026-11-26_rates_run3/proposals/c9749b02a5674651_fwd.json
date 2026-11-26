@@ -1,0 +1,14 @@
+{
+ "column_holds": "pik_spread_or_rate",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header is PIK under Interest, and the filer tagged pik_rate in all 217 compared rows with an exact match to n1. The example row shows a separate Cash column (1.50%) and a PIK column (2.50%), so the number is a PIK rate, not an all-in rate."
+}

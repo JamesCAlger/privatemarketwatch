@@ -1,0 +1,40 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "# (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The tagged interest_rate sits in this column's cells and matches n1 on nearly every row. In the 'incl. PIK' shapes n1 equals the tagged interest_rate and n2 equals pik_rate, so n1 is the all-in rate and n2 the PIK part. The '#% PIK' shape (1 row) is tagged interest_rate and also matches pik_rate, so the number is treated as PIK-only, though it may be the all-in rate on a fully PIK loan."
+}

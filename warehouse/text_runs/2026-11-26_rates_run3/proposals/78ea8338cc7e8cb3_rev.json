@@ -1,0 +1,18 @@
+{
+ "column_holds": "pct_of_net_assets",
+ "column_confidence": 0.98,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pct_of_net_assets"
+   ]
+  },
+  {
+   "shape": "—%",
+   "roles": []
+  }
+ ],
+ "codes": [],
+ "note": "The header is 'Percentage of Net Assets', and the tag_profile shows 4613 pct_of_net_assets tags placed in this column. The legs against spread and pik_rate do not match, which fits. The '—%' shape has no number, so its role list is empty."
+}

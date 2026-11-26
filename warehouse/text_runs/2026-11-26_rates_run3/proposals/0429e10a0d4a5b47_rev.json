@@ -1,0 +1,20 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header says Cash, but every tagged value in this column is a spread (1155 of 1155 compared rows match, tagged in the cell). The Ref. Rate column holds only a code like 'S+', so this column holds the spread. Tags were preferred over the header wording."
+}

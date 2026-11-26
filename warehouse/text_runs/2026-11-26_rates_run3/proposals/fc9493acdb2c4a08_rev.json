@@ -1,0 +1,154 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "C+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "L+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "ST+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "B+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CI+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#% (incl. #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "N+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "S",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": "The legend lists S as both SOFR and SONIA. Rows are mostly USD, and SOFR is written out as SOFR elsewhere in this column, so S may mean SONIA on sterling loans. The latest legend is ambiguous; SOFR is chosen as the default."
+  },
+  {
+   "code": "C",
+   "reference_rate": "CDOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "ST",
+   "reference_rate": "STIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "B",
+   "reference_rate": "BKBM",
+   "basis": "legend",
+   "note": "New Zealand Bank Bill reference rate"
+  },
+  {
+   "code": "CI",
+   "reference_rate": "CIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "N",
+   "reference_rate": "NIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": "U.S. Prime Rate"
+  }
+ ],
+ "note": "The spread tag equals n1 in every code+# shape, so the column holds reference rate and spread together. The bare '#%' cells equal the tagged interest rate, so they are fixed rates. The '#% PIK' cells equal the tagged pik_rate. The 'L+#% PIK' cells have n1 matching pik_rate, so the spread is the PIK part."
+}

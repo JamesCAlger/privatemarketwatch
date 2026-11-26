@@ -1,0 +1,372 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.96,
+ "shapes": [
+  {
+   "shape": "S+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "E+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "SONIA+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "N/A",
+   "roles": []
+  },
+  {
+   "shape": "L+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "S+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "S+# (includes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "P+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "BBSW+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "S+# (Includes #% PIK), #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "STIBOR+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "S+# Cash (includes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "S+# Cash plus #% PIK",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (includes #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "C+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "K+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "SARON+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "SONIA+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "E+# (Includes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "E+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "P+#",
+   "roles": [
+    "spread_bps"
+   ]
+  },
+  {
+   "shape": "S+# PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "L+# Cash plus #% PIK",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SARON+# (Includes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SARON+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "T+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "#% Cash plus #% PIK, #% Floor",
+   "roles": [
+    "cash_rate_pct",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "E+# Cash plus #% PIK",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "Equity plus #% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SONIA+# (Includes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "STIBOR+# (Inlcudes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "STIBOR+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "Variable",
+   "roles": []
+  },
+  {
+   "shape": "#% (includes #% PIK), #% Floor",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "L+# Cash (includes #% PIK)",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "N+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "S+# Cash plus #% PIK, # Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "S",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SONIA",
+   "reference_rate": "SONIA",
+   "basis": "common_usage",
+   "note": "Not in the legend, but standard."
+  },
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "BBSW",
+   "reference_rate": "BBSW",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "STIBOR",
+   "reference_rate": "STIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "C",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "K",
+   "reference_rate": "KORIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SARON",
+   "reference_rate": "SARON",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "T",
+   "reference_rate": "TONAR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "N",
+   "reference_rate": null,
+   "basis": "cannot_tell",
+   "note": "Not in the legend; one row only."
+  },
+  {
+   "code": "Equity plus",
+   "reference_rate": null,
+   "basis": "not_a_code",
+   "note": ""
+  },
+  {
+   "code": "Variable",
+   "reference_rate": null,
+   "basis": "not_a_code",
+   "note": ""
+  }
+ ],
+ "note": "The tags show spreads printed in basis points (equal_bps) and floors in percent (n2 equals the tagged pik_rate on PIK shapes). The PIK numbers in the 'includes' shapes are tagged pik_rate. In the 'Cash plus #% PIK' shapes, n1 is the cash spread and n2 is the PIK, which matches the tags. The standalone 'S+# PIK' shape is classed as a PIK spread, with weak evidence."
+}

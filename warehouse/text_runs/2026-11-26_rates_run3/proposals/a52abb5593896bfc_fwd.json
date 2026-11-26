@@ -1,0 +1,34 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#%.(incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The interest_rate tag sits in the cell for all shapes, and n1 equals it. In '#% (incl. #% PIK)', n1 is the all-in rate and n2 matches the pik_rate tag. In '#% PIK', n1 matches the pik_rate tag (185 of 185). On those rows the all-in rate equals the PIK rate. The 8 bps matches in '#%' are coincidental."
+}

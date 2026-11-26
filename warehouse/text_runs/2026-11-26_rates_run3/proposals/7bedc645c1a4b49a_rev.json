@@ -1,0 +1,135 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "C+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "ST+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CI+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "N+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "S",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "C",
+   "reference_rate": "CDOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": "U.S. Prime Rate"
+  },
+  {
+   "code": "SA",
+   "reference_rate": "SARON",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "ST",
+   "reference_rate": "STIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "CI",
+   "reference_rate": "CIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "N",
+   "reference_rate": "NIBOR",
+   "basis": "legend",
+   "note": ""
+  }
+ ],
+ "note": "The column has a reference-rate code plus a spread, and the filer's spread tag equals the printed number on every row of every shape. The bare '#%' shape (5 rows) matches the tagged spread on all 5 rows, and on the 4 rows with an interest_rate tag it also matches that rate, so the number is probably a fixed rate. It is given as spread_pct because the spread tag matched on all 5 rows."
+}

@@ -1,0 +1,14 @@
+{
+ "column_holds": "pik_spread_or_rate",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header is PIK under Interest, and all 177 rows carry a pik_rate tag placed in this cell with an exact match. The cell holds only the PIK portion; the cash spread sits in the adjacent Cash column."
+}

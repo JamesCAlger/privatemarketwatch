@@ -1,0 +1,14 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header says Cash, but the filer tagged these cells as spread (1682 of 1682 compared rows match exactly), and the Ref. Rate column holds a code like 'S+'. So the cell is the spread over the reference rate. The tags and legs were used over the header wording."
+}

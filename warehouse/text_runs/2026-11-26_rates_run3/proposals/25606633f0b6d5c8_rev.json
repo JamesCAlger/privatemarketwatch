@@ -1,0 +1,204 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.85,
+ "shapes": [
+  {
+   "shape": "SR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "N/A",
+   "roles": []
+  },
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SR+#% (#% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SR+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "C+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#% (#% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "E+#% (#% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "S+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "#% (#% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SA+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#% (#% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "SR+#",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "B+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "BB+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "S",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "common_usage",
+   "note": "Not in legend; seen only through 2023."
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SA",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "C",
+   "reference_rate": "CDOR",
+   "basis": "legend",
+   "note": "Legend lists C as both CDOR and CORRA; the latest filing is ambiguous. CORRA is likely for 2024 as CDOR was discontinued in mid-2024."
+  },
+  {
+   "code": "B",
+   "reference_rate": "BBSY",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "BB",
+   "reference_rate": "BBSY",
+   "basis": "common_usage",
+   "note": "Not in legend; likely a variant of BBSY."
+  }
+ ],
+ "note": "The column holds the reference-rate code plus a spread. Tags confirm the first number is the spread. In the PIK shapes, the tagged pik_rate matches the number in parentheses (n2). In '#% PIK' and 'X+#% PIK' the number equals the PIK rate. A bare '#%' is tagged as a spread, so it is probably a spread whose code was omitted."
+}

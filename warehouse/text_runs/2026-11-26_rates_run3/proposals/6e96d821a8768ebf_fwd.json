@@ -1,0 +1,40 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.95,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "# (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "Interest rate tags sit in this column's cells, and n1 equals the tagged interest_rate on nearly every row. In the 'incl. PIK' shapes n1 is the all-in rate and n2 matches the tagged pik_rate. The '#% PIK' shape has only one row; its n1 matches both the interest_rate and pik_rate tags, so the PIK role is a judgment call."
+}

@@ -1,0 +1,151 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "Estimated Yield:",
+   "roles": []
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "ST+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "B+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "BB+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CI+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "N+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "S",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": "U.S. Prime Rate"
+  },
+  {
+   "code": "CA",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "ST",
+   "reference_rate": "STIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SA",
+   "reference_rate": "SARON",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "B",
+   "reference_rate": "BKBM",
+   "basis": "legend",
+   "note": "New Zealand Bank Bill Reference Rate"
+  },
+  {
+   "code": "BB",
+   "reference_rate": "BBSY",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "CI",
+   "reference_rate": "CIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "N",
+   "reference_rate": "NIBOR",
+   "basis": "legend",
+   "note": ""
+  }
+ ],
+ "note": "Reference-rate code plus spread; the spread tag sits in this cell and matches n1 on all shapes. The bare '#%' shape matches the spread tag, but the example shows a fixed 10.00% PIK loan, so I treated it as a fixed rate. 'Estimated Yield:' is a label with no number."
+}

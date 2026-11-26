@@ -1,0 +1,45 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.5,
+ "shapes": [
+  {
+   "shape": "SR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SR",
+   "reference_rate": "SOFR",
+   "basis": "common_usage",
+   "note": "No legend in the bundle. SR is read as SOFR from standard usage, which is likely but not certain."
+  },
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "common_usage",
+   "note": "No legend in the bundle."
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "common_usage",
+   "note": "No legend in the bundle."
+  }
+ ],
+ "note": "Every number in the column is tagged as spread, and all 1343, 70 and 3 compared rows match exactly. Cells hold a code plus a spread, so the column could be read as rate_terms, but the evidence supports spread only. No cell prints a floor."
+}

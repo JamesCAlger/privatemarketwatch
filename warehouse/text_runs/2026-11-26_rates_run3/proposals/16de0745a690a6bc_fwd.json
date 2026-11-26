@@ -1,0 +1,75 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.85,
+ "shapes": [
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "S",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": "Legend defines S as Sterling Overnight Interbank Average Rate (SONIA)."
+  },
+  {
+   "code": "CA",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": "U.S. Prime Rate."
+  }
+ ],
+ "note": "Spread tags match the first number on all code+spread shapes. The bare '#%' shape also matches the spread tag, but the example row shows a 10.00% PIK interest rate, so it is a fixed PIK coupon with no reference rate. I used fixed_rate_pct because the tag evidence conflicts with the example. This shape has only 13 rows."
+}

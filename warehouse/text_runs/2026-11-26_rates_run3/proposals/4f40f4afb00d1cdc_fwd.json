@@ -1,0 +1,14 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.97,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header is Spread. The filer's spread tag sits in this cell on 13,644 of 13,646 compared rows, and the number matches the tagged spread on 13,643 of them. The coupon is in a separate column."
+}

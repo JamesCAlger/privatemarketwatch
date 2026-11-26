@@ -1,0 +1,14 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.97,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The tagged spread value matches n1 on 13643 of 13646 compared rows, and the filer placed the spread tag in this column's cells. The Coupon and Reference columns are separate, so this column holds only the spread."
+}

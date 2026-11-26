@@ -1,0 +1,20 @@
+{
+ "column_holds": "pct_of_net_assets",
+ "column_confidence": 0.98,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pct_of_net_assets"
+   ]
+  },
+  {
+   "shape": "—%",
+   "roles": [
+    "other_number"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header says Percentage of Members' Equity, and the filer's tags place pct_of_net_assets in 1416 cells of this column. The '—%' shape has no number, so it gets other_number (it is a zero or dash placeholder). The spread tag comparison matched in only 4 of 1397 rows, so it does not contradict this."
+}

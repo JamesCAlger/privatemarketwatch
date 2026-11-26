@@ -1,0 +1,45 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.85,
+ "shapes": [
+  {
+   "shape": "SR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SR",
+   "reference_rate": "SOFR",
+   "basis": "common_usage",
+   "note": "No legend in the bundle. SR is read as SOFR, the Blue Owl convention, but the filer does not define it here."
+  },
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "common_usage",
+   "note": "Appears only in 2023 filings, before the move to SOFR."
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "common_usage",
+   "note": ""
+  }
+ ],
+ "note": "Each cell holds a reference-rate code plus a spread and nothing else (no floor or other terms), and the tagged spread equals the printed number on every compared row. The cell is therefore a rate-terms cell that happens to carry only the spread number."
+}

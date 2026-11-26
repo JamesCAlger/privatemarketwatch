@@ -1,0 +1,27 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The interest_rate tag sits in this cell on all #% rows, and n1 equals it on 3813 of 3813 rows. In '#% (incl. #% PIK)' n1 is the all-in rate, and n2 equals the tagged pik_rate on 73 of 73 rows. In '#% PIK' n1 equals the pik_rate tag on 45 of 45 rows, so the cell is a pure PIK rate. The reference rate and spread are in a separate column."
+}
