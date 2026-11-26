@@ -11,6 +11,39 @@ both pipelines hold for the five funds.
 Agreement with production is not correctness. Production's text code is the least checked part of the old pipeline:
 25 fragile points are listed in the code report, section 6.
 
+## 0. Relation to the 2026-11-19 spec (added 2026-11-26)
+
+This draft was written without reading `text_fields_spec_2026-11-19.md` (beside this file; until 2026-11-26 it sat
+uncommitted in the main checkout as `docs/text_fields_spec.md`). The owner pointed out the gap. That spec holds
+thirteen owner decisions and governs the method. This file adds measurements, the production trace and the slices.
+Its decisions are cited here as "19-T1" to "19-T13"; "T1" to "T5" in this file are slices.
+
+Where this draft already follows it: rules not row answers (19-T1), no model in a build (19-T2), fund rules in the
+wrapper (19-T3), empty and counted when no rule fits.
+
+Where this draft was wrong or silent, and what now holds:
+
+| # | 2026-11-19 decision | This draft said | Now |
+|---|---|---|---|
+| 1 | 19-T1, 19-T10: the method is Agent A's, generalised; Agent A's grammar and anchor files are tested and folded in if useful | Invented a new `label_patterns` format; called Agent A "disabled" | Agent A's grammar format, anchors and held-out gate (`pipeline/identifier_held_out.py`) are the starting point. Apollo has both files. First task: test them |
+| 2 | 19-T7: the rules the wrappers already hold are applied and measured before any agent writes a rule | An agent proposes patterns from scratch | The wrappers' existing split patterns are loaded and measured first; an agent writes only what they do not cover |
+| 3 | 19-T3: rules go in the wrapper's `reading_rules` section | A new wrapper section | `reading_rules` (it exists in all five wrapper copies) |
+| 4 | 19-T11: the row corrections are a test set for rules | Applied them as corrections only | Test first: a rule that reproduces a correction retires it. What no rule reproduces is applied as a correction |
+| 5 | Section 11: the gate is never "agrees with production"; names have no arithmetic check, so the owner accepts each name rule once | Parse share and agreement with production | Agreement with production is a measurement. A name pattern is accepted by the owner, once per fund and format |
+| 6 | 19-T13: an uncovered structural change stops that fund's build | A ceiling | As 19-T13 |
+| 7 | 19-T9: Sonnet sub-agents first, Haiku tested | Start with Haiku | Owner, 2026-11-25: "simple models are better". Run both on the same bundles, keep the smaller if it passes |
+| 8 | Section 6: page structure (schedule table, header row, column of each cell, heading path) comes before everything | Not a step; slices T2 to T4 assume it | Page structure is a slice of its own, before any slice that reads the page |
+
+Open, for the owner (not applied):
+
+- **Order.** The 2026-11-19 spec starts with rate cells and column headers (strongest checks, and where Blue Owl and
+  Apollo keep what tags lack) and puts names last. This draft starts with names because the class needs them.
+  Recommendation: page structure first, then rate cells and headers; the label split runs beside them, since it
+  needs no page. Class follows both.
+- **Jev** (19-T5) stays undecided. Not used here.
+- The dictionary and stored splits of section 5 are new in this draft. A stored split is keyed on label text, not a
+  row, but it does not carry across a format change; keep it rare.
+
 ## 1. Purpose
 
 Hold, for every position, the fields that are not a tagged number: who the issuer is, what the instrument is, its

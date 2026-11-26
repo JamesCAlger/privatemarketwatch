@@ -6,6 +6,20 @@ section 6). Nothing here is built. Build starts on the owner's go.
 Agreement with production is not correctness. T1 compares names with production's; it checks no name against a
 page except where a task says so.
 
+## Superseded in part (2026-11-26)
+
+Written without the 2026-11-19 spec (`text_fields_spec_2026-11-19.md`) or Agent A. See `text_fields.md` section 0.
+Before any task below is built, the plan changes as follows; it is to be rewritten once the owner settles the order:
+
+- New task 0: test Agent A's Apollo grammar and anchors (apply through this layer; score against tags and the row
+  corrections). Fold in if useful (19-T10).
+- Task 2: no new format. Agent A's grammar format, stored in the wrapper's `reading_rules`. Load the wrappers'
+  existing split patterns first and measure them (19-T7).
+- Task 4: agents write only what the existing rules do not cover. Sonnet and Haiku on the same bundles.
+- Task 5: Apollo's anchor file already lists its industry names; start there.
+- Task 7: corrections are a test set first (19-T11); only the unreproduced remainder is applied.
+- Acceptance: a name pattern is accepted by the owner once per fund and format, not by agreement with production.
+
 ## Goal
 
 For every position: the label as filed, split into parts by a rule that is named, dated and tested. Parts:
