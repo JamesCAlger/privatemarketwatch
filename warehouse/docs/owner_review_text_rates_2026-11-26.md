@@ -61,3 +61,21 @@ page by a person.
 Accepted rules go into each fund's wrapper copy (`reading_rules`), the pipeline reads the fields from them with the
 rule named on every value, and the comparison with production and the count of unread rates now read are produced.
 Proposals not accepted stay unread and counted.
+
+## Added after the change-only review of fd9381b5 (2026-11-26)
+
+The review reproduced every count and confirmed decision 6's reading: Apollo's main shape and "S = SOFR" are marked
+contradicted only by the floor identity, which on Apollo can never pass (it runs only where an all-in tag exists, and
+Apollo's 8 such rows all carry a faulty tag). Two more things the owner should know before accepting:
+
+- What "accepted" tests. Every accepted number reading rests on one check: the printed number equals the filer's
+  tag. That settles WHICH number is the spread, the rate or the PIK. It does not settle the finer label where two
+  labels share one tag: "fixed rate" against "all-in rate" (both compared with the interest-rate tag), and "PIK
+  spread" against "PIK rate" (both compared with the PIK tag). Those labels rest on the wording and the agent.
+- On nearly all compared rows the tag sits in the very cell being read. So the check shows the rule picks the number
+  the filer itself tagged; it is not a second, independent source.
+
+To fix with the next build (not blocking the decisions): the floor identity must not contradict a proposal where it
+can only ever run on faulty tags; evidence must not be pooled across upper- and lower-case variants of a shape (one
+accepted Apollo reading shows 27 compared rows where its own count is 15; it passes alone at 15 of 15); a stale
+comment in the legend model.
