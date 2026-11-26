@@ -79,3 +79,18 @@ To fix with the next build (not blocking the decisions): the floor identity must
 can only ever run on faulty tags; evidence must not be pooled across upper- and lower-case variants of a shape (one
 accepted Apollo reading shows 27 compared rows where its own count is 15; it passes alone at 15 of 15); a stale
 comment in the legend model.
+
+## Owner's answers (2026-11-26)
+
+| # | Answer |
+|---|---|
+| 1, 2, 8, 10, 12 | As recommended (no comment given; the owner said uncommented items are OK) |
+| 3 | As recommended. The dated legend goes into the fund's wrapper as a dated code table (code, rate, first and last filing date, the filing that is the evidence); the per-filing legend check runs on every new filing and reports a filing whose legend disagrees |
+| 4 | Agreed |
+| 5 | Read the floors, source "printed, unchecked". The floor is its own field (`floor`), separate from the spread and the rate |
+| 6 | Agreed |
+| 7 | Changed by the owner: an untested reading is preferred to a missing one. A rare shape is read from the agent's reading when both runs agree and no tagged row differs. Measured: 69 stable rare shapes (136 positions); on 67 every tagged row matches (too few rows for the 5-row bar), 2 have no tagged row (5 positions), 1 has a row that differs (1 position, stays unread). Source value: "matches on few rows" or "untested" |
+| 9 | Accept Ares "Coupon" as the all-in rate. The other 10% of tags are the same cell filed under the PIK tag (1,517 cells "10.00% PIK", whole coupon paid in kind) |
+| 11 | Changed after measurement. A bare percentage with no rate code in a rate-terms column is a FIXED rate where it equals the row's all-in rate tag: BCRED 141/141, 16/16, 217/217, 20/20 and 6/6 rows; HPS 60/60 (the filer also files it under the spread tag, so the earlier acceptance as "spread" was the wrong label); Apollo 150/151 and 143/146. Rule: no code, number equals the all-in rate -> fixed rate, spread and reference rate empty. Blue Owl (19 positions) has no all-in tag: read by the same rule, source "untested". The other unstable shapes (13 positions with a value) stay unread |
+| 13 | As recommended, and the owner asked for the fix: the note printed under Ares' schedule ("...SOFR or an alternate base rate (commonly based on the Federal Funds Rate or the Prime Rate)...") is not in the warehouse's footnotes (392 stored Ares footnotes name no rate). Capture printed schedule notes as a legend source |
+| BCRED 2022-09-30 | As recommended (no comment given) |
