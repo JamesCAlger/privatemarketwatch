@@ -917,3 +917,13 @@ Branch `warehouse-text-spec`, pull request 23 into `dev`. Slice 5 (pull request 
 - Owner questions waiting: 2,271 Blue Owl published positions (from 2024-12-31) have their fair value printed only in
   the unfunded-commitment table, with no cost (a slice 2 scope question); the three questions in the plan.
 - Next: slice R (column headers and rate cells), the first slice with agent runs. Starts on the owner's go.
+
+### Owner answers, 2026-11-26 (after slice P)
+
+- The 2,271 Blue Owl published positions printed only in the unfunded-commitment table: keep them published.
+- Agent stability experiment run (`baseline_text_agent_stability_2026-11-26.md`): Sonnet and Haiku equally accurate
+  (138 to 140 of 144); Haiku used twice the tokens; "all four runs agree" still accepted one wrong header. So
+  agreement is a filter and the check is the acceptor. Recommendation waiting for the owner: one model, run twice
+  with options reversed, Sonnet by default.
+- Base rates: only a SOFR table exists; it covers about 85 to 90% of floating-rate rows. Other tables need a download
+  and the owner's go.
