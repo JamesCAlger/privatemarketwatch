@@ -110,3 +110,20 @@ label, which nothing publishes.
 - The 220 spreads and 14 maturities the label has and the tag lacks were not checked against the page.
 - The 76 reference-rate differences with production were not settled.
 - The gate was read, not run.
+
+## A5 revised after the owner's comment (2026-11-26)
+
+Owner: "98.5% sounds quite good, with some corrections." Accepted in part. The grammar is a good parser: the 1.5%
+is the label being out of date, not the grammar misreading it. The recommendation above was too strong.
+
+Revised recommendation: fold the grammar in as a second source, never the first.
+
+| Field | First source | Label grammar's role |
+|---|---|---|
+| Spread, maturity, rate, PIK | The tag (D6: the tag wins) | Fills the value where the tag is absent (220 spreads, 14 maturities, 77 rates, 12 PIK rates). A difference from the tag is recorded, not applied |
+| Reference rate, floor (no tag) | The label grammar now; the printed cell once slice R reads it | After slice R: the check on the cell, and the value where the cell cannot be read |
+
+Limit on "with some corrections": a stale spread or maturity is caught by the tag, so no correction is needed there.
+A stale reference rate or floor cannot be caught from the label alone, because nothing tagged contradicts it; only
+the printed cell shows it. Until slice R, those two fields carry an unmeasured share of stale values (for spread it
+is 1.5%). They are published with the rule named, so they can be told apart later.
