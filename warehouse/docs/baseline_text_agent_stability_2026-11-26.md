@@ -65,3 +65,43 @@ Stability and agreement:
 - One run per arm; the run-to-run spread with the same option order is not measured.
 - No test of the actual slice R task (a rule per column from a bundle built by the page models).
 - The reference labels were not re-checked; some "disagreements" may be the label's error.
+
+## Rerun through the API, to measure cost (owner request, 2026-11-26)
+
+The subagent runs above cannot price a model: their token totals include the tool round trips of reading files.
+This rerun sends one request per item (the production shape: one bundle, one call) and reads the tokens billed
+from each response. Script `scripts/text/agent_stability/run_api.py`; outputs `scratch/2026-11-26_agent_stability_api/`.
+Models `claude-haiku-5-5` and `claude-sonnet-5-5`, both at effort `low`, same prompt, options forward and reversed:
+816 requests, no errors, no refusals. Paid from the owner's API credits: about 1.31 USD in all, plus about 0.03 for
+a nine-item trial.
+
+Prices used (per million tokens, from the Claude API price list cached 2026-11-03): Haiku 5.5 0.10 input, 0.50
+output; Sonnet 5.5 2.00 input, 10.00 output.
+
+| Run | Input tokens | Output tokens | Cost (USD) | Cost per item | Wall time | Agree with label (144) | Headers (50) | Headings (73) | Rates (21) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Haiku forward | 247,424 | 8,097 | 0.029 | 0.00014 | 24 s | 140 | 47 | 73 | 20 |
+| Haiku reversed | 247,424 | 8,880 | 0.029 | 0.00014 | 24 s | 132 | 45 | 72 | 15 |
+| Sonnet forward | 247,424 | 13,488 | 0.630 | 0.0031 | 44 s | 143 | 49 | 73 | 21 |
+| Sonnet reversed | 247,424 | 12,498 | 0.620 | 0.0030 | 46 s | 143 | 49 | 73 | 21 |
+
+Stability on the 144 strong items: Sonnet gave the same answer in both orders on 144 (202 of all 204); Haiku on 134
+(187 of 204). Haiku's reversed run returned 3 unusable replies and dropped to 15 of 21 on rate cells.
+
+What it shows:
+
+1. Haiku is about 21 times cheaper per item. Both are cheap in absolute terms: the whole first pass for the five
+   funds is on the order of 1,500 units (about 66 header formats, about 1,100 distinct heading texts, a few dozen
+   rate shapes), so roughly 5 USD on Sonnet or 0.25 USD on Haiku. After that, only new or changed units each quarter.
+2. Sonnet is more accurate (143 against 132 to 140) and stable under option order (144 of 144 against 134).
+3. "Haiku twice, accept where both orders agree" accepts 134 of 144, 132 of them agreeing with the label, for 0.06
+   USD. "Sonnet once" gives 143 for 0.63 USD. Money does not decide this; the errors do. A wrong rule is wrong on
+   every row it reads, and each item sent to the owner costs the owner's time.
+4. The one item every run gets "wrong" is the same as before: Apollo's "Interest Rate" header over "S+525, 0.00%
+   Floor" cells. It needs the check on the cells, not a better model.
+
+Recommendation: Sonnet, run twice with the options reversed, plus the check. Haiku is not worth the saving at this
+volume. Revisit if the volume grows by orders of magnitude (it would not at 61 funds: about 60 USD on Sonnet, once).
+
+Limits: both at effort `low`, one prompt; not tuned for either model. The subagent runs above used default
+settings and a different shape (one agent reading all items), so the two tables are not the same test.
