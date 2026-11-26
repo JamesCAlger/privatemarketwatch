@@ -36,7 +36,7 @@ Where this draft was wrong or silent, and what now holds:
 
 Open, for the owner (not applied):
 
-- **Order.** The 2026-11-19 spec starts with rate cells and column headers (strongest checks, and where Blue Owl and
+- **Order: decided by the owner 2026-11-26, as recommended (plan `2026-11-26-text-plan.md`).** The 2026-11-19 spec starts with rate cells and column headers (strongest checks, and where Blue Owl and
   Apollo keep what tags lack) and puts names last. This draft starts with names because the class needs them.
   Recommendation: page structure first, then rate cells and headers; the label split runs beside them, since it
   needs no page. Class follows both.

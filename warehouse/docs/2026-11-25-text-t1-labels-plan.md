@@ -6,7 +6,7 @@ section 6). Nothing here is built. Build starts on the owner's go.
 Agreement with production is not correctness. T1 compares names with production's; it checks no name against a
 page except where a task says so.
 
-## Superseded in part (2026-11-26)
+## Replaced 2026-11-26 by `2026-11-26-text-plan.md` (owner settled the order)
 
 Written without the 2026-11-19 spec (`text_fields_spec_2026-11-19.md`) or Agent A. See `text_fields.md` section 0.
 Before any task below is built, the plan changes as follows; it is to be rewritten once the owner settles the order:
