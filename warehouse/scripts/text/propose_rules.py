@@ -39,7 +39,8 @@ NUMBER_ROLES = {
     "floor_pct": "Reference-rate floor, in percent",
     "all_in_rate_pct": "All-in interest rate, in percent (includes any PIK part)",
     "cash_rate_pct": "Cash-pay interest rate or cash part of the rate, in percent",
-    "pik_rate_pct": "PIK rate or PIK part (a PIK spread counts here), in percent",
+    "pik_rate_pct": "PIK rate or the PIK part of a rate, in percent (a fixed number, not a spread over a reference rate)",
+    "pik_spread_pct": "A spread over the reference rate that is paid in kind (for example S+5.00% PIK), in percent",
     "fixed_rate_pct": "A fixed coupon with no reference rate, in percent, where the text does not say whether it is cash or all-in",
     "pct_of_net_assets": "Share of net assets",
     "other_number": "A number that is none of these",
@@ -114,6 +115,11 @@ def call(path, order):
     if m:
         try:
             parsed = json.loads(m.group(0))
+        except ValueError:
+            parsed = None
+    if parsed is None and '{"column_holds"' in text:
+        try:  # the model sometimes writes a first attempt and then a corrected object: keep the last one
+            parsed = json.loads(text[text.rindex('{"column_holds"'):].strip().rstrip("`").strip())
         except ValueError:
             parsed = None
     if parsed is None:
