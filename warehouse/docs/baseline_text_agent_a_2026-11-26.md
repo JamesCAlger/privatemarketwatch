@@ -127,3 +127,19 @@ Limit on "with some corrections": a stale spread or maturity is caught by the ta
 A stale reference rate or floor cannot be caught from the label alone, because nothing tagged contradicts it; only
 the printed cell shows it. Until slice R, those two fields carry an unmeasured share of stale values (for spread it
 is 1.5%). They are published with the rule named, so they can be told apart later.
+
+## A6: the stale share, measured (owner question, 2026-11-26)
+
+`scripts/text/q_a6_label_vs_cell.sql`. The same patterns applied to the printed row of each of the 7,290 positions,
+compared with the label's reading. This replaces "unmeasured" above.
+
+| Field | Same | Differ | Label only | Cell only | Neither | No printed row found |
+|---|---:|---:|---:|---:|---:|---:|
+| Reference rate | 6,637 | 34 (0.5%) | 3 | 14 | 558 | 44 |
+| Spread | 6,571 | 100 (1.5%) | 3 | 14 | 558 | 44 |
+| Floor | 6,567 | 45 (0.7%) | 40 | 9 | 585 | 44 |
+
+- The printed row is readable with the grammar's own patterns on all but 44 positions, so the cell can be the first
+  source for reference rate and floor now, without waiting for slice R's agent run. The label is then the check.
+- Not settled: the 44 positions with no printed row found, and the 40 floors the label has and the row lacks.
+- Still a text match by code; no person read a page.
