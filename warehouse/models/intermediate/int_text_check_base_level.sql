@@ -12,6 +12,9 @@
 --   all_in_tag_is_leg  (phase 3 check fix 1a) the all-in TAG equals the spread or the printed floor alone (within
 --                  var text_legs_tolerance): the tag holds another leg, so it implies a base of zero (or base =
 --                  spread - floor) that tests nothing. The same mechanism as identity d of int_text_check_leg_arithmetic.
+--                  Fix round 1 (phase 3): only where no printed all-in rate agrees with the tag; where the print
+--                  agrees, the tag is the all-in rate and a zero base is a real reading (EURIBOR 2022, SARON 2025-26)
+--                  or a real contradiction, so the row is tested.
 --   usable
 -- spread = printed (proposal) else tag; all_in = tag else printed (the tagged all-in is the filer's number; a printed
 -- one is used where the filer tags none). spread_source, all_in_source say which. implied_base = all_in - spread.
@@ -53,6 +56,7 @@ with proxy_series(rate_name, series_rate) as (
             when coalesce(p_spread, t_spread) is null then 'no_spread'
             when coalesce(t_all_in, p_all_in_rate) is null then 'no_all_in'
             when t_all_in is not null
+                 and (p_all_in_rate is null or abs(p_all_in_rate - t_all_in) > {{ var('text_legs_tolerance') }})
                  and (abs(t_all_in - coalesce(p_spread, t_spread)) <= {{ var('text_legs_tolerance') }}
                       or abs(t_all_in - p_floor) <= {{ var('text_legs_tolerance') }}) then 'all_in_tag_is_leg'
             else 'usable'

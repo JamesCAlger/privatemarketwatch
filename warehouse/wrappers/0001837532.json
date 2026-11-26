@@ -1615,19 +1615,6 @@
       "target": "rate_text",
       "action": "rate_role",
       "parameter": {
-        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
-        "header_signature": "interestrate",
-        "shape": "#% Cash plus #% PIK, #% Floor",
-        "number_index": 3,
-        "role": "floor_pct",
-        "source_grade": "untested"
-      },
-      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
-    },
-    {
-      "target": "rate_text",
-      "action": "rate_role",
-      "parameter": {
         "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
         "header_signature": "interestrate",
         "shape": "BBSW+# Cash plus #% PIK, #% Floor",

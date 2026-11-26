@@ -123,7 +123,8 @@ with column_tag_map as (
         , fc.compared as fixed_compared, fc.equal as fixed_equal
     from shape_role_raw sr
     left join {{ ref('int_text_check_fixed_rate') }} fc
-        on fc.unit_key = sr.unit_key and fc.shape = sr.shape and sr.number_index = 1 and fc.verdict = 'fixed_rate'
+        on fc.unit_key = sr.unit_key and fc.shape = sr.shape and sr.number_index = 1
+        and fc.verdict in ('fixed_rate', 'fixed_rate_few_rows')
 )
 
 , shape_positions as (

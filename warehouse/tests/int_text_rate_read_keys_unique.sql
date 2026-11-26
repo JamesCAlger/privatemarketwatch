@@ -15,6 +15,12 @@ union all
 select 'int_text_rate_constraint', accession || '|' || context_id || '|' || constraint_name, count(*)
 from {{ ref('int_text_rate_constraint') }} group by 1, 2 having count(*) > 1
 union all
+select 'int_text_rate_held', accession || '|' || context_id || '|' || field || '|' || rule_id, count(*)
+from {{ ref('int_text_rate_held') }} group by 1, 2 having count(*) > 1
+union all
+select 'int_text_rate_finding', cik || '|' || constraint_name || '|' || rule_id, count(*)
+from {{ ref('int_text_rate_finding') }} group by 1, 2 having count(*) > 1
+union all
 select 'int_text_rate_read null key', coalesce(accession, '~') || '|' || coalesce(context_id, '~'), count(*)
 from {{ ref('int_text_rate_read') }} where accession is null or context_id is null group by 1, 2
 union all

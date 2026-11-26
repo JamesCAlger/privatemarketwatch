@@ -49,6 +49,9 @@ OWNER_COLUMNS = {  # unit_key -> (column_holds, item)
     "0dd66cba8d2b8641": ("rate_terms", 10),
 }
 FIXED_UNTESTED = {("25606633f0b6d5c8", "#%")}  # item 11, Blue Owl: no all-in tag to test it
+WHOLE_COUPON_UNITS = {"1de53b4d55ea4050"}      # fix round 1 item 3: Ares "Coupon" (owner item 9)
+NA_FIXED = [("010c6461a4a6ff27", "#%", "interest/ref.rate"),  # fix round 1 item 7: Blue Owl "Cash" beside "Ref. Rate"
+            ("0429e10a0d4a5b47", "#%", "interest/ref.rate")]
 COMMON_LETTERS = {"L", "P", "E", "S"}          # item 4
 BASE_RATE_CODES = {"BASERATE": "Base Rate", "CADBASERATE": "CAD Base Rate"}  # item 13
 NOT_A_CODE = {"EQUITYPLUS": "Equity plus", "VARIABLE": "Variable"}          # item 13
@@ -114,19 +117,29 @@ def role_rules(con):
         info = shape_info[(unit, shape)]
         rare_clean = (info["positions"] < 5 and all(r["stable"] for r in rs)
                       and sum(r["nt_differs"] or 0 for r in rs) == 0 and sum(r["leg_fail"] or 0 for r in rs) == 0)
+        # fix round 1 item 9: a shape with any unstable or contradicted role gets no rule at all (its floor included)
+        broken = any(r["verdict"] in ("unstable", "contradicted", "contradicted_small") for r in rs)
+        single = shape.count("#") == 1
         for r in rs:
             role = r["role"]
+            extra = {}
             if (unit, shape) in FIXED_UNTESTED and r["number_index"] == 1:
                 role, grade = "fixed_rate_pct", "untested"
                 ev = owner(11, "no rate code and a single number: a fixed rate; the fund files no all-in rate tag, so "
                                "the equality check cannot run")
-            elif role in ("pct_of_net_assets", "other_number", "cannot_tell") or not r["stable"]:
+            elif broken or role in ("pct_of_net_assets", "other_number", "cannot_tell") or not r["stable"]:
                 continue
             elif r["verdict"] == "accepted_by_check":
                 grade = "checked"
                 ev = (f"check {r['checks_confirming']}: {r['nt_equal']} of {r['nt_compared']} compared rows equal")
                 if r["label_changed_by"]:
                     ev += "; label fixed_rate set by check fixed_rate_no_code, " + owner(11)
+            elif r["label_changed_by"] and r["verdict"] == "needs_owner" and not (r["nt_differs"] or 0):
+                # fix round 1 item 8: the fixed-rate check found every compared row equal to the all-in tag, on fewer
+                # than 5 rows; the spread label it replaces is not kept (item 11), the few rows grade it (item 7)
+                grade = "matches_few_rows"
+                ev = (owner(11, "no rate code, the number equals the all-in tag on every compared row: a fixed rate")
+                      + f"; check fixed_rate_no_code {r['nt_equal']} of {r['nt_compared']}, under the 5-row bar")
             elif role == "floor_pct" and r["verdict"] == "needs_owner":
                 grade, ev = "untested", owner(5, "the number before the word Floor is the floor; no filer tags a "
                                                  "floor, so no check exists")
@@ -140,12 +153,30 @@ def role_rules(con):
                     ev = owner(7, f"rare shape ({info['positions']} positions); no tagged row to compare")
             else:
                 continue
+            if unit in WHOLE_COUPON_UNITS and role == "pik_rate_pct" and single:
+                # fix round 1 item 3 (owner item 9, controller ruling): "10.00% PIK" in the all-in column is the whole
+                # coupon paid in kind: the number is the all-in rate and the PIK rate; no cash rate is written
+                extra["whole_coupon"] = True
+                ev += "; whole coupon paid in kind: also the all-in rate, " + owner(9) + ", controller ruling fix round 1"
             yield r["cik"], {
                 "target": "rate_text", "action": "rate_role",
-                "parameter": {"table_signature": u["table_signature"], "header_signature": u["header_signature"],
-                              "shape": shape, "number_index": r["number_index"], "role": role,
-                              "source_grade": grade},
+                "parameter": dict({"table_signature": u["table_signature"], "header_signature": u["header_signature"],
+                                   "shape": shape, "number_index": r["number_index"], "role": role,
+                                   "source_grade": grade}, **extra),
                 "evidence": ev + f" (unit {unit})"}
+    # fix round 1 item 7 (owner item 11, Blue Owl ruling; controller ruling): a number in the "Cash" column on a row
+    # whose "Ref. Rate" cell prints N/A is a fixed rate; the printed N/A is the evidence that no reference rate exists
+    for unit, shape, cond_header in NA_FIXED:
+        if unit not in units:
+            continue
+        u = units[unit]
+        yield u["cik"], {
+            "target": "rate_text", "action": "rate_role",
+            "parameter": {"table_signature": u["table_signature"], "header_signature": u["header_signature"],
+                          "shape": shape, "number_index": 1, "role": "fixed_rate_pct", "source_grade": "untested",
+                          "condition_header_signature": cond_header, "condition_text": "N/A"},
+            "evidence": owner(11, "a number with no reference rate is a fixed rate; the row's Ref. Rate cell prints "
+                                  "N/A; no all-in tag, so untested") + f", controller ruling fix round 1 (unit {unit})"}
 
 
 def code_rules(con):
@@ -241,11 +272,15 @@ def main():
         con.close()
     order = {"rate_column": 0, "rate_role": 1, "rate_code": 2, "rate_text_not_a_code": 3, "rate_printed_wins": 4}
     changed = False
+    conflicts = []
+    pending = []
     for cik in CIKS:
         path = os.path.join(WRAPPERS, f"{cik}.json")
         with open(path, encoding="utf-8", newline="") as f:
             raw = f.read()
         wrapper = json.loads(raw)
+        old = [e for e in wrapper.get("reading_rules", []) if e.get("target") == "rate_text"]
+        conflicts += legend_conflicts(cik, old, entries.get(cik, []))
         kept = [e for e in wrapper.get("reading_rules", []) if e.get("target") != "rate_text"]
         new = sorted(entries.get(cik, []), key=lambda e: (order[e["action"]],
                                                           json.dumps(e["parameter"], sort_keys=True)))
@@ -261,12 +296,46 @@ def main():
         print(cik, ", ".join(f"{a}/{g} {n}" for (a, g), n in sorted(counts.items())))
         if text != raw:
             changed = True
-            if not check:
-                with open(path, "w", encoding="utf-8", newline="") as f:
-                    f.write(text)
-    if check and changed:
-        print("wrappers would change")
-        sys.exit(1)
+            pending.append((path, text))
+    if conflicts and "--accept-legend-change" not in sys.argv:
+        # fix round 1 item 4: a legend that contradicts an existing dated entry surfaces; nothing is written
+        print("legend change against the existing dated code table (nothing written; look at it, then rerun with "
+              "--accept-legend-change):")
+        for c in conflicts:
+            print("  " + c)
+        sys.exit(2)
+    if check:
+        if changed:
+            print("wrappers would change")
+            sys.exit(1)
+        return
+    for path, text in pending:
+        with open(path, "w", encoding="utf-8", newline="") as f:
+            f.write(text)
+
+
+def legend_conflicts(cik, old, new):
+    """Dated rate_code entries of the wrapper as it stands that the new table contradicts: a new dated entry for the
+    same code whose dates overlap an old one with another rate, or an old (code, rate) that is gone. Extending an
+    entry's dates with the same rate (a new filing whose legend agrees) is not a conflict."""
+    def dated(entries):
+        out = []
+        for e in entries:
+            p = e.get("parameter") or {}
+            if e.get("action") == "rate_code" and p.get("first_filing_date"):
+                out.append((p["code"].upper().replace(" ", ""), p["rate"], p["first_filing_date"],
+                            p["last_filing_date"]))
+        return out
+    o, n = dated(old), dated(new)
+    found = []
+    for code, rate, first, last in o:
+        same = [x for x in n if x[0] == code and x[1] == rate]
+        if not same:
+            found.append(f"{cik} {code}={rate} {first}..{last}: no longer in the table")
+        for c2, r2, f2, l2 in n:
+            if c2 == code and r2 != rate and f2 <= last and first <= l2:
+                found.append(f"{cik} {code}={rate} {first}..{last} overlaps new {code}={r2} {f2}..{l2}")
+    return found
 
 
 if __name__ == "__main__":

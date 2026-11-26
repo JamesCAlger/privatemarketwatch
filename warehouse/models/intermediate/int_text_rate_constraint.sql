@@ -4,8 +4,11 @@
 -- breaks them is not applied) and tested on its output (tests/int_text_rate_read_constraints.sql).
 -- One row per (accession, context_id, constraint_name) where the constraint applies.
 --
---   c4_legs        all-in = cash + PIK, where the position reads all three (read values only), within var
---                  text_legs_tolerance (the leg check's tolerance). rule_ids: the three fields' rules.
+--   c4_legs        where the position reads an all-in rate and a PIK rate: with a cash rate read, all-in = cash + PIK
+--                  within var text_legs_tolerance (the leg check's tolerance), input_state all_three; without one
+--                  (fix round 1), the implied cash leg all-in - PIK is not negative (input_state cash_implied, or
+--                  whole_coupon where the all-in rate is the whole-coupon PIK number, cash zero by the rule).
+--                  rule_ids: the fields' rules.
 --   c5_base_level  the reference rate has a series (seed reference_rate.series_id; the window is that series' rate in
 --                  seed base_rate_series, so CDOR is judged on the CORRA proxy and BBSY on the BBSW one, by lookup)
 --                  and the window at the report date is usable: implied base = all-in - spread is judged by macro
@@ -28,16 +31,25 @@ with r as (
 )
 
 , c4 as (
+    -- fix round 1: with no cash rate read, the cash leg is all-in less PIK and must not be negative (PIK <= all-in);
+    -- a whole-coupon PIK reading (all_in_source pik_coupon) has the cash leg zero by its rule
     select accession, context_id, cik, report_date, is_published, 'c4_legs' as constraint_name
-        , reference_rate, cash_rate + pik_rate as lhs, all_in_rate as rhs
-        , case when abs(cash_rate + pik_rate - all_in_rate) <= {{ var('text_legs_tolerance') }} then 'pass' else 'fail' end
-            as verdict
-        , 'read' as all_in_source, null::varchar as base_verdict, null::double as implied_base, null::double as range_min
+        , reference_rate
+        , coalesce(cash_rate, 0) + pik_rate as lhs, all_in_rate as rhs
+        , case
+            when cash_rate is not null
+                then case when abs(cash_rate + pik_rate - all_in_rate) <= {{ var('text_legs_tolerance') }} then 'pass'
+                          else 'fail' end
+            when pik_rate <= all_in_rate + {{ var('text_legs_tolerance') }} then 'pass'
+            else 'fail'
+          end as verdict
+        , all_in_source, null::varchar as base_verdict, null::double as implied_base, null::double as range_min
         , null::double as range_max
         , [all_in_rate_rule_id, cash_rate_rule_id, pik_rate_rule_id] as rule_ids
-        , null::varchar as input_state
+        , case when cash_rate is not null then 'all_three' when all_in_source = 'pik_coupon' then 'whole_coupon'
+               else 'cash_implied' end as input_state
     from r
-    where all_in_rate is not null and cash_rate is not null and pik_rate is not null
+    where all_in_rate is not null and pik_rate is not null
 )
 
 , c5_in as (

@@ -34,6 +34,12 @@ select
     , json_extract_string(parameter, '$.shape') as shape
     , try_cast(json_extract_string(parameter, '$.number_index') as integer) as number_index
     , json_extract_string(parameter, '$.role') as role
+    -- fix round 1: whole_coupon (a PIK-only number in an all-in column is also the all-in rate, owner item 9);
+    -- condition_header_signature / condition_text (the role applies only where the same row's cell in that column of
+    -- the same table prints that text, upper case and trimmed: a "Ref. Rate" cell printing N/A, owner item 11)
+    , coalesce(try_cast(json_extract_string(parameter, '$.whole_coupon') as boolean), false) as whole_coupon
+    , json_extract_string(parameter, '$.condition_header_signature') as condition_header_signature
+    , json_extract_string(parameter, '$.condition_text') as condition_text
     , json_extract_string(parameter, '$.code') as code
     , upper(replace(json_extract_string(parameter, '$.code'), ' ', '')) as code_key
     , json_extract_string(parameter, '$.rate') as rate

@@ -386,6 +386,20 @@ seeds:
               arguments:
                 to: ref('reference_rate')
                 field: rate_name
+  - name: text_rate_unread_cap
+    description: >
+      Text slice R phase 3 fix round 1 (2026-11-26): for each group (column unit, shape, status) of printed rate cells
+      the accepted rules leave unread, the positions measured on 2026-11-26 (scripts/text/q_t3_unread_cap.sql writes
+      the rows). tests/int_text_rate_unread_within_cap.sql fails a group that grows or is new. unit_key names no fund.
+    config:
+      column_types:
+        unit_key: varchar
+        shape: varchar
+        status: varchar
+        max_positions: integer
+    columns:
+      - name: max_positions
+        data_tests: [not_null]
   - name: text_proposed_column
     description: >
       Text slice R phase 2 (2026-11-26). PROPOSALS, NOT RULES: nothing downstream may publish from this seed, and no

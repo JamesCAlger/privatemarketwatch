@@ -26,7 +26,13 @@
 --     read_equals_tag / read_no_tag     read; the tag equals it / no tag exists.
 --   F_tag: the tag compared.
 -- all_in_rate: the all-in reading (all_in_rate_pct) and the fixed reading (fixed_rate_pct) together: a fixed rate is the
--- all-in rate of a fixed-rate loan. all_in_source: all_in, fixed, or both (two readings that agree).
+-- all-in rate of a fixed-rate loan. all_in_source: all_in, fixed, or both (two readings that agree); pik_coupon (fix
+-- round 1, owner item 9) when the only all-in reading is a whole-coupon PIK number (a rate_role rule with whole_coupon:
+-- "10.00% PIK" in an all-in column), which is then the all-in rate and the PIK rate; no cash rate is written.
+-- Fix round 1 item 1: constraints 1 and 2 count a printed code as a reference rate even when no rule resolves it
+-- (code_printed); the reference rate is then unread with status code_undecided and reference_rate_detail giving the
+-- cell status (legend_two_rates, code_no_rule, ...). Only a position with no code printed at all loses its spread or
+-- floor. Item 5: a printed_wins_over_tag all-in rate takes the grade of the printed_wins rule (owner).
 -- rate_type: fixed where the fixed reading is applied; floating where a reference rate and a spread (or PIK spread)
 -- are applied; null otherwise (no type is invented from anything else).
 -- Readings of number cells with no rule, and code cells no rule reads, stay unread here; int_text_rate_read_cell holds
@@ -41,6 +47,9 @@ with cell as (
     select accession, context_id, min(cik) as cik, min(report_date) as report_date, bool_or(is_published) as is_published
         , min(table_index) as table_index, min(row_index) as row_index
         , bool_or(field = 'reference_rate' and status <> 'read' and status <> 'not_a_code') as code_printed_unread
+        , bool_or(field = 'reference_rate' and status <> 'not_a_code') as code_printed
+        , string_agg(distinct status, ',') filter (where field = 'reference_rate' and status not in ('read', 'not_a_code'))
+            as code_statuses
     from cell
     group by 1, 2
 )
@@ -48,11 +57,13 @@ with cell as (
 , num as (
     select accession, context_id
     {%- for f in num_fields %}
-        , min(value) filter (where field = '{{ f }}' and status = 'read') as min_{{ f }}
-        , max(value) filter (where field = '{{ f }}' and status = 'read') as max_{{ f }}
-        , arg_min(rule_id, grade_rank::varchar || rule_id) filter (where field = '{{ f }}' and status = 'read') as rule_{{ f }}
-        , min(grade_rank) filter (where field = '{{ f }}' and status = 'read') as rank_{{ f }}
+        {%- set cond = "(field = 'all_in_rate' or (field = 'pik_rate' and whole_coupon))" if f == 'all_in_rate' else "field = '" ~ f ~ "'" %}
+        , min(value) filter (where {{ cond }} and status = 'read') as min_{{ f }}
+        , max(value) filter (where {{ cond }} and status = 'read') as max_{{ f }}
+        , arg_min(rule_id, grade_rank::varchar || rule_id) filter (where {{ cond }} and status = 'read') as rule_{{ f }}
+        , min(grade_rank) filter (where {{ cond }} and status = 'read') as rank_{{ f }}
     {%- endfor %}
+        , count(*) filter (where field = 'all_in_rate' and status = 'read') as n_all_in_printed
         , count(distinct reference_rate) filter (where field = 'reference_rate' and status = 'read') as n_rates
         , min(reference_rate) filter (where field = 'reference_rate' and status = 'read') as reference_rate
         , arg_min(rule_id, grade_rank::varchar || rule_id) filter (where field = 'reference_rate' and status = 'read') as rule_reference_rate
@@ -70,16 +81,19 @@ with cell as (
     {%- endfor %}
         , case when n.n_rates = 1 then n.reference_rate end as p_reference_rate
         , n.n_rates > 1 as conflict_reference_rate
-        , n.rule_reference_rate, n.rank_reference_rate
+        , n.rule_reference_rate, n.rank_reference_rate, n.n_all_in_printed
     from num n
 )
 
 -- all-in and fixed together; constraints A1 to A3 on the rules' output
 , constrained as (
     select p.*, pos.cik, pos.report_date, pos.is_published, pos.table_index, pos.row_index, pos.code_printed_unread
-        , p.p_reference_rate is not null as has_rate
+        , pos.code_printed, pos.code_statuses
+        -- fix round 1 item 1: a printed code counts as a reference rate for constraints 1 and 2 even when no rule
+        -- resolves it; the reference rate itself stays unread (status code_undecided)
+        , p.p_reference_rate is not null or coalesce(pos.code_printed, false) as has_rate
         , p.p_fixed_rate is not null
-            and (p.p_reference_rate is not null or p.p_spread is not null or p.p_floor is not null
+            and (p.p_reference_rate is not null or coalesce(pos.code_printed, false) or p.p_spread is not null or p.p_floor is not null
                  or p.p_pik_spread is not null) as fixed_broken
     from printed p
     join position pos on pos.accession = p.accession and pos.context_id = p.context_id
@@ -111,13 +125,14 @@ with cell as (
                     and abs(c.p_all_in_rate - c.p_fixed_rate) > {{ tol }} then true else false end as conflict_all_in_fixed
         , coalesce(c.p_all_in_rate, case when not c.fixed_broken then c.p_fixed_rate end) as v_all_in
         , case when c.p_all_in_rate is not null and c.p_fixed_rate is not null and not c.fixed_broken then 'both'
+               when c.p_all_in_rate is not null and c.n_all_in_printed = 0 then 'pik_coupon'
                when c.p_all_in_rate is not null then 'all_in'
                when c.p_fixed_rate is not null and not c.fixed_broken then 'fixed' end as all_in_source
         , case when c.p_all_in_rate is not null then c.rule_all_in_rate
                when not c.fixed_broken then c.rule_fixed_rate end as rule_all_in
         , case when c.p_all_in_rate is not null then least(c.rank_all_in_rate, coalesce(c.rank_fixed_rate, 9))
                when not c.fixed_broken then c.rank_fixed_rate end as rank_all_in
-        , w_all.rule_id as wins_all_in_rule
+        , w_all.rule_id as wins_all_in_rule, w_all.grade_rank as wins_all_in_rank
     from constrained c
     left join tag t on t.accession = c.accession and t.context_id = c.context_id
     left join wins w_all on w_all.accession = c.accession and w_all.context_id = c.context_id
@@ -126,7 +141,9 @@ with cell as (
 
 , statused as (
     select d.*
-        , case when d.conflict_reference_rate then 'conflict' when d.p_reference_rate is null then 'not_printed'
+        , case when d.conflict_reference_rate then 'conflict'
+               when d.p_reference_rate is null and d.code_printed_unread then 'code_undecided'
+               when d.p_reference_rate is null then 'not_printed'
                else 'read_no_tag' end as reference_rate_status
         , case when d.conflict_spread then 'conflict' when d.p_spread is null then 'not_printed'
                when not d.has_rate then 'constraint_spread_needs_reference_rate'
@@ -170,6 +187,8 @@ select
     , case when reference_rate_status {{ applied }} then {{ grade_of.format('rank_reference_rate') }} end
         as reference_rate_grade
     , reference_rate_status
+    , code_printed
+    , case when reference_rate_status = 'code_undecided' then code_statuses end as reference_rate_detail
     , case when spread_status {{ applied }} then p_spread end as spread
     , case when spread_status {{ applied }} then rule_spread end as spread_rule_id
     , case when spread_status {{ applied }} then {{ grade_of.format('rank_spread') }} end as spread_grade
@@ -184,7 +203,8 @@ select
     , case when all_in_rate_status {{ applied }} then v_all_in end as all_in_rate
     , case when all_in_rate_status = 'printed_wins_over_tag' then wins_all_in_rule
            when all_in_rate_status {{ applied }} then rule_all_in end as all_in_rate_rule_id
-    , case when all_in_rate_status {{ applied }} then {{ grade_of.format('rank_all_in') }} end as all_in_rate_grade
+    , case when all_in_rate_status = 'printed_wins_over_tag' then {{ grade_of.format('wins_all_in_rank') }}
+           when all_in_rate_status {{ applied }} then {{ grade_of.format('rank_all_in') }} end as all_in_rate_grade
     , all_in_rate_status
     , all_in_source
     , t_all_in as all_in_rate_tag

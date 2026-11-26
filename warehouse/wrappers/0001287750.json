@@ -615,9 +615,10 @@
         "shape": "#% PIK",
         "number_index": 1,
         "role": "pik_rate_pct",
-        "source_grade": "checked"
+        "source_grade": "checked",
+        "whole_coupon": true
       },
-      "evidence": "check number_tag: 1495 of 1496 compared rows equal (unit 1de53b4d55ea4050)"
+      "evidence": "check number_tag: 1495 of 1496 compared rows equal; whole coupon paid in kind: also the all-in rate, owner 2026-11-26 item 9 (docs/owner_review_text_rates_2026-11-26.md), controller ruling fix round 1 (unit 1de53b4d55ea4050)"
     },
     {
       "target": "rate_text",
@@ -628,9 +629,10 @@
         "shape": "#%PIK",
         "number_index": 1,
         "role": "pik_rate_pct",
-        "source_grade": "matches_few_rows"
+        "source_grade": "matches_few_rows",
+        "whole_coupon": true
       },
-      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 1de53b4d55ea4050)"
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar; whole coupon paid in kind: also the all-in rate, owner 2026-11-26 item 9 (docs/owner_review_text_rates_2026-11-26.md), controller ruling fix round 1 (unit 1de53b4d55ea4050)"
     },
     {
       "target": "rate_text",

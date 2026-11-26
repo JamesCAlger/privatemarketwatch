@@ -27,6 +27,9 @@
 --   nearest the report date (legend_own with no such rule: rule_id 'owner-2026-11-26-item-2', grade owner); self_named
 --   takes 'reference_rate:' || rate, grade owner.
 -- A cell with neither a code nor a number gives one row, number_index 0, field null, status no_value.
+-- Fix round 1: a rate_role rule with a condition (condition_header_signature, condition_text) applies only where the
+-- same row's cell in that column of the same table prints that text, and then wins over an unconditional rule for the
+-- same number. whole_coupon: the rule says the number (a PIK rate) is also the all-in rate (owner item 9).
 with column_rule as (
     select rule_id, cik, table_signature, header_signature, column_holds, source_grade, grade_rank
     from {{ ref('int_text_rate_rule') }}
@@ -56,12 +59,31 @@ with column_rule as (
     from position_cell pc, range(1, 1 + len(pc.numbers)) t(k)
 )
 
-, number_read as (
-    select n.*, r.rule_id, r.role, r.source_grade, r.grade_rank
+, role_candidate as (
+    -- a conditional rule applies only where its condition holds; where it holds it wins over an unconditional rule
+    select n.accession, n.context_id, n.unit_key, n.number_index, r.rule_id, r.role, r.source_grade, r.grade_rank
+        , r.whole_coupon, r.condition_text is not null as conditional
     from number_row n
-    left join {{ ref('int_text_rate_rule') }} r
+    join {{ ref('int_text_rate_rule') }} r
         on r.action = 'rate_role' and r.cik = n.cik and r.table_signature = n.table_signature
         and r.header_signature = n.header_signature and r.shape = n.shape and r.number_index = n.number_index
+    where r.condition_text is null
+       or exists (
+            select 1 from {{ ref('int_text_cell') }} o
+            where o.accession = n.accession and o.row_index = n.row_index and o.table_index = n.table_index
+              and o.header_signature = r.condition_header_signature
+              and upper(trim(o.text)) = upper(trim(r.condition_text)))
+    qualify row_number() over (partition by n.accession, n.context_id, n.unit_key, n.number_index
+                               order by r.condition_text is null, r.rule_id) = 1
+)
+
+, number_read as (
+    select n.*, r.rule_id, r.role, r.source_grade, r.grade_rank, coalesce(r.whole_coupon, false) as whole_coupon
+        , r.conditional
+    from number_row n
+    left join role_candidate r
+        on r.accession = n.accession and r.context_id = n.context_id and r.unit_key = n.unit_key
+        and r.number_index = n.number_index
 )
 
 , number_out as (
@@ -78,6 +100,7 @@ with column_rule as (
         , case when rule_id is null then 'no_role_rule' else 'read' end as status
         , null::varchar as code_step
         , rule_id, source_grade, grade_rank
+        , whole_coupon and rule_id is not null as whole_coupon
     from number_read
 )
 

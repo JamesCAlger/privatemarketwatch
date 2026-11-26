@@ -397,8 +397,13 @@ vars:
     # Positions failing constraint 4 (legs) or 5 (base level) on the rule-read fields: 306, all c5 (section 6 lists them
     # by fund and rate). Rows are returned by the test, not hidden.
     int_text_rate_constraint_fail: 306
-    # Readings not applied because they break constraints 1 to 3: 102 position-fields (section 5).
-    int_text_rate_constraint_dropped: 102
+    # Readings not applied because they break constraints 1 to 3: 102 position-fields (section 5). Fix round 1 (lowered,
+    # rows named in the doc's fix round 1 section): 5 (Ares 1 spread with no code, Apollo 4 floors with no code); a
+    # printed code that no rule resolves now counts as a reference rate, and Blue Owl's N/A rows and BCRED [7bedc6] are
+    # read as fixed rates.
+    int_text_rate_constraint_dropped: 5
+    # Fix round 1: rows the fix 1a mechanism takes out of a check (leg d 8, base level 5, constraint 5 5), all Apollo: 18.
+    int_text_all_in_tag_is_leg: 18
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).

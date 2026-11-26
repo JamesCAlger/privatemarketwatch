@@ -14,7 +14,11 @@
 --                a number with no reference rate that equals the all-in rate is the rate itself, not a spread over a
 --                base. int_text_proposal_verdict then labels the role fixed_rate_pct.
 --   not_fixed    compared >= the minimum rows and the share is below the bar (the number is not the all-in rate).
---   too_few_rows 1 to 4 compared rows.
+--   fixed_rate_few_rows (fix round 1 item 8) 1 to 4 compared rows, every one equal: below the bar, so not accepted by
+--                the check, but the spread label is not kept either (owner item 11: no code and the number equals
+--                the all-in rate is a fixed rate). The hole it closes: before, a code-free number equal to the all-in
+--                tag on 4 of 4 rows kept its spread label, accepted by the spread tag that the filer files too.
+--   too_few_rows 1 to 4 compared rows, not all equal.
 --   no_check     no compared row (no all-in tag on any code-free position: a filer that tags none).
 -- label_changes: the verdict is fixed_rate and some order proposed a spread.
 -- The check never turns a cell with a code into a fixed rate: such cells are not in its scope (false-positive test in
@@ -79,12 +83,14 @@ select
     , s.equal
     , case
         when s.compared = 0 then 'no_check'
+        when s.compared < {{ var('text_verdict_confirm_min_rows') }} and s.equal = s.compared then 'fixed_rate_few_rows'
         when s.compared < {{ var('text_verdict_confirm_min_rows') }} then 'too_few_rows'
         when s.equal / s.compared >= {{ var('text_verdict_confirm_min_share') }} then 'fixed_rate'
         else 'not_fixed'
       end as verdict
-    , s.compared >= {{ var('text_verdict_confirm_min_rows') }}
-        and s.equal / s.compared >= {{ var('text_verdict_confirm_min_share') }}
+    , ((s.compared >= {{ var('text_verdict_confirm_min_rows') }}
+        and s.equal / s.compared >= {{ var('text_verdict_confirm_min_share') }})
+       or (s.compared between 1 and {{ var('text_verdict_confirm_min_rows') }} - 1 and s.equal = s.compared))
         and (s.role_fwd in ('spread_bps', 'spread_pct') or s.role_rev in ('spread_bps', 'spread_pct')) as label_changes
 from summed s
 left join {{ ref('int_text_column_unit') }} u on u.unit_key = s.unit_key

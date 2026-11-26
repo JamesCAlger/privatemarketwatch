@@ -158,19 +158,29 @@ A4 (all-in = cash + PIK): 0 rows; no position reads a cash rate. A5 (implied bas
 | Apollo | 0 | 0 | - | no all-in 7,142; PIK 228; all-in tag equal to the spread or floor 5 (fix 1a); no spread 5 |
 | HPS | 5,666 | 18 | SOFR 15, BBSW 2, SONIA 1 | PIK 717; BSBY and SORA no series 15; no all-in 54; EURIBOR window empty 30 |
 
-The SOFR and LIBOR failures sit mostly in 2022 (term SOFR above overnight SOFR during the hikes, phase 2 section 4.3);
-not traced row by row here. The test lists every failing row with its rules.
+By year (`review_p3_r2_c5.sql`, after fix round 1): 168 of the 306 failures are in 2022 (Ares 67, BCRED 101), where
+term SOFR ran above overnight SOFR during the hikes (phase 2 section 4.3) and every series moved together. The 64 SOFR
+failures in 2024 to 2026 (Ares 11, BCRED 41, HPS 12) are not explained; they were not traced row by row. The test lists
+every failing row with its rules.
 
 ## 7. Comparison with production (published positions both sides hold; `q_t3_vs_production.sql`, `_detail.sql`, `q_t3_production_only.sql`, `q_t3_fixed_vs_production.sql`)
+
+Regenerated from the database after fix round 1 (`scratch/2026-11-26_text_slice_r3/fix1/q_t3_vs_production.tsv`); the
+first version of this table did not reproduce (BCRED reference rate and spread, Blue Owl reference rate and spread).
 
 | Fund | Field | Same | Differ | New only | Production only |
 |---|---|---:|---:|---:|---:|
 | Ares | reference rate | 12,383 | 3 | 379 | 0 |
-| Ares | spread / all-in / PIK | 12,759 / 12,772 / 2,603 | 0 / 0 / 0 | 3 / 18 / 1 | 4 / 310 / 24 |
-| BCRED | reference rate / spread / all-in / PIK | 13,884 / 13,882 / 14,379 / 923 | 0 / 0 / 9 / 0 | 0 / 0 / 3 / 0 | 22 / 35 / 4 / 3 |
-| Blue Owl | reference rate / spread / all-in / PIK | 6,835 / 6,328 / 19 / 591 | 4 / 138 / 0 / 0 | 0 | 18 / 368 / 87 / 135 |
-| Apollo | reference rate / spread / all-in / PIK | 6,660 / 6,489 / 277 / 241 | 15 / 14 / 0 / 0 | 0 | 4 / 176 / 69 / 30 |
-| HPS | reference rate / spread / all-in / PIK | 6,384 / 6,206 / 6,480 / 695 | 10 / 0 / 0 / 0 | 0 | 18 / 208 / 62 / 188 |
+| Ares | spread / all-in / PIK | 12,759 / 13,080 / 2,603 | 0 / 0 / 0 | 3 / 1,148 / 1 | 4 / 2 / 24 |
+| BCRED | reference rate / spread / all-in / PIK | 13,874 / 13,894 / 14,380 / 923 | 0 / 0 / 9 / 0 | 0 / 0 / 3 / 0 | 22 / 13 / 3 / 3 |
+| Blue Owl | reference rate / spread / all-in / PIK | 6,830 / 6,331 / 36 / 591 | 4 / 138 / 0 / 0 | 0 / 0 / 1 / 0 | 18 / 350 / 70 / 135 |
+| Apollo | reference rate / spread / all-in / PIK | 6,660 / 6,493 / 277 / 241 | 15 / 14 / 0 / 0 | 0 | 4 / 172 / 69 / 30 |
+| HPS | reference rate / spread / all-in / PIK | 6,384 / 6,224 / 6,480 / 695 | 10 / 0 / 0 / 0 | 0 | 18 / 190 / 62 / 188 |
+
+Ares all-in new only 1,148 (fix round 1): whole-coupon PIK readings ("10.00% PIK" in "Coupon", owner item 9) on rows
+where production holds no rate. Phase 4 measured 838 Ares PIK-only rows of preferred stock, common equity or a fund
+(production: no rate); these are likely the same rows, not checked row by row. Whether a PIK dividend on preferred
+stock is an "all-in rate" is a class question (slice C), open for the owner.
 
 Causes, every class of difference:
 
@@ -182,35 +192,37 @@ Causes, every class of difference:
 | Ares "CAD Base Rate" (production SOFR) 2, "Euribor (M)" (production SOFR) 1 | 3 | The cell prints the name; production's value is its guess (not traced) |
 | Blue Owl SR -> SOFR, production LIBOR | 4 | Not traced; the SR=SOFR rule is carried from the fund's one 2024-12-31 legend (item 2) |
 | BCRED all-in, printed_wins rule | 9 | Production holds the shifted tag (the neighbour's rate); here the printed rate (owner, BCRED 2022-09-30) |
-| Blue Owl spread 138, Apollo spread 14 | 152 | Production's spread is cash margin plus PIK margin (its `cash_plus_pik` reading, phase 4 `printed_total_margin_not_read`); here the spread is the cash margin and the PIK margin is the PIK spread |
+| Blue Owl spread 138, Apollo spread 14 | 152 | Production's spread equals this layer's spread plus the PIK number, on all 152 (`review_p3_r2_spread_diff.sql`). That PIK number is read here as `pik_rate`, not `pik_spread`: Blue Owl's "PIK" column cells ("#%") and Apollo's "... Cash plus #% PIK" carry the role pik_rate_pct. The spread tag is absent on all 152. Production sums them by its `cash_plus_pik` reading. Open owner questions: does "spread" include the PIK margin; is a PIK margin printed beside a reference rate a PIK spread or a PIK rate. No label changed without evidence |
 | Apollo "Cash plus PIK" read two ways | - | Those shapes ("#% Cash plus #% PIK" 1, "...Floor" 4) stay unread here (unstable); production's two readings are not reproduced |
 | Production fixed rates also held as a spread | BCRED 11, HPS 6 | Rules read them as fixed rates (rate type fixed, no spread); production holds the same number as basis_spread too (HPS 6 also coupon type floating). Production holds the other 361 + 67 + 19 + 276 fixed rates with no spread |
 | Rate type floating, production empty | Blue Owl 122, HPS 89, Ares 4 | Code plus PIK spread ("E + 7.00% PIK"): floating here; production sets no coupon type |
 | Rate type, other | Ares 3 (floating vs fixed), HPS 4 (floating vs fixed), Apollo 1 (fixed vs empty) | Not traced |
-| Production only: all-in where this layer reads only a PIK rate | Ares 307, Blue Owl 70, Apollo 53, HPS 62, BCRED 4 | PIK-only coupons ("10.50% PIK"): production reads the coupon as the rate (phase 4 `printed_rate_type_and_loan_class_not_read`); no accepted rule says a PIK-only number is the all-in rate |
+| Production only: all-in where this layer reads only a PIK rate | Blue Owl 70, Apollo 53, HPS 62, BCRED 3 (Ares 0 since fix round 1: whole coupon) | PIK-only coupons ("10.50% PIK"): production reads the coupon as the rate (phase 4 `printed_rate_type_and_loan_class_not_read`); no accepted rule says a PIK-only number is the all-in rate |
 | Production only: PIK where this layer reads a PIK spread | HPS 115, Blue Owl 120, BCRED 2 | Same number, labelled PIK spread here ("SF + 7.75% PIK") and PIK rate in production |
 | Production only: spread where this layer reads a PIK spread | HPS 184, Blue Owl 107, BCRED 2 | Production reads the PIK margin as the spread (its `margin_from_pik`) |
-| Production only: dropped by constraint 1 | 64 | Section 5 |
-| Production only: reference rate | 80 | Codes left unread here (two-name legends, not carried, item 4 letters) |
-| Production only: other | Blue Owl spread 242, Apollo spread 170, Apollo PIK 30, HPS PIK 73, others under 20 | Mostly shapes whose spread role was not accepted (section 4); not traced row by row |
+| Production only: dropped by constraint 1 | 1 | Section 5 and fix round 1 (was 64) |
+| Production only: reference rate | 62 | Codes left unread here, status code_undecided (two-name legends, not carried, item 4 letters) |
+| Production only: other | Blue Owl spread 243, Apollo spread 170, Apollo PIK 30, HPS PIK 73, others under 20 | Mostly shapes whose spread role was not accepted (section 4); not traced row by row |
 
 ## 8. Rates this layer leaves unread that production holds (`q_t3_unread_now_read.sql`)
 
-The brief's figure, 1,772 (text_fields.md, 2026-11-25), could not be reproduced from today's `cmp_rate`. Today's count
-of rows with outcome new_empty on interest_rate, cash leg, PIK rate and spread, both bases: 1,552.
+The figure 1,772 (text_fields.md, 2026-11-25) cannot be traced to any query. This section uses `cmp_rate`: 1,552 rows
+(1,407 distinct positions) with outcome new_empty on interest_rate, cash leg, PIK rate and spread, both bases. Numbers
+after fix round 1:
 
 | Field | Unread | Now read | Equal to production | Differ |
 |---|---:|---:|---:|---:|
-| interest_rate | 607 | 125 | 125 | 0 |
+| interest_rate | 606 | 416 | 416 | 0 |
 | interest_rate_cash | 145 | 0 | 0 | 0 |
 | pik_rate | 9 | 8 | 8 | 0 |
 | spread | 792 | 189 | 37 | 152 |
-| Total | 1,552 | 322 | 170 | 152 |
+| Total | 1,552 | 613 | 461 | 152 |
 
-Read now: BCRED fixed coupons (71 + 7 unpublished), Blue Owl fixed coupons (19), Apollo label-only rates (21 all-in, 8
-PIK, 16 spreads), HPS 5, Ares 2. The 152 that differ are all `printed_total_margin_not_read`: production sums the cash
-and PIK margins, here the cash margin is the spread (section 7). Not read: PIK-only coupons (406 rows, need the row class
-and the printed rate type: slice C), cash legs (no accepted rule reads one), Blue Owl PIK margins (199).
+Read now: Ares whole-coupon PIK coupons (273, fix round 1), BCRED fixed coupons (72 + 7 unpublished), Blue Owl fixed
+coupons (36: 19 as before and 17 of the 21 "Ref. Rate N/A" rows read as fixed since fix round 1), Apollo label-only rates (21 all-in, 8 PIK, 16 spreads), HPS 5, Ares 2 others.
+The 152 that differ are all `printed_total_margin_not_read` (section 7). Not read: PIK-only coupons of Blue Owl 70 and
+HPS 62 (no whole-coupon rule there; need the row class: slice C), cash legs (no accepted rule reads one), Blue Owl PIK
+margins (199). (The first version of this table said 607 interest-rate rows; the count is 606.)
 
 ## 9. Row corrections against the rules (`q_t3_corrections.sql`)
 
@@ -290,3 +302,53 @@ Results (2026-11-26):
 - Which dollar rate a code is where the legend is silent (item 1 self-named codes and item 4 letters rest on the owner).
 - Blue Owl and Apollo: no all-in rate, so constraint 5 tests nothing there.
 - Why production holds Blue Owl SR as LIBOR on 4 positions, and the 8 rate-type differences labelled not traced.
+
+## 14. Fix round 1 (review of 553600d4, 2026-11-26)
+
+Reviewer queries `scripts/text/review_p3_r2_*.sql` (not committed). This section holds where it disagrees with sections
+1 to 13; sections 7 and 8 and the constraint-5 paragraph of section 6 were regenerated in place. Still nothing
+published, no page read; a pass is consistency with the filer's tags, legend or public series, not correctness.
+Controller rulings below were made under the owner's items, recorded as such.
+
+| # | Item | Before | After |
+|---|---|---|---|
+| 1 | Constraint 1 with a printed code no rule resolves | 64 spreads dropped (`code_printed_unread`: BCRED 23, Blue Owl 18, Apollo 5, HPS 18), all equal to the spread tag | A printed code (read or not; "Equity plus" and "Variable" are not codes) counts as a reference rate for constraints 1 and 2; those spreads are read; the reference rate stays unread, status `code_undecided`, `reference_rate_detail` the cell status (BCRED 23, Blue Owl 18, Apollo 5, HPS 18). Readings dropped in all: 102 -> 5 |
+| 2 | Fix 1a in the base-level check | 25 rows excluded (Apollo 5, BCRED 18, Ares 2) | Excluded only where no printed all-in rate agrees with the tag: 5 (Apollo). The 20 BCRED and Ares rows are tested again (17 zero-base rows, 3 LIBOR contradictions); no proposal verdict changed. Identity d already used the tag only where no all-in rate is printed (unchanged, 8). New baseline `baseline_int_text_all_in_tag_is_leg` lists every excluded row: 18 (d 8, base level 5, constraint 5 5) |
+| 3 | Ares "Coupon" printed "#% PIK" (owner item 9; controller ruling) | read as PIK rate only | Rule flag `whole_coupon`: the number is the all-in rate and the PIK rate; no cash rate written; `all_in_source` pik_coupon on 1,544 positions. Constraint 4 extended: with no cash rate read, the implied cash leg (all-in less PIK) must not be negative. Before 0 rows; after 4,310 rows, 0 fail (Ares 1,250 implied cash + 1,543 whole coupon, BCRED 908, HPS 608, Apollo 1). A whole-coupon row passes by construction; the test bites on the 2,767 rows printing an all-in rate and a separate PIK rate |
+| 4 | Legend against the dated code table (owner item 3) | no test | `tests/text_legend_disagrees_with_code_table.sql`, error severity: 0 rows. The generator now refuses to write (exit 2, lists the entries) when a new legend contradicts an existing dated entry, unless rerun with `--accept-legend-change`. That refusal path was not exercised: no contradiction exists today |
+| 5 | Grade of the 9 BCRED printed_wins values | checked | owner (the printed_wins rule's grade) |
+| 6 | Unread baseline | ceiling on 41 groups only | Seed `text_rate_unread_cap` (unit, shape, status, positions; written by `q_t3_unread_cap.sql`) and test `int_text_rate_unread_within_cap`: a group that grows or is new fails |
+| 7 | Blue Owl "Cash" number where "Ref. Rate" prints N/A (owner item 11, Blue Owl ruling; controller ruling) | 21 spreads dropped by constraint 1 | Conditional rule (condition column "Ref. Rate", text N/A): fixed rate, grade untested, no spread. Blue Owl fixed rates 19 -> 40 |
+| 8 | BCRED [7bedc6] "#%" | spread rule, checked (5 positions; the spread tag matched 5 of 5, the all-in tag 4 of 4) | Fixed rate, grade matches_few_rows. How the check missed it: the fixed-rate check confirmed only at 5 rows, so below the bar the old spread label stood, accepted by the spread tag the filer also files. Closed generally: new verdict `fixed_rate_few_rows` (1 to 4 compared rows, every one equal to the all-in tag) relabels the role fixed_rate_pct (verdict needs_owner, too few rows) and the generator grades it matches_few_rows (items 11 and 7). BCRED fixed 478 -> 483; BCRED rate_role rules checked 69 -> 68, matches_few_rows 34 -> 35 |
+| 9 | Apollo "#% Cash plus #% PIK, #% Floor" | its floor ruled, then dropped by constraint 2 | No rule for any role of a shape with an unstable or contradicted role; listed unread. Apollo rate_role untested 54 -> 53; Apollo floors held 11 -> 4 |
+| 10 | K3 held values | a count only | `int_text_rate_held`: (position, field, value, rule, constraint): 5 rows (Ares 1 spread "8.00%" with no code; Apollo 4 floors on rows with no code, e.g. "12.50% (includes 6.25% PIK), 1.00% Floor") |
+| 11 | K4 findings | none | `int_text_rate_finding`: one row per (fund, constraint, rule), id = first 16 hex of md5(cik, constraint, rule id), with positions, dates and an example. 58 findings: Ares 8 (A1 1, c5 7), BCRED 41 (c5), Apollo 2 (A2), HPS 7 (c5). Unique id tested. Stability across two runs is NOT tested: the CI fixture has no rate-text rules, so its finding table is empty; the id is a pure hash of its three inputs |
+| 12 | Section 7 table | did not reproduce | regenerated from the database |
+| 13 | The 152 spread differences | "PIK margin is the PIK spread" | Production = spread + the PIK number on all 152; the number is read as `pik_rate` here. Two open owner questions in section 7 |
+| 14 | Constraint 5 "mostly 2022" | unquantified | 168 of 306 in 2022 (after fix round 1); the 64 SOFR failures 2024 to 2026 are not explained |
+| 15 | Rare shapes with no tagged row | owner sheet: 2 shapes, 5 positions | At 553600d4: 3 shapes, 7 positions. After item 9: 2 shapes, 5 positions (Apollo "Equity plus #% PIK" 2 and "Equity plus #% PIK, #% Floor" 3) |
+| 16 | The 1,772 figure | "could not be reproduced" | Cannot be traced; 1,552 (1,407 positions) used |
+
+Headline counts after fix round 1 (all positions; section 3 numbers before):
+
+| Measure | Before | After |
+|---|---:|---:|
+| Readings not applied (constraints 1 to 3) | 102 | 5 |
+| Reference rates `code_undecided` | (counted as not printed) | 64 |
+| Spreads read, BCRED / Blue Owl / Apollo / HPS | 22,640 / 8,254 / 7,185 / 6,294 | 22,663 / 8,272 / 7,190 / 6,312 |
+| Fixed rates, BCRED / Blue Owl | 478 / 19 | 483 / 40 |
+| Ares all-in rates read | 13,687 | 15,231 |
+| Constraint 4 rows (fail) | 0 (0) | 4,310 (0) |
+| Constraint 5 failures | 306 | 306 |
+| Rates production holds and this layer left unread, now read (equal / differ) | 322 (170 / 152) | 613 (461 / 152) |
+| Unread groups | 41 | 41 |
+| Findings | - | 58 |
+
+Results (fix round 1):
+
+- Full build (`--threads 2`, log `scratch/2026-11-26_text_slice_r3/full_build_fix1.log`): `PASS=1152 WARN=130 ERROR=0
+  TOTAL=1282`.
+- pytests: 181 passed (a first run failed `test_no_fund_names_in_sql` on two comments that named funds; fixed, rerun
+  181 passed).
+- CI fixture: step 4 `PASS=3`; build `PASS=745 WARN=5 ERROR=0 TOTAL=750`; empty run `PASS=2`; unit-test and drift step
+  `PASS=75`.
