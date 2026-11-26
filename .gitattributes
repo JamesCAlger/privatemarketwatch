@@ -8,3 +8,6 @@ data/overrides/**/_retired_*.json -text
 data/overrides/**/_retired_*.review.json !text
 # Text slice R: the SOFR seed copy, its sha256 recorded in warehouse/dbt_project.yml (sofr_seed_sha256).
 warehouse/seeds/sofr_90day_avg.csv -text
+# Text slice R phase 2: the base-rate seeds, sha256 recorded in warehouse/dbt_project.yml (base_rate_*_sha256).
+warehouse/seeds/base_rate_fred.csv -text
+warehouse/seeds/base_rate_series.csv -text

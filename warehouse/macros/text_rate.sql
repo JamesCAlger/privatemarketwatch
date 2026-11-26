@@ -38,3 +38,31 @@ regexp_matches(coalesce({{ expr }}, ''), '\d\s*%|[A-Za-z]\s*\+')
 {% macro text_numbers(expr) -%}
 list_transform(regexp_extract_all(coalesce({{ expr }}, ''), '\d+(?:,\d{3})*(?:\.\d+)?|\.\d+'), x -> try_cast(replace(x, ',', '') as double))
 {%- endmacro %}
+
+{#- Text slice R phase 2. The base-rate name a rate's printed name or abbreviation stands for, in the rate_name
+    vocabulary of seed base_rate_series; null when it maps to none. The same rules, in the same order, as NAME_RULES of
+    scripts/text/proposals_to_seeds.py (first match wins, upper-cased text searched): Canadian prime maps to none (no
+    series); CDOR to CORRA and BBSY to BBSW (their only series is the same OECD proxy); then BKBM, SOFR, SONIA, EURIBOR,
+    STIBOR, SARON, NIBOR, TONA (TONAR), KORIBOR, FEDFUNDS, LIBOR, PRIME. "Secured Overnight Financing Rate" gives SOFR,
+    "Norwegian Interbank Offered Rate" NIBOR, "Bloomberg Short Term Bank Yield Index" null. -#}
+{% macro base_rate_name(expr) -%}
+case
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'CANADIAN PRIME|CAD PRIME|CAD BASE RATE|CANADIAN BASE') then null
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'CDOR|CANADIAN DOLLAR OFFERED') then 'CORRA'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'CORRA|CANADIAN OVERNIGHT REPO') then 'CORRA'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'BBSY|BANK BILL SWAP BID') then 'BBSW'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'BBSW|BANK BILL SWAP') then 'BBSW'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'BKBM|BANK BILL BENCHMARK|NEW ZEALAND BANK BILL') then 'BKBM'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'SOFR|SECURED OVERNIGHT FINANCING') then 'SOFR'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'SONIA|STERLING OVERNIGHT') then 'SONIA'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'EURIBOR|EURO INTERBANK') then 'EURIBOR'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'STIBOR|STOCKHOLM INTERBANK') then 'STIBOR'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'SARON|SWISS AVERAGE RATE OVERNIGHT') then 'SARON'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'NIBOR|NORWEGIAN INTERBANK') then 'NIBOR'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'TONAR|TONA|TOKYO OVERNIGHT') then 'TONA'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'KORIBOR|KOREA INTERBANK|KOREAN INTERBANK') then 'KORIBOR'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'FEDERAL FUNDS|FED FUNDS|FEDFUNDS') then 'FEDFUNDS'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'LIBOR|LONDON INTERBANK') then 'LIBOR'
+    when regexp_matches(upper(coalesce({{ expr }}, '')), 'PRIME') then 'PRIME'
+end
+{%- endmacro %}
