@@ -11,6 +11,6 @@ select '4 prefix moved', t.cik, cc.text, count(*), min(cc.zone_signature || ' ->
 from int_page_cell_column cc join int_page_table t using (accession, table_index)
 where cc.column_rule = 'prefix_of_next' and cc.zone_signature is distinct from cc.header_signature group by 1, 2, 3
 union all
-select '5 heading depth', p.cik, ph.heading_depth::varchar, count(*), min(ph.text)
+select '5 heading depth', p.cik, ph.heading_level::varchar, count(*), min(ph.text)
 from int_position_heading ph join int_page_position p using (accession, context_id) where p.is_published group by 1, 2, 3
 order by 1, 2, 3

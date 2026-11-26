@@ -33,3 +33,13 @@ case
     else 'text'
 end
 {%- endmacro %}
+
+{#- A heading's key for its level (int_page_heading, fix round 2): lower case; the word 'continued' removed with any
+    brackets around it ('(continued)', '- continued' leaves '- '); bracketed marks of 1 to 3 letters or digits ('(1)',
+    '(a)') removed; then every white space removed. "Equity (continued)" and "Equity" give "equity". -#}
+{% macro page_heading_key(expr) -%}
+regexp_replace(
+    regexp_replace(regexp_replace(lower(coalesce({{ expr }}, '')), '\(?\s*continued\s*\)?', '', 'g'),
+                   '\(\s*[a-z0-9]{1,3}\s*\)', '', 'g'),
+    '[\s\x{00A0}]', '', 'g')
+{%- endmacro %}

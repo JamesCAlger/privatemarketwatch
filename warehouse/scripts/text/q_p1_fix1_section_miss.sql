@@ -11,7 +11,7 @@ with miss as (
                       and lower(ph.text) like '%controlled%')
 )
 select m.cik, m.accession, count(*) as n, min(m.row_index) as first_row
-    , (select string_agg(ph.heading_depth || ':' || left(ph.text, 40), ' | ' order by ph.heading_depth)
+    , (select string_agg(ph.heading_level || ':' || left(ph.text, 40), ' | ' order by ph.heading_level)
        from int_position_heading ph where ph.accession = m.accession and ph.context_id = min(m.context_id)) as kept
     , (select string_agg(h.row_index || ' d' || h.depth_from_bottom || ' L' || h.run_length || ':' || left(h.text, 45), ' | ' order by h.row_index desc)
        from int_page_heading h where h.accession = m.accession and h.row_index < min(m.row_index) and h.row_index > min(m.row_index) - 120) as above

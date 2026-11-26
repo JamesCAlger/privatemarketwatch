@@ -29,5 +29,5 @@ union all
 select 'int_page_heading', accession || '|' || row_index, count(*)
 from {{ ref('int_page_heading') }} group by 1, 2 having count(*) > 1
 union all
-select 'int_position_heading', accession || '|' || context_id || '|' || heading_depth, count(*)
+select 'int_position_heading', accession || '|' || context_id || '|' || heading_level, count(*)
 from {{ ref('int_position_heading') }} group by 1, 2 having count(*) > 1

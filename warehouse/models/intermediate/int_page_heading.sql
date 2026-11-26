@@ -16,8 +16,20 @@
 --   run_length            heading rows in the run.
 --   run_position          1 for the run's first (top) heading, up to run_length.
 --   depth_from_bottom     run_length - run_position: 0 for the heading directly above the rows that follow, 1 for the
---                         one above it, and so on. A structural count, not a level: a run of one is depth 0 whatever
---                         its text says.
+--                         one above it, and so on. A feature, not the level.
+-- Level (fix round 2), still no meaning:
+--   norm_text             macro page_heading_key: lower case, the word 'continued' (with brackets around it if any),
+--                         bracketed marks of 1 to 3 letters or digits and all white space removed.
+--   is_page_top_run       the run's first heading is the first data row of its table, and that table is not the first
+--                         table of the schedule (the run sits directly under a repeated header at a page top).
+--   is_continuation       the text contains 'continued', or the heading is in a page-top run and its norm_text appeared
+--                         earlier in the same schedule (a repeat of the running stack).
+--   level                 the most frequent depth_from_bottom of the heading's norm_text in its schedule (the filing's
+--                         schedules are counted apart: a joint venture's schedule has fewer levels, and mixing them
+--                         gave the fund's 'First Lien Debt' the joint venture's level), counting only occurrences that
+--                         are not continuations; ties go to the larger depth. A norm_text seen only as continuations
+--                         takes the depth of its first occurrence in the schedule (its own depth when it is the first). So 'Equity (continued)' and 'Equity' share one level, and a page-top repeat
+--                         that drops a level keeps each heading at the level its text has elsewhere.
 -- Plain features, not a classification:
 --   is_continued          the lowercased text contains 'continued'.
 --   next_row_kind         the next row of the same table that has a non-empty cell: heading (a heading row),
@@ -80,6 +92,8 @@ with header_table as (
         , sum(case when k.is_heading then 0 else 1 end) over (
             partition by k.accession, k.schedule_seq order by k.row_index rows between unbounded preceding and current row)
             as run_group
+        , min(k.row_in_table) over (partition by k.accession, k.table_index) as table_first_data_row
+        , min(k.table_index) over (partition by k.accession, k.schedule_seq) as schedule_first_table
     from kinded k
 )
 
@@ -93,13 +107,59 @@ with header_table as (
         , w.col_start
         , w.first_text as text
         , w.next_row_kind
-        , count(*) over (partition by w.accession, w.schedule_seq, w.run_group) as run_length
-        , row_number() over (partition by w.accession, w.schedule_seq, w.run_group order by w.row_index) as run_position
+        , w.table_first_data_row
+        , w.schedule_first_table
+        , count(*) over run as run_length
+        , row_number() over (run order by w.row_index) as run_position
+        , first_value(w.row_in_table) over (run order by w.row_index) as run_start_row_in_table
+        , first_value(w.table_index) over (run order by w.row_index) as run_start_table
+        , first_value(w.table_first_data_row) over (run order by w.row_index) as run_start_table_first_data_row
         , h.cik
         , h.report_date
     from with_run w
     join header_table h on h.accession = w.accession and h.table_index = w.table_index
     where w.is_heading
+    window run as (partition by w.accession, w.schedule_seq, w.run_group)
+)
+
+, featured as (
+    select
+        h.*
+        , h.run_length - h.run_position as depth_from_bottom
+        , strpos(lower(h.text), 'continued') > 0 as is_continued
+        , {{ page_heading_key('h.text') }} as norm_text
+        , h.run_start_row_in_table = h.run_start_table_first_data_row and h.run_start_table <> h.schedule_first_table
+            as is_page_top_run
+    from heading h
+)
+
+, continued as (
+    select
+        f.*
+        , f.is_continued
+            or (f.is_page_top_run and row_number() over (
+                partition by f.accession, f.schedule_seq, f.norm_text order by f.row_index) > 1)
+            as is_continuation
+    from featured f
+)
+
+, text_level as (
+    -- the most frequent depth of each normalised text in the schedule over occurrences that are not continuations;
+    -- ties go to the larger depth
+    select accession, schedule_seq, norm_text, depth_from_bottom as level
+    from (
+        select accession, schedule_seq, norm_text, depth_from_bottom, count(*) as n
+        from continued
+        where not is_continuation
+        group by 1, 2, 3, 4
+    )
+    qualify row_number() over (partition by accession, schedule_seq, norm_text order by n desc, depth_from_bottom desc) = 1
+)
+
+, first_depth as (
+    select accession, schedule_seq, norm_text, arg_min(depth_from_bottom, row_index) as first_depth
+    from continued
+    group by 1, 2, 3
 )
 
 , filing_order as (
@@ -114,24 +174,30 @@ with header_table as (
 )
 
 select
-    h.accession
-    , h.row_index
-    , h.table_index
-    , h.row_in_table
-    , h.cik
-    , h.report_date
-    , h.schedule_seq
-    , h.col_start
-    , h.text
-    , h.run_length
-    , h.run_position
-    , h.run_length - h.run_position as depth_from_bottom
-    , strpos(lower(h.text), 'continued') > 0 as is_continued
-    , h.next_row_kind
+    c.accession
+    , c.row_index
+    , c.table_index
+    , c.row_in_table
+    , c.cik
+    , c.report_date
+    , c.schedule_seq
+    , c.col_start
+    , c.text
+    , c.norm_text
+    , c.run_length
+    , c.run_position
+    , c.depth_from_bottom
+    , c.is_page_top_run
+    , c.is_continuation
+    , coalesce(tl.level, fd.first_depth) as level
+    , c.is_continued
+    , c.next_row_kind
     , case
         when f.filing_seq = 1 then null
         else pt.text is not null
     end as seen_in_prior_filing
-from heading h
-join filing_order f on f.accession = h.accession
-left join filing_text pt on pt.cik = h.cik and pt.filing_seq = f.filing_seq - 1 and pt.text = h.text
+from continued c
+join filing_order f on f.accession = c.accession
+left join text_level tl on tl.accession = c.accession and tl.schedule_seq = c.schedule_seq and tl.norm_text = c.norm_text
+left join first_depth fd on fd.accession = c.accession and fd.schedule_seq = c.schedule_seq and fd.norm_text = c.norm_text
+left join filing_text pt on pt.cik = c.cik and pt.filing_seq = f.filing_seq - 1 and pt.text = c.text

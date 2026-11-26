@@ -11,8 +11,8 @@ with p as (
 , d as (
     select p.*, d0.heading_row_index as d0_row, d1.heading_row_index as d1_row
     from p
-    left join int_position_heading d0 on d0.accession = p.accession and d0.context_id = p.context_id and d0.heading_depth = 0
-    left join int_position_heading d1 on d1.accession = p.accession and d1.context_id = p.context_id and d1.heading_depth = 1
+    left join int_position_heading d0 on d0.accession = p.accession and d0.context_id = p.context_id and d0.heading_level = 0
+    left join int_position_heading d1 on d1.accession = p.accession and d1.context_id = p.context_id and d1.heading_level = 1
 )
 select cik, count(*) as positions, count(d1_row) as with_depth_1
     , count(*) filter (where d1_row is not null and exists (

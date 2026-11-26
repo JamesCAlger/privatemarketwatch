@@ -295,6 +295,9 @@ vars:
     # Fix round 1: placed field facts given no column (row width not the table's): 36, Blue Owl 0001812554-26-000060
     # total rows (cost, fair value, share of net assets, 12 each, 4 tables). Before the fix they sat under wrong headers.
     int_page_field_fact_no_column: 36
+    # Fix round 2: published positions whose level-1 and level-2 headings both name 'controlled' or 'affiliated' with
+    # different texts (a sibling section kept as a parent): 23 (Blue Owl 10, HPS 9, BCRED 4). Not structurally fixable.
+    int_position_heading_sibling_sections: 23
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).

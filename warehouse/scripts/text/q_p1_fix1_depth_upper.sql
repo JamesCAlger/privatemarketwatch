@@ -9,7 +9,7 @@ with upper_text as (
     select p.cik, p.accession, p.context_id, p.row_index, s.schedule_seq, d1.heading_row_index as d1_row, d1.text as d1_text
     from int_page_position p
     join int_page_schedule s using (accession, table_index)
-    join int_position_heading d1 on d1.accession = p.accession and d1.context_id = p.context_id and d1.heading_depth = 1
+    join int_position_heading d1 on d1.accession = p.accession and d1.context_id = p.context_id and d1.heading_level = 1
     where p.is_published and p.placement_status = 'one_row'
 )
 , hit as (
