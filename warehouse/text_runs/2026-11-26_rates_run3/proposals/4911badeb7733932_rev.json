@@ -1,0 +1,76 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "L+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "C+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "L+#% (incl. #% PIK)",
+   "roles": [
+    "spread_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "L+#% PIK",
+   "roles": [
+    "pik_spread_pct"
+   ]
+  },
+  {
+   "shape": "SORF+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "L",
+   "reference_rate": "LIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "C",
+   "reference_rate": "CDOR",
+   "basis": "legend",
+   "note": "Legend defines C as Canadian Dollar Offered Rate."
+  },
+  {
+   "code": "SORF",
+   "reference_rate": "SOFR",
+   "basis": "common_usage",
+   "note": "Likely a typo for SOFR; not in legend."
+  }
+ ],
+ "note": "The column holds a reference-rate code plus spread, or a bare fixed rate for fixed-rate loans. The spread tag matches n1 on every L, SOFR and C row. For the bare '#%' rows the spread tag also equals n1, and so do the interest_rate and cash-rate tags, so a fixed rate is the safest reading. The 'L+#% PIK' shape is tagged as pik_rate, but because it carries a reference rate I treated it as a PIK spread."
+}

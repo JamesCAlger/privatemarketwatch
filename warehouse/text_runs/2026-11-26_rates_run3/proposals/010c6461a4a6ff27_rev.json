@@ -1,0 +1,14 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The Ref. Rate column holds 'S+' and this column prints only the number. Its tagged field is spread, and n1 equals the tagged spread on all 1682 compared rows. The header says 'Cash', but the tags show the value is the spread over the reference rate."
+}

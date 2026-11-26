@@ -1,0 +1,13 @@
+COLUMN ORDERS DIFFER 0dd66cba8d2b8641 Interest rate_terms spread
+confirmed     shapes  141  rows  104732   80.6%
+untested      shapes   80  rows    6687    5.1%
+no_number     shapes   57  rows   18385   14.2%
+unstable      shapes    6  rows      79    0.1%
+contradicted  shapes    0  rows       0    0.0%
+by column kind (rows):
+  all_in_rate          {'confirmed': 45399, 'untested': 17}
+  pct_of_net_assets    {'untested': 5730, 'no_number': 299}
+  pik_spread_or_rate   {'confirmed': 394}
+  rate_terms           {'confirmed': 42280, 'untested': 939, 'unstable': 79, 'no_number': 786}
+  reference_rate_code  {'no_number': 17300}
+  spread               {'confirmed': 16659, 'untested': 1}

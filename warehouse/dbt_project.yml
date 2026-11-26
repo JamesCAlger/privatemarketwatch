@@ -41,6 +41,71 @@ vars:
   # rate tags, in percentage points. Float rounding only: the legs are fractions times 100 in double precision (error
   # near 1e-15); 1e-9 is far above that and far below the smallest printed rate step (0.01).
   rate_legs_tolerance: 1.0e-9
+  # Text slice R phase 1 (2026-11-26). A column is a rate candidate when at least this share of its non-empty
+  # position-row texts look like rate text (int_text_column_unit, rule (c)).
+  text_rate_candidate_share: 0.2
+  # The SOFR level measurement (int_text_measure_sofr_level, measurement only since fix round 1): a SOFR value older
+  # than this many days before the report date is not used (same limit as fx_max_age_days); a row passes when
+  # abs(spread + base - all-in) is at most the tolerance in percentage points (spine section 10).
+  text_sofr_max_age_days: 7
+  text_spread_base_tolerance: 0.25
+  # Fix round 1. The cluster test (int_text_check_base_cluster_group): implied bases rounded to the step give up to
+  # max_centres centres; a row is in a cluster within radius (percentage points) of the nearest centre. A group with at
+  # least min_rows usable rows passes when its within share is at least min_share (bar set from the measured
+  # distribution, docs/baseline_text_rates_phase1_2026-11-26.md section 5). sofr_bound: measurement only.
+  text_cluster_centre_step: 0.05
+  text_cluster_max_centres: 3
+  text_cluster_radius: 0.30
+  text_cluster_min_rows: 10
+  text_cluster_min_share: 0.9
+  text_cluster_sofr_bound: 1.0
+  # Fix round 1. int_text_worklist: a unit is covered when at least this share of its positions is read by rules that
+  # pass a check in their own quarter.
+  text_covered_min_share: 0.95
+  # Fix round 1. sha256 of seeds/sofr_90day_avg.csv as text with CRLF read as LF (tests/seed_sofr_hash_matches.sql).
+  sofr_seed_file: "seeds/sofr_90day_avg.csv"
+  sofr_seed_sha256: "1fc3e109da22cd8ebea9b74ed84d9be34dc237781892364d98da5711ee0bde45"
+  # Text slice R phase 2. sha256 of the two base-rate seeds as text with CRLF read as LF
+  # (tests/seed_base_rate_hash_matches.sql); both files are -text in .gitattributes.
+  base_rate_fred_file: "seeds/base_rate_fred.csv"
+  base_rate_fred_sha256: "a4ab0bf9cb316d07ae5099ed459c6a083405eb4a42888984d484b9b2bfd27209"
+  base_rate_series_file: "seeds/base_rate_series.csv"
+  base_rate_series_sha256: "2f0e7b3c6919df167636c85b455c399f8be5470296b196ad0bf4f568e36fc053"
+  # Text slice R phase 2: the checks on the proposed rate read (docs/baseline_text_rates_phase2_2026-11-26.md).
+  # number_tolerance: a printed number equals a tag when they differ by at most this (percentage points; printed rates
+  # have two decimals, tags are exact). legs_tolerance: the leg identities on printed values (two numbers rounded to
+  # 0.01 each can be 0.01 apart; 0.011 leaves float room). floor_match: an implied base this close to the printed floor
+  # is the floor binding.
+  text_number_tolerance: 0.005
+  text_legs_tolerance: 0.011
+  text_floor_match: 0.05
+  # The base-rate level check (int_text_check_base_level): the window of series values a loan can have reset to, in
+  # days before the report date; the tolerance added to both edges of the window's range (published daily series,
+  # monthly OECD proxies); sofr_adjustment_max: the credit spread adjustment some SOFR loans add on top of SOFR
+  # (0.10 / 0.15 / 0.25 by tenor), allowed on the upper edge of SOFR only. Set from the measured distribution
+  # (docs/baseline_text_rates_phase2_2026-11-26.md section 4).
+  text_base_window_days: 190
+  text_base_tolerance_published: 0.30
+  text_base_tolerance_proxy: 0.60
+  text_base_sofr_adjustment_max: 0.26
+  # A monthly proxy whose latest value in the window ends more than this many days before the report date is stale.
+  text_base_monthly_max_age_days: 62
+  # A mapping is confirmed for a quarter when at least min_share of at least min_rows tested rows are admissible under
+  # the proposed rate; discriminating when no other rate is admissible for more than alt_max_share of them.
+  text_base_confirm_min_rows: 10
+  text_base_confirm_min_share: 0.9
+  text_base_alt_max_share: 0.5
+  # int_text_proposal_verdict: a check confirms a proposal when at least min_rows rows were compared and at least
+  # min_share agree; it contradicts when at least contradict_min_rows rows AND at least contradict_min_share of the
+  # compared rows disagree.
+  text_verdict_confirm_min_rows: 5
+  text_verdict_confirm_min_share: 0.9
+  text_verdict_contradict_min_rows: 5
+  text_verdict_contradict_min_share: 0.1
+  # Fix round 1: a check contradicts SMALL (verdict contradicted_small, never accepted) on at least small_min_rows
+  # disagreeing rows AND at least small_min_share of its compared rows: a total failure on few rows.
+  text_verdict_small_min_rows: 2
+  text_verdict_small_min_share: 0.5
   # A PIK rate above the all-in rate tag by more than this (percentage points) contradicts rate_is_all_in: production's
   # own margin (pipeline/financial_conventions.py prepare: pik > reported_rate + 0.01).
   pik_above_rate_margin: 0.01
@@ -274,6 +339,71 @@ vars:
     # The 8 fund-quarters that miss the filed total on the normalised basis (Ares 3, Apollo 5) all tie once the rows
     # corrections add are in (see sum_not_tied_corrected_pinned below).
     int_field_corrected_sum_not_tied: 3
+    # Text slice P (page structure), measured 2026-11-26 on the five funds (docs/baseline_page_structure_2026-11-26.md).
+    # Published positions whose fair-value fact has no visible printed row, or several: 0 and 0.
+    int_page_position_not_placed: 0
+    int_page_position_several_rows: 0
+    # Rows of schedule tables whose width after the rowspan rule is not the table's: 31, all Blue Owl (18 header rows
+    # of its width-54 tables, 12 total rows and 1 heading row of its two-line-header tables).
+    int_page_cell_row_width: 31
+    # Rows a rowspan reaches from further than the row above (left naive, flagged): 0. A rule, not a measurement.
+    int_page_cell_deeper_span: 0
+    # Schedule tables with no header taken: 1 (Ares 0001287750-23-000021 table 91, 28 rows, no row with 3 or more
+    # non-empty cells above its first position row).
+    int_page_table_no_header: 1
+    # Published positions whose printed row has no cell under a column: the positions of that table.
+    int_page_position_no_column: 1
+    # (accession, table, field) where the placed facts read as one field (any row role since fix round 1, macro
+    # page_field_fact) fall under two or more header signatures: 35 (HPS 26, Ares 4, Apollo 3, BCRED 2; was 27 on position
+    # facts only). The filer prints the odd value in the neighbouring column (rate cases) or tags a cost under Par (Apollo).
+    int_page_field_split_columns: 35
+    # Fix round 1: placed field facts given no column (row width not the table's): 36, Blue Owl 0001812554-26-000060
+    # total rows (cost, fair value, share of net assets, 12 each, 4 tables). Before the fix they sat under wrong headers.
+    int_page_field_fact_no_column: 36
+    # Fix round 2: published positions whose level-1 and level-2 headings both name 'controlled' or 'affiliated' with
+    # different texts (a sibling section kept as a parent): 23 (Blue Owl 10, HPS 9, BCRED 4). Not structurally fixable.
+    int_position_heading_sibling_sections: 23
+    # Text slice R phase 1, measured 2026-11-26 (docs/baseline_text_rates_phase1_2026-11-26.md). Published positions
+    # whose table has no column a read_printed_column rule names: 2,272 (Blue Owl 2,271 unfunded-commitment-only rows,
+    # Ares 1 in the table without a header).
+    int_text_reference_rate_column_not_found: 2272
+    # Published positions whose rule-read reference-rate code no rule of the fund maps: 43,437 (Ares 13,116, BCRED 13,283,
+    # Blue Owl 3,749, Apollo 7,329, HPS 5,960). The common codes the wrappers never list; the agent's work, not errors.
+    int_text_reference_rate_code_not_mapped: 43437
+    # map_code rules the legend contradicts or defines two ways in one filing: 4, all mixed (BCRED S=SONIA, Blue Owl
+    # C=CORRA, HPS B=BBSY and C=CORRA). None contradicts.
+    int_text_legend_rule_disagrees: 4
+    # (fund, code) pairs printed in rate-candidate columns with neither a rule nor a legend entry: 12.
+    int_text_code_no_rule_no_legend: 12
+    # Text slice R phase 2, measured 2026-11-26 (docs/baseline_text_rates_phase2_2026-11-26.md).
+    # Agent proposals the checks contradict, kinds column, role and code (fix round 1 redefined it per number role; it
+    # was 3 over shapes and codes): 6. Codes 4 (two SOFR mappings failed by the base level in 2022; two codes whose
+    # legend names change over time, exposed once CDOR/CORRA and BBSY/BBSW became four names); roles 2 (spread and
+    # floor of one floor shape, all-in tag holding the spread or floor).
+    # Phase 3 check fix 1a (2026-11-26, lowered, no row hidden): 4. The two roles of Apollo "S+#, #% Floor" [b4ee19] left:
+    # identity d no longer runs where the all-in tag equals the spread or the floor (the tag holds another leg); the
+    # spread role is now accepted by its number-tag check (3,858 of 3,859), the floor needs_owner (no check exists).
+    int_text_proposal_contradicted: 4
+    # Fix round 1: proposals failing a check on 2+ rows and half of its rows (verdict contradicted_small): 9. Phase 3
+    # (lowered): 5. Out: Apollo S=SOFR in two units (the base level no longer reads its 5 all-in tags that hold the spread
+    # or floor; the legend accepts them) and the spread and floor of Apollo "S+#, #% Floor" [8900b6].
+    int_text_proposal_contradicted_small: 5
+    # Leg identity rows that fail: 18 (a 4, b 1, c 3, d 8, f 2; section 3 of the note lists each). Phase 3 (lowered): 10;
+    # the 8 d rows are not_testable (all-in tag equal to the spread or the floor).
+    int_text_leg_identity_fail: 10
+    # Text slice R phase 3, measured 2026-11-26 (docs/baseline_text_rates_phase3_2026-11-26.md).
+    # Groups (fund, column unit, shape, status) of printed rate cells the accepted rules leave unread: 41 (section 4).
+    int_text_rate_unread_groups: 41
+    # Positions failing constraint 4 (legs) or 5 (base level) on the rule-read fields: 306, all c5 (section 6 lists them
+    # by fund and rate). Rows are returned by the test, not hidden.
+    int_text_rate_constraint_fail: 306
+    # Readings not applied because they break constraints 1 to 3: 102 position-fields (section 5). Fix round 1 (lowered,
+    # rows named in the doc's fix round 1 section): 5 (Ares 1 spread with no code, Apollo 4 floors with no code); a
+    # printed code that no rule resolves now counts as a reference rate, and Blue Owl's N/A rows and BCRED [7bedc6] are
+    # read as fixed rates.
+    int_text_rate_constraint_dropped: 5
+    # Fix round 1: rows the fix 1a mechanism takes out of a check (leg d 8, base level 5, constraint 5 5), all Apollo: 18.
+    int_text_all_in_tag_is_leg: 18
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).

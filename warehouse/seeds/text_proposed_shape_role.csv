@@ -1,0 +1,386 @@
+run_id,unit_key,shape,number_index,role_fwd,role_rev,same_in_both_orders,roles_fit_shape
+2026-11-26_rates_run3,010c6461a4a6ff27,#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,0429e10a0d4a5b47,#,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,0429e10a0d4a5b47,#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,0dd66cba8d2b8641,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,0dd66cba8d2b8641,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,0dd66cba8d2b8641,SR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,16de0745a690a6bc,#%,1,fixed_rate_pct,spread_pct,false,true
+2026-11-26_rates_run3,16de0745a690a6bc,CA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,16de0745a690a6bc,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,16de0745a690a6bc,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,16de0745a690a6bc,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,16de0745a690a6bc,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,173adfdabda43f76,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,173adfdabda43f76,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,173adfdabda43f76,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,173adfdabda43f76,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,173adfdabda43f76,#%.(incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,173adfdabda43f76,#%.(incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#% (#% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#% (#% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#% (#%PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#% (#%PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,1de53b4d55ea4050,#%PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,#%,1,fixed_rate_pct,spread_pct,false,true
+2026-11-26_rates_run3,25606633f0b6d5c8,#% (#% PIK),1,cash_rate_pct,spread_pct,false,true
+2026-11-26_rates_run3,25606633f0b6d5c8,#% (#% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,B+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,BB+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,C+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,E+#% (#% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,E+#% (#% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,E+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,L+#% (#% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,L+#% (#% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,L+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,N/A,0,,,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,S+#% (#% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,S+#% (#% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,S+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SA+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SR+#,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SR+#% (#% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SR+#% (#% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,25606633f0b6d5c8,SR+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,27a8ea2003741906,#%,1,pct_of_net_assets,pct_of_net_assets,true,true
+2026-11-26_rates_run3,27a8ea2003741906,—%,1,other_number,other_number,true,false
+2026-11-26_rates_run3,297c4b02f602dca3,#%,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,#%,1,fixed_rate_pct,spread_pct,false,true
+2026-11-26_rates_run3,35d86fe064f18517,B+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,BB+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,C+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,CA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,CI+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,N+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,SA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,35d86fe064f18517,ST+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,#%,1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,C+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,L+#% (incl. #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,L+#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,L+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,4911badeb7733932,SORF+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,4f40f4afb00d1cdc,#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,501a2d64caadc662,B+,0,,,true,true
+2026-11-26_rates_run3,501a2d64caadc662,C+,0,,,true,true
+2026-11-26_rates_run3,501a2d64caadc662,E+,0,,,true,true
+2026-11-26_rates_run3,501a2d64caadc662,N/A,0,,,true,true
+2026-11-26_rates_run3,501a2d64caadc662,P+,0,,,true,true
+2026-11-26_rates_run3,501a2d64caadc662,S+,0,,,true,true
+2026-11-26_rates_run3,501a2d64caadc662,SA+,0,,,true,true
+2026-11-26_rates_run3,5d304ffda5cd71c3,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,5d304ffda5cd71c3,#% (incl #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,5d304ffda5cd71c3,#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,5d304ffda5cd71c3,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6c8407a91bd24a79,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6c8407a91bd24a79,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6c8407a91bd24a79,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6c8407a91bd24a79,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6d09d2036523d9fe,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6d09d2036523d9fe,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6d09d2036523d9fe,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6d09d2036523d9fe,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,#,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,# (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,# (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,6e96d821a8768ebf,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,78ea8338cc7e8cb3,#%,1,pct_of_net_assets,pct_of_net_assets,true,true
+2026-11-26_rates_run3,78ea8338cc7e8cb3,—%,0,,,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,C+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,CI+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,N+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,SA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,ST+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,#%,1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,#% (incl #% PIK),1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,B+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,B+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,B+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,B+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,BB+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,BS+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,C+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,E+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,E+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,E+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,L+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,L+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,L+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,N+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,N+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,N+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,P+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,P+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% (incl #%PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% (incl #%PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% (incl. #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SF+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SN+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SN+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SN+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SN+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SORA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SORA+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,SORA+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,ST+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,ST+#% (incl #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,ST+#% (incl #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,83609702e29b9631,TN+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,#%,1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,#% Cash plus #% PIK,1,cash_rate_pct,cash_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,#% Cash plus #% PIK,2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"#% Cash plus #% PIK, #% Floor",1,all_in_rate_pct,cash_rate_pct,false,true
+2026-11-26_rates_run3,8900b6883e84a32c,"#% Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"#% Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"BBSW+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"BBSW+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"BBSW+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"BBSW+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"BBSW+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"C+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"C+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"E+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"E+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"E+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"E+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"E+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"Equity plus #% PIK, #% Floor",1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"Equity plus #% PIK, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"K+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"K+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"N+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"N+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,N/A,0,,,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"NIBOR+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"NIBOR+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"P+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"P+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+# Cash plus #% PIK, #% PIK",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+# Cash plus #% PIK, #% PIK",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+# Cash plus #% PIK, #% PIK",3,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"S+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SARON+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SARON+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SONIA+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SONIA+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SONIA+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SONIA+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"SONIA+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"STIBOR+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"STIBOR+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"T+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,8900b6883e84a32c,"T+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,BBSY (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,BBSY (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,BBSY (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,BKBM (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,BKBM (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,Base Rate (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,Base Rate (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,Base Rate (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CAD Base Rate (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CDOR (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CDOR (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CDOR (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CORRA (A),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CORRA (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CORRA (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,CORRA (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,Euribor (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,Euribor (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,Euribor (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,LIBOR (A),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,LIBOR (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,LIBOR (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,LIBOR (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,NIBOR (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,NIBOR (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SOFR (A),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SOFR (B),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SOFR (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SOFR (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SOFR (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SOFR (W),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SONIA (M),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SONIA (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,SONIA (S),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,TONA (Q),0,,,true,true
+2026-11-26_rates_run3,9ecddf9faf035680,TONA (S),0,,,true,true
+2026-11-26_rates_run3,a52abb5593896bfc,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,a52abb5593896bfc,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,a52abb5593896bfc,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,a52abb5593896bfc,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,a52abb5593896bfc,#%.(incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,a52abb5593896bfc,#%.(incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,B+,0,,,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,C+,0,,,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,E+,0,,,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,N/A,0,,,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,P+,0,,,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,S+,0,,,true,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,SA+,0,,,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,#%,1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,#% (includes #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,#% (includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"#% (includes #% PIK), #% Floor",1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"#% (includes #% PIK), #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"#% (includes #% PIK), #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"#% Cash plus #% PIK, #% Floor",1,cash_rate_pct,cash_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"#% Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"#% Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"BBSW+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"BBSW+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"BBSW+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"BBSW+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"BBSW+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"C+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"C+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,E+# (Includes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,E+# (Includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,E+# Cash plus #% PIK,1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,E+# Cash plus #% PIK,2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"E+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"E+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"E+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"E+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"E+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,Equity plus #% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"K+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"K+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,L+# Cash (includes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,L+# Cash (includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,L+# Cash plus #% PIK,1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,L+# Cash plus #% PIK,2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"L+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"L+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"N+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"N+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,N/A,0,,,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,P+#,1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"P+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"P+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# (Includes #% PIK), #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# (Includes #% PIK), #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# (Includes #% PIK), #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# (includes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# (includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# Cash (includes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# Cash (includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# Cash plus #% PIK,1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# Cash plus #% PIK,2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# Cash plus #% PIK, # Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# Cash plus #% PIK, # Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# Cash plus #% PIK, # Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,S+# PIK,1,pik_spread_pct,spread_bps,false,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"S+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,SARON+# (Includes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,SARON+# (Includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SARON+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SARON+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SARON+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SARON+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SARON+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,SONIA+# (Includes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,SONIA+# (Includes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SONIA+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SONIA+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SONIA+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SONIA+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"SONIA+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,STIBOR+# (Inlcudes #% PIK),1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,STIBOR+# (Inlcudes #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"STIBOR+# Cash plus #% PIK, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"STIBOR+# Cash plus #% PIK, #% Floor",2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"STIBOR+# Cash plus #% PIK, #% Floor",3,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"STIBOR+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"STIBOR+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"T+#, #% Floor",1,spread_bps,spread_bps,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,"T+#, #% Floor",2,floor_pct,floor_pct,true,true
+2026-11-26_rates_run3,b4ee1994c58b2d08,Variable,0,,,true,true
+2026-11-26_rates_run3,b95433509b569b33,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,b95433509b569b33,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,b95433509b569b33,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,c9749b02a5674651,#%,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,cb2ad95e4f097b26,#%,1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,cb2ad95e4f097b26,#% (incl. #% PIK),1,all_in_rate_pct,all_in_rate_pct,true,true
+2026-11-26_rates_run3,cb2ad95e4f097b26,#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,cb2ad95e4f097b26,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,d242ee8bc684a0c1,#%,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,d242ee8bc684a0c1,CA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d242ee8bc684a0c1,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d242ee8bc684a0c1,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d242ee8bc684a0c1,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d242ee8bc684a0c1,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,#%,1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,B+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,BB+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,CA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,CI+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,Estimated Yield:,0,,,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,N+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,SA+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,d30801edf470bdd3,ST+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,#%,1,fixed_rate_pct,fixed_rate_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,#% PIK,1,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,B+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,C+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,CI+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,E+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,L+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,L+#% (incl. #% PIK),1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,L+#% (incl. #% PIK),2,pik_rate_pct,pik_rate_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,L+#% PIK,1,pik_spread_pct,pik_spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,N+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,P+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,S+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,SOFR+#%,1,spread_pct,spread_pct,true,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,ST+#%,1,spread_pct,spread_pct,true,true

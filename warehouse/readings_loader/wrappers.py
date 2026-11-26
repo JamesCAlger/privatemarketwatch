@@ -136,6 +136,11 @@ def _reading_rules(cik, entries):
             raise LoadError(f"{cik} {key}: unknown field(s) {', '.join(unknown)} in {entry!r}")
         listed = {field: _examples(cik, key, entry, field) for field in _EXAMPLE_KEYS}
         entry = {k: v for k, v in entry.items() if k not in _EXAMPLE_KEYS}
+        # loader version 8 (text slice R phase 3): a parameter may be an object (the rate-text rules carry several
+        # values and a source grade); it is stored as canonical JSON (keys sorted, no spaces), so the rule id is stable.
+        if isinstance(entry.get("parameter"), dict):
+            entry["parameter"] = json.dumps(entry["parameter"], sort_keys=True, separators=(",", ":"),
+                                            ensure_ascii=False)
         if any(not isinstance(v, str) for v in entry.values()):
             raise _bad(cik, key, entry)
         e = {k: v.strip() for k, v in entry.items()}

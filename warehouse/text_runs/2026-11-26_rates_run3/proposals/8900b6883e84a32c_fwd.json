@@ -1,0 +1,249 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.95,
+ "shapes": [
+  {
+   "shape": "S+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "E+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "fixed_rate_pct"
+   ]
+  },
+  {
+   "shape": "SONIA+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "N/A",
+   "roles": []
+  },
+  {
+   "shape": "S+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "C+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "P+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "SONIA+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "BBSW+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "E+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "STIBOR+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "K+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "T+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "Equity plus #% PIK, #% Floor",
+   "roles": [
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "N+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "SARON+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "#% Cash plus #% PIK, #% Floor",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct",
+    "floor_pct"
+   ]
+  },
+  {
+   "shape": "S+# Cash plus #% PIK, #% PIK",
+   "roles": [
+    "spread_bps",
+    "pik_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% Cash plus #% PIK",
+   "roles": [
+    "cash_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "NIBOR+#, #% Floor",
+   "roles": [
+    "spread_bps",
+    "floor_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "S",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SONIA",
+   "reference_rate": "SONIA",
+   "basis": "common_usage",
+   "note": "not in legend"
+  },
+  {
+   "code": "C",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "BBSW",
+   "reference_rate": "BBSW",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "STIBOR",
+   "reference_rate": "STIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "K",
+   "reference_rate": "KORIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "T",
+   "reference_rate": "MUTKCALM",
+   "basis": "legend",
+   "note": "Legend: TONAR in the 2025-12-31 to 2026-06-30 filings; in the 2026-09-30 filing a second entry defines it as MUTKCALM (Japan Unsecured Overnight Call Rate Expected). Latest is given."
+  },
+  {
+   "code": "N",
+   "reference_rate": "NIBOR",
+   "basis": "common_usage",
+   "note": "Legend defines NIBOR, not N. Likely the same."
+  },
+  {
+   "code": "SARON",
+   "reference_rate": "SARON",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "NIBOR",
+   "reference_rate": "NIBOR",
+   "basis": "legend",
+   "note": "2026-09-30 legend: Norwegian Interbank Offered Rate. Earlier filings (2025-12-31 to 2026-06-30): Norwegian Overnight Weighted Average Rate (NOWA)."
+  },
+  {
+   "code": "Equity plus",
+   "reference_rate": null,
+   "basis": "not_a_code",
+   "note": "Not a rate code."
+  }
+ ],
+ "note": "Spread numbers are tagged as spread and match in bps. Floor numbers are not in the legs for spread, so floor_pct is assumed from the 'Floor' text. In the cash-plus-PIK shapes the pik_rate tag matched n2 exactly, so n2 is the PIK rate. In '#% Cash plus #% PIK, #% Floor' n1 matched interest_rate (n1 matched pik_rate too in 2 rows, an ambiguity). I treated n1 as the cash/all-in rate, but this is doubtful."
+}

@@ -1,0 +1,601 @@
+version: 2
+
+# Text slice R phase 2 (2026-11-26): the agent's PROPOSED rate rules read as proposals and judged by checks. Nothing in
+# this file's models is published, and no spine, staging or mart model reads them
+# (docs/baseline_text_rates_phase2_2026-11-26.md). Keys and coverage: tests/int_text_proposal_keys_unique.sql.
+models:
+  - name: int_text_rate_proposed
+    description: >
+      PROPOSAL, NOT A READING OF RECORD. Each printed cell of the 31 proposed rate-candidate columns read with the agent's
+      proposed roles of its shape (only where the two option orders agree): one row per position, column unit and
+      number (number_index 0: the code, or a cell with neither code nor number). Fields spread (basis points / 100),
+      floor, all_in_rate, cash_rate, pik_rate, pik_spread, fixed_rate, reference_rate_code (with reference_rate and the
+      normalised rate_name). Statuses in the header.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: context_id
+        data_tests: [not_null]
+      - name: unit_key
+        data_tests: [not_null]
+      - name: number_index
+        data_tests: [not_null]
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [read, shape_unstable, no_proposal, role_cannot_tell, not_a_rate_role,
+                         code_unstable, not_a_code, no_value]
+      - name: field
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [spread, floor, all_in_rate, cash_rate, pik_rate, pik_spread, fixed_rate, reference_rate_code]
+          - not_null:
+              config:
+                where: "status = 'read'"
+      - name: value
+        data_tests:
+          - not_null:
+              config:
+                where: "status = 'read' and number_index > 0"
+
+  - name: int_text_rate_proposed_position
+    description: >
+      PROPOSAL. The proposed read gathered per position: each printed field (agreeing values only; conflict flags where
+      two read values differ), the shapes that printed it, the code's normalised rate name, and the filer's tags (before
+      corrections). Input of the leg and base-level checks.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: context_id
+        data_tests: [not_null]
+
+  - name: int_text_check_number_tag
+    description: >
+      Each number the proposed rules read against the filer's tag of the same field on the same position (spread,
+      all-in, cash, PIK; a PIK spread against the PIK rate; a fixed rate against the interest rate): equal within 0.005
+      percentage points, differs, no_tag.
+    columns:
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [equal, differs, no_tag]
+      - name: tag_field
+        data_tests: [not_null]
+
+  - name: int_text_check_leg_arithmetic
+    description: >
+      Per position and leg identity (cash + PIK = all-in; PIK <= all-in; cash <= all-in; all-in >= margin + floor; the
+      split of a printed spread and PIK spread against a tagged spread; a field printed twice agrees), printed values
+      first and tags where a part is not printed, at least one part printed: pass or fail, with the source of each side,
+      whether the two sides are independent, and whether the row may count as confirming (fix round 1: only a with a
+      printed cash leg and not every part printed, and e; never b, c, d, f).
+    columns:
+      - name: identity
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [a_cash_plus_pik, b_pik_le_all_in, c_cash_le_all_in, d_floor_spread, e_spread_split,
+                         f_printed_agree]
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [pass, fail, not_testable]
+      - name: independence
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [independent, not_independent]
+      - name: counts_as_confirming
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [false]
+                quote: false
+              config:
+                where: "independence = 'not_independent'"
+
+  - name: int_text_base_rate_window
+    description: >
+      Per report date and base rate: the range of the rate's public series over the trailing 190 days (the published
+      daily series where one exists, else the monthly OECD proxy), its tolerance (0.30 published, 0.60 proxy; plus 0.26
+      on SOFR's upper edge for the credit spread adjustment), and whether the window is current.
+    columns:
+      - name: report_date
+        data_tests: [not_null]
+      - name: rate_name
+        data_tests: [not_null]
+      - name: state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [ok, no_values, stale]
+
+  - name: int_text_check_base_level
+    description: >
+      Per position whose proposed code names a rate with a series, and per candidate rate (the proposed one and every
+      other): implied base (all-in minus spread) against the candidate's window. Verdict admissible, floor_binding,
+      outside, no_series, not_tested (PIK, no spread, no all-in rate). CDOR is judged against the CORRA series and BBSY
+      against BBSW (proxy_series, here only).
+    columns:
+      - name: candidate_rate
+        data_tests: [not_null]
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [admissible, floor_binding, outside, no_series, not_tested]
+
+  - name: int_text_check_base_level_quarter
+    description: >
+      Per proposed code mapping and quarter: tested rows, share admissible under the proposed rate and under each
+      alternative, confirmed (90% of at least 10), discriminating (no alternative above 50%), separates_currency_bloc (no
+      rate of another currency above 50%; reported, not an acceptance), contradicted.
+    columns:
+      - name: code_unit_key
+        data_tests: [not_null]
+      - name: report_date
+        data_tests: [not_null]
+      - name: confirmed
+        data_tests: [not_null]
+      - name: discriminating
+        data_tests: [not_null]
+
+  - name: int_text_check_code_legend
+    description: >
+      Per proposed code mapping and filing: the filer's own legend in that filing against the proposed rate (agrees,
+      contradicts, mixed, unclear, no_legend_in_filing), both normalised by macro base_rate_name; CDOR, CORRA, BBSY and
+      BBSW are four names, so a filing defining a code as both is mixed.
+    columns:
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [agrees, contradicts, mixed, unclear, no_legend_in_filing]
+
+  - name: int_text_proposal_verdict
+    description: >
+      A MEASUREMENT THE OWNER READS, NOT AN ACCEPTANCE: per proposed column, number role, shape and code, whether it is
+      stable in both orders, each applicable check's counts, and a verdict (accepted_by_check, needs_owner with a reason,
+      unstable, contradicted, contradicted_small; for a shape also partly_accepted and nothing_to_read). A role is judged
+      on its own evidence only; a shape is accepted only when every role is. Rules in the model's header. No acceptance is recorded anywhere else.
+    columns:
+      - name: proposal_kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [column, shape, role, code]
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [accepted_by_check, partly_accepted, needs_owner, unstable, contradicted, contradicted_small,
+                         nothing_to_read]
+
+unit_tests:
+  - name: int_text_rate_proposed_numbers_and_statuses
+    description: >
+      Text slice R phase 2. The k-th number of a cell is the k-th '#' of its shape, read with the proposed role. p1
+      "S+525, 0.50% Floor": spread 5.25 (basis points / 100), floor 0.50, code S read as SOFR. p2 "5.38% Cash plus 5.38%
+      PIK, 0.00% Floor": cash 5.38, PIK 5.38, floor 0 (no code). p3 "SOFR + 5.25%": spread 5.25 in percent, code SOFR.
+      p4 "S+1250" and p5 "S+1,250" (with and without a thousands separator): spread 12.50. p6 "N/A": no_value. p7
+      "E+500": the two orders gave different roles (shape_unstable) and different rates (code_unstable). p8 "X+100": no
+      proposal for the shape or the code. p9 "7.00%": the role is cannot_tell. p10 "S+525, 0.50% FLOOR" (phase 3 check
+      fix 1b): the same shape upper-cased as p1 but another spelling, which no proposal names: its numbers are
+      no_proposal (not pooled into p1's proposal); its code is still read.
+    model: int_text_rate_proposed
+    given:
+      - input: ref('text_proposed_column')
+        rows:
+          - {run_id: r, unit_key: u, column_holds_fwd: rate_terms, column_holds_rev: rate_terms, same_in_both_orders: true}
+      - input: ref('text_proposed_shape_role')
+        rows:
+          - {run_id: r, unit_key: u, shape: "S+#, #% Floor", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "S+#, #% Floor", number_index: 2, role_fwd: floor_pct, role_rev: floor_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "#% Cash plus #% PIK, #% Floor", number_index: 1, role_fwd: cash_rate_pct, role_rev: cash_rate_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "#% Cash plus #% PIK, #% Floor", number_index: 2, role_fwd: pik_rate_pct, role_rev: pik_rate_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "#% Cash plus #% PIK, #% Floor", number_index: 3, role_fwd: floor_pct, role_rev: floor_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "SOFR+#%", number_index: 1, role_fwd: spread_pct, role_rev: spread_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "S+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "N/A", number_index: 0, role_fwd: null, role_rev: null, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "E+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_pct, same_in_both_orders: false, roles_fit_shape: true}
+          - {run_id: r, unit_key: u, shape: "#%", number_index: 1, role_fwd: cannot_tell, role_rev: cannot_tell, same_in_both_orders: true, roles_fit_shape: true}
+      - input: ref('text_proposed_code')
+        rows:
+          - {run_id: r, unit_key: u, code: S, reference_rate_fwd: SOFR, reference_rate_rev: SOFR, rate_name: SOFR, basis_fwd: legend, basis_rev: legend, same_in_both_orders: true}
+          - {run_id: r, unit_key: u, code: SOFR, reference_rate_fwd: SOFR, reference_rate_rev: SOFR, rate_name: SOFR, basis_fwd: common_usage, basis_rev: common_usage, same_in_both_orders: true}
+          - {run_id: r, unit_key: u, code: E, reference_rate_fwd: EURIBOR, reference_rate_rev: ESTR, rate_name: null, basis_fwd: legend, basis_rev: legend, same_in_both_orders: false}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, ri as row_index, 1 as table_index, 5::hugeint as col_start, '1' as cik,
+                 date '2026-03-31' as report_date, true as is_published, 1::bigint as positions, 'T' as table_signature,
+                 'h' as header_signature, 'u' as unit_key, txt as text, 1::bigint as n_cells, shp as shape,
+                 upper(shp) as shape_key_text, cd as code, true as rate_text, []::varchar[] as fact_fields,
+                 0::bigint as fact_count
+          from (values (1, 'S+525, 0.50% Floor', 'S+#, #% Floor', 'S'),
+                       (2, '5.38% Cash plus 5.38% PIK, 0.00% Floor', '#% Cash plus #% PIK, #% Floor', null),
+                       (3, 'SOFR + 5.25%', 'SOFR+#%', 'SOFR'), (4, 'S+1250', 'S+#', 'S'), (5, 'S+1,250', 'S+#', 'S'),
+                       (6, 'N/A', 'N/A', null), (7, 'E+500', 'E+#', 'E'), (8, 'X+100', 'X+#', 'X'),
+                       (9, '7.00%', '#%', null), (10, 'S+525, 0.50% FLOOR', 'S+#, #% FLOOR', 'S')) t(ri, txt, shp, cd)
+      - input: ref('int_page_position')
+        rows:
+          - {accession: A, context_id: p1, placement_status: one_row, row_index: 1}
+          - {accession: A, context_id: p2, placement_status: one_row, row_index: 2}
+          - {accession: A, context_id: p3, placement_status: one_row, row_index: 3}
+          - {accession: A, context_id: p4, placement_status: one_row, row_index: 4}
+          - {accession: A, context_id: p5, placement_status: one_row, row_index: 5}
+          - {accession: A, context_id: p6, placement_status: one_row, row_index: 6}
+          - {accession: A, context_id: p7, placement_status: one_row, row_index: 7}
+          - {accession: A, context_id: p8, placement_status: one_row, row_index: 8}
+          - {accession: A, context_id: p9, placement_status: one_row, row_index: 9}
+          - {accession: A, context_id: p10, placement_status: one_row, row_index: 10}
+    expect:
+      rows:
+        - {context_id: p10, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
+        - {context_id: p10, number_index: 1, field: null, status: no_proposal, value: null, rate_name: null}
+        - {context_id: p10, number_index: 2, field: null, status: no_proposal, value: null, rate_name: null}
+        - {context_id: p1, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
+        - {context_id: p1, number_index: 1, field: spread, status: read, value: 5.25, rate_name: null}
+        - {context_id: p1, number_index: 2, field: floor, status: read, value: 0.5, rate_name: null}
+        - {context_id: p2, number_index: 1, field: cash_rate, status: read, value: 5.38, rate_name: null}
+        - {context_id: p2, number_index: 2, field: pik_rate, status: read, value: 5.38, rate_name: null}
+        - {context_id: p2, number_index: 3, field: floor, status: read, value: 0.0, rate_name: null}
+        - {context_id: p3, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
+        - {context_id: p3, number_index: 1, field: spread, status: read, value: 5.25, rate_name: null}
+        - {context_id: p4, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
+        - {context_id: p4, number_index: 1, field: spread, status: read, value: 12.5, rate_name: null}
+        - {context_id: p5, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
+        - {context_id: p5, number_index: 1, field: spread, status: read, value: 12.5, rate_name: null}
+        - {context_id: p6, number_index: 0, field: null, status: no_value, value: null, rate_name: null}
+        - {context_id: p7, number_index: 0, field: reference_rate_code, status: code_unstable, value: null, rate_name: null}
+        - {context_id: p7, number_index: 1, field: null, status: shape_unstable, value: null, rate_name: null}
+        - {context_id: p8, number_index: 0, field: reference_rate_code, status: no_proposal, value: null, rate_name: null}
+        - {context_id: p8, number_index: 1, field: null, status: no_proposal, value: null, rate_name: null}
+        - {context_id: p9, number_index: 1, field: null, status: role_cannot_tell, value: null, rate_name: null}
+
+  - name: int_text_check_number_tag_verdicts
+    description: >
+      Text slice R phase 2. A printed spread 5.25 against the tag 5.25: equal. An all-in 9.00 against 9.004: equal (the
+      0.005 tolerance). A PIK rate 2.00 against 2.50: differs. A cash rate with no cash tag: no_tag. A PIK spread 3.00
+      against the PIK rate tag 3.00: equal. A floor is not compared (no row). A row not read gives no row.
+    model: int_text_check_number_tag
+    given:
+      - input: ref('int_text_rate_proposed')
+        rows:
+          - {accession: A, context_id: p1, unit_key: u, number_index: 1, status: read, field: spread, value: 5.25, fact_fields: []}
+          - {accession: A, context_id: p1, unit_key: u, number_index: 2, status: read, field: floor, value: 1.0, fact_fields: []}
+          - {accession: A, context_id: p2, unit_key: u, number_index: 1, status: read, field: all_in_rate, value: 9.0, fact_fields: [interest_rate_tag]}
+          - {accession: A, context_id: p3, unit_key: u, number_index: 1, status: read, field: pik_rate, value: 2.0, fact_fields: []}
+          - {accession: A, context_id: p4, unit_key: u, number_index: 1, status: read, field: cash_rate, value: 7.0, fact_fields: []}
+          - {accession: A, context_id: p5, unit_key: u, number_index: 1, status: read, field: pik_spread, value: 3.0, fact_fields: [pik_rate]}
+          - {accession: A, context_id: p6, unit_key: u, number_index: 1, status: shape_unstable, field: null, value: null, fact_fields: []}
+      - input: ref('int_field_normalised')
+        rows:
+          - {accession: A, context_id: p1, field: spread, value: 5.25, status: normalised}
+          - {accession: A, context_id: p2, field: interest_rate, value: 9.004, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p3, field: pik_rate, value: 2.5, status: normalised}
+          - {accession: A, context_id: p5, field: pik_rate, value: 3.0, status: normalised}
+    expect:
+      rows:
+        - {context_id: p1, field: spread, tag_field: spread, verdict: equal, tag_in_this_cell: false}
+        - {context_id: p2, field: all_in_rate, tag_field: interest_rate, verdict: equal, tag_in_this_cell: true}
+        - {context_id: p3, field: pik_rate, tag_field: pik_rate, verdict: differs, tag_in_this_cell: false}
+        - {context_id: p4, field: cash_rate, tag_field: interest_rate_cash, verdict: no_tag, tag_in_this_cell: false}
+        - {context_id: p5, field: pik_spread, tag_field: pik_rate, verdict: equal, tag_in_this_cell: true}
+
+  - name: int_text_check_leg_arithmetic_identities
+    description: >
+      Text slice R phase 2 (sides and independence since fix round 1). p1 printed all-in 9.00 and PIK 2.00, cash tag
+      7.00: a, b, c pass; a is not independent (a tagged cash leg restates the all-in and PIK tags), never confirming. p2
+      printed cash 6.00 and PIK 3.00, all-in tag 9.50: a fails, independent. p13 printed cash 6.00, PIK 3.00 and all-in
+      9.00: a passes but all three come from print (one source): not independent. p3 printed spread 5.00 and floor 1.00,
+      all-in tag 5.50: d fails. p4 the same with all-in 5.99: d passes (0.011 tolerance), not confirming. p5 no spread,
+      PIK spread 4.00, floor 0.50, all-in 8.00: d passes on the PIK spread as margin. p6 spread 3.00 and PIK spread 2.00
+      printed, spread tag 5.00: e passes (equals_total) and confirms; p7 spread tag 3.00: e passes (equals_cash_spread);
+      p12 spread tag 4.00: e fails. p8 tags only: no row. p9 two PIK rates that differ: f fails; p10 a spread read twice
+      that agrees: f passes. p11 printed PIK 9.50 above the all-in tag 9.00: b fails. Phase 3 check fix 1a: p14 spread
+      4.00 and floor 0.50 printed, all-in TAG 4.00 (the tag holds the spread): d not_testable; p15 all-in tag 0.50 (the
+      floor): not_testable; p16 the same 4.00 PRINTED as the all-in rate: d still fails (the mechanism reads tags only,
+      a real error on the page is not hidden).
+    model: int_text_check_leg_arithmetic
+    given:
+      - input: ref('int_text_rate_proposed_position')
+        rows:
+          - {accession: A, context_id: p1, p_all_in_rate: 9.0, p_pik_rate: 2.0, t_cash: 7.0, shapes_all_in_rate: [s1], shapes_pik_rate: [s1], n_all_in_rate: 1, n_pik_rate: 1}
+          - {accession: A, context_id: p2, p_cash_rate: 6.0, p_pik_rate: 3.0, t_all_in: 9.5, shapes_cash_rate: [s2], shapes_pik_rate: [s2], n_cash_rate: 1, n_pik_rate: 1}
+          - {accession: A, context_id: p13, p_cash_rate: 6.0, p_pik_rate: 3.0, p_all_in_rate: 9.0, shapes_cash_rate: [s2], shapes_pik_rate: [s2], shapes_all_in_rate: [s13], n_cash_rate: 1, n_pik_rate: 1, n_all_in_rate: 1}
+          - {accession: A, context_id: p3, p_spread: 5.0, p_floor: 1.0, t_all_in: 5.5, shapes_spread: [s3], shapes_floor: [s3], n_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p4, p_spread: 5.0, p_floor: 1.0, t_all_in: 5.99, shapes_spread: [s3], shapes_floor: [s3], n_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p5, p_pik_spread: 4.0, p_floor: 0.5, t_all_in: 8.0, shapes_pik_spread: [s5], shapes_floor: [s5], n_pik_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p6, p_spread: 3.0, p_pik_spread: 2.0, t_spread: 5.0, shapes_spread: [s6], shapes_pik_spread: [s6], n_spread: 1, n_pik_spread: 1}
+          - {accession: A, context_id: p7, p_spread: 3.0, p_pik_spread: 2.0, t_spread: 3.0, shapes_spread: [s6], shapes_pik_spread: [s6], n_spread: 1, n_pik_spread: 1}
+          - {accession: A, context_id: p12, p_spread: 3.0, p_pik_spread: 2.0, t_spread: 4.0, shapes_spread: [s6], shapes_pik_spread: [s6], n_spread: 1, n_pik_spread: 1}
+          - {accession: A, context_id: p8, t_all_in: 9.0, t_cash: 7.0, t_pik: 2.0}
+          - {accession: A, context_id: p9, conflict_pik_rate: true, n_pik_rate: 2, shapes_pik_rate: [s9]}
+          - {accession: A, context_id: p10, p_spread: 4.0, n_spread: 2, shapes_spread: [s10, s11]}
+          - {accession: A, context_id: p11, p_pik_rate: 9.5, t_all_in: 9.0, shapes_pik_rate: [s12], n_pik_rate: 1}
+          - {accession: A, context_id: p14, p_spread: 4.0, p_floor: 0.5, t_all_in: 4.0, shapes_spread: [s3], shapes_floor: [s3], n_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p15, p_spread: 4.0, p_floor: 0.5, t_all_in: 0.5, shapes_spread: [s3], shapes_floor: [s3], n_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p16, p_spread: 4.0, p_floor: 0.5, p_all_in_rate: 4.0, shapes_spread: [s3], shapes_floor: [s3], shapes_all_in_rate: [s3], n_spread: 1, n_floor: 1, n_all_in_rate: 1}
+    expect:
+      rows:
+        - {context_id: p14, identity: d_floor_spread, verdict: not_testable, detail: all_in_tag_equals_margin, independence: independent, counts_as_confirming: false}
+        - {context_id: p15, identity: d_floor_spread, verdict: not_testable, detail: all_in_tag_equals_floor, independence: independent, counts_as_confirming: false}
+        - {context_id: p16, identity: d_floor_spread, verdict: fail, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p1, identity: a_cash_plus_pik, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p1, identity: b_pik_le_all_in, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p1, identity: c_cash_le_all_in, verdict: pass, detail: null, independence: independent, counts_as_confirming: false}
+        - {context_id: p2, identity: a_cash_plus_pik, verdict: fail, detail: null, independence: independent, counts_as_confirming: true}
+        - {context_id: p2, identity: b_pik_le_all_in, verdict: pass, detail: null, independence: independent, counts_as_confirming: false}
+        - {context_id: p2, identity: c_cash_le_all_in, verdict: pass, detail: null, independence: independent, counts_as_confirming: false}
+        - {context_id: p13, identity: a_cash_plus_pik, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p13, identity: b_pik_le_all_in, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p13, identity: c_cash_le_all_in, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p3, identity: d_floor_spread, verdict: fail, detail: null, independence: independent, counts_as_confirming: false}
+        - {context_id: p4, identity: d_floor_spread, verdict: pass, detail: null, independence: independent, counts_as_confirming: false}
+        - {context_id: p5, identity: d_floor_spread, verdict: pass, detail: margin_is_pik_spread, independence: independent, counts_as_confirming: false}
+        - {context_id: p6, identity: e_spread_split, verdict: pass, detail: equals_total, independence: independent, counts_as_confirming: true}
+        - {context_id: p7, identity: e_spread_split, verdict: pass, detail: equals_cash_spread, independence: independent, counts_as_confirming: true}
+        - {context_id: p12, identity: e_spread_split, verdict: fail, detail: equals_neither, independence: independent, counts_as_confirming: true}
+        - {context_id: p9, identity: f_printed_agree, verdict: fail, detail: pik_rate, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p10, identity: f_printed_agree, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
+        - {context_id: p11, identity: b_pik_le_all_in, verdict: fail, detail: null, independence: independent, counts_as_confirming: false}
+
+  - name: int_text_base_rate_window_trailing_range
+    description: >
+      Text slice R phase 2. Report date 2026-03-31, window from 2025-09-22 (190 days). SOFR daily: 2025-09-01 is before
+      the window, so the range is 3.60 to 4.20 (3 values); the SOFR 90-day average series (kind average) is not used;
+      tolerance 0.30 and the 0.26 adjustment on the upper edge. EURIBOR monthly proxy: August (ends 2025-08-31) is out,
+      September (ends 2025-09-30, overlaps the window) and March are in: 2.00 to 2.10, tolerance 0.60, last value
+      2026-03-31. SONIA daily, last value 2026-03-20 (11 days old): stale. PRIME: no value in the window.
+    model: int_text_base_rate_window
+    given:
+      - input: ref('int_text_rate_proposed_position')
+        rows:
+          - {accession: A, context_id: p1, report_date: 2026-03-31}
+      - input: ref('base_rate_series')
+        rows:
+          - {series_id: SOFR, rate_name: SOFR, frequency: daily, kind: published}
+          - {series_id: SOFR90DAYAVG, rate_name: SOFR, frequency: daily, kind: average}
+          - {series_id: EZ, rate_name: EURIBOR, frequency: monthly, kind: proxy}
+          - {series_id: IUDSOIA, rate_name: SONIA, frequency: daily, kind: published}
+          - {series_id: GB, rate_name: SONIA, frequency: monthly, kind: proxy}
+          - {series_id: DPRIME, rate_name: PRIME, frequency: daily, kind: published}
+      - input: ref('base_rate_fred')
+        rows:
+          - {series_id: SOFR, date: 2025-09-01, value_pct: 9.0}
+          - {series_id: SOFR, date: 2025-10-01, value_pct: 4.2}
+          - {series_id: SOFR, date: 2026-01-15, value_pct: 3.9}
+          - {series_id: SOFR, date: 2026-03-30, value_pct: 3.6}
+          - {series_id: SOFR90DAYAVG, date: 2026-03-30, value_pct: 9.0}
+          - {series_id: EZ, date: 2025-08-01, value_pct: 9.9}
+          - {series_id: EZ, date: 2025-09-01, value_pct: 2.1}
+          - {series_id: EZ, date: 2026-03-01, value_pct: 2.0}
+          - {series_id: IUDSOIA, date: 2026-03-20, value_pct: 3.7}
+          - {series_id: GB, date: 2026-03-01, value_pct: 3.7}
+          - {series_id: DPRIME, date: 2024-01-02, value_pct: 8.5}
+    expect:
+      rows:
+        - {rate_name: SOFR, series_id: SOFR, range_min: 3.6, range_max: 4.2, n_values: 3, tolerance: 0.3, upper_extra: 0.26, state: ok}
+        - {rate_name: EURIBOR, series_id: EZ, range_min: 2.0, range_max: 2.1, n_values: 2, tolerance: 0.6, upper_extra: 0, state: ok}
+        - {rate_name: SONIA, series_id: IUDSOIA, range_min: 3.7, range_max: 3.7, n_values: 1, tolerance: 0.3, upper_extra: 0, state: stale}
+        - {rate_name: PRIME, series_id: DPRIME, range_min: null, range_max: null, n_values: 0, tolerance: 0.3, upper_extra: 0, state: no_values}
+
+  - name: int_text_check_base_level_verdicts
+    description: >
+      Text slice R phase 2. Windows at 2026-03-31: SOFR 3.60 to 4.20 (admissible 3.30 to 4.76), EURIBOR 2.00 to 2.10
+      (1.40 to 2.70), CORRA 2.20 to 2.50 (1.60 to 3.10), SONIA stale. q1 SOFR, all-in 9.00 less spread 5.00 = 4.00:
+      admissible under SOFR, outside under EURIBOR and CORRA, no_series under SONIA. q2 implied 1.00 with a printed floor
+      1.00: floor_binding (outside every range). q3 implied 2.00, floor 1.00: outside under SOFR, admissible under EURIBOR
+      and CORRA. q4 carries a PIK tag and q5 has no all-in rate: not_tested, proposed rate only. q6 is proposed as CDOR
+      (fix round 1): judged against the CORRA series (proxy_series), so the CORRA row is the proposed one; implied 2.50.
+    model: int_text_check_base_level
+    given:
+      - input: ref('int_text_rate_proposed_position')
+        rows:
+          - {accession: A, context_id: q1, report_date: 2026-03-31, rate_name: SOFR, code: S, code_unit_key: u, p_spread: 5.0, t_all_in: 9.0}
+          - {accession: A, context_id: q2, report_date: 2026-03-31, rate_name: SOFR, code: S, code_unit_key: u, p_spread: 5.0, p_floor: 1.0, t_all_in: 6.0}
+          - {accession: A, context_id: q3, report_date: 2026-03-31, rate_name: SOFR, code: S, code_unit_key: u, p_spread: 5.0, p_floor: 1.0, t_all_in: 7.0}
+          - {accession: A, context_id: q4, report_date: 2026-03-31, rate_name: SOFR, code: S, code_unit_key: u, p_spread: 5.0, t_all_in: 11.0, t_pik: 2.0}
+          - {accession: A, context_id: q5, report_date: 2026-03-31, rate_name: SOFR, code: S, code_unit_key: u, t_spread: 5.0}
+          - {accession: A, context_id: q6, report_date: 2026-03-31, rate_name: CDOR, code: C, code_unit_key: u, p_spread: 5.0, t_all_in: 7.5}
+      - input: ref('int_text_base_rate_window')
+        rows:
+          - {report_date: 2026-03-31, rate_name: SOFR, kind: published, range_min: 3.6, range_max: 4.2, tolerance: 0.3, upper_extra: 0.26, admissible_low: 3.3, admissible_high: 4.76, state: ok}
+          - {report_date: 2026-03-31, rate_name: EURIBOR, kind: proxy, range_min: 2.0, range_max: 2.1, tolerance: 0.6, upper_extra: 0, admissible_low: 1.4, admissible_high: 2.7, state: ok}
+          - {report_date: 2026-03-31, rate_name: CORRA, kind: proxy, range_min: 2.2, range_max: 2.5, tolerance: 0.6, upper_extra: 0, admissible_low: 1.6, admissible_high: 3.1, state: ok}
+          - {report_date: 2026-03-31, rate_name: SONIA, kind: published, range_min: 3.7, range_max: 3.7, tolerance: 0.3, upper_extra: 0, admissible_low: 3.4, admissible_high: 4.0, state: stale}
+    expect:
+      rows:
+        - {context_id: q1, candidate_rate: SOFR, proposed_rate: SOFR, is_proposed: true, input_state: usable, implied_base: 4.0, verdict: admissible}
+        - {context_id: q1, candidate_rate: EURIBOR, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 4.0, verdict: outside}
+        - {context_id: q1, candidate_rate: CORRA, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 4.0, verdict: outside}
+        - {context_id: q1, candidate_rate: SONIA, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 4.0, verdict: no_series}
+        - {context_id: q2, candidate_rate: SOFR, proposed_rate: SOFR, is_proposed: true, input_state: usable, implied_base: 1.0, verdict: floor_binding}
+        - {context_id: q2, candidate_rate: EURIBOR, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 1.0, verdict: floor_binding}
+        - {context_id: q2, candidate_rate: CORRA, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 1.0, verdict: floor_binding}
+        - {context_id: q2, candidate_rate: SONIA, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 1.0, verdict: no_series}
+        - {context_id: q3, candidate_rate: SOFR, proposed_rate: SOFR, is_proposed: true, input_state: usable, implied_base: 2.0, verdict: outside}
+        - {context_id: q3, candidate_rate: EURIBOR, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 2.0, verdict: admissible}
+        - {context_id: q3, candidate_rate: CORRA, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 2.0, verdict: admissible}
+        - {context_id: q3, candidate_rate: SONIA, proposed_rate: SOFR, is_proposed: false, input_state: usable, implied_base: 2.0, verdict: no_series}
+        - {context_id: q4, candidate_rate: SOFR, proposed_rate: SOFR, is_proposed: true, input_state: pik, implied_base: null, verdict: not_tested}
+        - {context_id: q5, candidate_rate: SOFR, proposed_rate: SOFR, is_proposed: true, input_state: no_all_in, implied_base: null, verdict: not_tested}
+        - {context_id: q6, candidate_rate: SOFR, proposed_rate: CDOR, is_proposed: false, input_state: usable, implied_base: 2.5, verdict: outside}
+        - {context_id: q6, candidate_rate: EURIBOR, proposed_rate: CDOR, is_proposed: false, input_state: usable, implied_base: 2.5, verdict: admissible}
+        - {context_id: q6, candidate_rate: CORRA, proposed_rate: CDOR, is_proposed: true, input_state: usable, implied_base: 2.5, verdict: admissible}
+        - {context_id: q6, candidate_rate: SONIA, proposed_rate: CDOR, is_proposed: false, input_state: usable, implied_base: 2.5, verdict: no_series}
+
+  - name: int_text_check_base_level_quarter_power
+    description: >
+      Text slice R phase 2. Five proposals at one quarter, 10 tested positions each. A (SOFR): all admissible, and all
+      admissible under FEDFUNDS (another USD rate) too: confirmed, not discriminating, but it separates the currency bloc
+      (no other currency above 0.50). B (PRIME): all admissible, every alternative outside: confirmed, discriminating,
+      separates the bloc. C (EURIBOR): 8 admissible, 2 outside: share 0.80, not confirmed; 2 outside rows are fewer than
+      5, so not contradicted. D (CORRA): 4 admissible, 6 outside: contradicted. E (SONIA): 9 positions only: not
+      confirmed.
+    model: int_text_check_base_level_quarter
+    given:
+      - input: ref('int_text_check_base_level')
+        format: sql
+        rows: |
+          select 'A' as accession, k || '-' || i as context_id, '1' as cik, date '2026-03-31' as report_date,
+                 true as is_published, k as code_unit_key, 's' as code_shape_key, k as code, pr as proposed_rate,
+                 pr as proposed_series, cand as candidate_rate, cand = pr as is_proposed, 'usable' as input_state,
+                 5.0 as spread, 'printed' as spread_source, 9.0 as all_in, 'tag' as all_in_source, null::double as floor,
+                 4.0 as implied_base, 'published' as series_kind, 3.6 as range_min, 4.2 as range_max, 0.3 as tolerance,
+                 0.0 as upper_extra, 0.0 as distance,
+                 case when cand = pr and i > n_ok then 'outside' when cand = pr then 'admissible'
+                      when alt_ok and cand = 'FEDFUNDS' then 'admissible' else 'outside' end as verdict
+          from (values ('A', 'SOFR', 10, 10, true), ('B', 'PRIME', 10, 10, false), ('C', 'EURIBOR', 10, 8, false),
+                       ('D', 'CORRA', 10, 4, false), ('E', 'SONIA', 9, 9, false)) t(k, pr, n, n_ok, alt_ok)
+          cross join range(1, 11) r(i)
+          cross join (values ('SOFR'), ('PRIME'), ('EURIBOR'), ('CORRA'), ('SONIA'), ('FEDFUNDS')) c(cand)
+          where i <= n
+    expect:
+      rows:
+        - {code_unit_key: A, tested: 10, admissible: 10, share_admissible: 1.0, best_alt_share: 1.0, confirmed: true, discriminating: false, separates_currency_bloc: true, contradicted: false}
+        - {code_unit_key: B, tested: 10, admissible: 10, share_admissible: 1.0, best_alt_share: 0.0, confirmed: true, discriminating: true, separates_currency_bloc: true, contradicted: false}
+        - {code_unit_key: C, tested: 10, admissible: 8, share_admissible: 0.8, best_alt_share: 0.0, confirmed: false, discriminating: false, separates_currency_bloc: false, contradicted: false}
+        - {code_unit_key: D, tested: 10, admissible: 4, share_admissible: 0.4, best_alt_share: 0.0, confirmed: false, discriminating: false, separates_currency_bloc: false, contradicted: true}
+        - {code_unit_key: E, tested: 9, admissible: 9, share_admissible: 1.0, best_alt_share: 0.0, confirmed: false, discriminating: false, separates_currency_bloc: false, contradicted: false}
+
+  - name: int_text_proposal_verdict_rules
+    description: >
+      Text slice R phase 2, per number role since fix round 1. Columns: c1 all_in_rate under a 0.95 interest-rate tag
+      column: accepted_by_check; c2 orders differ: unstable; c3 reference_rate_code with no tag: needs_owner
+      (no_check_exists); c4 spread under a 0.90 interest-rate tag column: contradicted. Shapes and roles of c1: "S+#" its
+      spread 10 of 10 equal: accepted. "S+#, #% Floor": the spread 10 of 10 equal is accepted, the floor has no check
+      (no_check_exists), so the shape is partly_accepted, not accepted. "#%" 7 equal 3 differ: below_bar, needs_owner.
+      "E+#" 6 of 10 differ: contradicted. "P+#" 2 of 3 differ: contradicted_small (2 rows, at least half). "#% PIK" no
+      tag, 6 independent cash-plus-PIK identity rows pass: accepted by leg arithmetic; "#% Cash" 6 not independent rows
+      pass: they never count, no_check_exists. "N/A": nothing_to_read (no role row). "L+#" orders differ: unstable.
+      Codes: S agrees with the legend on 10 positions: accepted_by_check; P base level discriminating:
+      accepted_by_check; L only a non-discriminating base level: needs_owner (weak_only); C 6 of 20 tested rows outside:
+      contradicted; K 2 of 3 legend positions contradict: contradicted_small; T orders differ: unstable. Phase 3 check
+      1d: "#" whose orders split fixed_rate_pct / spread_pct, and the fixed-rate check finds its number equals the
+      all-in tag on 8 of 8 code-free rows: the role is fixed_rate_pct, accepted_by_check (the check settles the split).
+    model: int_text_proposal_verdict
+    given:
+      - input: ref('text_proposed_column')
+        rows:
+          - {run_id: r, unit_key: c1, column_holds_fwd: all_in_rate, column_holds_rev: all_in_rate, same_in_both_orders: true}
+          - {run_id: r, unit_key: c2, column_holds_fwd: rate_terms, column_holds_rev: spread, same_in_both_orders: false}
+          - {run_id: r, unit_key: c3, column_holds_fwd: reference_rate_code, column_holds_rev: reference_rate_code, same_in_both_orders: true}
+          - {run_id: r, unit_key: c4, column_holds_fwd: spread, column_holds_rev: spread, same_in_both_orders: true}
+      - input: ref('int_text_column_unit')
+        rows:
+          - {unit_key: c1, cik: "1"}
+          - {unit_key: c2, cik: "1"}
+          - {unit_key: c3, cik: "1"}
+          - {unit_key: c4, cik: "1"}
+      - input: ref('int_text_check_column_tags')
+        rows:
+          - {unit_key: c1, position_rows: 100, tagged_rows: 100, dominant_field: interest_rate_tag, dominant_share: 0.95}
+          - {unit_key: c2, position_rows: 100, tagged_rows: 100, dominant_field: spread, dominant_share: 1.0}
+          - {unit_key: c3, position_rows: 100, tagged_rows: 0, dominant_field: null, dominant_share: null}
+          - {unit_key: c4, position_rows: 50, tagged_rows: 50, dominant_field: interest_rate_tag, dominant_share: 0.9}
+      - input: ref('text_proposed_shape_role')
+        rows:
+          - {run_id: r, unit_key: c1, shape: "S+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "S+#, #% Floor", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "S+#, #% Floor", number_index: 2, role_fwd: floor_pct, role_rev: floor_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "#%", number_index: 1, role_fwd: all_in_rate_pct, role_rev: all_in_rate_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "E+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "P+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "#% PIK", number_index: 1, role_fwd: pik_rate_pct, role_rev: pik_rate_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "#% Cash", number_index: 1, role_fwd: cash_rate_pct, role_rev: cash_rate_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "N/A", number_index: 0, role_fwd: null, role_rev: null, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "L+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_pct, same_in_both_orders: false, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "#", number_index: 1, role_fwd: fixed_rate_pct, role_rev: spread_pct, same_in_both_orders: false, roles_fit_shape: true}
+      - input: ref('int_text_check_fixed_rate')
+        rows:
+          - {unit_key: c1, shape: "#", compared: 8, equal: 8, verdict: fixed_rate, label_changes: true}
+      - input: ref('int_text_rate_proposed')
+        format: sql
+        rows: |
+          select 'A' as accession, 'x' as context_id, 'c1' as unit_key, left(md5('c1|S+#'), 16) as shape_key,
+                 'S+#' as shape, 1 as number_index, 'read' as status, 'spread' as field, 'S' as reference_rate_code
+          where false
+      - input: ref('int_text_check_number_tag')
+        format: sql
+        rows: |
+          select left(md5('c1|' || upper(s)), 16) as shape_key, 1 as number_index,
+                 case when i <= ok then 'equal' else 'differs' end as verdict
+          from (values ('S+#', 10, 10), ('S+#, #% Floor', 10, 10), ('#%', 7, 10), ('E+#', 4, 10), ('P+#', 1, 3))
+               t(s, ok, n)
+          cross join range(1, 11) r(i)
+          where i <= n
+      - input: ref('int_text_check_leg_arithmetic')
+        format: sql
+        rows: |
+          select [f || '|' || left(md5('c1|' || upper(s)), 16)]::varchar[] as parts, 'a_cash_plus_pik' as identity,
+                 'pass' as verdict, conf as counts_as_confirming
+          from (values ('pik_rate', '#% PIK', true), ('cash_rate', '#% Cash', false)) t(f, s, conf)
+          cross join range(1, 7) r(i)
+      - input: ref('text_proposed_code')
+        rows:
+          - {run_id: r, unit_key: c1, code: S, reference_rate_fwd: SOFR, reference_rate_rev: SOFR, rate_name: SOFR, same_in_both_orders: true}
+          - {run_id: r, unit_key: c1, code: P, reference_rate_fwd: PRIME, reference_rate_rev: PRIME, rate_name: PRIME, same_in_both_orders: true}
+          - {run_id: r, unit_key: c1, code: L, reference_rate_fwd: LIBOR, reference_rate_rev: LIBOR, rate_name: LIBOR, same_in_both_orders: true}
+          - {run_id: r, unit_key: c1, code: C, reference_rate_fwd: CORRA, reference_rate_rev: CORRA, rate_name: CORRA, same_in_both_orders: true}
+          - {run_id: r, unit_key: c1, code: K, reference_rate_fwd: KORIBOR, reference_rate_rev: KORIBOR, rate_name: KORIBOR, same_in_both_orders: true}
+          - {run_id: r, unit_key: c1, code: T, reference_rate_fwd: TONAR, reference_rate_rev: MUTKCALM, rate_name: null, same_in_both_orders: false}
+      - input: ref('int_text_check_code_legend')
+        rows:
+          - {unit_key: c1, code_key: S, accession: A, positions: 10, verdict: agrees}
+          - {unit_key: c1, code_key: K, accession: A, positions: 1, verdict: agrees}
+          - {unit_key: c1, code_key: K, accession: B, positions: 2, verdict: contradicts}
+      - input: ref('int_text_check_base_level_quarter')
+        rows:
+          - {code_unit_key: c1, code_key: S, report_date: 2026-03-31, tested: 20, admissible: 20, outside: 0, confirmed: true, discriminating: false, separates_currency_bloc: true, contradicted: false}
+          - {code_unit_key: c1, code_key: P, report_date: 2026-03-31, tested: 20, admissible: 20, outside: 0, confirmed: true, discriminating: true, separates_currency_bloc: true, contradicted: false}
+          - {code_unit_key: c1, code_key: L, report_date: 2026-03-31, tested: 20, admissible: 20, outside: 0, confirmed: true, discriminating: false, separates_currency_bloc: false, contradicted: false}
+          - {code_unit_key: c1, code_key: C, report_date: 2026-03-31, tested: 20, admissible: 14, outside: 6, confirmed: false, discriminating: false, separates_currency_bloc: false, contradicted: true}
+    expect:
+      rows:
+        - {proposal_kind: column, unit_key: c1, shape: null, number_index: null, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: column, unit_key: c2, shape: null, number_index: null, code: null, verdict: unstable, reason: null}
+        - {proposal_kind: column, unit_key: c3, shape: null, number_index: null, code: null, verdict: needs_owner, reason: no_check_exists}
+        - {proposal_kind: column, unit_key: c4, shape: null, number_index: null, code: null, verdict: contradicted, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "S+#", number_index: 1, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "S+#, #% Floor", number_index: 1, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "S+#, #% Floor", number_index: 2, code: null, verdict: needs_owner, reason: no_check_exists}
+        - {proposal_kind: role, unit_key: c1, shape: "#%", number_index: 1, code: null, verdict: needs_owner, reason: below_bar}
+        - {proposal_kind: role, unit_key: c1, shape: "E+#", number_index: 1, code: null, verdict: contradicted, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "P+#", number_index: 1, code: null, verdict: contradicted_small, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "#% PIK", number_index: 1, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "#% Cash", number_index: 1, code: null, verdict: needs_owner, reason: no_check_exists}
+        - {proposal_kind: role, unit_key: c1, shape: "L+#", number_index: 1, code: null, verdict: unstable, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "#", number_index: 1, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "#", number_index: null, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "S+#", number_index: null, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "S+#, #% Floor", number_index: null, code: null, verdict: partly_accepted, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "#%", number_index: null, code: null, verdict: needs_owner, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "E+#", number_index: null, code: null, verdict: contradicted, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "P+#", number_index: null, code: null, verdict: contradicted_small, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "#% PIK", number_index: null, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "#% Cash", number_index: null, code: null, verdict: needs_owner, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "N/A", number_index: null, code: null, verdict: nothing_to_read, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "L+#", number_index: null, code: null, verdict: unstable, reason: null}
+        - {proposal_kind: code, unit_key: c1, shape: null, number_index: null, code: S, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: code, unit_key: c1, shape: null, number_index: null, code: P, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: code, unit_key: c1, shape: null, number_index: null, code: L, verdict: needs_owner, reason: weak_only}
+        - {proposal_kind: code, unit_key: c1, shape: null, number_index: null, code: C, verdict: contradicted, reason: null}
+        - {proposal_kind: code, unit_key: c1, shape: null, number_index: null, code: K, verdict: contradicted_small, reason: null}
+        - {proposal_kind: code, unit_key: c1, shape: null, number_index: null, code: T, verdict: unstable, reason: null}

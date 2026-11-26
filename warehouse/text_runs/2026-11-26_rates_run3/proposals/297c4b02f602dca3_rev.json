@@ -1,0 +1,14 @@
+{
+ "column_holds": "pik_spread_or_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The header is PIK under Interest, and all 177 rows carry a pik_rate tag placed in this cell that equals n1. The example row shows S+ in the Ref. Rate column with a PIK of 2.25%, which could be a PIK spread over the reference rate. The tag is pik_rate, so I used pik_rate_pct."
+}

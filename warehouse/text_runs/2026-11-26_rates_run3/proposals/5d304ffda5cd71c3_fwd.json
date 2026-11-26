@@ -1,0 +1,27 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.95,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The tag profile shows interest_rate tagged in 6561 of 6562 rows. The plain '#%' shape equals the tagged interest_rate on every compared row. In '#% PIK' the number equals the pik_rate tag, so it is a PIK rate. In '#% (incl #% PIK)' n1 is the total rate and n2 is the PIK part, which matches the pik_rate tag and the printed wording. The 'n1 equals interest_rate' leg for that shape has only 1 compared row, so that evidence is thin and the roles rest mostly on the wording."
+}

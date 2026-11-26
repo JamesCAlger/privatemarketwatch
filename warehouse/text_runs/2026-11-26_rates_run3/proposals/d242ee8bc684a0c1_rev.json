@@ -1,0 +1,75 @@
+{
+ "column_holds": "rate_terms",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "SOFR+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#%",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "P+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "S+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "CA+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "E+#%",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [
+  {
+   "code": "SOFR",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": "U.S. Prime Rate"
+  },
+  {
+   "code": "S",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": "Sterling Overnight Interbank Average Rate"
+  },
+  {
+   "code": "CA",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  }
+ ],
+ "note": "Spread tags equal n1 in all shapes. The bare '#%' shape is a fixed rate; the example row shows 10.00% PIK in the Interest Rate column, so I read it as a PIK rate. The tag is 'spread', so it could instead be a plain fixed rate (fixed_rate_pct)."
+}

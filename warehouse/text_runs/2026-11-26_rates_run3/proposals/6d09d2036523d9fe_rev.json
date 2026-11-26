@@ -1,0 +1,27 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "Every cell is tagged interest_rate. In the '#% (incl. #% PIK)' shape, n1 equals the interest_rate tag on all 22 rows and n2 equals the pik_rate tag on all 22 rows, so n1 is the all-in rate and n2 the PIK part. The '#% PIK' shape has one row, 9.75% PIK, where the whole rate is PIK. Its n1 matches the pik_rate tag and the interest_rate tag is absent, so I read it as a PIK rate."
+}

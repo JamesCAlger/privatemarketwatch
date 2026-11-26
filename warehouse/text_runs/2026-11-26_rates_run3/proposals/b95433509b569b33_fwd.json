@@ -1,0 +1,21 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.95,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The interest_rate tag sits in this column's cells on all 973 rows and n1 equals it on every compared row, so n1 is the all-in rate. In the PIK shape, n2 equals the tagged pik_rate on all 4 rows and is the PIK part included in the all-in rate. The column holds no reference-rate codes; those are in the separate Reference Rate and Spread column."
+}

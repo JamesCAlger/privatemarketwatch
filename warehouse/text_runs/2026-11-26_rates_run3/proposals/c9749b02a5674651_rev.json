@@ -1,0 +1,14 @@
+{
+ "column_holds": "pik_spread_or_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The column sits under the Interest group header as PIK. All 217 rows tag pik_rate in this cell and equal the printed number. The reference rate is in a separate column, so the value is a PIK rate, not a spread over a reference rate."
+}

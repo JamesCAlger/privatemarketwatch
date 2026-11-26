@@ -1,0 +1,73 @@
+{
+ "column_holds": "reference_rate_code",
+ "column_confidence": 0.95,
+ "shapes": [
+  {
+   "shape": "S+",
+   "roles": []
+  },
+  {
+   "shape": "N/A",
+   "roles": []
+  },
+  {
+   "shape": "E+",
+   "roles": []
+  },
+  {
+   "shape": "SA+",
+   "roles": []
+  },
+  {
+   "shape": "C+",
+   "roles": []
+  },
+  {
+   "shape": "P+",
+   "roles": []
+  },
+  {
+   "shape": "B+",
+   "roles": []
+  }
+ ],
+ "codes": [
+  {
+   "code": "S",
+   "reference_rate": "SOFR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "E",
+   "reference_rate": "EURIBOR",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "SA",
+   "reference_rate": "SONIA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "C",
+   "reference_rate": "CORRA",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "P",
+   "reference_rate": "PRIME",
+   "basis": "legend",
+   "note": ""
+  },
+  {
+   "code": "B",
+   "reference_rate": "BBSY",
+   "basis": "legend",
+   "note": "Australian Bank Bill Swap Bid Rate"
+  }
+ ],
+ "note": "The column holds only the reference-rate code with a trailing '+'. The spread appears in the separate Cash or PIK columns, and no shape contains numbers."
+}

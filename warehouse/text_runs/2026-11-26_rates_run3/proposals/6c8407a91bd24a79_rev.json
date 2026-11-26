@@ -1,0 +1,27 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "Plain '#%' equals the interest_rate tag in all 543 rows, so it is the all-in rate. In '#% (incl. #% PIK)' n1 matches interest_rate and n2 matches pik_rate. The '#% PIK' cells match pik_rate, e.g. 12.69% PIK on SOFR+8.25%, so the whole rate is PIK; I labelled it pik_rate_pct, though it is arguably the all-in rate as well."
+}

@@ -23,7 +23,9 @@ import hashlib
 # of a scope fund in the two stores, loaded or skipped) and agent_store_skipped (why a file was not loaded).
 # 7: slice 5 Task 4. source_encodings.rate_only_contexts 'adopt_adjacent' is a rule row (rule_class convention, target
 # interest_rate, action adopt_adjacent_rate_context) instead of a not_loaded row. Other rows and ids are unchanged.
-LOADER_VERSION = "7"
+# 8: text slice R phase 3. A `reading_rules` entry's parameter may be an object, stored as canonical JSON (keys sorted,
+# no spaces). Rows and ids of every existing rule are unchanged (their parameters are text).
+LOADER_VERSION = "8"
 
 RULE_COLUMNS = [
     "rule_id", "cik", "valid_from", "valid_to", "validity_basis", "sel_accession", "sel_axis",

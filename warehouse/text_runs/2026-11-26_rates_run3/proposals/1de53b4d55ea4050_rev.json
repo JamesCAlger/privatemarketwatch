@@ -1,0 +1,40 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (#% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#%PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (#%PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The interest_rate tag matches n1 in nearly every '#%' row (12407 of 12409), and in the '#% (#% PIK)' shape n1 matches the interest_rate tag while n2 matches the pik_rate tag (1239 of 1252). Pure '#% PIK' cells are tagged as pik_rate. The Spread and Reference columns are separate. In the '#% PIK' shape, n1 equals interest_rate in only 32 of 32 compared rows, which is a small sample; pik_rate is the dominant tag, so I use pik_rate_pct."
+}

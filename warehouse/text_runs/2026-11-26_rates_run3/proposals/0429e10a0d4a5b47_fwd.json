@@ -1,0 +1,20 @@
+{
+ "column_holds": "spread",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "spread_pct"
+   ]
+  },
+  {
+   "shape": "#",
+   "roles": [
+    "spread_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The Ref. Rate column holds the code (S+), and this Cash column holds only the number. Every compared row's tagged spread equals n1 and the tag sits in this cell (1155 of 1155 and 1 of 1), so the number is a spread despite the 'Cash' header. The tags decided it over the header wording."
+}

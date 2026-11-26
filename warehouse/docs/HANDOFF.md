@@ -1,6 +1,6 @@
 # Handoff: data-model redesign in `warehouse/`
 
-**Current state: read "RESUME HERE" and "State after slice 5 (corrections), 2026-11-25" near the end. The sections before them are history.**
+**Current state: for the text work read "State after text slices A and P (2026-11-26)" at the end; for the spine read "RESUME HERE" and "State after slice 5 (corrections), 2026-11-25". The sections before them are history.**
 
 Written 2026-11-18 at the end of the session that built steps 1 and 2. Read this first, then the documents it points to.
 
@@ -895,3 +895,122 @@ minors in the section above. Then slice 5 (corrections; 716 rows wait on it), th
 
 Agreement with production is not correctness. Unverified: 671 principal currencies taken as USD;
 2,303 published principals on rows with no debt term fact.
+
+## State after text slices A and P (2026-11-26) - READ THIS FOR THE TEXT WORK
+
+Branch `warehouse-text-spec`, pull request 23 into `dev`. Slice 5 (pull request 22) is merged into `dev`.
+
+- Specs: `text_fields_spec_2026-11-19.md` governs the method (owner decisions 19-T1 to 19-T13); `text_fields.md` holds
+  measurements and section 0 reconciles the two. Plan: `2026-11-26-text-plan.md`. Order decided by the owner: A, P, R,
+  then L beside them, C, I, F.
+- Slice A done (`baseline_text_agent_a_2026-11-26.md`): Agent A's Apollo label grammar agrees with the tags on 98.5%;
+  the differences are stale labels. Owner's view: good enough to keep. Recorded: the tag first, then the printed cell,
+  the label grammar as second source and check.
+- Slice P done (`baseline_page_structure_2026-11-26.md`): nine models `int_page_*` and `int_position_heading`; two fix
+  rounds, three reviews. Full build `PASS=904 WARN=119 ERROR=0 TOTAL=1023` plus one test added after (run alone, passes).
+  Columns are settled. Heading LEVELS are a default only: owner agreed 2026-11-26 that what a heading means, and which
+  heading is the parent, is decided by a per-fund heading rule in slices C and I, not by more general code.
+- The full build needs `--threads 2` on this machine: with 4 threads `int_page_cell` ran out of memory at about 8 GB
+  free. Not yet made cheaper.
+- Not built in P: the check that printed subtotals equal the rows beneath (plan P4), and applying the wrappers' existing
+  rules through the page models (plan P5). Both move to slice R.
+- Owner questions waiting: 2,271 Blue Owl published positions (from 2024-12-31) have their fair value printed only in
+  the unfunded-commitment table, with no cost (a slice 2 scope question); the three questions in the plan.
+- Next: slice R (column headers and rate cells), the first slice with agent runs. Starts on the owner's go.
+
+### Owner answers, 2026-11-26 (after slice P)
+
+- The 2,271 Blue Owl published positions printed only in the unfunded-commitment table: keep them published.
+- Agent stability experiment run (`baseline_text_agent_stability_2026-11-26.md`): Sonnet and Haiku equally accurate
+  (138 to 140 of 144); Haiku used twice the tokens; "all four runs agree" still accepted one wrong header. So
+  agreement is a filter and the check is the acceptor. Recommendation waiting for the owner: one model, run twice
+  with options reversed, Sonnet by default.
+- Base rates: only a SOFR table exists; it covers about 85 to 90% of floating-rate rows. Other tables need a download
+  and the owner's go.
+- Owner, 2026-11-26: the model for slice R is Sonnet, run twice with the options reversed, plus the check. The
+  base-rate check uses the SOFR table only for now. Evidence: `baseline_text_agent_stability_2026-11-26.md`.
+
+## State after text slice R (rate columns), 2026-11-26 - READ THIS FOR THE TEXT WORK
+
+Branch `warehouse-text-spec`, pull request 23 into `dev`. Last commit of the slice: `3a9d0a9d` (fix round 2).
+Last results: full build (`--threads 2`) `PASS=1154 WARN=130 ERROR=0 TOTAL=1284`; 185 Python tests; CI fixture
+`PASS=747 WARN=5 ERROR=0 TOTAL=752`. Fix round 2 was not independently reviewed (phase 3 and fix round 1 were).
+
+Agreement with the filer's tags, its legend, public rate series or production is consistency, not correctness. No
+page was read by a person.
+
+### What is built
+
+| Phase | What | Account |
+|---|---|---|
+| 1 | Rate columns, text shapes, worklist, bundles (`int_text_cell`, `int_text_column_unit`, `int_text_shape_unit`, `int_text_worklist`, `int_text_bundle`) | `baseline_text_rates_phase1_2026-11-26.md` |
+| Agent run | Sonnet, one API request per column, twice with options reversed; run 3 is the run of record (`text_runs/2026-11-26_rates_run3/`) | `baseline_text_rates_agent_run_2026-11-26.md` |
+| 2 | Proposals as seeds and the checks: printed number against tag, leg arithmetic, base level against FRED series, legend per filing; verdict per column, shape, role, code | `baseline_text_rates_phase2_2026-11-26.md` |
+| 3 | Accepted rules written into the five wrapper copies by `scripts/text/accepted_rules_to_wrappers.py` (loader version 8); read model `int_text_rate_read` (reference rate, spread, floor, all-in, cash, PIK rate, PIK spread, rate type, each with rule id and grade); constraints `int_text_rate_constraint`; held values `int_text_rate_held`; findings `int_text_rate_finding`; seeds `reference_rate`, `reference_rate_name` | `baseline_text_rates_phase3_2026-11-26.md` (sections 14 and 15 are the fix rounds) |
+
+Grades on every value: `checked` (a check accepted the rule), `matches_few_rows`, `untested`, `owner`.
+
+### Owner decisions (2026-11-26)
+
+The 13 decisions and the owner's answers are in `owner_review_text_rates_2026-11-26.md` ("Owner's answers"). Short:
+all accepted; floors read as their own field, grade untested; an untested reading is preferred to a missing one; a
+number with no rate code that equals the all-in rate is a fixed rate; "Base Rate" is stored as printed.
+
+Design agreed the same day (plan section "Shared-model constraints and findings", K1 to K11): a field's meaning is
+fixed by constraints in one shared model, the same for every fund; dbt tests detect, a decisions store remembers;
+one finding per fund, constraint and rule with a stable id; the decisions table belongs to slice 6.
+
+### Counts (after fix round 2)
+
+- Rates production leaves unread (`cmp_rate`): 1,552 (1,407 positions). Now read: 613; 461 equal production, 152
+  differ. The earlier figure 1,772 cannot be traced; do not use it.
+- Readings blocked by constraints 1 to 3: 5, kept as held values. Reference rates `code_undecided`: 64 (the spread
+  is read).
+- Constraint 5 (all-in near reference level plus spread) fails 306 rows: 168 in 2022; 64 SOFR failures in 2024 to
+  2026 are not explained.
+- Findings: 58 (BCRED 41, Ares 8, HPS 7, Apollo 2).
+- Production errors found: Apollo K and T held as SOFR (15), HPS BS and BB (10), a fixed rate held as a spread on
+  17 positions (BCRED 11, HPS 6), BCRED 2022-09-30 rate tags one row off (9 positions).
+
+### Rulings made without the owner, with the cost if wrong
+
+- Ares "#% PIK" Coupon cells are read as the all-in rate and the PIK rate (under owner item 9). 1,130 all-in rates
+  production does not hold: preferred 711, common equity 173, fund 9, loans 237. If a PIK dividend is not an
+  all-in rate, the 893 equity and fund values are wrong in meaning; decide in slice C.
+- Blue Owl numbers in the "Cash" column on rows whose "Ref. Rate" prints "N/A" are fixed rates, grade untested
+  (21 positions, under owner item 11).
+- A legend entry is not carried across a filing that gives the code two names: 25 positions stay unread.
+- A printed value that differs from the filer's tag is left unread and listed (31 positions), except the BCRED
+  2022-09-30 rows.
+
+### Open for the owner
+
+1. Does "spread" include the PIK margin (production does; here it is the cash margin only: the cause of all 152
+   differences)? Is a PIK margin beside a reference rate a PIK spread or a PIK rate (stored as PIK rate today)?
+   Recommendation: cash margin only; PIK spread for a margin over a reference rate.
+2. Is a PIK dividend on preferred stock an all-in rate (893 Ares rows)? Recommendation: decide in slice C.
+3. Push of the commits after aa94b332.
+
+### Measured, not built
+
+- Row roles against the printed row label (`scripts/text/q_k_role_page.sql`): no position sits on a row labelled
+  Total or Subtotal (about 72,800 judged); 111 unresolved rows do (Apollo 72, Blue Owl 39) and are probably
+  aggregates; 1,681 positions whose facts span several rows were not judged. The row role is built by slice 2's
+  rules from labels and amounts; the filing does not provide it, and no check used the page before this.
+- Reference-rate currency against principal currency (`scripts/text/q_k5_currency.sql`): 853 positions differ.
+  593 are Ares, whose principals are all held as USD while the page prints foreign benchmarks. The other four
+  funds: 260, mostly SOFR on a euro or sterling principal, causes not separated. BCRED "S" as SONIA is supported
+  (4 SONIA rows with a non-sterling principal). A flag, not a hard constraint.
+
+### Not done
+
+- The note printed under Ares' schedule (the "alternate base rate" sentence) is not captured: it needs a new
+  filed table, parser version 4 and a re-parse of the 86 cached filings. Design in the phase 3 account, section 10.
+- K8 (map constraints to production's ledger rule ids), K6 and K7 (decisions table, agent routing: slice 6).
+- Finding-id stability across two real builds is untested (the CI fixture has no rate rules).
+- From slice P: the subtotal sum check, a cheaper `int_page_cell`, the "changed" worklist state.
+
+### Next
+
+Slice L (the label), then C (class and lien), I (industry; open it with the subtotal check and the 111 unresolved
+rows), F (footnotes; the Ares note belongs here). Plan: `2026-11-26-text-plan.md`.

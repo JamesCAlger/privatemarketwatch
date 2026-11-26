@@ -1,0 +1,485 @@
+version: 2
+
+# Text slice R phase 3 (2026-11-26): the accepted rate-text rules applied (docs/baseline_text_rates_phase3_2026-11-26.md).
+# Nothing here is published outside the warehouse. Keys: tests/int_text_rate_read_keys_unique.sql.
+
+models:
+  - name: int_text_check_fixed_rate
+    description: >
+      Check 1d (owner item 11): per proposed single-number shape with no rate code whose number some order calls a
+      spread or a fixed rate, whether the number equals the all-in tag on code-free positions (fixed_rate, not_fixed,
+      too_few_rows, no_check). A fixed_rate verdict relabels the role fixed_rate_pct in int_text_proposal_verdict.
+    columns:
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [fixed_rate, fixed_rate_few_rows, not_fixed, too_few_rows, no_check]
+
+  - name: int_text_legend_rate
+    description: >
+      Per filing and code: the rates the filing's own legend gives the code, by exact lookup in seeds reference_rate and
+      reference_rate_name (one_rate, two_rates, unresolved).
+    columns:
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [one_rate, two_rates, unresolved]
+
+  - name: int_text_rate_rule
+    description: >
+      The accepted rate-text rules of the wrapper copies (target rate_text), typed. Each carries a source grade.
+    columns:
+      - name: rule_id
+        data_tests: [unique, not_null]
+      - name: action
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [rate_column, rate_role, rate_code, rate_text_not_a_code, rate_printed_wins]
+      - name: source_grade
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [checked, matches_few_rows, untested, owner]
+      - name: evidence
+        data_tests: [not_null]
+      - name: role
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [spread_bps, spread_pct, floor_pct, all_in_rate_pct, cash_rate_pct, pik_rate_pct, pik_spread_pct,
+                         fixed_rate_pct]
+          - not_null:
+              config:
+                where: "action = 'rate_role'"
+
+  - name: int_text_rate_read_cell
+    description: Every printed rate cell of a position in a ruled column, read with the accepted rules (status per row).
+    columns:
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [read, no_role_rule, not_a_code, legend_two_rates, legend_rate_unknown, code_undecided,
+                         code_no_rule, no_value]
+      - name: source_grade
+        data_tests:
+          - not_null:
+              config:
+                where: "status = 'read'"
+
+  - name: int_text_rate_read
+    description: >
+      Per position: reference rate, spread, floor, all-in, cash, PIK, PIK spread and rate type read with the accepted
+      rules, each with its rule id, source grade and status. Constraints A1 to A3 applied (a reading that breaks them is
+      not applied and keeps a constraint_* status); the tag first (differs_from_tag) except where a rate_printed_wins
+      rule covers the row.
+    columns:
+      - name: rate_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [fixed, floating]
+      - name: reference_rate_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [not_printed, conflict, code_undecided, read_no_tag]
+      - name: all_in_source
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [all_in, fixed, both, pik_coupon]
+      - name: spread_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [not_printed, conflict, constraint_spread_needs_reference_rate, differs_from_tag,
+                         read_equals_tag, read_no_tag]
+      - name: all_in_rate_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [not_printed, conflict, constraint_fixed_with_floating_terms, whole_coupon_pik_not_applied,
+                         differs_from_tag, printed_wins_over_tag, read_equals_tag, read_no_tag]
+      - name: floor_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [not_printed, conflict, constraint_floor_needs_reference_rate, read_no_tag]
+
+  - name: int_text_rate_held
+    description: >
+      Plan K3: readings blocked by constraints 1 to 3, kept as held values (position, field, value, rule, constraint),
+      not in the shared field.
+    columns:
+      - name: constraint_name
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [A1_spread_needs_reference_rate, A2_floor_needs_reference_rate, A3_fixed_with_floating_terms]
+      - name: rule_id
+        data_tests: [not_null]
+
+  - name: int_text_rate_finding
+    description: >
+      Plan K4: one finding per (fund, constraint, rule) over held values and constraint failures; finding_id is a hash of
+      those three only, so it is the same in every build.
+    columns:
+      - name: finding_id
+        data_tests: [unique, not_null]
+      - name: positions
+        data_tests: [not_null]
+
+  - name: int_text_rate_constraint
+    description: Constraints A4 (legs) and A5 (base level) on the read model; failures reported, never applied.
+    columns:
+      - name: constraint_name
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [c4_legs, c5_base_level]
+      - name: verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [pass, fail, not_tested, no_series]
+
+unit_tests:
+  - name: int_text_check_fixed_rate_false_positive
+    description: >
+      Check 1d. u1 "#%" proposed spread_pct: on 5 code-free positions the number equals the all-in tag -> fixed_rate,
+      label_changes. FALSE POSITIVE GUARDS: u2 "S+#" (a real spread with a code, whose number happens to equal a faulty
+      all-in tag on 5 rows) is out of scope: no row, never fixed. u3 "#%" proposed spread_pct in a column whose positions
+      read a code in another column (a "Spread" column beside a "Reference" column): rows_with_code 5, compared 0 -> no_check, not
+      fixed. Fix round 2: u4 3 code-free rows, all equal to the all-in tag -> fixed_rate_few_rows, label changes; u5 3 rows,
+      one differs -> too_few_rows, no label change.
+    model: int_text_check_fixed_rate
+    given:
+      - input: ref('text_proposed_shape_role')
+        rows:
+          - {run_id: r, unit_key: u1, shape: "#%", number_index: 1, role_fwd: spread_pct, role_rev: spread_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u2, shape: "S+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_bps, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u3, shape: "#%", number_index: 1, role_fwd: spread_pct, role_rev: spread_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u4, shape: "#%", number_index: 1, role_fwd: spread_pct, role_rev: spread_pct, same_in_both_orders: true, roles_fit_shape: true}
+          - {run_id: r, unit_key: u5, shape: "#%", number_index: 1, role_fwd: spread_pct, role_rev: spread_pct, same_in_both_orders: true, roles_fit_shape: true}
+      - input: ref('int_text_rate_proposed')
+        format: sql
+        rows: |
+          select 'A' as accession, u || '-' || i as context_id, u as unit_key, shp as shape, 1 as number_index,
+                 v as number_value, 'read' as status, 'spread' as field, null::varchar as reference_rate_code
+          from (values ('u1', '#%', 7.25), ('u2', 'S+#', 725.0), ('u3', '#%', 5.0)) t(u, shp, v)
+          cross join range(1, 6) r(i)
+          union all
+          select 'A', u || '-' || i, u, '#%', 1, v, 'read', 'spread', null
+          from (values ('u4', 6.75), ('u5', 6.75)) t(u, v) cross join range(1, 4) r(i)
+          union all
+          select 'A', 'u3-' || i, 'ucode', 'SOFR (Q)', 0, null, 'read', 'reference_rate_code', 'SOFR'
+          from range(1, 6) r(i)
+      - input: ref('int_field_normalised')
+        format: sql
+        rows: |
+          select 'A' as accession, u || '-' || i as context_id, 'interest_rate' as field, 'all_in' as rate_kind,
+                 'normalised' as status, v as value
+          from (values ('u1', 7.25), ('u2', 7.25), ('u3', 5.0)) t(u, v)
+          cross join range(1, 6) r(i)
+          union all
+          select 'A', u || '-' || i, 'interest_rate', 'all_in', 'normalised', case when u = 'u5' and i = 3 then 9.0 else 6.75 end
+          from (values ('u4'), ('u5')) t(u) cross join range(1, 4) r(i)
+      - input: ref('int_text_column_unit')
+        rows:
+          - {unit_key: u1, cik: "1"}
+          - {unit_key: u3, cik: "1"}
+          - {unit_key: u4, cik: "1"}
+          - {unit_key: u5, cik: "1"}
+    expect:
+      rows:
+        - {unit_key: u1, shape: "#%", number_rows: 5, rows_with_code: 0, compared: 5, equal: 5, verdict: fixed_rate, label_changes: true}
+        - {unit_key: u3, shape: "#%", number_rows: 5, rows_with_code: 5, compared: 0, equal: 0, verdict: no_check, label_changes: false}
+        - {unit_key: u4, shape: "#%", number_rows: 3, rows_with_code: 0, compared: 3, equal: 3, verdict: fixed_rate_few_rows, label_changes: true}
+        - {unit_key: u5, shape: "#%", number_rows: 3, rows_with_code: 0, compared: 3, equal: 2, verdict: too_few_rows, label_changes: false}
+
+  - name: int_text_legend_rate_lookup
+    description: >
+      Exact lookup, no substring. F1 'Secured Overnight Financing Rate ("SOFR" or "S")': one_rate SOFR. F2 'Norwegian
+      Overnight Weighted Average Rate ("NIBOR")': the name says NOWA, the abbreviation NIBOR -> two_rates. F3 'Japan
+      Unsecured Overnight Call Rate Expected ("MUTKCALM")': neither part listed -> unresolved. F4 "CDOR" and "CORRA" both
+      given for code C in one filing -> two_rates (no CDOR/CORRA leak through a substring).
+    model: int_text_legend_rate
+    given:
+      - input: ref('int_text_check_legend')
+        rows:
+          - {cik: "1", accession: F1, report_date: 2026-03-31, code: S, name: "Secured Overnight Financing Rate", abbreviation: SOFR, code_key: S, abbreviation_key: SOFR}
+          - {cik: "1", accession: F2, report_date: 2026-03-31, code: NIBOR, name: "Norwegian Overnight Weighted Average Rate", abbreviation: NIBOR, code_key: NIBOR, abbreviation_key: NIBOR}
+          - {cik: "1", accession: F3, report_date: 2026-03-31, code: MUTKCALM, name: "Japan Unsecured Overnight Call Rate Expected", abbreviation: MUTKCALM, code_key: MUTKCALM, abbreviation_key: MUTKCALM}
+          - {cik: "1", accession: F4, report_date: 2026-03-31, code: C, name: "Canadian Dollar Offered Rate", abbreviation: CDOR, code_key: C, abbreviation_key: CDOR}
+          - {cik: "1", accession: F4, report_date: 2026-03-31, code: C, name: "Canadian Overnight Repo Rate Average", abbreviation: CORRA, code_key: C, abbreviation_key: CORRA}
+      - input: ref('reference_rate')
+        rows:
+          - {rate_name: SOFR}
+          - {rate_name: NIBOR}
+          - {rate_name: NOWA}
+          - {rate_name: CDOR}
+          - {rate_name: CORRA}
+      - input: ref('reference_rate_name')
+        rows:
+          - {printed_name: "SECURED OVERNIGHT FINANCING RATE", rate_name: SOFR}
+          - {printed_name: "NORWEGIAN OVERNIGHT WEIGHTED AVERAGE RATE", rate_name: NOWA}
+          - {printed_name: "CANADIAN DOLLAR OFFERED RATE", rate_name: CDOR}
+          - {printed_name: "CANADIAN OVERNIGHT REPO RATE AVERAGE", rate_name: CORRA}
+    expect:
+      rows:
+        - {accession: F1, code_key: S, verdict: one_rate, rates: [SOFR]}
+        - {accession: F2, code_key: NIBOR, verdict: two_rates, rates: [NIBOR, NOWA]}
+        - {accession: F3, code_key: MUTKCALM, verdict: unresolved, rates: []}
+        - {accession: F4, code_key: C, verdict: two_rates, rates: [CDOR, CORRA]}
+
+  - name: int_text_rate_read_cell_rules
+    description: >
+      Rules applied to cells. r1 "S+525, 0.50% Floor" (2026-03-31): roles read (spread 5.25 from basis points, floor
+      0.50); code S has no own legend in the filing, the table entry S=SOFR (2025-03-31 to 2025-12-31) is nearest:
+      SOFR, code_table. r2 "S+525, 0.50% FLOOR": another spelling, no role rule: no_role_rule (code still read). r3 code
+      C in filing F3 whose own legend says CDOR and CORRA: legend_two_rates. r4 code C in filing F4 (2023-06-30), own
+      legend none; the only table entry C=CORRA (2025-03-31 on) lies beyond F5 (2024-12-31) whose legend gives C two
+      names: not carried, code_no_rule. r5 "SONIA+350": self-named (owner item 1), rule reference_rate:SONIA. r6
+      "Variable": not_a_code. r7 code E with its own legend EURIBOR in F7: legend_own, citing the table rule E=EURIBOR.
+      Fix round 1: r8 "8.00%" whose row prints N/A in the condition column: the conditional fixed-rate rule wins; r9 the
+      same number where that column prints "S+": the unconditional spread rule.
+    model: int_text_rate_read_cell
+    given:
+      - input: ref('int_text_rate_rule')
+        rows:
+          - {rule_id: col, cik: "1", action: rate_column, table_signature: T, header_signature: h, column_holds: rate_terms, source_grade: checked, grade_rank: 1}
+          - {rule_id: ro1, cik: "1", action: rate_role, table_signature: T, header_signature: h, shape: "S+#, #% Floor", number_index: 1, role: spread_bps, source_grade: checked, grade_rank: 1}
+          - {rule_id: ro2, cik: "1", action: rate_role, table_signature: T, header_signature: h, shape: "S+#, #% Floor", number_index: 2, role: floor_pct, source_grade: untested, grade_rank: 4}
+          - {rule_id: cS, cik: "1", action: rate_code, code_key: S, rate: SOFR, first_filing_date: 2025-03-31, last_filing_date: 2025-12-31, source_grade: checked, grade_rank: 1}
+          - {rule_id: cC, cik: "1", action: rate_code, code_key: C, rate: CORRA, first_filing_date: 2025-03-31, last_filing_date: 2026-06-30, source_grade: owner, grade_rank: 3}
+          - {rule_id: cE, cik: "1", action: rate_code, code_key: E, rate: EURIBOR, first_filing_date: 2025-03-31, last_filing_date: 2026-06-30, source_grade: checked, grade_rank: 1}
+          - {rule_id: nv, cik: "1", action: rate_text_not_a_code, code_key: VARIABLE, source_grade: owner, grade_rank: 3}
+          - {rule_id: ro3, cik: "1", action: rate_role, table_signature: T, header_signature: h, shape: "#%", number_index: 1, role: spread_pct, source_grade: checked, grade_rank: 1}
+          - {rule_id: ro4, cik: "1", action: rate_role, table_signature: T, header_signature: h, shape: "#%", number_index: 1, role: fixed_rate_pct, source_grade: untested, grade_rank: 4, condition_header_signature: ref, condition_text: N/A}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, 1 as table_index, 5::hugeint as col_start, '1' as cik, rd as report_date,
+                 true as is_published, 'T' as table_signature, 'h' as header_signature, 'u' as unit_key, txt as text,
+                 shp as shape, cd as code
+          from (values ('F1', 1, date '2026-03-31', 'S+525, 0.50% Floor', 'S+#, #% Floor', 'S'),
+                       ('F1', 2, date '2026-03-31', 'S+525, 0.50% FLOOR', 'S+#, #% FLOOR', 'S'),
+                       ('F3', 3, date '2024-12-31', 'C+450', 'C+#', 'C'),
+                       ('F4', 4, date '2023-06-30', 'C+450', 'C+#', 'C'),
+                       ('F1', 5, date '2026-03-31', 'SONIA+350', 'SONIA+#', 'SONIA'),
+                       ('F1', 6, date '2026-03-31', 'Variable', 'Variable', 'Variable'),
+                       ('F7', 7, date '2026-03-31', 'E+450', 'E+#', 'E'),
+                       ('F1', 8, date '2026-03-31', '8.00%', '#%', null),
+                       ('F1', 9, date '2026-03-31', '8.00%', '#%', null)) t(acc, ri, rd, txt, shp, cd)
+          union all
+          select 'F1', ri, 1, 9::hugeint, '1', date '2026-03-31', true, 'T', 'ref', 'uref', txt, txt, null
+          from (values (8, 'N/A'), (9, 'S+')) t(ri, txt)
+      - input: ref('int_page_position')
+        rows:
+          - {accession: F1, context_id: r1, placement_status: one_row, row_index: 1}
+          - {accession: F1, context_id: r2, placement_status: one_row, row_index: 2}
+          - {accession: F3, context_id: r3, placement_status: one_row, row_index: 3}
+          - {accession: F4, context_id: r4, placement_status: one_row, row_index: 4}
+          - {accession: F1, context_id: r5, placement_status: one_row, row_index: 5}
+          - {accession: F1, context_id: r6, placement_status: one_row, row_index: 6}
+          - {accession: F7, context_id: r7, placement_status: one_row, row_index: 7}
+          - {accession: F1, context_id: r8, placement_status: one_row, row_index: 8}
+          - {accession: F1, context_id: r9, placement_status: one_row, row_index: 9}
+      - input: ref('int_text_legend_rate')
+        rows:
+          - {cik: "1", accession: F3, report_date: 2024-12-31, code_key: C, verdict: two_rates, rates: [CDOR, CORRA]}
+          - {cik: "1", accession: F5, report_date: 2024-12-31, code_key: C, verdict: two_rates, rates: [CDOR, CORRA]}
+          - {cik: "1", accession: F7, report_date: 2026-03-31, code_key: E, verdict: one_rate, rates: [EURIBOR]}
+      - input: ref('reference_rate')
+        rows:
+          - {rate_name: SOFR}
+          - {rate_name: SONIA}
+          - {rate_name: EURIBOR}
+      - input: ref('reference_rate_name')
+        rows:
+          - {printed_name: TONAR, rate_name: TONA}
+    expect:
+      rows:
+        - {context_id: r1, number_index: 0, field: reference_rate, reference_rate: SOFR, status: read, code_step: code_table, rule_id: cS, value: null}
+        - {context_id: r1, number_index: 1, field: spread, reference_rate: null, status: read, code_step: null, rule_id: ro1, value: 5.25}
+        - {context_id: r1, number_index: 2, field: floor, reference_rate: null, status: read, code_step: null, rule_id: ro2, value: 0.5}
+        - {context_id: r2, number_index: 0, field: reference_rate, reference_rate: SOFR, status: read, code_step: code_table, rule_id: cS, value: null}
+        - {context_id: r2, number_index: 1, field: null, reference_rate: null, status: no_role_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r2, number_index: 2, field: null, reference_rate: null, status: no_role_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r3, number_index: 0, field: reference_rate, reference_rate: null, status: legend_two_rates, code_step: null, rule_id: null, value: null}
+        - {context_id: r3, number_index: 1, field: null, reference_rate: null, status: no_role_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r4, number_index: 0, field: reference_rate, reference_rate: null, status: code_no_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r4, number_index: 1, field: null, reference_rate: null, status: no_role_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r5, number_index: 0, field: reference_rate, reference_rate: SONIA, status: read, code_step: self_named, rule_id: "reference_rate:SONIA", value: null}
+        - {context_id: r5, number_index: 1, field: null, reference_rate: null, status: no_role_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r6, number_index: 0, field: reference_rate, reference_rate: null, status: not_a_code, code_step: null, rule_id: nv, value: null}
+        - {context_id: r7, number_index: 0, field: reference_rate, reference_rate: EURIBOR, status: read, code_step: legend_own, rule_id: cE, value: null}
+        - {context_id: r7, number_index: 1, field: null, reference_rate: null, status: no_role_rule, code_step: null, rule_id: null, value: null}
+        - {context_id: r8, number_index: 1, field: fixed_rate, reference_rate: null, status: read, code_step: null, rule_id: ro4, value: 8.0}
+        - {context_id: r9, number_index: 1, field: spread, reference_rate: null, status: read, code_step: null, rule_id: ro3, value: 8.0}
+
+  - name: int_text_rate_read_constraints_drop_real_errors
+    description: >
+      Owner addition A1 to A3, a real error still fails each: p1 a spread with no reference rate (no code printed) ->
+      constraint_spread_needs_reference_rate, spread null; p2 a floor with no reference rate -> constraint_floor_needs_
+      reference_rate; p3 a fixed rate on a position that also reads a reference rate and spread ->
+      constraint_fixed_with_floating_terms, all-in null, rate type floating (the spread and rate stand). p4 the clean
+      case: code SOFR, spread 5.25 equal to its tag, floor 0.50 -> floating, all read. p5 a fixed rate alone -> fixed,
+      all-in 9.00. p6 the printed all-in 8.00 differs from the tag 8.50 -> differs_from_tag (tag first); p7 the same
+      under a rate_printed_wins rule -> printed_wins_over_tag, all-in 8.00, grade owner (the rule's, fix round 1 item 5).
+      Fix round 1: p8 spread 4.00 with a code printed that no rule resolves -> spread read (the code counts for A1),
+      reference rate code_undecided, no rate type; p9 a whole-coupon PIK reading 10.00 -> all-in 10.00 and PIK 10.00,
+      all_in_source pik_coupon, no cash rate. Fix round 2: p10 a whole-coupon PIK 19.00 whose PIK tag is 12.29: the PIK
+      reading is not applied (differs_from_tag), so the all-in rate is not applied either (whole_coupon_pik_not_applied).
+    model: int_text_rate_read
+    given:
+      - input: ref('int_text_rate_read_cell')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", table_index: 1, row_index: 1, unit_key: u, number_index: 1, field: spread, value: 5.0, status: read, rule_id: rs, grade_rank: 1}
+          - {accession: A, context_id: p2, cik: "1", table_index: 1, row_index: 2, unit_key: u, number_index: 2, field: floor, value: 0.5, status: read, rule_id: rf, grade_rank: 4}
+          - {accession: A, context_id: p3, cik: "1", table_index: 1, row_index: 3, unit_key: u, number_index: 0, field: reference_rate, reference_rate: SOFR, status: read, rule_id: rc, grade_rank: 3}
+          - {accession: A, context_id: p3, cik: "1", table_index: 1, row_index: 3, unit_key: u, number_index: 1, field: spread, value: 5.0, status: read, rule_id: rs, grade_rank: 1}
+          - {accession: A, context_id: p3, cik: "1", table_index: 1, row_index: 3, unit_key: v, number_index: 1, field: fixed_rate, value: 9.0, status: read, rule_id: rx, grade_rank: 1}
+          - {accession: A, context_id: p4, cik: "1", table_index: 1, row_index: 4, unit_key: u, number_index: 0, field: reference_rate, reference_rate: SOFR, status: read, rule_id: rc, grade_rank: 3}
+          - {accession: A, context_id: p4, cik: "1", table_index: 1, row_index: 4, unit_key: u, number_index: 1, field: spread, value: 5.25, status: read, rule_id: rs, grade_rank: 1}
+          - {accession: A, context_id: p4, cik: "1", table_index: 1, row_index: 4, unit_key: u, number_index: 2, field: floor, value: 0.5, status: read, rule_id: rf, grade_rank: 4}
+          - {accession: A, context_id: p5, cik: "1", table_index: 1, row_index: 5, unit_key: v, number_index: 1, field: fixed_rate, value: 9.0, status: read, rule_id: rx, grade_rank: 1}
+          - {accession: A, context_id: p6, cik: "1", table_index: 1, row_index: 6, unit_key: w, number_index: 1, field: all_in_rate, value: 8.0, status: read, rule_id: ra, grade_rank: 1}
+          - {accession: A, context_id: p7, cik: "1", table_index: 1, row_index: 7, unit_key: w, number_index: 1, field: all_in_rate, value: 8.0, status: read, rule_id: ra, grade_rank: 1}
+          - {accession: A, context_id: p8, cik: "1", table_index: 1, row_index: 8, unit_key: u, number_index: 0, field: reference_rate, status: code_no_rule}
+          - {accession: A, context_id: p8, cik: "1", table_index: 1, row_index: 8, unit_key: u, number_index: 1, field: spread, value: 4.0, status: read, rule_id: rs, grade_rank: 1}
+          - {accession: A, context_id: p9, cik: "1", table_index: 1, row_index: 9, unit_key: w, number_index: 1, field: pik_rate, value: 10.0, status: read, rule_id: rp, grade_rank: 1, whole_coupon: true}
+          - {accession: A, context_id: p10, cik: "1", table_index: 1, row_index: 10, unit_key: w, number_index: 1, field: pik_rate, value: 19.0, status: read, rule_id: rp, grade_rank: 1, whole_coupon: true}
+      - input: ref('int_field_normalised')
+        rows:
+          - {accession: A, context_id: p4, field: spread, value: 5.25, status: normalised, rate_kind: null}
+          - {accession: A, context_id: p6, field: interest_rate, value: 8.5, status: normalised, rate_kind: all_in}
+          - {accession: A, context_id: p7, field: interest_rate, value: 8.5, status: normalised, rate_kind: all_in}
+          - {accession: A, context_id: p10, field: pik_rate, value: 12.29, status: normalised, rate_kind: null}
+      - input: ref('int_text_rate_rule')
+        rows:
+          - {rule_id: rw, cik: "1", action: rate_printed_wins, accession: A, field: all_in_rate, table_index: 1, first_row: 7, last_row: 7, grade_rank: 3}
+    expect:
+      rows:
+        - {context_id: p1, spread: null, spread_status: constraint_spread_needs_reference_rate, spread_detail: no_code, floor_status: not_printed, all_in_rate: null, rate_type: null, all_in_rate_grade: null, reference_rate_status: not_printed, pik_rate: null, all_in_source: null, all_in_rate_status: not_printed}
+        - {context_id: p2, spread: null, spread_status: not_printed, spread_detail: null, floor_status: constraint_floor_needs_reference_rate, all_in_rate: null, rate_type: null, all_in_rate_grade: null, reference_rate_status: not_printed, pik_rate: null, all_in_source: null, all_in_rate_status: not_printed}
+        - {context_id: p3, spread: 5.0, spread_status: read_no_tag, spread_detail: null, floor_status: not_printed, all_in_rate: null, rate_type: floating, all_in_rate_grade: null, reference_rate_status: read_no_tag, pik_rate: null, all_in_source: null, all_in_rate_status: constraint_fixed_with_floating_terms}
+        - {context_id: p4, spread: 5.25, spread_status: read_equals_tag, spread_detail: null, floor_status: read_no_tag, all_in_rate: null, rate_type: floating, all_in_rate_grade: null, reference_rate_status: read_no_tag, pik_rate: null, all_in_source: null, all_in_rate_status: not_printed}
+        - {context_id: p5, spread: null, spread_status: not_printed, spread_detail: null, floor_status: not_printed, all_in_rate: 9.0, rate_type: fixed, all_in_rate_grade: checked, reference_rate_status: not_printed, pik_rate: null, all_in_source: fixed, all_in_rate_status: read_no_tag}
+        - {context_id: p6, spread: null, spread_status: not_printed, spread_detail: null, floor_status: not_printed, all_in_rate: null, rate_type: null, all_in_rate_grade: null, reference_rate_status: not_printed, pik_rate: null, all_in_source: all_in, all_in_rate_status: differs_from_tag}
+        - {context_id: p7, spread: null, spread_status: not_printed, spread_detail: null, floor_status: not_printed, all_in_rate: 8.0, rate_type: null, all_in_rate_grade: owner, reference_rate_status: not_printed, pik_rate: null, all_in_source: all_in, all_in_rate_status: printed_wins_over_tag}
+        - {context_id: p8, spread: 4.0, spread_status: read_no_tag, spread_detail: null, floor_status: not_printed, all_in_rate: null, rate_type: null, all_in_rate_grade: null, reference_rate_status: code_undecided, pik_rate: null, all_in_source: null, all_in_rate_status: not_printed}
+        - {context_id: p9, spread: null, spread_status: not_printed, spread_detail: null, floor_status: not_printed, all_in_rate: 10.0, rate_type: null, all_in_rate_grade: checked, reference_rate_status: not_printed, pik_rate: 10.0, all_in_source: pik_coupon, all_in_rate_status: read_no_tag}
+        - {context_id: p10, spread: null, spread_status: not_printed, spread_detail: null, floor_status: not_printed, all_in_rate: null, rate_type: null, all_in_rate_grade: null, reference_rate_status: not_printed, pik_rate: null, all_in_source: pik_coupon, all_in_rate_status: whole_coupon_pik_not_applied}
+
+  - name: int_text_rate_constraint_real_errors_fail
+    description: >
+      Owner addition A4 and A5, a real error still fails each. p1 all-in 9.00, cash 6.00, PIK 2.00 -> c4 fail; p2 9.00 =
+      7.00 + 2.00 -> c4 pass. p3 SOFR, spread 5.00, all-in 9.50 at 2026-03-31 with SOFR's window 3.60 to 4.20 (admissible
+      3.30 to 4.76): implied base 4.50 -> c5 pass; p4 all-in 12.00: implied 7.00 -> c5 fail; p5 a rate with no series
+      (Base Rate) -> not_tested; p6 the all-in TAG equals the spread (5.00): not_tested (the tag holds another leg).
+      Fix round 2: p7 all-in 6.00, PIK 8.00, no cash rate read: the implied cash leg is negative -> c4 fail; p8 a
+      whole-coupon reading (all-in 10.00 = PIK 10.00) -> c4 pass.
+    model: int_text_rate_constraint
+    given:
+      - input: ref('int_text_rate_read')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, all_in_rate: 9.0, cash_rate: 6.0, pik_rate: 2.0}
+          - {accession: A, context_id: p2, cik: "1", report_date: 2026-03-31, all_in_rate: 9.0, cash_rate: 7.0, pik_rate: 2.0}
+          - {accession: A, context_id: p3, cik: "1", report_date: 2026-03-31, reference_rate: SOFR, spread: 5.0, all_in_rate: 9.5}
+          - {accession: A, context_id: p4, cik: "1", report_date: 2026-03-31, reference_rate: SOFR, spread: 5.0, all_in_rate: 12.0}
+          - {accession: A, context_id: p5, cik: "1", report_date: 2026-03-31, reference_rate: "Base Rate", spread: 1.0, all_in_rate: 8.5}
+          - {accession: A, context_id: p6, cik: "1", report_date: 2026-03-31, reference_rate: SOFR, spread: 5.0, all_in_rate_tag: 5.0}
+          - {accession: A, context_id: p7, cik: "1", report_date: 2026-03-31, all_in_rate: 6.0, pik_rate: 8.0, all_in_source: all_in}
+          - {accession: A, context_id: p8, cik: "1", report_date: 2026-03-31, all_in_rate: 10.0, pik_rate: 10.0, all_in_source: pik_coupon}
+      - input: ref('int_field_normalised')
+        format: sql
+        rows: |
+          select 'A' as accession, 'none' as context_id, 'pik_rate' as field, 'normalised' as status, 0.0 as value
+          where false
+      - input: ref('reference_rate')
+        rows:
+          - {rate_name: SOFR, series_id: SOFR}
+          - {rate_name: "Base Rate", series_id: null}
+      - input: ref('base_rate_series')
+        rows:
+          - {series_id: SOFR, rate_name: SOFR}
+      - input: ref('int_text_base_rate_window')
+        rows:
+          - {report_date: 2026-03-31, rate_name: SOFR, range_min: 3.6, range_max: 4.2, admissible_low: 3.3, admissible_high: 4.76, state: ok}
+    expect:
+      rows:
+        - {context_id: p1, constraint_name: c4_legs, verdict: fail}
+        - {context_id: p2, constraint_name: c4_legs, verdict: pass}
+        - {context_id: p3, constraint_name: c5_base_level, verdict: pass}
+        - {context_id: p4, constraint_name: c5_base_level, verdict: fail}
+        - {context_id: p5, constraint_name: c5_base_level, verdict: not_tested}
+        - {context_id: p6, constraint_name: c5_base_level, verdict: not_tested}
+        - {context_id: p7, constraint_name: c4_legs, verdict: fail}
+        - {context_id: p8, constraint_name: c4_legs, verdict: pass}
+
+  - name: int_text_rate_finding_stable_id
+    description: >
+      Fix round 2. Two rate_role rules ra1 and ra2 read the same column, shape, number and role and differ only in their
+      evidence text and counts (so their rule_ids differ): their held values make ONE finding (one id, 2 positions). Two
+      rate_code rules for code S = SOFR that differ only in their filing dates (rc1, rc2) make one finding of constraint
+      5. A rule with another role (rb) is a separate finding.
+    model: int_text_rate_finding
+    given:
+      - input: ref('int_text_rate_rule')
+        rows:
+          - {rule_id: ra1, rule_key: k_spread, cik: "1", action: rate_role, evidence: "check number_tag: 10 of 10"}
+          - {rule_id: ra2, rule_key: k_spread, cik: "1", action: rate_role, evidence: "check number_tag: 12 of 12, new wording"}
+          - {rule_id: rb, rule_key: k_floor, cik: "1", action: rate_role, evidence: "owner item 5"}
+          - {rule_id: rc1, rule_key: k_code_s, cik: "1", action: rate_code, first_filing_date: 2025-03-31, last_filing_date: 2025-12-31}
+          - {rule_id: rc2, rule_key: k_code_s, cik: "1", action: rate_code, first_filing_date: 2025-03-31, last_filing_date: 2026-06-30}
+      - input: ref('int_text_rate_held')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, field: spread, constraint_name: A1_spread_needs_reference_rate, rule_id: ra1, value: 5.0, cell_text: "5.00%"}
+          - {accession: A, context_id: p2, cik: "1", report_date: 2026-06-30, field: spread, constraint_name: A1_spread_needs_reference_rate, rule_id: ra2, value: 5.0, cell_text: "5.00%"}
+          - {accession: A, context_id: p3, cik: "1", report_date: 2026-06-30, field: floor, constraint_name: A2_floor_needs_reference_rate, rule_id: rb, value: 1.0, cell_text: "1.00% Floor"}
+      - input: ref('int_text_rate_constraint')
+        rows:
+          - {accession: A, context_id: p4, cik: "1", report_date: 2025-06-30, constraint_name: c5_base_level, verdict: fail, rule_ids: [rc1]}
+          - {accession: A, context_id: p5, cik: "1", report_date: 2026-06-30, constraint_name: c5_base_level, verdict: fail, rule_ids: [rc2]}
+    expect:
+      rows:
+        - {cik: "1", constraint_name: A1_spread_needs_reference_rate, rule_key: k_spread, positions: 2}
+        - {cik: "1", constraint_name: A2_floor_needs_reference_rate, rule_key: k_floor, positions: 1}
+        - {cik: "1", constraint_name: c5_base_level, rule_key: k_code_s, positions: 2}
+
+  - name: int_text_rate_rule_key_ignores_evidence_counts_dates
+    description: >
+      Fix round 2. rule_key hashes what a rule reads, never its evidence, counts or dates. c1 and c2 (code S = SOFR)
+      differ in evidence wording, filing dates, evidence filing and grade: same key. r1 and r2 (a spread role) differ in
+      evidence counts and grade: same key. Expected keys are md5 of the key fields, computed once by query.
+    model: int_text_rate_rule
+    given:
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: c1, cik: "1", target: rate_text, action: rate_code, evidence: "owner item 2: 7 filings", parameter: '{"code":"S","evidence_accession":"0000000001-25-000001","first_filing_date":"2025-03-31","last_filing_date":"2025-12-31","rate":"SOFR","source_grade":"owner"}'}
+          - {rule_id: c2, cik: "1", target: rate_text, action: rate_code, evidence: "check legend: 9 filings", parameter: '{"code":"S","evidence_accession":"0000000001-26-000009","first_filing_date":"2025-03-31","last_filing_date":"2026-06-30","rate":"SOFR","source_grade":"checked"}'}
+          - {rule_id: r1, cik: "1", target: rate_text, action: rate_role, evidence: "check number_tag: 10 of 10", parameter: '{"header_signature":"h","number_index":1,"role":"spread_bps","shape":"S+#","source_grade":"checked","table_signature":"T"}'}
+          - {rule_id: r2, cik: "1", target: rate_text, action: rate_role, evidence: "owner item 7: 3 of 3", parameter: '{"header_signature":"h","number_index":1,"role":"spread_bps","shape":"S+#","source_grade":"matches_few_rows","table_signature":"T"}'}
+    expect:
+      rows:
+        - {rule_id: c1, rule_key: e3fe196791d2d455}
+        - {rule_id: c2, rule_key: e3fe196791d2d455}
+        - {rule_id: r1, rule_key: 7b968d0924302971}
+        - {rule_id: r2, rule_key: 7b968d0924302971}

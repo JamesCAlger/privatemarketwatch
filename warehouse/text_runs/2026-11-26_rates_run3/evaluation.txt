@@ -1,0 +1,67 @@
+unit	header	rows	column_fwd	column_rev	tag_says	col_check	shapes	shape_same	rows_same_pct	legs_ok	legs_bad	codes	code_same	legend_ok	legend_bad	no_legend
+010c6461	Cash/Interest	1771	spread	spread	spread:1.00	tags_agree	1	1	100	1	0	0	0	0	0	0
+0429e10a	Cash/Interest	1231	spread	spread	spread:1.00	tags_agree	2	2	100	1	0	0	0	0	0	0
+0dd66cba	Interest	1416	rate_terms	spread	spread:1.00	ORDERS_DIFFER	3	3	100	2	0	3	3	0	0	3
+16de0745	Reference Rate and Spread (2	3901	rate_terms	rate_terms	spread:1.00	tags_agree	6	5	100	4	0	5	5	5	0	0
+173adfda	Interest Rate (2)(15)	6230	all_in_rate	all_in_rate	interest_rate_tag:0.99	tags_agree	4	4	100	4	0	0	0	0	0	0
+1de53b4d	Coupon (3)	15233	all_in_rate	all_in_rate	interest_rate_tag:0.90	tags_agree	5	5	100	4	0	0	0	0	0	0
+25606633	Interest	4613	rate_terms	rate_terms	spread:0.88	tags_agree	23	21	99	17	0	9	8	6	0	2
+27a8ea20	Percentage of Members’ Equit	1416	pct_of_net_assets	pct_of_net_assets	pct_of_net_assets:1.00	tags_agree	2	1	99	0	0	0	0	0	0	0
+297c4b02	PIK/Interest	177	pik_spread_or_rate	pik_spread_or_rate	pik_rate:1.00	tags_agree	1	1	100	1	0	0	0	0	0	0
+35d86fe0	Reference Rate and Spread (2	6200	rate_terms	rate_terms	spread:1.00	tags_agree	14	13	99	10	0	13	13	13	0	0
+4911bade	Reference Rate and Spread	971	rate_terms	rate_terms	spread:1.00	tags_agree	7	7	100	2	0	4	4	3	0	1
+4f40f4af	Spread (3)	13658	spread	spread	spread:1.00	tags_agree	1	1	100	1	0	0	0	0	0	0
+501a2d64	Ref. Rate/Interest	2109	reference_rate_code	reference_rate_code	-	no_tag_check	7	7	100	0	0	6	6	6	0	0
+5d304ffd	Interest Rate(2)	6632	all_in_rate	all_in_rate	interest_rate_tag:0.99	tags_agree	3	3	100	2	0	0	0	0	0	0
+6c8407a9	Interest Rate (2)(15)	560	all_in_rate	all_in_rate	interest_rate_tag:0.99	tags_agree	3	3	100	4	0	0	0	0	0	0
+6d09d203	Interest Rate (2)(15)	1235	all_in_rate	all_in_rate	interest_rate_tag:1.00	tags_agree	3	3	100	3	0	0	0	0	0	0
+6e96d821	Interest Rate (2)	1346	all_in_rate	all_in_rate	interest_rate_tag:1.00	tags_agree	5	5	100	4	0	0	0	0	0	0
+78ea8338	Percentage of Net Assets	4613	pct_of_net_assets	pct_of_net_assets	pct_of_net_assets:1.00	tags_agree	2	2	100	0	0	0	0	0	0	0
+7bedc645	Reference Rate and Spread	1229	rate_terms	rate_terms	spread:1.00	tags_agree	11	11	100	7	0	10	10	10	0	0
+83609702	Reference Rate and Spread(2)	6662	rate_terms	rate_terms	spread:0.96	tags_agree	32	32	100	32	0	13	13	13	0	0
+8900b688	Interest Rate (13)	3112	rate_terms	rate_terms	spread:0.91	tags_agree	23	22	100	11	0	13	12	9	0	3
+9ecddf9f	Reference (7)	13657	reference_rate_code	reference_rate_code	-	no_tag_check	36	36	100	0	0	12	12	0	0	12
+a52abb55	Interest Rate (2)(15)	9276	all_in_rate	all_in_rate	interest_rate_tag:0.98	tags_agree	4	4	100	4	0	0	0	0	0	0
+aceeb6cc	Ref. Rate/Interest	1534	reference_rate_code	reference_rate_code	-	no_tag_check	7	7	100	0	0	6	6	6	0	0
+b4ee1994	Interest Rate (13)	4914	rate_terms	rate_terms	spread:0.93	tags_agree	40	39	100	18	0	14	13	10	0	3
+b9543350	Interest Rate (2)(6)	973	all_in_rate	all_in_rate	interest_rate_tag:1.00	tags_agree	2	2	100	1	0	0	0	0	0	0
+c9749b02	PIK/Interest	217	pik_spread_or_rate	pik_spread_or_rate	pik_rate:1.00	tags_agree	1	1	100	1	0	0	0	0	0	0
+cb2ad95e	Interest Rate (2)(15)	3931	all_in_rate	all_in_rate	interest_rate_tag:0.99	tags_agree	3	3	100	4	0	0	0	0	0	0
+d242ee8b	Reference Rate and Spread (2	555	rate_terms	rate_terms	spread:1.00	tags_agree	6	6	100	1	0	5	5	5	0	0
+d30801ed	Reference Rate and Spread (2	9169	rate_terms	rate_terms	spread:0.98	tags_agree	13	13	100	11	0	11	11	11	0	0
+fc9493ac	Reference Rate and Spread	1342	rate_terms	rate_terms	spread:1.00	tags_agree	14	14	100	5	0	10	10	10	0	0
+TOTAL {'units': 31, 'col_same': 30, 'shapes': 284, 'shape_same': 277, 'rows': 129883, 'rows_same': 129785, 'legs_ok': 155, 'legs_bad': 0, 'codes': 134, 'code_same': 131, 'leg_ok': 107, 'leg_bad': 0, 'no_leg': 24, 'tags_agree': 27, 'ORDERS_DIFFER': 1, 'no_tag_check': 3}
+  NOLEGEND 0dd66cba8d2b8641 [Interest] 'L' proposed=LIBOR basis=common_usage
+  NOLEGEND 0dd66cba8d2b8641 [Interest] 'P' proposed=PRIME basis=common_usage
+  NOLEGEND 0dd66cba8d2b8641 [Interest] 'SR' proposed=SOFR basis=common_usage
+  SHAPE 16de0745a690a6bc [Reference Rate and Spread (2)] '#%' rows=13 fwd=['fixed_rate_pct'] rev=['spread_pct']
+  SHAPE 25606633f0b6d5c8 [Interest] '#%' rows=19 fwd=['fixed_rate_pct'] rev=['spread_pct']
+  SHAPE 25606633f0b6d5c8 [Interest] '#% (#% PIK)' rows=7 fwd=['cash_rate_pct', 'pik_rate_pct'] rev=['spread_pct', 'pik_rate_pct']
+  NOLEGEND 25606633f0b6d5c8 [Interest] 'BB' proposed=BBSY basis=common_usage
+  CODE 25606633f0b6d5c8 [Interest] 'C' fwd=CORRA rev=CDOR
+  NOLEGEND 25606633f0b6d5c8 [Interest] 'L' proposed=LIBOR basis=common_usage
+  SHAPE 27a8ea2003741906 [Percentage of Members’ Equity] '—%' rows=19 fwd=['other_number'] rev=['other_number']
+  SHAPE 35d86fe064f18517 [Reference Rate and Spread (2)] '#%' rows=34 fwd=['fixed_rate_pct'] rev=['spread_pct']
+  NOLEGEND 4911badeb7733932 [Reference Rate and Spread] 'SORF' proposed=SOFR basis=common_usage
+  SHAPE 8900b6883e84a32c [Interest Rate (13)] '#% Cash plus #% PIK, #% Floor' rows=2 fwd=['all_in_rate_pct', 'pik_rate_pct', 'floor_pct'] rev=['cash_rate_pct', 'pik_rate_pct', 'floor_pct']
+  NOLEGEND 8900b6883e84a32c [Interest Rate (13)] 'Equity plus' proposed=None basis=not_a_code
+  NOLEGEND 8900b6883e84a32c [Interest Rate (13)] 'N' proposed=NIBOR basis=common_usage
+  NOLEGEND 8900b6883e84a32c [Interest Rate (13)] 'SONIA' proposed=SONIA basis=common_usage
+  CODE 8900b6883e84a32c [Interest Rate (13)] 'T' fwd=MUTKCALM rev=TONAR
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'BBSY' proposed=BBSY basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'BKBM' proposed=BKBM basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'Base Rate' proposed=Base Rate (prime/base rate) basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'CAD Base Rate' proposed=Canadian base rate (CAD prime) basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'CDOR' proposed=CDOR basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'CORRA' proposed=CORRA basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'Euribor' proposed=EURIBOR basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'LIBOR' proposed=LIBOR basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'NIBOR' proposed=NIBOR basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'SOFR' proposed=SOFR basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'SONIA' proposed=SONIA basis=common_usage
+  NOLEGEND 9ecddf9faf035680 [Reference (7)] 'TONA' proposed=TONA basis=common_usage
+  SHAPE b4ee1994c58b2d08 [Interest Rate (13)] 'S+# PIK' rows=4 fwd=['pik_spread_pct'] rev=['spread_bps']
+  NOLEGEND b4ee1994c58b2d08 [Interest Rate (13)] 'Equity plus' proposed=None basis=not_a_code
+  CODE b4ee1994c58b2d08 [Interest Rate (13)] 'N' fwd=None rev=NIBOR
+  NOLEGEND b4ee1994c58b2d08 [Interest Rate (13)] 'SONIA' proposed=SONIA basis=common_usage
+  NOLEGEND b4ee1994c58b2d08 [Interest Rate (13)] 'Variable' proposed=None basis=not_a_code

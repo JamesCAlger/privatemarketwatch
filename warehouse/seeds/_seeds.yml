@@ -247,3 +247,268 @@ seeds:
           - not_null:
               config:
                 where: "step in ('filed', 'converted', 'reading_input')"
+  - name: sofr_90day_avg
+    description: >
+      Text slice R phase 1 (2026-11-26): the SOFR 90-day average in percent, one row per published date. Read by the
+      measurement int_text_measure_sofr_level and by the sanity bound of int_text_check_base_cluster_group. A copy, not a
+      download: source data/reference/sofr_90day_avg.csv (the file pipeline/sofr_reference.py reads; FRED SOFR90DAYAVG
+      cached by scripts/fetch_sofr.py), copied at git acbccdfa. sha256 of the bytes as committed (LF line ends), the same
+      for source and seed: 1fc3e109da22cd8ebea9b74ed84d9be34dc237781892364d98da5711ee0bde45, recorded in var
+      sofr_seed_sha256 and checked by tests/seed_sofr_hash_matches.sql; the seed is -text in .gitattributes (fix round 1),
+      so every checkout has those bytes. 1,988 dates, 2018-07-02 to 2026-06-18. A backward-looking average, a proxy for
+      the term SOFR loans reference (pipeline/sofr_reference.py: expect a 0.10 to 0.20 point gap).
+    config:
+      column_types:
+        date: date
+        sofr_90day_avg_pct: double
+    columns:
+      - name: date
+        data_tests: [unique, not_null]
+      - name: sofr_90day_avg_pct
+        data_tests: [not_null]
+  - name: base_rate_fred
+    description: >
+      Text slice R phase 2 (2026-11-26): public base-rate series downloaded from FRED on 2026-11-26 with the owner's go
+      by scripts/text/fetch_base_rates.py (manifest scripts/text/base_rate_fred_manifest.json: per series the URL, rows,
+      first and last date and the sha256 of the bytes received). One row per (series_id, date), value in percent,
+      from 2021-06-01. Daily: SOFR and its 30/90/180-day averages, SONIA (IUDSOIA), the prime rate (DPRIME), the
+      effective fed funds rate (DFF). Monthly OECD 3-month interbank rates (dated the first of the month, a monthly
+      average): proxies for USD LIBOR, EURIBOR, the UK, CORRA/CDOR, BBSW/BBSY, BKBM, STIBOR, SARON, NIBOR, TONA and
+      KORIBOR. The euro area and UK monthly series end 2026-01. Term SOFR and LIBOR are licensed and are not here.
+      sha256 of the file as committed (LF) recorded in var base_rate_fred_sha256 and checked by
+      tests/seed_base_rate_hash_matches.sql; the file is -text in .gitattributes. Read by int_text_base_rate_window.
+    config:
+      column_types:
+        series_id: varchar
+        date: date
+        value_pct: double
+    columns:
+      - name: series_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_rate_series')
+                field: series_id
+      - name: date
+        data_tests: [not_null]
+      - name: value_pct
+        data_tests: [not_null]
+  - name: base_rate_series
+    description: >
+      Text slice R phase 2 (2026-11-26): one row per FRED series of seed base_rate_fred (written by the same script).
+      rate_name: the name the rate proposals use (SOFR, SONIA, PRIME, FEDFUNDS, LIBOR, EURIBOR, CORRA, BBSW, BKBM,
+      STIBOR, SARON, NIBOR, TONA, KORIBOR). kind: published (the rate itself, daily), average (a backward average of
+      the rate), proxy (an OECD monthly 3-month interbank average standing for the benchmark, not the benchmark). A
+      rate can have two series (SONIA: published daily and a UK monthly proxy); int_text_base_rate_window says which
+      it uses. sha256 recorded in var base_rate_series_sha256 (tests/seed_base_rate_hash_matches.sql).
+    config:
+      column_types:
+        series_id: varchar
+        rate_name: varchar
+        frequency: varchar
+        kind: varchar
+        note: varchar
+    columns:
+      - name: series_id
+        data_tests: [unique, not_null]
+      - name: rate_name
+        data_tests: [not_null]
+      - name: frequency
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['daily', 'monthly']
+      - name: kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['published', 'average', 'proxy']
+  - name: reference_rate
+    description: >
+      Text slice R phase 3 (2026-11-26, owner addition B): one row per benchmark a rate code can mean. rate_name: the
+      canonical name every rate-text rule (wrapper action rate_code) must resolve to (tests/reference_rate_rule_resolves.sql).
+      currency; kind: overnight, term, interbank, prime or base ("Base Rate" and "CAD Base Rate": a loan's base rate as
+      printed, no single benchmark, no series). successor: the rate that replaced it (LIBOR -> SOFR, CDOR -> CORRA); BBSW
+      and BBSY stay two rates with no link. series_id: the FRED series of seed base_rate_series the base-level checks
+      read for it, blank where none (CDOR and BBSY read the OECD proxy their pair shares). Owner item 1: a printed code
+      equal to a rate_name here (case and spaces ignored) is that rate. Rate names are looked up here and in seed
+      reference_rate_name, never matched by substring.
+    config:
+      column_types:
+        rate_name: varchar
+        currency: varchar
+        kind: varchar
+        successor: varchar
+        series_id: varchar
+        note: varchar
+    columns:
+      - name: rate_name
+        data_tests: [unique, not_null]
+      - name: kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['overnight', 'term', 'interbank', 'prime', 'base']
+      - name: successor
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('reference_rate')
+                field: rate_name
+      - name: series_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('base_rate_series')
+                field: series_id
+  - name: reference_rate_name
+    description: >
+      Text slice R phase 3 (2026-11-26): the printed names and abbreviations of rates in the five funds' legends that
+      are not themselves a rate_name of seed reference_rate, and the rate each stands for (upper case, as printed:
+      'SECURED OVERNIGHT FINANCING RATE' -> SOFR, 'TONAR' -> TONA). Exact lookup, no substring. Built from
+      scripts/text/q_t3_legend_names.sql; a legend name not listed resolves to no rate.
+    config:
+      column_types:
+        printed_name: varchar
+        rate_name: varchar
+        note: varchar
+    columns:
+      - name: printed_name
+        data_tests: [unique, not_null]
+      - name: rate_name
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('reference_rate')
+                field: rate_name
+  - name: text_rate_unread_cap
+    description: >
+      Text slice R phase 3 fix round 1 (2026-11-26): for each group (column unit, shape, status) of printed rate cells
+      the accepted rules leave unread, the positions measured on 2026-11-26 (scripts/text/q_t3_unread_cap.sql writes
+      the rows). tests/int_text_rate_unread_within_cap.sql fails a group that grows or is new. unit_key names no fund.
+    config:
+      column_types:
+        unit_key: varchar
+        shape: varchar
+        status: varchar
+        max_positions: integer
+    columns:
+      - name: max_positions
+        data_tests: [not_null]
+  - name: text_proposed_column
+    description: >
+      Text slice R phase 2 (2026-11-26). PROPOSALS, NOT RULES: nothing downstream may publish from this seed, and no
+      model may feed it into a field, a wrapper or a mart. What an agent (claude-sonnet-5-5, run of record
+      text_runs/2026-11-26_rates_run3) proposed each rate-candidate column holds, asked twice with the answer options
+      in forward and reversed order. Written by scripts/text/proposals_to_seeds.py from the run folder (deterministic;
+      rerun it to regenerate). One row per (run_id, unit_key); unit_key is the column unit of int_text_column_unit.
+      same_in_both_orders: both orders gave the same answer. Judged by int_text_proposal_verdict, a measurement the
+      owner reads.
+    config:
+      column_types:
+        run_id: varchar
+        unit_key: varchar
+        column_holds_fwd: varchar
+        column_holds_rev: varchar
+        same_in_both_orders: boolean
+    columns:
+      - name: unit_key
+        data_tests: [unique, not_null]
+      - name: run_id
+        data_tests: [not_null]
+      - name: same_in_both_orders
+        data_tests: [not_null]
+  - name: text_proposed_shape_role
+    description: >
+      Text slice R phase 2 (2026-11-26). PROPOSALS, NOT RULES: nothing downstream may publish from this seed. The role
+      an agent proposed for the k-th number (number_index, 1-based) of each text shape of each rate-candidate column, in
+      forward and reversed option order (same run and script as text_proposed_column). A shape with no number gets one
+      row with number_index 0 and empty roles. same_in_both_orders: the two roles are equal and the two role lists have
+      the same length (lists of different length make every row of the shape not same; a shape answered in one order
+      only is not same). roles_fit_shape: both lists hold as many roles as the shape has '#'. Roles: spread_bps,
+      spread_pct, floor_pct, all_in_rate_pct, cash_rate_pct, pik_rate_pct, pik_spread_pct, fixed_rate_pct,
+      pct_of_net_assets, other_number, cannot_tell (scripts/text/propose_rules.py NUMBER_ROLES). shape is the display
+      shape of the bundle; int_text_rate_proposed matches it upper-cased to int_text_cell.shape_key_text.
+      Key: (run_id, unit_key, shape, number_index), tests/int_text_proposal_keys_unique.sql.
+    config:
+      column_types:
+        run_id: varchar
+        unit_key: varchar
+        shape: varchar
+        number_index: integer
+        role_fwd: varchar
+        role_rev: varchar
+        same_in_both_orders: boolean
+        roles_fit_shape: boolean
+    columns:
+      - name: unit_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('text_proposed_column')
+                field: unit_key
+      - name: shape
+        data_tests: [not_null]
+      - name: number_index
+        data_tests: [not_null]
+      - name: role_fwd
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['spread_bps', 'spread_pct', 'floor_pct', 'all_in_rate_pct', 'cash_rate_pct', 'pik_rate_pct',
+                         'pik_spread_pct', 'fixed_rate_pct', 'pct_of_net_assets', 'other_number', 'cannot_tell']
+      - name: role_rev
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['spread_bps', 'spread_pct', 'floor_pct', 'all_in_rate_pct', 'cash_rate_pct', 'pik_rate_pct',
+                         'pik_spread_pct', 'fixed_rate_pct', 'pct_of_net_assets', 'other_number', 'cannot_tell']
+  - name: text_proposed_code
+    description: >
+      Text slice R phase 2 (2026-11-26). PROPOSALS, NOT RULES: nothing downstream may publish from this seed. The
+      reference rate an agent proposed each code printed in a rate-candidate column stands for, in forward and
+      reversed option order (same run and script as text_proposed_column). rate_name_fwd/_rev: the answer normalised to
+      the rate_name vocabulary of seed base_rate_series (SOFR, EURIBOR, SONIA, LIBOR, PRIME, CORRA, BBSW, BKBM, STIBOR,
+      SARON, NIBOR, TONA, KORIBOR, FEDFUNDS) plus CDOR and BBSY, empty where it maps to none (CIBOR, SORA, the Bloomberg
+      short-term bank yield index, Canadian prime, not_a_code). Fix round 1: CDOR, CORRA, BBSY and BBSW are four names
+      here and everywhere downstream; only int_text_check_base_level reads CDOR against the CORRA proxy series and BBSY
+      against the BBSW one (rate_name_note says so). rate_name: the agreed normalised name when both orders give the
+      same, else empty. same_in_both_orders: normalised names equal (two answers that map to no name are compared as
+      upper-cased text, or by the rule that matched them). basis: legend, common_usage, cannot_tell or not_a_code, per
+      order. Key: (run_id, unit_key, code), tests/int_text_proposal_keys_unique.sql.
+    config:
+      column_types:
+        run_id: varchar
+        unit_key: varchar
+        code: varchar
+        reference_rate_fwd: varchar
+        reference_rate_rev: varchar
+        rate_name_fwd: varchar
+        rate_name_rev: varchar
+        rate_name: varchar
+        rate_name_note: varchar
+        basis_fwd: varchar
+        basis_rev: varchar
+        same_in_both_orders: boolean
+    columns:
+      - name: unit_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('text_proposed_column')
+                field: unit_key
+      - name: code
+        data_tests: [not_null]
+      - name: rate_name
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['SOFR', 'EURIBOR', 'SONIA', 'LIBOR', 'PRIME', 'CORRA', 'BBSW', 'BKBM', 'STIBOR', 'SARON',
+                         'NIBOR', 'TONA', 'KORIBOR', 'FEDFUNDS', 'CDOR', 'BBSY']

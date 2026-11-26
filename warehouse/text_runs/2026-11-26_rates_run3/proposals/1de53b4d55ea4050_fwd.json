@@ -1,0 +1,40 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.9,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (#% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#%PIK",
+   "roles": [
+    "pik_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (#%PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The tag evidence decides it. In '#%' cells n1 equals the tagged interest_rate on 12407 of 12409 compared rows. In '#% (#% PIK)' cells n1 equals the total interest_rate and n2 equals pik_rate. In '#% PIK' cells n1 equals the tagged pik_rate on 1495 of 1496 rows. A few of those rows (32) carry an interest_rate tag that matches n1, so a pure-PIK coupon is occasionally tagged as the all-in rate, but pik_rate is the better fit. The spread is in its own column."
+}

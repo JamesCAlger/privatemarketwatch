@@ -1,0 +1,22 @@
+{
+ "column_holds": "all_in_rate",
+ "column_confidence": 0.93,
+ "shapes": [
+  {
+   "shape": "#%",
+   "roles": [
+    "all_in_rate_pct"
+   ]
+  },
+  {
+   "shape": "#% (incl. #% PIK)",
+   "roles": [
+    "all_in_rate_pct",
+    "pik_rate_pct"
+   ]
+  }
+ ],
+ "codes": [],
+ "note": "The interest_rate tag sits in this cell on all 969 plain rows. On the 4 PIK rows the tag also sits on n1, the total, and the pik_rate tag matches n2 (e.g. 10.88% incl. 5.44% PIK). The spread is printed in the separate Reference Rate and Spread column, so no code appears in this column's shapes.",
+ "note_extra": null
+}

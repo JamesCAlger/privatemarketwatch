@@ -1,0 +1,2 @@
+-- Text slice R phase 3 fix round 1: writes seed text_rate_unread_cap (positions per unread group, sorted). Run from warehouse/.
+copy (select unit_key, shape, status, count(distinct accession || '|' || context_id)::integer as max_positions from int_text_rate_read_cell where status not in ('read', 'no_value') group by 1, 2, 3 order by 1, 2, 3) to 'seeds/text_rate_unread_cap.csv' (header, delimiter ',')

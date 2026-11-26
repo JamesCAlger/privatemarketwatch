@@ -1,0 +1,19 @@
+series_id,rate_name,frequency,kind,note
+SOFR,SOFR,daily,published,Secured Overnight Financing Rate
+SOFR30DAYAVG,SOFR,daily,average,30-day average SOFR
+SOFR90DAYAVG,SOFR,daily,average,90-day average SOFR
+SOFR180DAYAVG,SOFR,daily,average,180-day average SOFR
+IUDSOIA,SONIA,daily,published,Sterling Overnight Index Average
+DPRIME,PRIME,daily,published,Bank prime loan rate
+DFF,FEDFUNDS,daily,published,Effective federal funds rate
+IR3TIB01USM156N,LIBOR,monthly,proxy,"OECD 3-month interbank rate, United States: proxy for USD LIBOR"
+IR3TIB01EZM156N,EURIBOR,monthly,proxy,"OECD 3-month interbank rate, euro area: proxy for EURIBOR"
+IR3TIB01GBM156N,SONIA,monthly,proxy,"OECD 3-month interbank rate, United Kingdom"
+IR3TIB01CAM156N,CORRA,monthly,proxy,"OECD 3-month interbank rate, Canada: proxy for CDOR and CORRA"
+IR3TIB01AUM156N,BBSW,monthly,proxy,"OECD 3-month interbank rate, Australia: proxy for BBSW and BBSY"
+IR3TIB01NZM156N,BKBM,monthly,proxy,"OECD 3-month interbank rate, New Zealand: proxy for BKBM"
+IR3TIB01SEM156N,STIBOR,monthly,proxy,"OECD 3-month interbank rate, Sweden: proxy for STIBOR"
+IR3TIB01CHM156N,SARON,monthly,proxy,"OECD 3-month interbank rate, Switzerland: proxy for SARON"
+IR3TIB01NOM156N,NIBOR,monthly,proxy,"OECD 3-month interbank rate, Norway: proxy for NIBOR"
+IR3TIB01JPM156N,TONA,monthly,proxy,"OECD 3-month interbank rate, Japan: proxy for TONA/TONAR"
+IR3TIB01KRM156N,KORIBOR,monthly,proxy,"OECD 3-month interbank rate, Korea: proxy for KORIBOR"
