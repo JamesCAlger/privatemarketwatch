@@ -19,8 +19,38 @@
 -- 5-row bar), untested (no check possible: floors, rare shapes with no tagged row, fixed rates of a filer with no all-in tag), owner (the
 -- owner accepted it: items 1 to 4, 8 to 10, 13, the 2022-09-30 shifted-tag finding). grade_rank: checked 1, matches_few_rows
 -- 2, owner 3, untested 4 (the read model keeps the strongest when two rules give one value).
+-- rule_key (fix round 2): a stable key of what the rule reads, for finding ids. rule_id is the loader's content hash over
+-- every column, evidence and dated parameters included, so it changes when evidence wording, a count or a date changes.
+-- rule_key hashes only: fund, action, table and header signature, shape, number index, role, the condition column and
+-- text (rate_role); code and rate (rate_code, rate_text_not_a_code); field, table index and printed rows (rate_printed_wins,
+-- with its filing, the rule's scope). Never evidence, counts, filing dates or the evidence filing.
+with r as (
+    select *, json_extract_string(parameter, '$.table_signature') as p_table_signature
+        , json_extract_string(parameter, '$.header_signature') as p_header_signature
+        , json_extract_string(parameter, '$.shape') as p_shape
+        , json_extract_string(parameter, '$.number_index') as p_number_index
+        , json_extract_string(parameter, '$.role') as p_role
+        , json_extract_string(parameter, '$.condition_header_signature') as p_cond_header
+        , json_extract_string(parameter, '$.condition_text') as p_cond_text
+        , upper(replace(json_extract_string(parameter, '$.code'), ' ', '')) as p_code_key
+        , json_extract_string(parameter, '$.rate') as p_rate
+        , json_extract_string(parameter, '$.field') as p_field
+        , json_extract_string(parameter, '$.table_index') as p_table_index
+        , json_extract_string(parameter, '$.first_row') as p_first_row
+        , json_extract_string(parameter, '$.last_row') as p_last_row
+    from {{ ref('stg_reading_rule') }}
+    where target = 'rate_text'
+)
+
 select
     rule_id
+    , left(md5(concat_ws('|', cik, action, coalesce(p_table_signature, ''), coalesce(p_header_signature, ''),
+                         coalesce(p_shape, ''), coalesce(p_number_index, ''), coalesce(p_role, ''),
+                         coalesce(p_cond_header, ''), coalesce(p_cond_text, ''), coalesce(p_code_key, ''),
+                         coalesce(p_rate, ''), coalesce(p_field, ''), coalesce(p_table_index, ''),
+                         coalesce(p_first_row, ''), coalesce(p_last_row, ''),
+                         case when action = 'rate_printed_wins' then coalesce(sel_accession, '') else '' end)), 16)
+        as rule_key
     , cik
     , action
     , sel_accession as accession
@@ -51,5 +81,4 @@ select
     , try_cast(json_extract_string(parameter, '$.first_row') as integer) as first_row
     , try_cast(json_extract_string(parameter, '$.last_row') as integer) as last_row
     , evidence
-from {{ ref('stg_reading_rule') }}
-where target = 'rate_text'
+from r

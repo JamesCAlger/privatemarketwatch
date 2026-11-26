@@ -270,12 +270,21 @@ def main():
                 entries.setdefault(cik, []).append(e)
     finally:
         con.close()
+    code = write_wrappers(entries, WRAPPERS, CIKS, check=check, accept="--accept-legend-change" in sys.argv)
+    if code:
+        sys.exit(code)
+
+
+def write_wrappers(entries, wrappers_dir, ciks, check=False, accept=False):
+    """Replace the rate_text entries of each <cik>.json in wrappers_dir with entries[cik]. Returns 0 when done (or
+    nothing to do), 1 in check mode when a wrapper would change, 2 when a legend contradicts an existing code entry and
+    accept is False; with 1 or 2 nothing is written."""
     order = {"rate_column": 0, "rate_role": 1, "rate_code": 2, "rate_text_not_a_code": 3, "rate_printed_wins": 4}
     changed = False
     conflicts = []
     pending = []
-    for cik in CIKS:
-        path = os.path.join(WRAPPERS, f"{cik}.json")
+    for cik in ciks:
+        path = os.path.join(wrappers_dir, f"{cik}.json")
         with open(path, encoding="utf-8", newline="") as f:
             raw = f.read()
         wrapper = json.loads(raw)
@@ -297,36 +306,38 @@ def main():
         if text != raw:
             changed = True
             pending.append((path, text))
-    if conflicts and "--accept-legend-change" not in sys.argv:
-        # fix round 1 item 4: a legend that contradicts an existing dated entry surfaces; nothing is written
-        print("legend change against the existing dated code table (nothing written; look at it, then rerun with "
+    if conflicts and not accept:
+        # fix round 1 item 4: a legend that contradicts an existing code entry surfaces; nothing is written
+        print("legend change against the existing code table (nothing written; look at it, then rerun with "
               "--accept-legend-change):")
         for c in conflicts:
             print("  " + c)
-        sys.exit(2)
+        return 2
     if check:
         if changed:
             print("wrappers would change")
-            sys.exit(1)
-        return
+            return 1
+        return 0
     for path, text in pending:
         with open(path, "w", encoding="utf-8", newline="") as f:
             f.write(text)
+    return 0
 
 
 def legend_conflicts(cik, old, new):
-    """Dated rate_code entries of the wrapper as it stands that the new table contradicts: a new dated entry for the
-    same code whose dates overlap an old one with another rate, or an old (code, rate) that is gone. Extending an
-    entry's dates with the same rate (a new filing whose legend agrees) is not a conflict."""
-    def dated(entries):
+    """rate_code entries of the wrapper as it stands that the new table contradicts. Dated: a new entry for the same
+    code whose dates overlap with another rate, or an old (code, rate) that is gone. Undated (fix round 2: the owner's
+    item 4 and 13 entries, which hold at every date): any new entry for the same code with another rate, or the old
+    (code, rate) gone. Extending a dated entry with the same rate (a new filing whose legend agrees) is no conflict."""
+    def codes(entries):
         out = []
         for e in entries:
             p = e.get("parameter") or {}
-            if e.get("action") == "rate_code" and p.get("first_filing_date"):
-                out.append((p["code"].upper().replace(" ", ""), p["rate"], p["first_filing_date"],
-                            p["last_filing_date"]))
+            if e.get("action") == "rate_code":
+                out.append((p["code"].upper().replace(" ", ""), p["rate"], p.get("first_filing_date") or "0000-01-01",
+                            p.get("last_filing_date") or "9999-12-31"))
         return out
-    o, n = dated(old), dated(new)
+    o, n = codes(old), codes(new)
     found = []
     for code, rate, first, last in o:
         same = [x for x in n if x[0] == code and x[1] == rate]

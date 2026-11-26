@@ -28,7 +28,9 @@
 -- all_in_rate: the all-in reading (all_in_rate_pct) and the fixed reading (fixed_rate_pct) together: a fixed rate is the
 -- all-in rate of a fixed-rate loan. all_in_source: all_in, fixed, or both (two readings that agree); pik_coupon (fix
 -- round 1, owner item 9) when the only all-in reading is a whole-coupon PIK number (a rate_role rule with whole_coupon:
--- "10.00% PIK" in an all-in column), which is then the all-in rate and the PIK rate; no cash rate is written.
+-- "10.00% PIK" in an all-in column), which is then the all-in rate and the PIK rate; no cash rate is written. Fix round
+-- 2: where that PIK reading is not applied (it differs from the PIK tag, or conflicts), the all-in rate is not applied
+-- either: status whole_coupon_pik_not_applied, listed unread.
 -- Fix round 1 item 1: constraints 1 and 2 count a printed code as a reference rate even when no rule resolves it
 -- (code_printed); the reference rate is then unread with status code_undecided and reference_rate_detail giving the
 -- cell status (legend_two_rates, code_no_rule, ...). Only a position with no code printed at all loses its spread or
@@ -159,6 +161,11 @@ with cell as (
         , case when d.conflict_all_in_rate or d.conflict_fixed_rate or d.conflict_all_in_fixed then 'conflict'
                when d.p_all_in_rate is null and d.p_fixed_rate is not null and d.fixed_broken
                     then 'constraint_fixed_with_floating_terms'
+               -- fix round 2: a whole-coupon all-in rate stands only if its PIK reading is applied
+               when d.p_all_in_rate is not null and d.n_all_in_printed = 0
+                    and not (not coalesce(d.conflict_pik_rate, false) and d.p_pik_rate is not null
+                             and (d.t_pik is null or abs(d.p_pik_rate - d.t_pik) <= {{ tol }}))
+                    then 'whole_coupon_pik_not_applied'
                when d.v_all_in is null then 'not_printed'
                when d.t_all_in is not null and abs(d.v_all_in - d.t_all_in) > {{ tol }} and d.wins_all_in_rule is not null
                     then 'printed_wins_over_tag'
