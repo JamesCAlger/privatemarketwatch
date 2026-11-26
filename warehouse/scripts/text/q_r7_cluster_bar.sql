@@ -7,5 +7,5 @@ select basis, is_sofr_like, count(*) as groups
     , count(*) filter (where within_share < 0.95) as below_95
     , count(*) filter (where sofr_distance > 1.0) as sofr_dist_over_1
     , round(median(within_share), 3) as median_within
-from int_text_check_base_cluster_group where usable >= 10
+from int_text_measure_implied_base_group where usable >= 10
 group by 1, 2 order by 1, 2

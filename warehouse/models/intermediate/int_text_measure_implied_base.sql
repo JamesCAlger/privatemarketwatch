@@ -1,6 +1,9 @@
--- Computes the base rate each position implies, for the cluster test of a reference-rate reading (text slice R fix
--- round 1, 2026-11-26; replaces the SOFR level test as the check the worklist reads). One row per (accession,
--- context_id, basis) for every position of int_text_reference_rate_read whose cell gives a code.
+-- MEASUREMENT ONLY (fix round 2: renamed from int_text_check_base_cluster; no model and no worklist state reads it):
+-- the base rate each position implies (text slice R fix round 1, 2026-11-26). One row per (accession, context_id,
+-- basis) for every position of int_text_reference_rate_read whose cell gives a code. Measured in fix round 2: it has no
+-- power to tell a right reading from a wrong one (two codes of one fund and quarter mixed together still cluster;
+-- reading the all-in rate as the spread gives implied base 0 on every row, which clusters perfectly), so it judges
+-- nothing (docs/baseline_text_rates_phase1_2026-11-26.md section 13).
 --
 -- Idea: loans on one base rate in one quarter reset to a few published values (the 1, 3 and 6 month tenors), so
 -- all-in minus spread clusters at a few points when the code is read right. Needs no base-rate table.
@@ -15,7 +18,7 @@
 --               rows with status read.
 --   hypothesis  every row with a code, rate_label = the printed code (upper case, spaces removed), whether or not a rule
 --               maps it. This is a hypothesis table for this check only ("what if this code is one base rate"); it reads
---               nothing and the worklist does not use it.
+--               nothing.
 -- state: inputs_missing (spread or all_in missing), pik_present, usable.
 with coded as (
     select accession, context_id, cik, report_date, is_published, unit_key, code, reference_rate, status

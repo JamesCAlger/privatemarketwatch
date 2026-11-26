@@ -20,9 +20,11 @@
 --   top_cells           the 12 most frequent distinct non-empty texts of the column on position rows: {text, rows}.
 --   shapes              the column's shapes (int_text_shape_unit), most frequent first, ties by shape key, at most 40:
 --                       {shape, rows, code, first_report_date, last_report_date, legs}. legs: the shape-legs evidence
---                       (int_text_check_shape_legs) for a parts-stating shape, the pairs where a printed number equals a
---                       tagged value at least once: {number, field, compared, equal, equal_bps}, by number then most
---                       equal; null for other shapes. shapes_total: how many shapes the column has.
+--                       (int_text_check_shape_legs) for a parts-stating shape: every (printed number, tagged field) pair
+--                       compared, zero matches kept (fix round 2), over the four tagged fields interest_rate,
+--                       interest_rate_cash, pik_rate, spread: {number, field, compared, equal, equal_bps}, by number then
+--                       field; null for other shapes. shapes_total: how many shapes the column has.
+--   legs_help           one fixed sentence per term of legs (n1, n2, compared, equal, equal_bps).
 --   example_rows        for each of the 3 most frequent shapes, one full printed row: the row of that shape whose text
 --                       equals the shape's most frequent text, latest report date first, then smaller accession, then
 --                       smaller row_index. {shape, report_date, cells: [{header, group_header, text}]} over every leaf
@@ -30,7 +32,9 @@
 --   tag_profile         {field, rows}: position rows of the column holding a fact read as the field, most first.
 --   legend              the filer's legend entries (int_text_check_legend) for the codes printed in the column, one per
 --                       (code, name, abbreviation): {code, name, abbreviation, filings: [{report_date, accession}]},
---                       by code, name, abbreviation; filings by report date. A rule's dates can be read from it.
+--                       by code, name, abbreviation; filings by report date. A rule's dates can be read from it. Since
+--                       fix round 2 only filings whose report date lies inside the column's own first_report_date to
+--                       last_report_date; legend_entries_outside: how many (entry, filing) pairs were left out by that.
 --   caps                {top_cells: 12, shapes: 40, example_rows: 3, text_chars: 200}.
 -- Not in the bundle (fix round 1, measured): the printed note a header's mark ("Reference Rate and Spread(2)") refers
 -- to. The filed layer keeps table rows only, and no table row of any filing starts with such a mark followed by text
@@ -110,11 +114,14 @@ with unit as (
 )
 
 , legs as (
-    select shape_key
-        , list({'number': number_label, 'field': tag_field, 'compared': compared, 'equal': equal, 'equal_bps': equal_bps}
-               order by number_label, equal desc, equal_bps desc, tag_field) as legs
-    from {{ ref('int_text_check_shape_legs') }}
-    where equal > 0 or equal_bps > 0
+    select lb.shape_key
+        , list({'number': lb.number_label, 'field': f.tag_field, 'compared': coalesce(l.compared, 0),
+                'equal': coalesce(l.equal, 0), 'equal_bps': coalesce(l.equal_bps, 0)}
+               order by lb.number_label, f.tag_field) as legs
+    from (select distinct shape_key, number_label from {{ ref('int_text_check_shape_legs') }}) lb
+    cross join (select unnest(['interest_rate', 'interest_rate_cash', 'pik_rate', 'spread']) as tag_field) f
+    left join {{ ref('int_text_check_shape_legs') }} l
+        on l.shape_key = lb.shape_key and l.number_label = lb.number_label and l.tag_field = f.tag_field
     group by 1
 )
 
@@ -172,20 +179,29 @@ with unit as (
     group by 1
 )
 
+, unit_code as (
+    select distinct c.unit_key, c.cik, upper(replace(c.code, ' ', '')) as code_key, u.first_report_date, u.last_report_date
+    from cell c
+    join unit u on u.unit_key = c.unit_key
+    where c.code is not null
+)
+
 , legend_entry as (
-    select cik, code_key, code, name, abbreviation
-        , list({'report_date': cast(report_date as varchar), 'accession': accession} order by report_date, accession)
-            as filings
-    from {{ ref('int_text_check_legend') }}
-    group by 1, 2, 3, 4, 5
+    select k.unit_key, l.code, l.name, l.abbreviation
+        , list({'report_date': cast(l.report_date as varchar), 'accession': l.accession} order by l.report_date, l.accession)
+            filter (where l.report_date between k.first_report_date and k.last_report_date) as filings
+        , count(*) filter (where l.report_date not between k.first_report_date and k.last_report_date) as outside
+    from unit_code k
+    join {{ ref('int_text_check_legend') }} l on l.cik = k.cik and l.code_key = k.code_key
+    group by 1, 2, 3, 4
 )
 
 , legend as (
-    select k.unit_key
-        , list({'code': l.code, 'name': left(l.name, {{ text_chars }}), 'abbreviation': l.abbreviation,
-                'filings': l.filings} order by l.code, l.name, l.abbreviation) as legend
-    from (select distinct unit_key, cik, upper(replace(code, ' ', '')) as code_key from cell where code is not null) k
-    join legend_entry l on l.cik = k.cik and l.code_key = k.code_key
+    select unit_key
+        , list({'code': code, 'name': left(name, {{ text_chars }}), 'abbreviation': abbreviation, 'filings': filings}
+               order by code, name, abbreviation) filter (where filings is not null) as legend
+        , sum(outside) as legend_entries_outside
+    from legend_entry
     group by 1
 )
 
@@ -205,9 +221,11 @@ with unit as (
             'top_cells': tc.top_cells,
             'shapes': sl.shapes,
             'shapes_total': sl.shapes_total,
+            'legs_help': 'n1, n2, ...: the first, second, ... number printed in the cell, in order; n1+n2 is their sum. compared: rows of the shape where that number and that tagged field both exist. equal: of those, rows where the number equals the tagged value (within 0.005). equal_bps: rows where the number divided by 100 equals the tagged value (a spread printed in basis points).',
             'example_rows': er.example_rows,
             'tag_profile': tp.tag_profile,
             'legend': lg.legend,
+            'legend_entries_outside': coalesce(lg.legend_entries_outside, 0),
             'caps': {'top_cells': 12, 'shapes': 40, 'example_rows': 3, 'text_chars': {{ text_chars }}}
         })::varchar as bundle_json
     from unit u

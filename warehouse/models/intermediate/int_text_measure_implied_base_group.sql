@@ -1,8 +1,9 @@
--- Judges a reference-rate reading by the cluster test, per fund, quarter, basis and rate label (text slice R fix round 1,
--- 2026-11-26). One row per (cik, report_date, basis, rate_label) of int_text_check_base_cluster. Every quarter is its
--- own row.
+-- MEASUREMENT ONLY (fix round 2: renamed from int_text_check_base_cluster_group; no model and no worklist state reads
+-- it): the implied-base clusters per fund, quarter, basis and rate label (text slice R fix round 1, 2026-11-26). One row
+-- per (cik, report_date, basis, rate_label) of int_text_measure_implied_base. cluster_state is a description of the
+-- clusters, not a verdict on a rule: wrong readings pass it (section 13 of the baseline note).
 --
--- usable: rows with an implied base (int_text_check_base_cluster state usable); pik_present, inputs_missing: the rest.
+-- usable: rows with an implied base (int_text_measure_implied_base state usable); pik_present, inputs_missing: the rest.
 -- Centres: the implied bases rounded to var text_cluster_centre_step (0.05); the var text_cluster_max_centres (3) most
 -- frequent rounded values, ties to the smaller value, are the centres; centre_1 is the most frequent (the main centre).
 -- within: usable rows whose implied base lies within var text_cluster_radius (0.30 percentage points) of the nearest
@@ -11,17 +12,17 @@
 -- sofr_distance = abs(centre_1 - sofr), for every label, with is_sofr_like when rate_label is 'SOFR' or the fund's
 -- legend (int_text_check_legend) gives the code the abbreviation SOFR. MEASUREMENT ONLY, a sanity bound
 -- (var text_cluster_sofr_bound, 1.0): within_bound says whether the main centre is that close; it decides nothing.
--- check_state:
+-- cluster_state:
 --   too_few_rows  fewer than var text_cluster_min_rows usable rows: not judged.
 --   pass          within_share >= var text_cluster_min_share.
 --   fail          otherwise.
--- The bar (min_rows, min_share) was set from the measured distribution, not to make every group pass; the groups
--- below it are listed in docs/baseline_text_rates_phase1_2026-11-26.md section 5.
+-- The bar (min_rows, min_share) was set from the measured distribution in fix round 1; it is kept to describe the
+-- clusters, not to accept anything.
 {% set step = var('text_cluster_centre_step') %}
 with row_base as (
     select cik, report_date, basis, rate_label, state, implied_base
         , round(implied_base / {{ step }}) * {{ step }} as rounded
-    from {{ ref('int_text_check_base_cluster') }}
+    from {{ ref('int_text_measure_implied_base') }}
 )
 
 , mode_count as (
@@ -102,6 +103,6 @@ select
         when j.usable < {{ var('text_cluster_min_rows') }} then 'too_few_rows'
         when j.within_share >= {{ var('text_cluster_min_share') }} then 'pass'
         else 'fail'
-    end as check_state
+    end as cluster_state
 from joined j
 asof left join sofr s on s.date <= j.report_date

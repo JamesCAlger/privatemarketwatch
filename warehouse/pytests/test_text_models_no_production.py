@@ -73,6 +73,52 @@ def test_no_text_model_reads_production():
     assert bad == {}, "int_text_* models depending on production or comparison models: %r" % bad
 
 
+# DuckDB's file readers by name (a column such as read_failed is not one).
+SOURCE_OR_READ = re.compile(
+    r"""\bsource\s*\(|\bread_(?:text|blob|csv|csv_auto|parquet|json|json_auto|json_objects|ndjson|xlsx)\s*\(""")
+
+
+def _macro_texts(text, macros, seen=None):
+    """The model's own text plus the bodies of every macro it calls, recursively (fix round 2)."""
+    seen = set() if seen is None else seen
+    texts = [text]
+    for block in JINJA.findall(text):
+        for name in CALL.findall(block):
+            if name in macros and name not in seen:
+                seen.add(name)
+                texts += _macro_texts(macros[name], macros, seen)
+    return texts
+
+
+def _source_or_read_hits(text, macros):
+    """source() calls and inline file reads (read_text(, read_csv(, read_parquet(, ...) in a model or its macros."""
+    hits = set()
+    for part in _macro_texts(text, macros):
+        hits |= set(m.group(0).strip() for m in SOURCE_OR_READ.finditer(part))
+    return sorted(hits)
+
+
+def test_no_text_model_reads_a_source_or_a_file():
+    """Fix round 2: an int_text_* model reads models only: no source() (production or filed tables) and no inline
+    read_text / read_csv / read_parquet, directly or through a macro."""
+    macros = _macros()
+    bad = {}
+    for path in sorted((WAREHOUSE / "models").rglob("int_text_*.sql")):
+        hits = _source_or_read_hits(path.read_text(encoding="utf-8"), macros)
+        if hits:
+            bad[path.stem] = hits
+    assert bad == {}, "int_text_* models reading a source or a file: %r" % bad
+
+
+def test_source_or_read_detector_finds_planted_violations():
+    """Guard: the detector finds a planted source(), an inline read_csv and a read inside a called macro."""
+    macros = {"planted_macro": "{% macro planted_macro() %} select * from read_parquet('x.parquet') {% endmacro %}"}
+    assert _source_or_read_hits("select * from {{ source('output', 'holdings') }}", macros) == ["source("]
+    assert _source_or_read_hits("select * from read_csv('../data/output/x.csv')", macros) == ["read_csv("]
+    assert _source_or_read_hits("select 1 from {{ planted_macro() }}", macros) == ["read_parquet("]
+    assert _source_or_read_hits("select * from {{ ref('int_text_cell') }}", macros) == []
+
+
 def test_detector_sees_a_known_dependency():
     """Guard against a detector that sees nothing: cmp_rate reads stg_holdings."""
     graph = _graph()

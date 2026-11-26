@@ -2,8 +2,9 @@
 -- spread plus the SOFR 90-day average against the filed all-in rate, on each position whose reference-rate column gives
 -- a code (text slice R phase 1, 2026-11-26). One row per position of int_text_reference_rate_read with a code:
 -- (accession, context_id). Measured: with the 90-day backward average it fails correct readings in quarters when SOFR
--- moved (7 of 15; docs/baseline_text_rates_phase1_2026-11-26.md section 5), so the check that judges rules is the
--- cluster test int_text_check_base_cluster. It never compares with production.
+-- moved (7 of 15; docs/baseline_text_rates_phase1_2026-11-26.md section 5). Its successor, the implied-base cluster
+-- (int_text_measure_implied_base), is a measurement too since fix round 2: no arithmetic check judges a reference-rate
+-- or spread rule at present. It never compares with production.
 --
 -- Inputs on the same position:
 --   spread    int_field_normalised field spread, status normalised (the tag before row corrections; percent). The tag only: no existing rule

@@ -1553,11 +1553,11 @@ models:
               arguments:
                 values: [rule_and_legend, rule_only, legend_only, neither]
 
-  - name: int_text_check_base_cluster
+  - name: int_text_measure_implied_base
     description: >
-      Fix round 1. Per position with a printed code and basis (rule: the reference rate an existing rule reads;
-      hypothesis: the printed code, for this check only): all-in rate minus spread (tags before corrections), PIK rows
-      left out. The input of the cluster test.
+      MEASUREMENT ONLY (fix round 2: renamed from int_text_check_base_cluster; nothing reads it). Per position with a
+      printed code and basis (rule: the reference rate an existing rule reads; hypothesis: the printed code): all-in rate
+      minus spread (tags before corrections), PIK rows left out. It cannot tell a right reading from a wrong one.
     columns:
       - name: accession
         data_tests: [not_null]
@@ -1574,15 +1574,15 @@ models:
               arguments:
                 values: [usable, pik_present, inputs_missing]
 
-  - name: int_text_check_base_cluster_group
+  - name: int_text_measure_implied_base_group
     description: >
-      Fix round 1. The cluster test per (fund, quarter, basis, rate label): up to three centres (modes of the implied base
-      rounded to 0.05), the share of rows within 0.30 of the nearest, the main centre's distance from the SOFR seed
-      (measurement only), and check_state pass, fail or too_few_rows. The worklist reads basis 'rule' only.
+      MEASUREMENT ONLY (fix round 2: renamed from int_text_check_base_cluster_group; nothing reads it). The implied-base
+      clusters per (fund, quarter, basis, rate label): up to three centres, the share within 0.30, the main centre's
+      distance from the SOFR seed, and cluster_state. Wrong readings pass it; it accepts nothing.
     columns:
       - name: report_date
         data_tests: [not_null]
-      - name: check_state
+      - name: cluster_state
         data_tests:
           - not_null
           - accepted_values:
@@ -1629,10 +1629,11 @@ models:
 
   - name: int_text_worklist
     description: >
-      Per column unit and shape unit: positions in the unit, read, read by passing rules, failing, the shares, the dated
-      quarter lists, and the state (fix round 1): covered needs at least 95% of the positions read by rules that pass a
-      check in their own quarter; partly_covered, covered_unchecked, failed_check, uncovered otherwise (rules in the
-      model's header). changed_state is not built in phase 1 and is always null.
+      Per column unit and shape unit: positions in the unit; read positions by status (fix round 2: read_and_checked when
+      the position's own filing's legend agrees with the rule, read_unchecked with no legend, read_failed when it is
+      mixed or contradicts, read_unspecified for a label_is_unspecified read, which never counts); the shares; the
+      quarter lists; and the state: covered needs 95% read_and_checked, covered_unchecked 95% read, partly_covered,
+      failed_check, uncovered otherwise (rules in the model's header). changed_state is not built and always null.
     columns:
       - name: work_key
         data_tests: [unique, not_null]
@@ -6022,11 +6023,12 @@ unit_tests:
 
   - name: int_text_worklist_states
     description: >
-      Text slice R fix round 1. Column units, 100 positions each unless said. u_cov: 96 read and passing (legend agrees):
-      covered. u_part: 17 of 100 read and passing: partly_covered, not covered. u_unch: 96 read, no check applies:
-      covered_unchecked. u_fail: 96 read, one position mixed under its own filing's legend in 2022-12-31: failed_check with
-      failing_quarters '2022-12-31'. u_clu: 96 read, legend silent, the cluster test passes for the fund, quarter and rate:
-      covered. u_none: no rule names it: uncovered. u_zero: a rule names it, nothing read: uncovered.
+      Text slice R fix round 2. Column units of 100 positions; each read position's status comes from its own filing's
+      legend. u_cov: 96 read, legend agrees: covered. u_part: 17 read and agreed: partly_covered. u_unch: 96 read, no
+      legend in their filings: covered_unchecked. u_mix: 50 agreed and 46 with no legend: 96 read, 50 checked:
+      covered_unchecked, not covered. u_fail: 95 agreed, 1 mixed in 2022-12-31: failed_check, failing_quarters
+      '2022-12-31'. u_spec: 96 read by a label_is_unspecified rule: they do not count, uncovered. u_none: no rule names
+      it: uncovered. u_zero: a rule names it, nothing read: uncovered.
     model: int_text_worklist
     given:
       - input: ref('int_text_column_unit')
@@ -6034,8 +6036,9 @@ unit_tests:
           - {unit_key: u_cov, cik: "1", is_rate_candidate: true, read_rule_ids: r}
           - {unit_key: u_part, cik: "1", is_rate_candidate: true, read_rule_ids: r}
           - {unit_key: u_unch, cik: "1", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_mix, cik: "1", is_rate_candidate: true, read_rule_ids: r}
           - {unit_key: u_fail, cik: "1", is_rate_candidate: true, read_rule_ids: r}
-          - {unit_key: u_clu, cik: "2", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_spec, cik: "1", is_rate_candidate: true, read_rule_ids: r}
           - {unit_key: u_none, cik: "1", is_rate_candidate: false, read_rule_ids: null}
           - {unit_key: u_zero, cik: "1", is_rate_candidate: true, read_rule_ids: r}
       - input: ref('int_text_cell')
@@ -6045,44 +6048,41 @@ unit_tests:
                  date '2026-03-31' as report_date, true as is_published, 100::bigint as positions, 'T' as table_signature,
                  'h' as header_signature, u as unit_key, 'S+' as text, 1::bigint as n_cells, 'S+' as shape,
                  'S+' as shape_key_text, 'S' as code, true as rate_text, []::varchar[] as fact_fields, 0::bigint as fact_count
-          from (values ('u_cov'), ('u_part'), ('u_unch'), ('u_fail'), ('u_clu'), ('u_none'), ('u_zero')) t(u)
+          from (values ('u_cov'), ('u_part'), ('u_unch'), ('u_mix'), ('u_fail'), ('u_spec'), ('u_none'), ('u_zero')) t(u)
       - input: ref('int_text_shape_unit')
         rows: []
       - input: ref('int_text_reference_rate_read')
         format: sql
         rows: |
-          select 'A' as accession, u || '-' || i as context_id, cik, rd as report_date, true as is_published,
+          select 'A' as accession, ctx as context_id, '1' as cik, rd as report_date, true as is_published,
                  1 as table_index, 1 as row_index, 0::hugeint as col_start, u as unit_key, 'r' as column_rule_id,
                  1::bigint as n_columns_named, 'S+' as cell_text, 'S' as code, 'SOFR' as reference_rate, 'm' as map_rule_id,
                  1::bigint as n_map_rules, 'read' as status
-          from (values ('u_cov', '1', 96, date '2026-03-31'), ('u_part', '1', 17, date '2026-03-31'),
-                       ('u_unch', '1', 96, date '2026-03-31'), ('u_fail', '1', 95, date '2026-03-31'),
-                       ('u_clu', '2', 96, date '2026-03-31')) t(u, cik, n, rd),
-               range(n) r(i)
-          union all
-          select 'A', 'u_fail-x', '1', date '2022-12-31', true, 1, 1, 0::hugeint, 'u_fail', 'r', 1::bigint, 'S+', 'S', 'SOFR',
-                 'm', 1::bigint, 'read'
+          from (
+              select u, u || '-' || v || '-' || i as ctx, date '2026-03-31' as rd
+              from (values ('u_cov', 96, 'agrees'), ('u_part', 17, 'agrees'), ('u_unch', 96, 'no_legend_in_filing'),
+                           ('u_mix', 50, 'agrees'), ('u_mix', 46, 'no_legend_in_filing'), ('u_fail', 95, 'agrees'),
+                           ('u_spec', 96, 'not_applicable')) t(u, n, v), range(n) r(i)
+              union all
+              select 'u_fail', 'u_fail-mixed-0', date '2022-12-31'
+          )
       - input: ref('int_text_check_legend_read')
         format: sql
         rows: |
-          select 'A' as accession, u || '-' || i as context_id, v as legend_verdict
+          select 'A' as accession, u || '-' || v || '-' || i as context_id, v as legend_verdict
           from (values ('u_cov', 96, 'agrees'), ('u_part', 17, 'agrees'), ('u_unch', 96, 'no_legend_in_filing'),
-                       ('u_fail', 95, 'agrees'), ('u_clu', 96, 'no_legend_in_filing')) t(u, n, v), range(n) r(i)
-          union all
-          select 'A', 'u_fail-x', 'mixed'
-      - input: ref('int_text_check_base_cluster_group')
-        rows:
-          - {cik: "2", report_date: 2026-03-31, basis: rule, rate_label: SOFR, check_state: pass}
-          - {cik: "2", report_date: 2026-03-31, basis: hypothesis, rate_label: SOFR, check_state: fail}
+                       ('u_mix', 50, 'agrees'), ('u_mix', 46, 'no_legend_in_filing'), ('u_fail', 95, 'agrees'),
+                       ('u_spec', 96, 'not_applicable'), ('u_fail', 1, 'mixed')) t(u, n, v), range(n) r(i)
     expect:
       rows:
-        - {work_key: u_cov, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 96, rows_read_failing: 0, failing_quarters: null, state: covered}
-        - {work_key: u_part, rows_in_unit: 100, rows_read: 17, rows_read_by_passing_rule: 17, rows_read_failing: 0, failing_quarters: null, state: partly_covered}
-        - {work_key: u_unch, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 0, rows_read_failing: 0, failing_quarters: null, state: covered_unchecked}
-        - {work_key: u_fail, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 95, rows_read_failing: 1, failing_quarters: "2022-12-31", state: failed_check}
-        - {work_key: u_clu, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 96, rows_read_failing: 0, failing_quarters: null, state: covered}
-        - {work_key: u_none, rows_in_unit: 100, rows_read: 0, rows_read_by_passing_rule: 0, rows_read_failing: 0, failing_quarters: null, state: uncovered}
-        - {work_key: u_zero, rows_in_unit: 100, rows_read: 0, rows_read_by_passing_rule: 0, rows_read_failing: 0, failing_quarters: null, state: uncovered}
+        - {work_key: u_cov, rows_in_unit: 100, rows_read: 96, rows_read_checked: 96, rows_read_unchecked: 0, rows_read_failed: 0, rows_read_unspecified: 0, failing_quarters: null, state: covered}
+        - {work_key: u_part, rows_in_unit: 100, rows_read: 17, rows_read_checked: 17, rows_read_unchecked: 0, rows_read_failed: 0, rows_read_unspecified: 0, failing_quarters: null, state: partly_covered}
+        - {work_key: u_unch, rows_in_unit: 100, rows_read: 96, rows_read_checked: 0, rows_read_unchecked: 96, rows_read_failed: 0, rows_read_unspecified: 0, failing_quarters: null, state: covered_unchecked}
+        - {work_key: u_mix, rows_in_unit: 100, rows_read: 96, rows_read_checked: 50, rows_read_unchecked: 46, rows_read_failed: 0, rows_read_unspecified: 0, failing_quarters: null, state: covered_unchecked}
+        - {work_key: u_fail, rows_in_unit: 100, rows_read: 96, rows_read_checked: 95, rows_read_unchecked: 0, rows_read_failed: 1, rows_read_unspecified: 0, failing_quarters: "2022-12-31", state: failed_check}
+        - {work_key: u_spec, rows_in_unit: 100, rows_read: 0, rows_read_checked: 0, rows_read_unchecked: 0, rows_read_failed: 0, rows_read_unspecified: 96, failing_quarters: null, state: uncovered}
+        - {work_key: u_none, rows_in_unit: 100, rows_read: 0, rows_read_checked: 0, rows_read_unchecked: 0, rows_read_failed: 0, rows_read_unspecified: 0, failing_quarters: null, state: uncovered}
+        - {work_key: u_zero, rows_in_unit: 100, rows_read: 0, rows_read_checked: 0, rows_read_unchecked: 0, rows_read_failed: 0, rows_read_unspecified: 0, failing_quarters: null, state: uncovered}
 
   - name: int_text_shape_unit_key_and_display
     description: >
@@ -6107,16 +6107,16 @@ unit_tests:
         - {shape_key_text: "SOFR+#%", shape: "SOFR+#%", cell_count: 3, distinct_texts: 3}
         - {shape_key_text: "#%", shape: "#%", cell_count: 1, distinct_texts: 1}
 
-  - name: int_text_check_base_cluster_group_centres
+  - name: int_text_measure_implied_base_group_centres
     description: >
-      Text slice R fix round 1. Fund 1, 2026-03-31, rule basis SOFR: implied bases 4.30 (x5), 4.32, 4.10 (x3), 3.50 (x2)
+      Text slice R fix round 1 (a measurement since fix round 2). Fund 1, 2026-03-31, rule basis SOFR: implied bases 4.30 (x5), 4.32, 4.10 (x3), 3.50 (x2)
       and 9.00: centres 4.30, 4.10, 3.50 (the three most frequent rounded values); 9.00 is 4.70 from the nearest, so 12 of
       13 rows are within 0.30 (0.923, pass at 0.90); main share 10/13 (4.30, 4.32, 4.20 and the three 4.10 rows lie within
       0.30 of 4.30). SOFR 4.40 gives sofr_distance 0.10. A PIK row and a row with no all-in rate are not usable. Fund 2
       has 3 usable rows: too_few_rows.
-    model: int_text_check_base_cluster_group
+    model: int_text_measure_implied_base_group
     given:
-      - input: ref('int_text_check_base_cluster')
+      - input: ref('int_text_measure_implied_base')
         format: sql
         rows: |
           select cik, date '2026-03-31' as report_date, 'rule' as basis, 'SOFR' as rate_label, st as state, b as implied_base
@@ -6132,8 +6132,8 @@ unit_tests:
           - {date: 2026-03-31, sofr_90day_avg_pct: 4.40}
     expect:
       rows:
-        - {cik: "1", rows: 15, usable: 13, pik_present: 1, inputs_missing: 1, within: 12, centre_1: 4.30, is_sofr_like: true, sofr: 4.40, check_state: pass}
-        - {cik: "2", rows: 3, usable: 3, pik_present: 0, inputs_missing: 0, within: 3, centre_1: 4.0, is_sofr_like: true, sofr: 4.40, check_state: too_few_rows}
+        - {cik: "1", rows: 15, usable: 13, pik_present: 1, inputs_missing: 1, within: 12, centre_1: 4.30, is_sofr_like: true, sofr: 4.40, cluster_state: pass}
+        - {cik: "2", rows: 3, usable: 3, pik_present: 0, inputs_missing: 0, within: 3, centre_1: 4.0, is_sofr_like: true, sofr: 4.40, cluster_state: too_few_rows}
   - name: int_text_reference_rate_read_statuses
     description: >
       Text slice R phase 1. The fund's read_printed_column rule names "Ref. Rate", the sub-header of a two-line leaf under

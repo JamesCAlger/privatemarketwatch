@@ -9,7 +9,9 @@ layer and the page models.
 
 **Fix round 1 (independent review of 0f243ca7) changed the worklist, the legend check, the rate check, the bundles and
 the shapes. Section 12 has what changed with before/after numbers per fund; where sections 1 to 11 disagree with
-section 12, section 12 holds.** Bundles are not anonymous: the table title (16 of 31 bundles), company names and
+section 12, section 12 holds. Fix round 2 (review of 9285a8ad) took the cluster test out of every verdict: section 13
+holds over section 12.** **There is at present no arithmetic check on the reference rate or the spread** (section
+13.1). Bundles are not anonymous: the table title (16 of 31 bundles), company names and
 filing accessions name the fund. They carry no production value.
 
 ## 1. What each model decides
@@ -413,3 +415,79 @@ Full build (`dbt.ps1 build --threads 2`): `PASS=996 WARN=123 ERROR=0 TOTAL=1119`
 (local, new folder): step 4 `PASS=3`; build `PASS=589 WARN=5 ERROR=0 TOTAL=594`; empty run `PASS=2`; unit-test and drift
 step `PASS=62`. pytests: 178 passed. Bundles: exported after the full build and again after rebuilding every text
 model; the 31 sha256 values are identical.
+
+## 13. Fix round 2 (review of 9285a8ad, 2026-11-26)
+
+Reviewer queries: `scripts/text/review_r2_*.sql` (not committed). Queries of this round: `scripts/text/q_r8_*.sql`.
+
+### 13.1 No arithmetic check on the reference rate or the spread
+
+**There is at present no arithmetic check on the reference rate or the spread.** Both attempts failed:
+
+- Spread plus the SOFR 90-day average against the all-in rate (`int_text_measure_sofr_level`): the 90-day backward
+  average lags the term rate the loans reset to, so correct SOFR readings fail in every quarter when SOFR moved (7 of
+  15; section 5).
+- Clusters of all-in minus spread (`int_text_measure_implied_base`, `_group`, renamed from `int_text_check_base_cluster`
+  in this round): the reviewer showed it cannot tell codes apart. Mixing two codes of one fund and quarter still scores
+  at least 0.90 in 54 of 73 pairs whose medians differ by 2 points or more (three centres of radius 0.30 cover two
+  tight clusters); reading the all-in rate as the spread gives implied base 0 on every row, which clusters perfectly;
+  zero is an admissible centre.
+
+Both stay as measurements; no model and no worklist state reads them. A level check needs a table of each base rate
+(SOFR term tenors, SONIA, EURIBOR, CORRA, ...) at each report date. No such table is in the repository; none was
+fetched (no network).
+
+### 13.2 Passing is per row
+
+A read position counts as checked only when the check tested that row: its own filing's legend agrees with the rule
+that read it. Read statuses: `read_and_checked` (legend agrees), `read_unchecked` (no legend for the code in the
+filing, or none with an abbreviation), `read_failed` (mixed or contradicts), `read_unspecified` (read by a
+`label_is_unspecified` rule, which names no rate; it never counts as read). States: covered (95% read_and_checked),
+covered_unchecked (95% read, fewer checked), partly_covered, failed_check, uncovered. Unit test
+`int_text_worklist_states` rewritten (eight units: covered, partly, unchecked, mixed checked and unchecked, failed,
+unspecified-only, no rule, nothing read).
+
+State counts (`scripts/text/q_r8_worklist.sql`), covered / covered_unchecked / partly_covered / failed_check / uncovered:
+
+| Fund | Columns, fix round 1 | Columns, fix round 2 | Shapes, fix round 1 | Shapes, fix round 2 |
+|---|---|---|---|---|
+| Ares | 0/0/1/0/13 | 0/0/1/0/13 | 3/12/0/0/27 | 0/12/0/0/30 |
+| BCRED | 0/0/5/2/57 | 0/0/6/1/57 | 31/1/0/2/61 | 32/1/0/1/61 |
+| Blue Owl | 0/0/3/1/39 | 0/0/3/1/39 | 7/8/0/1/33 | 7/8/0/1/33 |
+| Apollo | 0/0/2/0/14 | 0/0/2/0/14 | 4/2/0/0/59 | 4/2/0/0/59 |
+| HPS | 0/0/0/1/11 | 0/0/0/1/11 | 12/0/0/2/21 | 12/0/0/2/21 |
+
+- Ares's 3 "Base Rate (Q)" shapes, covered in round 1 with no legend agreement, are now uncovered (read_unspecified
+  only). Its Reference column: 144 read, 0 checked, 144 unchecked, 397 unspecified, of 13,657.
+- BCRED [7bedc6] is partly covered now (its 2023-03-31 failure came from the cluster test); [fc9493] still fails, for
+  2022-12-31 only (12 positions under the filing that defines S two ways).
+- Blue Owl [256066]: 3,451 read, 5 checked, 3,444 unchecked, 2 failed (2024-12-31). HPS [836097]: 452 read, 434
+  checked, 18 failed (2024-12-31, 2025-06-30 to 2025-12-31).
+- Still no column is covered.
+
+### 13.3 Bundles
+
+- legs: every (printed number, tagged field) pair of a parts-stating shape, over interest_rate, interest_rate_cash,
+  pik_rate and spread, zero matches kept. Apollo "S+# Cash plus #% PIK, #% Floor" (62 rows) now shows n2 = pik_rate on
+  62 of 62, n1 against pik_rate 0 equal (3 as basis points), and spread, rate and cash rate "compared 0": none of those
+  rows carries those tags.
+- `legs_help`: one sentence each for n1/n2, compared, equal, equal_bps.
+- Legend entries: only filings inside the column's own first-to-last report dates; `legend_entries_outside` counts the
+  (entry, filing) pairs left out: BCRED 557, Blue Owl 107, Apollo 68, Ares 0, HPS 0.
+- 31 bundles, 242,936 bytes; all 31 hashes changed against fix round 1 (every bundle gained `legs_help` and
+  `legend_entries_outside`).
+
+### 13.4 Small items
+
+- `tests/seed_sofr_hash_matches.sql` also compares the loaded seed table with the file read now (md5 over date,value
+  lines, both typed alike), so a file edited after the last load fails.
+- `pytests/test_text_models_no_production.py` also fails when an `int_text_*` model, or a macro it calls, uses
+  `source(` or a DuckDB file reader (`read_text`, `read_csv`, `read_parquet`, `read_json`, ...); a guard test plants a
+  source(), a read_csv and a read inside a called macro and checks all three are found. The reader names are listed
+  because a plain `read_` pattern matched the column name `read_failed`.
+
+### 13.5 Build
+
+Full build (`dbt.ps1 build --threads 2`): `PASS=996 WARN=123 ERROR=0 TOTAL=1119`. CI fixture (local, new folder): step 4
+`PASS=3`; build `PASS=589 WARN=5 ERROR=0 TOTAL=594`; empty run `PASS=2`; unit-test and drift step `PASS=62`. pytests:
+180 passed. Baseline ceilings unchanged (2,272 / 43,437 / 4 / 12).

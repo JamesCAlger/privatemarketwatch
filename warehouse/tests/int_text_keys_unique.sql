@@ -37,8 +37,8 @@ union all
 select 'int_text_check_legend_quarter', unit_key || '|' || report_date, count(*)
 from {{ ref('int_text_check_legend_quarter') }} group by 1, 2 having count(*) > 1
 union all
-select 'int_text_check_base_cluster', accession || '|' || context_id || '|' || basis, count(*)
-from {{ ref('int_text_check_base_cluster') }} group by 1, 2 having count(*) > 1
+select 'int_text_measure_implied_base', accession || '|' || context_id || '|' || basis, count(*)
+from {{ ref('int_text_measure_implied_base') }} group by 1, 2 having count(*) > 1
 union all
-select 'int_text_check_base_cluster_group', cik || '|' || report_date || '|' || basis || '|' || coalesce(rate_label, '~'), count(*)
-from {{ ref('int_text_check_base_cluster_group') }} group by 1, 2 having count(*) > 1
+select 'int_text_measure_implied_base_group', cik || '|' || report_date || '|' || basis || '|' || coalesce(rate_label, '~'), count(*)
+from {{ ref('int_text_measure_implied_base_group') }} group by 1, 2 having count(*) > 1

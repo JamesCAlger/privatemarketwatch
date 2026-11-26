@@ -4,6 +4,6 @@ select cik, basis, rate_label, cast(report_date as varchar) as q, usable, pik_pr
     , round(within_share, 3) as within, round(main_share, 3) as main
     , list_transform(centres, x -> round(x, 2)) as centres, round(sofr, 2) as sofr, round(sofr_distance, 2) as sofr_dist
     , is_sofr_like as sofr_like, check_state
-from int_text_check_base_cluster_group
+from int_text_measure_implied_base_group
 where usable >= 5
 order by cik, basis desc, rate_label, report_date
