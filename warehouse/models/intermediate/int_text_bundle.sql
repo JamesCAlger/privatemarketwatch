@@ -1,35 +1,45 @@
 -- Builds the bundle an agent is given for one rate-candidate column (text slice R phase 1, 2026-11-26; spec section
--- 4.3; plan R2). One row per rate-candidate column unit (int_text_column_unit.is_rate_candidate), covered or not (the
--- controller filters on worklist_state): unit_key.
+-- 4.3; plan R2; dated content added in fix round 1). One row per rate-candidate column unit
+-- (int_text_column_unit.is_rate_candidate), whatever its worklist state (the controller filters): unit_key.
 --
--- Built from the filed layer and the page models only: nothing from production, stg_holdings or any comparison model.
--- Numbers in cell texts are not masked. No fund name or CIK is written into the JSON (cik is a column beside it, for the
--- controller).
+-- Built from the filed layer and the page models only: no production value, nothing from stg_holdings, the comparison
+-- models or the row corrections (tags are read before corrections). Numbers in cell texts are not masked. Bundles are
+-- NOT anonymous: the table title, company names in example rows and filing accessions name the fund. cik is also a
+-- column beside the JSON, for the controller.
+-- Representative table: the unit's position rows' table with the latest report date, then the smaller accession, then
+-- the smaller table_index. header_text, group_header_text and header_row all come from it (one filing, so footnote
+-- marks agree).
 -- bundle_json, keys in this order:
---   unit_key          the column unit's key (md5-based, names no fund).
---   header_text       the leaf's own header text; group_header_text: the upper line over a two-line leaf, else null.
---   header_row        every leaf column of the representative table, left to right: {header, group_header}. The
---                     representative table: the unit's position rows' table with the latest report date, then the
---                     smaller accession, then the smaller table_index.
---   table_title       the most frequent non-null title_text (int_page_schedule) among the tables holding the unit's
---                     position rows, ties to the smaller text; null when none.
---   top_cells         the 12 most frequent distinct non-empty texts of the column on position rows: {text, rows},
---                     ties to the smaller text.
---   shapes            the column's shapes (int_text_shape_unit), most frequent first, ties by shape, at most 40:
---                     {shape, rows, code}. shapes_total: how many shapes the column has.
---   example_rows      for each of the 3 most frequent shapes, one full printed row: the row of that shape whose text
---                     equals the shape's most frequent text, latest report date first, then smaller accession, then
---                     smaller row_index. {shape, report_date, cells: [{header, group_header, text}]} over every leaf
---                     column of that row's table ('' where the column is empty on the row).
---   tag_profile       {field, rows}: position rows of the column holding a fact read as the field, most first.
---   legend            the filer's legend entries (int_text_check_legend, any filing of the fund) for the codes printed
---                     in the column: {code, name, abbreviation, filings}, by code then name.
---   caps              the size rule: {top_cells: 12, shapes: 40, example_rows: 3, text_chars: 200}.
--- Every text in the bundle is cut to 200 characters. bundle_chars: length of bundle_json. Same filings, same bundle: every
--- list has a total order.
+--   unit_key            the column unit's key.
+--   header_text         the leaf's own header text in the representative table; group_header_text: the upper line
+--                       over a two-line leaf, else null.
+--   first_report_date, last_report_date   of the column unit (int_text_column_unit).
+--   header_row          every leaf column of the representative table, left to right: {header, group_header}.
+--   table_title         the most frequent non-null title_text (int_page_schedule) among the tables holding the unit's
+--                       position rows, ties to the smaller text; null when none.
+--   top_cells           the 12 most frequent distinct non-empty texts of the column on position rows: {text, rows}.
+--   shapes              the column's shapes (int_text_shape_unit), most frequent first, ties by shape key, at most 40:
+--                       {shape, rows, code, first_report_date, last_report_date, legs}. legs: the shape-legs evidence
+--                       (int_text_check_shape_legs) for a parts-stating shape, the pairs where a printed number equals a
+--                       tagged value at least once: {number, field, compared, equal, equal_bps}, by number then most
+--                       equal; null for other shapes. shapes_total: how many shapes the column has.
+--   example_rows        for each of the 3 most frequent shapes, one full printed row: the row of that shape whose text
+--                       equals the shape's most frequent text, latest report date first, then smaller accession, then
+--                       smaller row_index. {shape, report_date, cells: [{header, group_header, text}]} over every leaf
+--                       column of that row's table ('' where the column is empty on the row).
+--   tag_profile         {field, rows}: position rows of the column holding a fact read as the field, most first.
+--   legend              the filer's legend entries (int_text_check_legend) for the codes printed in the column, one per
+--                       (code, name, abbreviation): {code, name, abbreviation, filings: [{report_date, accession}]},
+--                       by code, name, abbreviation; filings by report date. A rule's dates can be read from it.
+--   caps                {top_cells: 12, shapes: 40, example_rows: 3, text_chars: 200}.
+-- Not in the bundle (fix round 1, measured): the printed note a header's mark ("Reference Rate and Spread(2)") refers
+-- to. The filed layer keeps table rows only, and no table row of any filing starts with such a mark followed by text
+-- (0 of 348 header marks found; scripts/text/q_r7_note_rows.sql), so it cannot be found by a general rule.
+-- Every text is cut to 200 characters. bundle_chars: length of bundle_json. Same filings, same bundle: every list has a
+-- total order.
 {% set text_chars = 200 %}
 with unit as (
-    select unit_key, cik, header_text, group_header_text
+    select unit_key, cik, header_signature, first_report_date, last_report_date
     from {{ ref('int_text_column_unit') }}
     where is_rate_candidate
 )
@@ -41,9 +51,9 @@ with unit as (
 )
 
 , representative as (
-    select unit_key, accession, table_index
+    select unit_key, accession, table_index, col_start
     from (
-        select unit_key, accession, table_index
+        select unit_key, accession, table_index, col_start
             , row_number() over (partition by unit_key order by report_date desc, accession, table_index) as rk
         from cell
     )
@@ -59,6 +69,8 @@ with unit as (
 
 , header_row as (
     select r.unit_key, list({'header': l.header, 'group_header': l.group_header} order by l.column_index) as header_row
+        , max(case when l.col_start = r.col_start then l.header end) as header_text
+        , max(case when l.col_start = r.col_start then l.group_header end) as group_header_text
     from representative r
     join leaf l on l.accession = r.accession and l.table_index = r.table_index
     group by 1
@@ -91,17 +103,29 @@ with unit as (
 )
 
 , shape_ranked as (
-    select unit_key, shape, cell_count, code, examples
-        , row_number() over (partition by unit_key order by cell_count desc, shape) as rk
+    select shape_key, unit_key, shape, shape_key_text, cell_count, code, examples, first_report_date, last_report_date
+        , row_number() over (partition by unit_key order by cell_count desc, shape_key_text) as rk
         , count(*) over (partition by unit_key) as shapes_total
     from {{ ref('int_text_shape_unit') }}
 )
 
+, legs as (
+    select shape_key
+        , list({'number': number_label, 'field': tag_field, 'compared': compared, 'equal': equal, 'equal_bps': equal_bps}
+               order by number_label, equal desc, equal_bps desc, tag_field) as legs
+    from {{ ref('int_text_check_shape_legs') }}
+    where equal > 0 or equal_bps > 0
+    group by 1
+)
+
 , shape_list as (
-    select unit_key, min(shapes_total) as shapes_total
-        , list({'shape': left(shape, {{ text_chars }}), 'rows': cell_count, 'code': code} order by rk) as shapes
-    from shape_ranked
-    where rk <= 40
+    select s.unit_key, min(s.shapes_total) as shapes_total
+        , list({'shape': left(s.shape, {{ text_chars }}), 'rows': s.cell_count, 'code': s.code,
+                'first_report_date': cast(s.first_report_date as varchar),
+                'last_report_date': cast(s.last_report_date as varchar), 'legs': g.legs} order by s.rk) as shapes
+    from shape_ranked s
+    left join legs g on g.shape_key = s.shape_key
+    where s.rk <= 40
     group by 1
 )
 
@@ -109,11 +133,11 @@ with unit as (
     select unit_key, shape, shape_rank, accession, row_index, table_index, report_date
     from (
         select s.unit_key, s.shape, s.rk as shape_rank, c.accession, c.row_index, c.table_index, c.report_date
-            , row_number() over (partition by s.unit_key, s.shape
+            , row_number() over (partition by s.unit_key, s.shape_key_text
                                  order by (c.text = s.examples[1]) desc, c.report_date desc, c.accession, c.row_index)
                 as rk
         from shape_ranked s
-        join cell c on c.unit_key = s.unit_key and c.shape = s.shape
+        join cell c on c.unit_key = s.unit_key and c.shape_key_text = s.shape_key_text
         where s.rk <= 3
     )
     where rk = 1
@@ -148,16 +172,20 @@ with unit as (
     group by 1
 )
 
+, legend_entry as (
+    select cik, code_key, code, name, abbreviation
+        , list({'report_date': cast(report_date as varchar), 'accession': accession} order by report_date, accession)
+            as filings
+    from {{ ref('int_text_check_legend') }}
+    group by 1, 2, 3, 4, 5
+)
+
 , legend as (
     select k.unit_key
         , list({'code': l.code, 'name': left(l.name, {{ text_chars }}), 'abbreviation': l.abbreviation,
                 'filings': l.filings} order by l.code, l.name, l.abbreviation) as legend
     from (select distinct unit_key, cik, upper(replace(code, ' ', '')) as code_key from cell where code is not null) k
-    join (
-        select cik, code_key, code, name, abbreviation, count(distinct accession) as filings
-        from {{ ref('int_text_check_legend') }}
-        group by 1, 2, 3, 4, 5
-    ) l on l.cik = k.cik and l.code_key = k.code_key
+    join legend_entry l on l.cik = k.cik and l.code_key = k.code_key
     group by 1
 )
 
@@ -168,8 +196,10 @@ with unit as (
         , w.state as worklist_state
         , to_json({
             'unit_key': u.unit_key,
-            'header_text': left(u.header_text, {{ text_chars }}),
-            'group_header_text': left(u.group_header_text, {{ text_chars }}),
+            'header_text': h.header_text,
+            'group_header_text': h.group_header_text,
+            'first_report_date': cast(u.first_report_date as varchar),
+            'last_report_date': cast(u.last_report_date as varchar),
             'header_row': h.header_row,
             'table_title': left(t.title_text, {{ text_chars }}),
             'top_cells': tc.top_cells,

@@ -1,8 +1,8 @@
--- Summarises the spread-plus-base check per column unit, quarter and code (text slice R phase 1, 2026-11-26). One row
--- per (unit_key, report_date, code_key). Every quarter is its own row: a quarter passes or fails on its own (spec
--- section 11), never as a pooled average.
+-- MEASUREMENT ONLY (renamed in fix round 1 from int_text_check_spread_base_unit; not read by the worklist): the SOFR
+-- level measurement per column unit, quarter and code (text slice R phase 1, 2026-11-26). One row per (unit_key,
+-- report_date, code_key). Every quarter is its own row.
 --
--- Rows: int_text_check_spread_base. code_key: the code upper case, white space removed. is_read_sofr: the existing
+-- Rows: int_text_measure_sofr_level. code_key: the code upper case, white space removed. is_read_sofr: the existing
 -- rules read the code as SOFR at that quarter (all rows of a code at one date share it).
 -- positions: rows; checked: rows with check_state pass or fail; passed; pass_share = passed / checked (null when no
 -- row was checked); pik_present, inputs_missing, no_sofr_value: the rows not judged. median_residual over checked rows.
@@ -22,5 +22,5 @@ select
     , count(*) filter (where check_state = 'inputs_missing') as inputs_missing
     , count(*) filter (where check_state = 'no_sofr_value') as no_sofr_value
     , median(residual) filter (where check_state in ('pass', 'fail')) as median_residual
-from {{ ref('int_text_check_spread_base') }}
+from {{ ref('int_text_measure_sofr_level') }}
 group by 1, 2, 3

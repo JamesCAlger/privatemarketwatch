@@ -44,14 +44,27 @@ vars:
   # Text slice R phase 1 (2026-11-26). A column is a rate candidate when at least this share of its non-empty
   # position-row texts look like rate text (int_text_column_unit, rule (c)).
   text_rate_candidate_share: 0.2
-  # The spread-plus-base check (int_text_check_spread_base): a SOFR value older than this many days before the report
-  # date is not used (same limit as fx_max_age_days); a row passes when abs(spread + base - all-in) is at most the
-  # tolerance in percentage points (spine section 10: the 90-day average is a proxy, 0.25 as measured there). In
-  # int_text_worklist a quarter of a unit is judged only with at least min_rows checked rows, and fails below min_share.
+  # The SOFR level measurement (int_text_measure_sofr_level, measurement only since fix round 1): a SOFR value older
+  # than this many days before the report date is not used (same limit as fx_max_age_days); a row passes when
+  # abs(spread + base - all-in) is at most the tolerance in percentage points (spine section 10).
   text_sofr_max_age_days: 7
   text_spread_base_tolerance: 0.25
-  text_spread_base_min_rows: 10
-  text_spread_base_min_share: 0.9
+  # Fix round 1. The cluster test (int_text_check_base_cluster_group): implied bases rounded to the step give up to
+  # max_centres centres; a row is in a cluster within radius (percentage points) of the nearest centre. A group with at
+  # least min_rows usable rows passes when its within share is at least min_share (bar set from the measured
+  # distribution, docs/baseline_text_rates_phase1_2026-11-26.md section 5). sofr_bound: measurement only.
+  text_cluster_centre_step: 0.05
+  text_cluster_max_centres: 3
+  text_cluster_radius: 0.30
+  text_cluster_min_rows: 10
+  text_cluster_min_share: 0.9
+  text_cluster_sofr_bound: 1.0
+  # Fix round 1. int_text_worklist: a unit is covered when at least this share of its positions is read by rules that
+  # pass a check in their own quarter.
+  text_covered_min_share: 0.95
+  # Fix round 1. sha256 of seeds/sofr_90day_avg.csv as text with CRLF read as LF (tests/seed_sofr_hash_matches.sql).
+  sofr_seed_file: "seeds/sofr_90day_avg.csv"
+  sofr_seed_sha256: "1fc3e109da22cd8ebea9b74ed84d9be34dc237781892364d98da5711ee0bde45"
   # A PIK rate above the all-in rate tag by more than this (percentage points) contradicts rate_is_all_in: production's
   # own margin (pipeline/financial_conventions.py prepare: pik > reported_rate + 0.01).
   pik_above_rate_margin: 0.01

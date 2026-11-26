@@ -1500,8 +1500,10 @@ models:
 
   - name: int_text_check_legend_rule
     description: >
-      Per existing map_code rule: agrees, contradicts, mixed, unclear or not_in_legend against the legend of the filings
-      inside its dates. Rules contradicted or mixed have a baseline ceiling (tests/baseline_int_text_legend_rule_disagrees.sql).
+      Per existing map_code rule, judged filing by filing (fix round 1): in which filings of its dates the filer's legend
+      agrees, contradicts, is mixed, is unclear or has no such code, with the report dates listed. state summarises over
+      filings; rules contradicted or mixed in any filing have a baseline ceiling
+      (tests/baseline_int_text_legend_rule_disagrees.sql). A read row is judged by int_text_check_legend_read.
     columns:
       - name: rule_id
         data_tests: [unique, not_null]
@@ -1511,6 +1513,31 @@ models:
           - accepted_values:
               arguments:
                 values: [agrees, contradicts, mixed, unclear, not_in_legend]
+
+  - name: int_text_check_legend_read
+    description: >
+      Fix round 1. Per position an existing rule reads: the legend verdict of its own filing (agrees, contradicts, mixed,
+      unclear, no_legend_in_filing; not_applicable for a label_is_unspecified read). Another quarter's legend never counts.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: context_id
+        data_tests: [not_null]
+      - name: legend_verdict
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [agrees, contradicts, mixed, unclear, no_legend_in_filing, not_applicable]
+
+  - name: int_text_check_legend_quarter
+    description: >
+      Fix round 1. The dated legend verdicts counted per (column unit, quarter).
+    columns:
+      - name: unit_key
+        data_tests: [not_null]
+      - name: report_date
+        data_tests: [not_null]
 
   - name: int_text_check_legend_code
     description: >
@@ -1526,11 +1553,47 @@ models:
               arguments:
                 values: [rule_and_legend, rule_only, legend_only, neither]
 
-  - name: int_text_check_spread_base
+  - name: int_text_check_base_cluster
     description: >
-      Per position whose reference-rate column gives a code: spread (tag) plus base (SOFR 90-day average at the report
-      date, or the printed floor when higher) against the all-in rate, residual and check_state. SOFR only (owner question
-      2); rows of other codes are kept so a proposed rule can be judged, with is_read_sofr false.
+      Fix round 1. Per position with a printed code and basis (rule: the reference rate an existing rule reads;
+      hypothesis: the printed code, for this check only): all-in rate minus spread (tags before corrections), PIK rows
+      left out. The input of the cluster test.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: basis
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [rule, hypothesis]
+      - name: state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [usable, pik_present, inputs_missing]
+
+  - name: int_text_check_base_cluster_group
+    description: >
+      Fix round 1. The cluster test per (fund, quarter, basis, rate label): up to three centres (modes of the implied base
+      rounded to 0.05), the share of rows within 0.30 of the nearest, the main centre's distance from the SOFR seed
+      (measurement only), and check_state pass, fail or too_few_rows. The worklist reads basis 'rule' only.
+    columns:
+      - name: report_date
+        data_tests: [not_null]
+      - name: check_state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [pass, fail, too_few_rows]
+
+  - name: int_text_measure_sofr_level
+    description: >
+      MEASUREMENT ONLY (fix round 1: renamed from int_text_check_spread_base; nothing reads it). Per position with a code:
+      tag spread plus the SOFR 90-day average (or the printed floor when higher) against the all-in rate. It fails correct
+      readings in quarters when SOFR moved, which is why the cluster test replaced it.
     columns:
       - name: accession
         data_tests: [not_null]
@@ -1543,10 +1606,10 @@ models:
               arguments:
                 values: [pass, fail, pik_present, inputs_missing, no_sofr_value]
 
-  - name: int_text_check_spread_base_unit
+  - name: int_text_measure_sofr_level_unit
     description: >
-      The spread-plus-base check per (column unit, quarter, code): positions, checked, passed, pass share, rows not
-      judged, median residual. Every quarter is its own row.
+      MEASUREMENT ONLY (fix round 1: renamed from int_text_check_spread_base_unit). The SOFR level measurement per (column
+      unit, quarter, code).
     columns:
       - name: unit_key
         data_tests: [not_null]
@@ -1556,7 +1619,8 @@ models:
   - name: int_text_check_shape_legs
     description: >
       Per parts-stating shape (PIK and two or more numbers), printed number and tag field: how often the number equals the
-      tagged rate, cash, PIK or spread on the same row (also as basis points). Evidence for a parse, not a verdict.
+      tagged rate, cash, PIK or spread on the same row (also as basis points; tags before corrections). Evidence for a
+      parse, not a verdict.
     columns:
       - name: shape_key
         data_tests: [not_null]
@@ -1565,8 +1629,10 @@ models:
 
   - name: int_text_worklist
     description: >
-      Per column unit and shape unit: covered, covered_unchecked, failed_check or uncovered (rules in the model's
-      header). changed_state is not built in phase 1 and is always null.
+      Per column unit and shape unit: positions in the unit, read, read by passing rules, failing, the shares, the dated
+      quarter lists, and the state (fix round 1): covered needs at least 95% of the positions read by rules that pass a
+      check in their own quarter; partly_covered, covered_unchecked, failed_check, uncovered otherwise (rules in the
+      model's header). changed_state is not built in phase 1 and is always null.
     columns:
       - name: work_key
         data_tests: [unique, not_null]
@@ -1581,12 +1647,14 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: [covered, covered_unchecked, failed_check, uncovered]
+                values: [covered, covered_unchecked, partly_covered, failed_check, uncovered]
 
   - name: int_text_bundle
     description: >
-      Per rate-candidate column unit, covered or not: the JSON bundle an agent is given (spec 4.3), from the filed layer
-      only, with its size cap inside it and bundle_chars beside it. scripts/text/export_bundles.py writes one file per row.
+      Per rate-candidate column unit, whatever its state: the JSON bundle an agent is given (spec 4.3), from the filed
+      layer and the tags before corrections, no production value. Not anonymous: the title, example rows and accessions
+      name the fund. Size cap inside it, bundle_chars beside it. scripts/text/export_bundles.py writes one file per row
+      (all of them by default).
     columns:
       - name: unit_key
         data_tests: [unique, not_null]
@@ -5739,7 +5807,7 @@ unit_tests:
       placeholder ("N+#", code N). Row 12: two cells under one header ("SOFR +", "5.25%") join into "SOFR + 5.25%"; the
       footnote mark "(2)" is left out; the spread fact placed in "5.25%" is counted. Row 13: "N/A" has no code. Row 14:
       "Base Rate (Q)" gives the two-word code. Row 15: "1,250.5" gives "#"; a trailing footnote cell is not kept. Row 20
-      holds no position: no row. Row 14's position is not published.
+      holds no position: no row. Row 14's position is not published. Fix round 1, shape spacing: "SOFR + 5.25%" gives "SOFR+#%"; row 16 joins "10.00" and "%" into "10.00 %", shape "#%"; row 17 "Sofr +5.25 %" gives display "Sofr+#%" and the same key "SOFR+#%" as row 12.
     model: int_text_cell
     given:
       - input: ref('int_page_position')
@@ -5751,6 +5819,8 @@ unit_tests:
           - {accession: A, context_id: p5, cik: "1", report_date: 2026-03-31, is_published: false, placement_status: one_row, row_index: 14, table_index: 1}
           - {accession: A, context_id: p6, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 15, table_index: 1}
           - {accession: A, context_id: p7, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: not_placed}
+          - {accession: A, context_id: p8, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 16, table_index: 1}
+          - {accession: A, context_id: p9, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 17, table_index: 1}
       - input: ref('int_page_schedule')
         rows:
           - {accession: A, table_index: 1, table_signature: "co|rate"}
@@ -5767,6 +5837,9 @@ unit_tests:
           - {accession: A, row_index: 15, cell_index: 1, table_index: 1, text: "1,250.5", shape: number, column_rule: zone, column_col_start: 5, header_signature: rate}
           - {accession: A, row_index: 15, cell_index: 2, table_index: 1, text: "(3)", shape: footnote_mark, column_rule: trailing_footnote, header_signature: "#footnote_marks"}
           - {accession: A, row_index: 20, cell_index: 1, table_index: 1, text: S+100, shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 16, cell_index: 1, table_index: 1, text: "10.00", shape: number, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 16, cell_index: 2, table_index: 1, text: "%", shape: empty_marker, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 17, cell_index: 1, table_index: 1, text: Sofr +5.25 %, shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
       - input: ref('int_field_read')
         rows:
           - {accession: A, fact_id: f1, field: spread, status: read}
@@ -5779,13 +5852,15 @@ unit_tests:
           - {accession: A, fact_id: f1, row_index: 12, cell_index: 2}
     expect:
       rows:
-        - {row_index: 10, col_start: 0, text: Acme, shape: Acme, code: Acme, rate_text: false, fact_count: 0, positions: 1, is_published: true}
-        - {row_index: 10, col_start: 5, text: "S+525, 0.50% Floor", shape: "S+#, #% Floor", code: S, rate_text: true, fact_count: 0, positions: 1, is_published: true}
-        - {row_index: 11, col_start: 5, text: N+475, shape: "N+#", code: N, rate_text: true, fact_count: 0, positions: 1, is_published: true}
-        - {row_index: 12, col_start: 5, text: SOFR + 5.25%, shape: "SOFR + #%", code: SOFR, rate_text: true, fact_count: 1, positions: 1, is_published: true}
-        - {row_index: 13, col_start: 5, text: N/A, shape: N/A, code: null, rate_text: false, fact_count: 0, positions: 1, is_published: true}
-        - {row_index: 14, col_start: 5, text: Base Rate (Q), shape: Base Rate (Q), code: Base Rate, rate_text: false, fact_count: 0, positions: 1, is_published: false}
-        - {row_index: 15, col_start: 5, text: "1,250.5", shape: "#", code: null, rate_text: false, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 10, col_start: 0, text: Acme, shape: Acme, shape_key_text: ACME, code: Acme, rate_text: false, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 10, col_start: 5, text: "S+525, 0.50% Floor", shape: "S+#, #% Floor", shape_key_text: "S+#, #% FLOOR", code: S, rate_text: true, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 11, col_start: 5, text: N+475, shape: "N+#", shape_key_text: "N+#", code: N, rate_text: true, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 12, col_start: 5, text: SOFR + 5.25%, shape: "SOFR+#%", shape_key_text: "SOFR+#%", code: SOFR, rate_text: true, fact_count: 1, positions: 1, is_published: true}
+        - {row_index: 16, col_start: 5, text: 10.00 %, shape: "#%", shape_key_text: "#%", code: null, rate_text: true, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 17, col_start: 5, text: Sofr +5.25 %, shape: "Sofr+#%", shape_key_text: "SOFR+#%", code: Sofr, rate_text: true, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 13, col_start: 5, text: N/A, shape: N/A, shape_key_text: N/A, code: null, rate_text: false, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 14, col_start: 5, text: Base Rate (Q), shape: Base Rate (Q), shape_key_text: BASE RATE (Q), code: Base Rate, rate_text: false, fact_count: 0, positions: 1, is_published: false}
+        - {row_index: 15, col_start: 5, text: "1,250.5", shape: "#", shape_key_text: "#", code: null, rate_text: false, fact_count: 0, positions: 1, is_published: true}
 
   - name: int_text_column_unit_rate_candidate
     description: >
@@ -5873,10 +5948,11 @@ unit_tests:
 
   - name: int_text_check_legend_rule_states
     description: >
-      Text slice R phase 1. A=ALPHA agrees (the legend gives A the abbreviation ALPHA); B=BETA contradicts (GAMMA); C=CORRA
-      is mixed (one filing defines C as both CDOR and CORRA); F=FEDFUNDS is unclear (no abbreviation printed); Z=ZED has
-      no legend entry; D=DELTA ends 2024-03-31 and its only legend entry is dated 2026-03-31: not in the legend in its
-      dates.
+      Text slice R, dated in fix round 1. The fund has three filings: X (2026-03-31) with a legend, Y (2025-12-31) and W
+      (2024-03-31) without. A=ALPHA agrees in X and has no legend in Y and W (agree_dates '2026-03-31'); B=BETA contradicts
+      in X (GAMMA); C=CORRA is mixed in X (C defined as both CDOR and CORRA); F=FEDFUNDS is unclear in X (no abbreviation
+      printed); Z=ZED has no legend in any filing; D=DELTA ends 2024-03-31, so only W is judged, and W has no legend: X's
+      entry for D (OTHER) does not count.
     model: int_text_check_legend_rule
     given:
       - input: ref('stg_reading_rule')
@@ -5887,6 +5963,11 @@ unit_tests:
           - {rule_id: f, cik: "1", target: reference_rate, action: map_code, parameter: F=FEDFUNDS}
           - {rule_id: z, cik: "1", target: reference_rate, action: map_code, parameter: Z=ZED}
           - {rule_id: d, cik: "1", target: reference_rate, action: map_code, parameter: D=DELTA, valid_to: 2024-03-31}
+      - input: ref('int_page_table')
+        rows:
+          - {accession: X, table_index: 1, cik: "1", report_date: 2026-03-31}
+          - {accession: Y, table_index: 1, cik: "1", report_date: 2025-12-31}
+          - {accession: W, table_index: 1, cik: "1", report_date: 2024-03-31}
       - input: ref('int_text_check_legend')
         rows:
           - {cik: "1", accession: X, report_date: 2026-03-31, code: A, name: Alpha Rate, abbreviation: ALPHA, code_key: A, abbreviation_key: ALPHA}
@@ -5897,13 +5978,162 @@ unit_tests:
           - {cik: "1", accession: X, report_date: 2026-03-31, code: D, name: Other Rate, abbreviation: OTHER, code_key: D, abbreviation_key: OTHER}
     expect:
       rows:
-        - {rule_id: a, agree_filings: 1, contradict_filings: 0, both_filings: 0, unclear_filings: 0, state: agrees}
-        - {rule_id: b, agree_filings: 0, contradict_filings: 1, both_filings: 0, unclear_filings: 0, state: contradicts}
-        - {rule_id: c, agree_filings: 0, contradict_filings: 0, both_filings: 1, unclear_filings: 0, state: mixed}
-        - {rule_id: f, agree_filings: 0, contradict_filings: 0, both_filings: 0, unclear_filings: 1, state: unclear}
-        - {rule_id: z, agree_filings: 0, contradict_filings: 0, both_filings: 0, unclear_filings: 0, state: not_in_legend}
-        - {rule_id: d, agree_filings: 0, contradict_filings: 0, both_filings: 0, unclear_filings: 0, state: not_in_legend}
+        - {rule_id: a, n_filings: 3, agree_filings: 1, contradict_filings: 0, mixed_filings: 0, unclear_filings: 0, no_legend_filings: 2, agree_dates: "2026-03-31", mixed_dates: null, state: agrees}
+        - {rule_id: b, n_filings: 3, agree_filings: 0, contradict_filings: 1, mixed_filings: 0, unclear_filings: 0, no_legend_filings: 2, agree_dates: null, mixed_dates: null, state: contradicts}
+        - {rule_id: c, n_filings: 3, agree_filings: 0, contradict_filings: 0, mixed_filings: 1, unclear_filings: 0, no_legend_filings: 2, agree_dates: null, mixed_dates: "2026-03-31", state: mixed}
+        - {rule_id: f, n_filings: 3, agree_filings: 0, contradict_filings: 0, mixed_filings: 0, unclear_filings: 1, no_legend_filings: 2, agree_dates: null, mixed_dates: null, state: unclear}
+        - {rule_id: z, n_filings: 3, agree_filings: 0, contradict_filings: 0, mixed_filings: 0, unclear_filings: 0, no_legend_filings: 3, agree_dates: null, mixed_dates: null, state: not_in_legend}
+        - {rule_id: d, n_filings: 1, agree_filings: 0, contradict_filings: 0, mixed_filings: 0, unclear_filings: 0, no_legend_filings: 1, agree_dates: null, mixed_dates: null, state: not_in_legend}
 
+  - name: int_text_check_legend_read_verdicts
+    description: >
+      Text slice R fix round 1. Each read row is judged on its own filing's legend. p1 (filing X) read by S=SOFR, X defines
+      S as SOFR: agrees. p2 (filing Y, same rule): Y has no legend for S: no_legend_in_filing, although X agrees. p3 (filing
+      M, rule S=SOFR): M defines S as both SONIA and SOFR: mixed. p4 (filing X, rule C=CDOR): X defines C as CORRA:
+      contradicts. p5 read by a label_is_unspecified rule: not_applicable. p6 is not read: no row.
+    model: int_text_check_legend_read
+    given:
+      - input: ref('int_text_reference_rate_read')
+        rows:
+          - {accession: X, context_id: p1, cik: "1", report_date: 2026-03-31, code: S, reference_rate: SOFR, map_rule_id: m1, status: read}
+          - {accession: Y, context_id: p2, cik: "1", report_date: 2025-12-31, code: S, reference_rate: SOFR, map_rule_id: m1, status: read}
+          - {accession: M, context_id: p3, cik: "1", report_date: 2022-12-31, code: S, reference_rate: SOFR, map_rule_id: m1, status: read}
+          - {accession: X, context_id: p4, cik: "1", report_date: 2026-03-31, code: C, reference_rate: CDOR, map_rule_id: m2, status: read}
+          - {accession: X, context_id: p5, cik: "1", report_date: 2026-03-31, code: Base Rate, reference_rate: unspecified, map_rule_id: u1, status: read}
+          - {accession: X, context_id: p6, cik: "1", report_date: 2026-03-31, code: Q, status: code_not_mapped}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: m1, cik: "1", target: reference_rate, action: map_code, parameter: S=SOFR}
+          - {rule_id: m2, cik: "1", target: reference_rate, action: map_code, parameter: C=CDOR}
+          - {rule_id: u1, cik: "1", target: reference_rate, action: label_is_unspecified, parameter: Base Rate}
+      - input: ref('int_text_check_legend')
+        rows:
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: S, name: Secured Overnight Financing Rate, abbreviation: SOFR, code_key: S, abbreviation_key: SOFR}
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: C, name: Canadian Overnight Repo Rate Average, abbreviation: CORRA, code_key: C, abbreviation_key: CORRA}
+          - {cik: "1", accession: M, report_date: 2022-12-31, code: S, name: Sterling Overnight Interbank Average Rate, abbreviation: SONIA, code_key: S, abbreviation_key: SONIA}
+          - {cik: "1", accession: M, report_date: 2022-12-31, code: S, name: Secured Overnight Financing Rate, abbreviation: SOFR, code_key: S, abbreviation_key: SOFR}
+    expect:
+      rows:
+        - {context_id: p1, legend_verdict: agrees}
+        - {context_id: p2, legend_verdict: no_legend_in_filing}
+        - {context_id: p3, legend_verdict: mixed}
+        - {context_id: p4, legend_verdict: contradicts}
+        - {context_id: p5, legend_verdict: not_applicable}
+
+  - name: int_text_worklist_states
+    description: >
+      Text slice R fix round 1. Column units, 100 positions each unless said. u_cov: 96 read and passing (legend agrees):
+      covered. u_part: 17 of 100 read and passing: partly_covered, not covered. u_unch: 96 read, no check applies:
+      covered_unchecked. u_fail: 96 read, one position mixed under its own filing's legend in 2022-12-31: failed_check with
+      failing_quarters '2022-12-31'. u_clu: 96 read, legend silent, the cluster test passes for the fund, quarter and rate:
+      covered. u_none: no rule names it: uncovered. u_zero: a rule names it, nothing read: uncovered.
+    model: int_text_worklist
+    given:
+      - input: ref('int_text_column_unit')
+        rows:
+          - {unit_key: u_cov, cik: "1", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_part, cik: "1", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_unch, cik: "1", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_fail, cik: "1", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_clu, cik: "2", is_rate_candidate: true, read_rule_ids: r}
+          - {unit_key: u_none, cik: "1", is_rate_candidate: false, read_rule_ids: null}
+          - {unit_key: u_zero, cik: "1", is_rate_candidate: true, read_rule_ids: r}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, 1 as row_index, 1 as table_index, 0::hugeint as col_start, '1' as cik,
+                 date '2026-03-31' as report_date, true as is_published, 100::bigint as positions, 'T' as table_signature,
+                 'h' as header_signature, u as unit_key, 'S+' as text, 1::bigint as n_cells, 'S+' as shape,
+                 'S+' as shape_key_text, 'S' as code, true as rate_text, []::varchar[] as fact_fields, 0::bigint as fact_count
+          from (values ('u_cov'), ('u_part'), ('u_unch'), ('u_fail'), ('u_clu'), ('u_none'), ('u_zero')) t(u)
+      - input: ref('int_text_shape_unit')
+        rows: []
+      - input: ref('int_text_reference_rate_read')
+        format: sql
+        rows: |
+          select 'A' as accession, u || '-' || i as context_id, cik, rd as report_date, true as is_published,
+                 1 as table_index, 1 as row_index, 0::hugeint as col_start, u as unit_key, 'r' as column_rule_id,
+                 1::bigint as n_columns_named, 'S+' as cell_text, 'S' as code, 'SOFR' as reference_rate, 'm' as map_rule_id,
+                 1::bigint as n_map_rules, 'read' as status
+          from (values ('u_cov', '1', 96, date '2026-03-31'), ('u_part', '1', 17, date '2026-03-31'),
+                       ('u_unch', '1', 96, date '2026-03-31'), ('u_fail', '1', 95, date '2026-03-31'),
+                       ('u_clu', '2', 96, date '2026-03-31')) t(u, cik, n, rd),
+               range(n) r(i)
+          union all
+          select 'A', 'u_fail-x', '1', date '2022-12-31', true, 1, 1, 0::hugeint, 'u_fail', 'r', 1::bigint, 'S+', 'S', 'SOFR',
+                 'm', 1::bigint, 'read'
+      - input: ref('int_text_check_legend_read')
+        format: sql
+        rows: |
+          select 'A' as accession, u || '-' || i as context_id, v as legend_verdict
+          from (values ('u_cov', 96, 'agrees'), ('u_part', 17, 'agrees'), ('u_unch', 96, 'no_legend_in_filing'),
+                       ('u_fail', 95, 'agrees'), ('u_clu', 96, 'no_legend_in_filing')) t(u, n, v), range(n) r(i)
+          union all
+          select 'A', 'u_fail-x', 'mixed'
+      - input: ref('int_text_check_base_cluster_group')
+        rows:
+          - {cik: "2", report_date: 2026-03-31, basis: rule, rate_label: SOFR, check_state: pass}
+          - {cik: "2", report_date: 2026-03-31, basis: hypothesis, rate_label: SOFR, check_state: fail}
+    expect:
+      rows:
+        - {work_key: u_cov, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 96, rows_read_failing: 0, failing_quarters: null, state: covered}
+        - {work_key: u_part, rows_in_unit: 100, rows_read: 17, rows_read_by_passing_rule: 17, rows_read_failing: 0, failing_quarters: null, state: partly_covered}
+        - {work_key: u_unch, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 0, rows_read_failing: 0, failing_quarters: null, state: covered_unchecked}
+        - {work_key: u_fail, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 95, rows_read_failing: 1, failing_quarters: "2022-12-31", state: failed_check}
+        - {work_key: u_clu, rows_in_unit: 100, rows_read: 96, rows_read_by_passing_rule: 96, rows_read_failing: 0, failing_quarters: null, state: covered}
+        - {work_key: u_none, rows_in_unit: 100, rows_read: 0, rows_read_by_passing_rule: 0, rows_read_failing: 0, failing_quarters: null, state: uncovered}
+        - {work_key: u_zero, rows_in_unit: 100, rows_read: 0, rows_read_by_passing_rule: 0, rows_read_failing: 0, failing_quarters: null, state: uncovered}
+
+  - name: int_text_shape_unit_key_and_display
+    description: >
+      Text slice R fix round 1. Three spellings of one shape key ("SOFR+#%" twice, "Sofr+#%" once) form one shape unit with
+      the most frequent spelling as its display form and 3 texts; "#%" is its own shape. The column is a rate candidate.
+    model: int_text_shape_unit
+    given:
+      - input: ref('int_text_column_unit')
+        rows:
+          - {unit_key: u, cik: "1", is_rate_candidate: true}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, ri as row_index, 1 as table_index, 0::hugeint as col_start, '1' as cik,
+                 date '2026-03-31' as report_date, true as is_published, 1::bigint as positions, 'T' as table_signature,
+                 'h' as header_signature, 'u' as unit_key, txt as text, 1::bigint as n_cells, sh as shape, sk as shape_key_text,
+                 cd as code, true as rate_text, []::varchar[] as fact_fields, 0::bigint as fact_count
+          from (values (1, 'SOFR + 5.25%', 'SOFR+#%', 'SOFR+#%', 'SOFR'), (2, 'SOFR +5.00 %', 'SOFR+#%', 'SOFR+#%', 'SOFR'),
+                       (3, 'Sofr + 4.00%', 'Sofr+#%', 'SOFR+#%', 'Sofr'), (4, '10.00 %', '#%', '#%', null)) t(ri, txt, sh, sk, cd)
+    expect:
+      rows:
+        - {shape_key_text: "SOFR+#%", shape: "SOFR+#%", cell_count: 3, distinct_texts: 3}
+        - {shape_key_text: "#%", shape: "#%", cell_count: 1, distinct_texts: 1}
+
+  - name: int_text_check_base_cluster_group_centres
+    description: >
+      Text slice R fix round 1. Fund 1, 2026-03-31, rule basis SOFR: implied bases 4.30 (x5), 4.32, 4.10 (x3), 3.50 (x2)
+      and 9.00: centres 4.30, 4.10, 3.50 (the three most frequent rounded values); 9.00 is 4.70 from the nearest, so 12 of
+      13 rows are within 0.30 (0.923, pass at 0.90); main share 10/13 (4.30, 4.32, 4.20 and the three 4.10 rows lie within
+      0.30 of 4.30). SOFR 4.40 gives sofr_distance 0.10. A PIK row and a row with no all-in rate are not usable. Fund 2
+      has 3 usable rows: too_few_rows.
+    model: int_text_check_base_cluster_group
+    given:
+      - input: ref('int_text_check_base_cluster')
+        format: sql
+        rows: |
+          select cik, date '2026-03-31' as report_date, 'rule' as basis, 'SOFR' as rate_label, st as state, b as implied_base
+          from (values ('1', 'usable', 4.30), ('1', 'usable', 4.30), ('1', 'usable', 4.30), ('1', 'usable', 4.30),
+                       ('1', 'usable', 4.30), ('1', 'usable', 4.32), ('1', 'usable', 4.10), ('1', 'usable', 4.10),
+                       ('1', 'usable', 4.10), ('1', 'usable', 3.50), ('1', 'usable', 3.50), ('1', 'usable', 9.00),
+                       ('1', 'usable', 4.20), ('1', 'pik_present', null), ('1', 'inputs_missing', null),
+                       ('2', 'usable', 4.0), ('2', 'usable', 4.0), ('2', 'usable', 4.0)) t(cik, st, b)
+      - input: ref('int_text_check_legend')
+        rows: []
+      - input: ref('sofr_90day_avg')
+        rows:
+          - {date: 2026-03-31, sofr_90day_avg_pct: 4.40}
+    expect:
+      rows:
+        - {cik: "1", rows: 15, usable: 13, pik_present: 1, inputs_missing: 1, within: 12, centre_1: 4.30, is_sofr_like: true, sofr: 4.40, check_state: pass}
+        - {cik: "2", rows: 3, usable: 3, pik_present: 0, inputs_missing: 0, within: 3, centre_1: 4.0, is_sofr_like: true, sofr: 4.40, check_state: too_few_rows}
   - name: int_text_reference_rate_read_statuses
     description: >
       Text slice R phase 1. The fund's read_printed_column rule names "Ref. Rate", the sub-header of a two-line leaf under
@@ -5962,14 +6192,14 @@ unit_tests:
         - {context_id: p9, status: read, code: C, reference_rate: CDOR, map_rule_id: m2, column_rule_id: rc, cell_text: C+}
         - {context_id: p7, status: no_rule, code: null, reference_rate: null, map_rule_id: null, column_rule_id: null, cell_text: null}
 
-  - name: int_text_check_spread_base_arithmetic
+  - name: int_text_measure_sofr_level_arithmetic
     description: >
-      Text slice R phase 1. SOFR 3.5 on 2026-03-31. p1 spread 5.00 + 3.5 = all-in 8.50: residual 0, pass. p2 all-in 9.00:
+      Text slice R phase 1 (a measurement since fix round 1). SOFR 3.5 on 2026-03-31. p1 spread 5.00 + 3.5 = all-in 8.50: residual 0, pass. p2 all-in 9.00:
       residual 0.5, fail. p3 "4.00% Floor" printed: base = greatest(3.5, 4.0) = 4.0, 5 + 4 = 9.00: pass. p7 all-in 8.75:
       residual 0.25, the tolerance itself: pass. p4 PIK 2.0: not judged. p5 no all-in rate (a cash-kind rate does not
       count): inputs missing. p6 at 2026-09-30: the latest SOFR is 183 days old: no SOFR value. p8's code is mapped to
       SONIA: checked the same way, is_read_sofr false. p9 has no code: no row.
-    model: int_text_check_spread_base
+    model: int_text_measure_sofr_level
     given:
       - input: ref('int_text_reference_rate_read')
         rows:
@@ -5982,12 +6212,12 @@ unit_tests:
           - {accession: A, context_id: p7, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
           - {accession: A, context_id: p8, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: SN, reference_rate: SONIA, cell_text: SN+500, status: read}
           - {accession: A, context_id: p9, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: null, cell_text: N/A, status: no_code}
-      - input: ref('int_field_corrected')
+      - input: ref('int_field_normalised')
         rows:
           - {accession: A, context_id: p1, field: spread, value: 5.0, status: normalised}
           - {accession: A, context_id: p1, field: interest_rate, value: 8.5, rate_kind: all_in, status: normalised}
           - {accession: A, context_id: p2, field: spread, value: 5.0, status: normalised}
-          - {accession: A, context_id: p2, field: interest_rate, value: 9.0, rate_kind: all_in, status: corrected}
+          - {accession: A, context_id: p2, field: interest_rate, value: 9.0, rate_kind: all_in, status: normalised}
           - {accession: A, context_id: p3, field: spread, value: 5.0, status: normalised}
           - {accession: A, context_id: p3, field: interest_rate, value: 9.0, rate_kind: all_in, status: normalised}
           - {accession: A, context_id: p4, field: spread, value: 5.0, status: normalised}

@@ -1,13 +1,15 @@
--- Measures spread plus base rate against the filed all-in rate on each position whose reference-rate column gives a
--- code (text slice R phase 1, 2026-11-26; spec section 11: "spread plus base rate equals the all-in rate"; owner
--- question 2 of the plan: SOFR only). One row per position of int_text_reference_rate_read with a code:
--- (accession, context_id). A measurement that judges a rule; it never compares with production.
+-- MEASUREMENT ONLY (renamed in fix round 1 from int_text_check_spread_base; no model and no worklist state reads it):
+-- spread plus the SOFR 90-day average against the filed all-in rate, on each position whose reference-rate column gives
+-- a code (text slice R phase 1, 2026-11-26). One row per position of int_text_reference_rate_read with a code:
+-- (accession, context_id). Measured: with the 90-day backward average it fails correct readings in quarters when SOFR
+-- moved (7 of 15; docs/baseline_text_rates_phase1_2026-11-26.md section 5), so the check that judges rules is the
+-- cluster test int_text_check_base_cluster. It never compares with production.
 --
 -- Inputs on the same position:
---   spread    int_field_corrected field spread, status normalised or corrected (percent). The tag only: no existing rule
+--   spread    int_field_normalised field spread, status normalised (the tag before row corrections; percent). The tag only: no existing rule
 --             reads a spread from text, so the rule-read cell gives no spread yet (spread_source 'tag').
---   all_in    int_field_corrected field interest_rate, status normalised or corrected, rate_kind all_in (percent).
---   pik       int_field_corrected field pik_rate, status normalised or corrected (percent).
+--   all_in    int_field_normalised field interest_rate, status normalised, rate_kind all_in (percent).
+--   pik       int_field_normalised field pik_rate, status normalised (percent).
 --   floor     from the rule-read cell text (int_text_reference_rate_read.cell_text): the number before '% Floor'
 --             ("S+525, 0.75% Floor" gives 0.75); null when not printed.
 --   sofr      seed sofr_90day_avg: the latest date on or before the report date, used only when it is at most
@@ -22,7 +24,7 @@
 --   pass            residual <= var text_spread_base_tolerance (0.25).
 --   fail            otherwise.
 -- is_read_sofr: the existing rules read the code as SOFR (reference_rate = 'SOFR'). This is the check of the brief: the
--- per-unit summary (int_text_check_spread_base_unit) keeps the rows of every code, so a code no rule maps yet ('SF',
+-- per-unit summary (int_text_measure_sofr_level_unit) keeps the rows of every code, so a code no rule maps yet ('SF',
 -- 'SOFR') shows how it would fare if read as SOFR; that is evidence for a proposed rule, not a reading.
 with coded_read as (
     select accession, context_id, cik, report_date, is_published, unit_key, cell_text, code, reference_rate, status
@@ -35,8 +37,8 @@ with coded_read as (
         , max(case when field = 'spread' then value end) as spread
         , max(case when field = 'interest_rate' and rate_kind = 'all_in' then value end) as all_in
         , max(case when field = 'pik_rate' then value end) as pik
-    from {{ ref('int_field_corrected') }}
-    where field in ('spread', 'interest_rate', 'pik_rate') and status in ('normalised', 'corrected')
+    from {{ ref('int_field_normalised') }}
+    where field in ('spread', 'interest_rate', 'pik_rate') and status = 'normalised'
     group by 1, 2
 )
 

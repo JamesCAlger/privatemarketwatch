@@ -11,7 +11,8 @@
 -- "cell text" every later rate-text model reads.
 -- unit_key: the column unit (int_text_column_unit): the first 16 hex characters of md5(cik | table_signature |
 -- header_signature). It names no fund.
--- shape: macro text_shape of text (numbers become '#'). code: macro rate_code of text. rate_text: macro is_rate_text.
+-- shape: macro text_shape of text (numbers become '#', no space before '%' or around '+'); shape_key_text: the same
+-- upper-cased (macro text_shape_key), the key shape units group on (fix round 1). code: macro rate_code of text. rate_text: macro is_rate_text.
 -- fact_fields: the distinct fields (macro page_field_fact: int_field_read's field, else the concept_map read_field) of
 -- the filed facts placed in the row's cells of this column, sorted; empty list when none. fact_count: how many such
 -- placements.
@@ -72,6 +73,7 @@ select
     , j.text
     , j.n_cells
     , {{ text_shape('j.text') }} as shape
+    , {{ text_shape_key('j.text') }} as shape_key_text
     , {{ rate_code('j.text') }} as code
     , {{ is_rate_text('j.text') }} as rate_text
     , coalesce(cf.fact_fields, []::varchar[]) as fact_fields

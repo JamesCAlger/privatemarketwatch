@@ -7,6 +7,11 @@ Phase 1 is code only: no model call, no agent, no network. Queries: `scripts/tex
 only rules applied are the ones the wrapper copies already hold (19-T7). Every count is a measurement of the filed
 layer and the page models.
 
+**Fix round 1 (independent review of 0f243ca7) changed the worklist, the legend check, the rate check, the bundles and
+the shapes. Section 12 has what changed with before/after numbers per fund; where sections 1 to 11 disagree with
+section 12, section 12 holds.** Bundles are not anonymous: the table title (16 of 31 bundles), company names and
+filing accessions name the fund. They carry no production value.
+
 ## 1. What each model decides
 
 | Model | Decides |
@@ -260,4 +265,151 @@ Differences grouped:
 8. Bundle: the header row comes from the latest table; the title is the most frequent title among the unit's tables;
    the tag profile and the legend cover all filings; shapes are capped at 40.
 9. The seed's sha256 is recorded twice: for the committed bytes (LF) and for the Windows checkout (CRLF).
-   `.gitattributes` (outside `warehouse/`) was not changed.
+   `.gitattributes` (outside `warehouse/`) was not changed. (Superseded in fix round 1, item 7.)
+
+## 12. Fix round 1 (independent review of 0f243ca7, 2026-11-26)
+
+Queries: the reviewer's `scripts/text/review_r1_*.sql` and `scripts/text/q_r7_*.sql`. All counts below are from the
+fix-round build.
+
+### 12.1 What changed
+
+| # | Finding | Change |
+|---|---|---|
+| 1 | A column was `covered` when one minor rule passed (Apollo "Interest Rate" read 17 of 4,916) | `int_text_worklist` carries rows_in_unit (positions), rows_read, rows_read_by_passing_rule, rows_read_failing and both shares on every row. `covered` needs at least 95% of the unit's positions read by rules that pass a check in their own quarter (var `text_covered_min_share`); new state `partly_covered`; `covered_unchecked` = 95% read, not confirmed. Unit test `int_text_worklist_states`. The export writes every rate-candidate column by default |
+| 2 | The legend check was not dated | New `int_text_check_legend_read`: each read position against the legend of its own filing (agrees, contradicts, mixed, unclear, no_legend_in_filing; not_applicable for label_is_unspecified). `int_text_check_legend_quarter` counts them per unit and quarter; the worklist lists the quarters. `int_text_check_legend_rule` now judges every filing of the rule's dates and lists the report dates per verdict. Unit tests `int_text_check_legend_rule_states` (rewritten) and `int_text_check_legend_read_verdicts` |
+| 3 | The SOFR level test accepted nothing and would fail a correct rule in 7 of 15 quarters | Renamed `int_text_measure_sofr_level(_unit)`, measurement only, read by nothing. New cluster test `int_text_check_base_cluster` (rows) and `int_text_check_base_cluster_group` (fund, quarter, basis, label), read by the worklist for basis `rule`. Unit test `int_text_check_base_cluster_group_centres` |
+| 4 | Bundles lacked what a dated rule needs | First and last report date on the column and on every shape; every legend entry lists its filings (report date, accession); shape-legs evidence on each parts-stating shape; header_text, group header and header row from the same (latest) table. The header's printed note: not done, see 12.6 |
+| 5 | The model comment said bundles name no fund | Comment and this note corrected: bundles are not anonymous (the title names the fund in 16 of 31), they carry no production value |
+| 6 | Shapes split by spacing and case (307 shapes) | Macro `text_shape` drops the space before `%` and around `+`; shape units group on the upper-case key (`text_shape_key`) and show the most frequent spelling. 286 shape units. Unit tests `int_text_cell_shape_and_code` (extended) and `int_text_shape_unit_key_and_display` |
+| 7 | The seed's sha256 was only in a description | `tests/seed_sofr_hash_matches.sql` hashes the file (CRLF read as LF, as `stg_wrapper_drift` does) against var `sofr_seed_sha256`; `warehouse/seeds/sofr_90day_avg.csv -text` in `.gitattributes` (the file re-checked-out with its committed bytes) |
+| 8 | Checks and bundle read `int_field_corrected`, which reaches `stg_holdings` | Every `int_text_*` model reads `int_field_normalised` (tags converted, before corrections). `pytests/test_text_models_no_production.py` walks the ref graph from the SQL files and macros and fails if an `int_text_*` model has `stg_holdings` or a `cmp_*` model among its ancestors (a guard test checks the walker sees `cmp_rate -> stg_holdings`) |
+
+Also fixed: the header of `tests/baseline_int_text_code_no_rule_no_legend.sql` named the funds, which
+`pytests/test_no_fund_names_in_sql.py` forbids; the first commit did not run that test. Now passes.
+
+### 12.2 Worklist before and after
+
+Columns: covered / covered_unchecked / partly_covered / failed_check / uncovered.
+
+| Fund | Before (no partly_covered state) | After |
+|---|---|---|
+| Ares | 0 / 1 / - / 0 / 13 | 0 / 0 / 1 / 0 / 13 |
+| BCRED | 1 / 0 / - / 6 / 57 | 0 / 0 / 5 / 2 / 57 |
+| Blue Owl | 1 / 0 / - / 3 / 39 | 0 / 0 / 3 / 1 / 39 |
+| Apollo | 2 / 0 / - / 0 / 14 | 0 / 0 / 2 / 0 / 14 |
+| HPS | 0 / 0 / - / 1 / 11 | 0 / 0 / 0 / 1 / 11 |
+
+Shapes, covered / covered_unchecked / failed_check / uncovered (no shape is partly covered): Ares 0/17/0/29 -> 3/12/0/27;
+BCRED 29/0/6/63 -> 31/1/2/61; Blue Owl 14/1/4/40 -> 7/8/1/33; Apollo 6/0/0/62 -> 4/2/0/59; HPS 10/0/4/22 -> 12/0/2/21.
+
+**No column is covered.** Every column a rule names, with its shares (positions; `scripts/text/q_r7_worklist.sql`):
+
+| Fund | Column [unit] | State | In unit | Read | By passing rule | Failing | Share read / passing | Failing quarters |
+|---|---|---|---:|---:|---:|---:|---|---|
+| Ares | Reference [9ecddf] | partly_covered | 13,657 | 541 | 421 | 0 | 0.040 / 0.031 | |
+| BCRED | Reference Rate and Spread [16de07] | partly_covered | 3,901 | 13 | 13 | 0 | 0.003 / 0.003 | |
+| BCRED | Reference Rate and Spread [35d86f] | partly_covered | 6,200 | 154 | 154 | 0 | 0.025 / 0.025 | |
+| BCRED | Reference Rate and Spread [d242ee] | partly_covered | 555 | 3 | 3 | 0 | 0.005 / 0.005 | |
+| BCRED | Reference Rate and Spread [d30801] | partly_covered | 9,169 | 407 | 407 | 0 | 0.044 / 0.044 | |
+| BCRED | Reference Rate and Spread [4911ba] | partly_covered | 971 | 1 | 1 | 0 | 0.001 / 0.001 | |
+| BCRED | Reference Rate and Spread [7bedc6] | failed_check | 1,229 | 30 | 17 | 13 | 0.024 / 0.014 | 2023-03-31 |
+| BCRED | Reference Rate and Spread [fc9493] | failed_check | 1,342 | 41 | 13 | 22 | 0.031 / 0.010 | 2022-09-30, 2022-12-31 |
+| Blue Owl | Interest / Ref. Rate [501a2d] | partly_covered | 2,109 | 29 | 29 | 0 | 0.014 / 0.014 | |
+| Blue Owl | Interest / Ref. Rate [aceeb6] | partly_covered | 1,534 | 29 | 29 | 0 | 0.019 / 0.019 | |
+| Blue Owl | Interest [0dd66c] | partly_covered | 1,416 | 1,343 | 0 | 0 | 0.948 / 0.000 | |
+| Blue Owl | Interest [256066] | failed_check | 4,613 | 3,451 | 5 | 2 | 0.748 / 0.001 | 2024-12-31 |
+| Apollo | Interest Rate [b4ee19] | partly_covered | 4,916 | 17 | 10 | 0 | 0.003 / 0.002 | |
+| Apollo | Interest Rate [8900b6] | partly_covered | 3,112 | 46 | 46 | 0 | 0.015 / 0.015 | |
+| HPS | Reference Rate and Spread [836097] | failed_check | 6,662 | 452 | 434 | 18 | 0.068 / 0.065 | 2024-12-31, 2025-06-30, 2025-09-30, 2025-12-31 |
+
+Blue Owl's `SR` reads (3,451 + 1,343) are almost all unchecked: the fund files no all-in rate, so the cluster test
+cannot run, and its legend defines SR only in the 2024-12-31 filing (SR=SOFR: agree 1 filing, no legend 14).
+
+### 12.3 Legend, dated
+
+Read positions by the verdict of their own filing (`int_text_check_legend_quarter`; `scripts/text/q_r7_legend_dated.sql`):
+
+| Fund | Read | Agrees | Mixed | Contradicts | Unclear | No legend in filing | Not applicable | Quarters mixed |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| Ares | 541 | 0 | 0 | 0 | 0 | 144 | 397 | |
+| BCRED | 649 | 621 | 12 | 0 | 0 | 16 | 0 | 2022-12-31 |
+| Blue Owl | 4,852 | 63 | 2 | 0 | 0 | 4,787 | 0 | 2024-12-31 |
+| Apollo | 63 | 56 | 0 | 0 | 0 | 7 | 0 | |
+| HPS | 452 | 434 | 18 | 0 | 0 | 0 | 0 | 2024-12-31, 2025-06-30, 2025-09-30, 2025-12-31 |
+
+Before, one 2022-12-31 footnote failed five BCRED units for 2023 to 2026 and a 2024-12-31 legend failed Blue Owl's 2026
+unit; now only the positions of the mixed filing's own quarter fail. Per rule (filings agreeing / mixed / no legend):
+BCRED S=SONIA 14 / 1 (2022-12-31) / 1; Blue Owl SR=SOFR 1 (2024-12-31) / 0 / 14, C=CORRA 7 / 1 (2024-12-31) / 2,
+B=BBSY and SA=SONIA 8 / 0 / 7; HPS B=BBSY 6 / 1 (2024-12-31) / 0, C=CORRA 2 / 3 (2025-06-30 to 2025-12-31) / 0;
+Apollo BBSW 7 / 0 / 8, C=CORRA 6 / 0 / 9; Ares's 5 rules no legend in any of 17 filings. Contradictions: 0.
+
+### 12.4 Cluster test
+
+Implied base = tagged all-in rate minus tagged spread (tags before corrections), per fund, quarter and label; rows with
+a PIK rate above 0 are left out (whether the spread includes the PIK leg differs by fund, so no cash leg is derived;
+4% to 8% of coded rows at Ares, BCRED and HPS). Centres: the three most frequent implied bases rounded to 0.05. Within: the share of rows within
+0.30 of the nearest centre. Full table `scratch/2026-11-26_text_slice_r/cluster.tsv` (`scripts/text/q_r7_cluster.sql`).
+
+Distribution first, groups with at least 10 usable rows (`scripts/text/q_r7_cluster_bar.sql`):
+
+| Basis | Groups | Median within | Below 0.80 | Below 0.85 | Below 0.90 | Below 0.95 | SOFR distance over 1.0 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| rule (codes read by existing rules) | 49 | 1.000 | 1 | 2 | 2 | 3 | 15 (not SOFR: SONIA, CORRA, Prime-like "unspecified") |
+| hypothesis, SOFR-like codes | 63 | 0.993 | 3 | 7 | 8 | 10 | 2 |
+| hypothesis, other codes | 99 | 1.000 | 3 | 5 | 9 | 19 | 59 (expected: not SOFR) |
+
+SOFR-like codes as hypothesis (within share, usable rows): Ares `SOFR`, BCRED `SOFR`, HPS `SF` are at 0.95 to 1.00 in
+every quarter from 2023-03-31 on except 2024-09-30 (Ares 0.847, HPS 0.791; BCRED 0.985), and fall to 0.71 to 0.90 in
+2022-09-30 and 2022-12-31. Main centre against the SOFR seed: within 0.5 from 2023-06-30 on in every quarter (0.00 to
+0.46); above 1.0 only for Ares 2022-09-30 (1.57) and 2022-12-31 (1.13), when the 90-day average lagged the hikes.
+
+Proposed bar (set in vars, `text_cluster_min_rows` 10, `text_cluster_min_share` 0.90): it fails these groups
+(`scripts/text/q_r7_cluster_fails.sql`), all in quarters when rates moved fast inside the quarter (2022 hikes, the
+2024-09 cut), where loans reset on different days and the implied bases spread over more than three tenors:
+
+- rule basis: BCRED SONIA 2022-09-30 (0.70), 2023-03-31 (0.85).
+- hypothesis: Ares SOFR 2022-09-30 (0.83), 2022-12-31 (0.90 rounded, 0.898), 2024-09-30 (0.85); BCRED SOFR 2022-09-30
+  (0.71), 2022-12-31 (0.80); HPS SF 2024-09-30 (0.79); Ares LIBOR 2022-09-30 (0.78); BCRED L 2022-09-30, 2022-12-31
+  (0.89, 0.88); E groups of BCRED and HPS (0.79 to 0.87) and Ares CORRA 2024-12-31 (0.77).
+
+A bar of 0.95 would also fail 2024-12-31 for the three large SOFR groups (0.955 to 0.966); 0.85 would pass Ares SOFR 2022-12-31 and both BCRED L 2022 groups.
+0.90 is the lowest round bar that still fails the 2022 quarters of the two largest SOFR groups.
+
+What the cluster test cannot do: it shows that one code behaves like one base rate in a quarter, not which rate.
+A code mapped to the wrong rate clusters just as well (BCRED's `S` clusters within 0.20 of SOFR whether it is SONIA or
+SOFR: its main centre is 0.01 to 0.43 from the SOFR seed, and SONIA was close to SOFR in most quarters). The SOFR distance is the only link to a level, and it is a measurement.
+Funds it cannot cover: Blue Owl (no all-in rate tag at all: no implied base) and Apollo (both tags on 0.1% of its
+7,392 coded positions: every group too_few_rows).
+
+### 12.5 Bundles
+
+31 bundles (unchanged: one per rate-candidate column unit, all exported by default), 2,979 to 20,142 characters, about
+228,200 characters in all (legend filing lists and shape dates made them larger). By state: partly_covered 11,
+failed_check 4, uncovered 16. Exported to `scratch/2026-11-26_text_slice_r/bundles/`; determinism checked by exporting
+before and after the full build (identical sha256 values; 12.7).
+
+Left as they are, noted: one column printed under several table signatures gives several bundles (BCRED 7, Apollo 2);
+the controller sends each and compares the answers. Share-of-net-assets columns are admitted by the 20% rate-text rule.
+
+### 12.6 Not done
+
+- The printed note a header's mark refers to ("Reference Rate and Spread(2)" -> note (2)). The filed layer stores
+  table rows only; no table row of any filing starts with a mark "(n)" followed by text: 0 of 348 marks in rate-column
+  headers found (`scripts/text/q_r7_note_rows.sql`, `q_r7_note_rows2.sql`). Left out of the bundle, said in its header.
+- The old tables `int_text_check_spread_base(_unit)` stay in the local database file until it is rebuilt from empty;
+  nothing reads them.
+
+### 12.7 Tests and build (fix round 1)
+
+New tests: unit tests `int_text_check_legend_read_verdicts`, `int_text_worklist_states`,
+`int_text_shape_unit_key_and_display`, `int_text_check_base_cluster_group_centres`; rewritten
+`int_text_check_legend_rule_states`; extended `int_text_cell_shape_and_code`; renamed
+`int_text_measure_sofr_level_arithmetic`. `tests/seed_sofr_hash_matches.sql`; keys of the four new models in
+`tests/int_text_keys_unique.sql`; `pytests/test_text_models_no_production.py` (3 tests). Baseline ceilings unchanged
+(measured again: 2,272 / 43,437 / 4 / 12).
+
+Full build (`dbt.ps1 build --threads 2`): `PASS=996 WARN=123 ERROR=0 TOTAL=1119` (was 973/123/1096). CI fixture
+(local, new folder): step 4 `PASS=3`; build `PASS=589 WARN=5 ERROR=0 TOTAL=594`; empty run `PASS=2`; unit-test and drift
+step `PASS=62`. pytests: 178 passed. Bundles: exported after the full build and again after rebuilding every text
+model; the 31 sha256 values are identical.

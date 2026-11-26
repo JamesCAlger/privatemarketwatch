@@ -3,10 +3,20 @@
 {#- The text shape of a column's text on a row: every number (a digit run, with groups of three digits after thousands
     commas and decimals: '525', '1,250', '0.50', '.75'; a comma not followed by three digits is kept, so "525," stays
     "#,") becomes '#', every run of white space (the no-break space too) becomes one space, the ends
-    are trimmed. Letters and all other characters are kept. '#' is the placeholder because a rate code can be the
+    are trimmed, and (fix round 1) the space before '%' and the spaces around '+' are removed, so "SOFR + 5.25%",
+    "SOFR +5.25 %" and "SOFR+5.25%" give one shape "SOFR+#%" (cells joined with a space made "# %" out of "10.00" and
+    "%"). Letters and all other characters are kept, case too: the shape unit's key is the upper-case shape (macro
+    text_shape_key), its display form the most frequent spelling. '#' is the placeholder because a rate code can be the
     letter N ("N+475" gives "N+#", never confused with a number). "S+525, 0.50% Floor" gives "S+#, #% Floor". -#}
 {% macro text_shape(expr) -%}
-trim(regexp_replace(regexp_replace(coalesce({{ expr }}, ''), '\d+(,\d{3})*(\.\d+)?|\.\d+', '#', 'g'), '[\s\x{00A0}]+', ' ', 'g'))
+regexp_replace(regexp_replace(
+    trim(regexp_replace(regexp_replace(coalesce({{ expr }}, ''), '\d+(,\d{3})*(\.\d+)?|\.\d+', '#', 'g'), '[\s\x{00A0}]+', ' ', 'g')),
+    ' %', '%', 'g'), ' ?\+ ?', '+', 'g')
+{%- endmacro %}
+
+{#- The key of a shape: macro text_shape upper-cased ("Base rate (Q)" and "Base Rate (Q)" are one shape unit). -#}
+{% macro text_shape_key(expr) -%}
+upper({{ text_shape(expr) }})
 {%- endmacro %}
 
 {#- The leading rate code or words of a text: one or more words of letters (dots allowed inside a word, words joined by

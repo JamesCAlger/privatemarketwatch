@@ -7,12 +7,12 @@
 -- Rows: the shape's position-row texts (int_text_cell), each position on the row (int_page_position one_row) once.
 -- Numbers: macro text_numbers of the text, in order. number_label: 'n1', 'n2', ... (each number up to the fourth), and
 -- 'n1+n2' (the sum of the first two).
--- Tags (int_field_corrected, status normalised or corrected, percent): interest_rate (any rate_kind), interest_rate_cash,
+-- Tags (int_field_normalised: the filed tags converted, before any row correction; status normalised, percent): interest_rate (any rate_kind), interest_rate_cash,
 -- pik_rate, spread.
 -- compared: rows where both the number and the tag exist. equal: abs(number - tag) <= 0.005. equal_bps: abs(number / 100
 -- - tag) <= 0.005 (a spread printed in basis points, "S+525"). equal_share = equal / compared.
 with shape as (
-    select shape_key, unit_key, shape
+    select shape_key, unit_key, shape, shape_key_text
     from {{ ref('int_text_shape_unit') }}
     where regexp_matches(shape, '(?i)pik') and length(shape) - length(replace(shape, '#', '')) >= 2
 )
@@ -20,7 +20,7 @@ with shape as (
 , cell as (
     select s.shape_key, c.accession, c.row_index, {{ text_numbers('c.text') }} as numbers
     from {{ ref('int_text_cell') }} c
-    join shape s on s.unit_key = c.unit_key and s.shape = c.shape
+    join shape s on s.unit_key = c.unit_key and s.shape_key_text = c.shape_key_text
     where c.text <> ''
 )
 
@@ -43,9 +43,9 @@ with shape as (
 
 , tag as (
     select accession, context_id, field as tag_field, value
-    from {{ ref('int_field_corrected') }}
+    from {{ ref('int_field_normalised') }}
     where field in ('interest_rate', 'interest_rate_cash', 'pik_rate', 'spread')
-        and status in ('normalised', 'corrected') and value is not null
+        and status = 'normalised' and value is not null
 )
 
 select
