@@ -247,3 +247,21 @@ seeds:
           - not_null:
               config:
                 where: "step in ('filed', 'converted', 'reading_input')"
+  - name: sofr_90day_avg
+    description: >
+      Text slice R phase 1 (2026-11-26): the SOFR 90-day average in percent, one row per published date, for the
+      spread-plus-base check (int_text_check_spread_base). A copy, not a download: source data/reference/sofr_90day_avg.csv
+      (the file pipeline/sofr_reference.py reads; FRED SOFR90DAYAVG cached by scripts/fetch_sofr.py), copied at git
+      acbccdfa. sha256 of the source's bytes as committed (LF line ends): 1fc3e109da22cd8ebea9b74ed84d9be34dc237781892364d98da5711ee0bde45;
+      the seed's bytes as committed are the same (a Windows checkout with core.autocrlf shows CRLF and hashes
+      0e839377a88c8893e8d7511897c32afcff1c2cbb81fb6d3cf5fe5de558e40a0b). 1,988 dates, 2018-07-02 to 2026-06-18. A backward-looking
+      average, a proxy for the term SOFR loans reference (pipeline/sofr_reference.py: expect a 0.10 to 0.20 point gap).
+    config:
+      column_types:
+        date: date
+        sofr_90day_avg_pct: double
+    columns:
+      - name: date
+        data_tests: [unique, not_null]
+      - name: sofr_90day_avg_pct
+        data_tests: [not_null]

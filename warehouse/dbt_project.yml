@@ -41,6 +41,17 @@ vars:
   # rate tags, in percentage points. Float rounding only: the legs are fractions times 100 in double precision (error
   # near 1e-15); 1e-9 is far above that and far below the smallest printed rate step (0.01).
   rate_legs_tolerance: 1.0e-9
+  # Text slice R phase 1 (2026-11-26). A column is a rate candidate when at least this share of its non-empty
+  # position-row texts look like rate text (int_text_column_unit, rule (c)).
+  text_rate_candidate_share: 0.2
+  # The spread-plus-base check (int_text_check_spread_base): a SOFR value older than this many days before the report
+  # date is not used (same limit as fx_max_age_days); a row passes when abs(spread + base - all-in) is at most the
+  # tolerance in percentage points (spine section 10: the 90-day average is a proxy, 0.25 as measured there). In
+  # int_text_worklist a quarter of a unit is judged only with at least min_rows checked rows, and fails below min_share.
+  text_sofr_max_age_days: 7
+  text_spread_base_tolerance: 0.25
+  text_spread_base_min_rows: 10
+  text_spread_base_min_share: 0.9
   # A PIK rate above the all-in rate tag by more than this (percentage points) contradicts rate_is_all_in: production's
   # own margin (pipeline/financial_conventions.py prepare: pik > reported_rate + 0.01).
   pik_above_rate_margin: 0.01
@@ -298,6 +309,18 @@ vars:
     # Fix round 2: published positions whose level-1 and level-2 headings both name 'controlled' or 'affiliated' with
     # different texts (a sibling section kept as a parent): 23 (Blue Owl 10, HPS 9, BCRED 4). Not structurally fixable.
     int_position_heading_sibling_sections: 23
+    # Text slice R phase 1, measured 2026-11-26 (docs/baseline_text_rates_phase1_2026-11-26.md). Published positions
+    # whose table has no column a read_printed_column rule names: 2,272 (Blue Owl 2,271 unfunded-commitment-only rows,
+    # Ares 1 in the table without a header).
+    int_text_reference_rate_column_not_found: 2272
+    # Published positions whose rule-read reference-rate code no rule of the fund maps: 43,437 (Ares 13,116, BCRED 13,283,
+    # Blue Owl 3,749, Apollo 7,329, HPS 5,960). The common codes the wrappers never list; the agent's work, not errors.
+    int_text_reference_rate_code_not_mapped: 43437
+    # map_code rules the legend contradicts or defines two ways in one filing: 4, all mixed (BCRED S=SONIA, Blue Owl
+    # C=CORRA, HPS B=BBSY and C=CORRA). None contradicts.
+    int_text_legend_rule_disagrees: 4
+    # (fund, code) pairs printed in rate-candidate columns with neither a rule nor a legend entry: 12.
+    int_text_code_no_rule_no_legend: 12
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).

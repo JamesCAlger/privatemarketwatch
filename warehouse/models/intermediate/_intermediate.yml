@@ -1418,6 +1418,180 @@ models:
         data_tests:
           - not_null
 
+
+  # Text slice R phase 1 (rate text: units, existing rules, checks, bundles), 2026-11-26. Keys of all models:
+  # tests/int_text_keys_unique.sql. Counts: docs/baseline_text_rates_phase1_2026-11-26.md. Nothing here applies a new
+  # rule or says a value is right; no model reads production.
+  - name: int_text_cell
+    description: >
+      One row per printed position row and leaf column holding a non-footnote cell: the column's cells joined in order
+      (the "cell text" of every later rate-text model), its shape (numbers become '#'), its leading code, whether it looks
+      like rate text, and the fields of the facts placed in it. unit_key names the column unit without naming the fund.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: unit_key
+        data_tests: [not_null]
+      - name: text
+        data_tests: [not_null]
+      - name: shape
+        data_tests: [not_null]
+
+  - name: int_text_column_unit
+    description: >
+      One row per (cik, table signature, column signature) across the fund's filings: header text and group header,
+      first and last report date, filings and tables, shape counts and shares, position-row cells, the tag profile, the
+      read_printed_column rules naming it, and whether it is a rate-candidate column (rule in the model's header).
+    columns:
+      - name: unit_key
+        data_tests: [unique, not_null]
+      - name: cik
+        data_tests: [not_null]
+      - name: is_rate_candidate
+        data_tests: [not_null]
+
+  - name: int_text_shape_unit
+    description: >
+      One row per (rate-candidate column unit, text shape): texts, positions, first and last report date, three
+      deterministic examples, the code, and the facts per field on the shape's rows.
+    columns:
+      - name: shape_key
+        data_tests: [unique, not_null]
+      - name: unit_key
+        data_tests: [not_null]
+      - name: shape
+        data_tests: [not_null]
+
+  - name: int_text_reference_rate_read
+    description: >
+      One row per position with a printed row: the wrapper copies' existing reference-rate rules applied (19-T7), with
+      the cell text, code, reference rate, rule ids and a status. No vocabulary beyond the fund's rules. Published
+      positions with status column_not_found or code_not_mapped have baseline ceilings
+      (tests/baseline_int_text_reference_rate_column_not_found.sql, tests/baseline_int_text_reference_rate_code_not_mapped.sql).
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: context_id
+        data_tests: [not_null]
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [read, no_rule, column_not_found, cell_empty, no_code, code_not_mapped]
+
+  - name: int_text_check_column_tags
+    description: >
+      Per column unit: the field the filer's tags under the column say it holds (dominant field and share, the second
+      field), and how many non-empty position-row texts carry no tag. A measurement that can accept a column rule.
+    columns:
+      - name: unit_key
+        data_tests: [unique, not_null]
+
+  - name: int_text_check_legend
+    description: >
+      The filer's own definitions of rate codes, read from footnote text with one general pattern (a capitalised name,
+      then one or two quoted codes in brackets): one row per (cik, accession, code, name, abbreviation).
+    columns:
+      - name: code
+        data_tests: [not_null]
+      - name: name
+        data_tests: [not_null]
+
+  - name: int_text_check_legend_rule
+    description: >
+      Per existing map_code rule: agrees, contradicts, mixed, unclear or not_in_legend against the legend of the filings
+      inside its dates. Rules contradicted or mixed have a baseline ceiling (tests/baseline_int_text_legend_rule_disagrees.sql).
+    columns:
+      - name: rule_id
+        data_tests: [unique, not_null]
+      - name: state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [agrees, contradicts, mixed, unclear, not_in_legend]
+
+  - name: int_text_check_legend_code
+    description: >
+      Per (cik, code) printed in rate-candidate columns: rows, whether a rule or the legend says what it means. Codes with
+      neither have a baseline ceiling (tests/baseline_int_text_code_no_rule_no_legend.sql).
+    columns:
+      - name: code_key
+        data_tests: [not_null]
+      - name: state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [rule_and_legend, rule_only, legend_only, neither]
+
+  - name: int_text_check_spread_base
+    description: >
+      Per position whose reference-rate column gives a code: spread (tag) plus base (SOFR 90-day average at the report
+      date, or the printed floor when higher) against the all-in rate, residual and check_state. SOFR only (owner question
+      2); rows of other codes are kept so a proposed rule can be judged, with is_read_sofr false.
+    columns:
+      - name: accession
+        data_tests: [not_null]
+      - name: context_id
+        data_tests: [not_null]
+      - name: check_state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [pass, fail, pik_present, inputs_missing, no_sofr_value]
+
+  - name: int_text_check_spread_base_unit
+    description: >
+      The spread-plus-base check per (column unit, quarter, code): positions, checked, passed, pass share, rows not
+      judged, median residual. Every quarter is its own row.
+    columns:
+      - name: unit_key
+        data_tests: [not_null]
+      - name: report_date
+        data_tests: [not_null]
+
+  - name: int_text_check_shape_legs
+    description: >
+      Per parts-stating shape (PIK and two or more numbers), printed number and tag field: how often the number equals the
+      tagged rate, cash, PIK or spread on the same row (also as basis points). Evidence for a parse, not a verdict.
+    columns:
+      - name: shape_key
+        data_tests: [not_null]
+      - name: number_label
+        data_tests: [not_null]
+
+  - name: int_text_worklist
+    description: >
+      Per column unit and shape unit: covered, covered_unchecked, failed_check or uncovered (rules in the model's
+      header). changed_state is not built in phase 1 and is always null.
+    columns:
+      - name: work_key
+        data_tests: [unique, not_null]
+      - name: unit_type
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [column, shape]
+      - name: state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [covered, covered_unchecked, failed_check, uncovered]
+
+  - name: int_text_bundle
+    description: >
+      Per rate-candidate column unit, covered or not: the JSON bundle an agent is given (spec 4.3), from the filed layer
+      only, with its size cap inside it and bundle_chars beside it. scripts/text/export_bundles.py writes one file per row.
+    columns:
+      - name: unit_key
+        data_tests: [unique, not_null]
+      - name: bundle_json
+        data_tests: [not_null]
 unit_tests:
   - name: cmp_row_set_catch_all_causes
     description: >
@@ -5556,3 +5730,288 @@ unit_tests:
         - {context_id: p11, heading_level: 1, heading_rank: 2, heading_row_index: 50, distance_rows: 6, same_table: true}
         - {context_id: p10, heading_level: 0, heading_rank: 2, heading_row_index: 54, distance_rows: 8, same_table: true}
         - {context_id: p10, heading_level: 1, heading_rank: 1, heading_row_index: 60, distance_rows: 2, same_table: true}
+
+  # Text slice R phase 1 (rate text: units, existing rules, checks, bundles), 2026-11-26.
+  - name: int_text_cell_shape_and_code
+    description: >
+      Text slice R phase 1. Shape masking, the code and rate text, on the column's text of a position row. Row 10: "S+525,
+      0.50% Floor" gives shape "S+#, #% Floor", code S. Row 11: "N+475" keeps the letter N apart from the number
+      placeholder ("N+#", code N). Row 12: two cells under one header ("SOFR +", "5.25%") join into "SOFR + 5.25%"; the
+      footnote mark "(2)" is left out; the spread fact placed in "5.25%" is counted. Row 13: "N/A" has no code. Row 14:
+      "Base Rate (Q)" gives the two-word code. Row 15: "1,250.5" gives "#"; a trailing footnote cell is not kept. Row 20
+      holds no position: no row. Row 14's position is not published.
+    model: int_text_cell
+    given:
+      - input: ref('int_page_position')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 10, table_index: 1}
+          - {accession: A, context_id: p2, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 11, table_index: 1}
+          - {accession: A, context_id: p3, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 12, table_index: 1}
+          - {accession: A, context_id: p4, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 13, table_index: 1}
+          - {accession: A, context_id: p5, cik: "1", report_date: 2026-03-31, is_published: false, placement_status: one_row, row_index: 14, table_index: 1}
+          - {accession: A, context_id: p6, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, row_index: 15, table_index: 1}
+          - {accession: A, context_id: p7, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: not_placed}
+      - input: ref('int_page_schedule')
+        rows:
+          - {accession: A, table_index: 1, table_signature: "co|rate"}
+      - input: ref('int_page_cell_column')
+        rows:
+          - {accession: A, row_index: 10, cell_index: 0, table_index: 1, text: Acme, shape: text, column_rule: zone, column_col_start: 0, header_signature: co}
+          - {accession: A, row_index: 10, cell_index: 1, table_index: 1, text: "S+525, 0.50% Floor", shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 11, cell_index: 1, table_index: 1, text: N+475, shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 12, cell_index: 1, table_index: 1, text: SOFR +, shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 12, cell_index: 2, table_index: 1, text: "5.25%", shape: percent, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 12, cell_index: 3, table_index: 1, text: "(2)", shape: footnote_mark, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 13, cell_index: 1, table_index: 1, text: N/A, shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 14, cell_index: 1, table_index: 1, text: Base Rate (Q), shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 15, cell_index: 1, table_index: 1, text: "1,250.5", shape: number, column_rule: zone, column_col_start: 5, header_signature: rate}
+          - {accession: A, row_index: 15, cell_index: 2, table_index: 1, text: "(3)", shape: footnote_mark, column_rule: trailing_footnote, header_signature: "#footnote_marks"}
+          - {accession: A, row_index: 20, cell_index: 1, table_index: 1, text: S+100, shape: text, column_rule: zone, column_col_start: 5, header_signature: rate}
+      - input: ref('int_field_read')
+        rows:
+          - {accession: A, fact_id: f1, field: spread, status: read}
+      - input: ref('stg_filed_fact')
+        rows: []
+      - input: ref('concept_map')
+        rows: []
+      - input: ref('stg_filed_fact_placement')
+        rows:
+          - {accession: A, fact_id: f1, row_index: 12, cell_index: 2}
+    expect:
+      rows:
+        - {row_index: 10, col_start: 0, text: Acme, shape: Acme, code: Acme, rate_text: false, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 10, col_start: 5, text: "S+525, 0.50% Floor", shape: "S+#, #% Floor", code: S, rate_text: true, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 11, col_start: 5, text: N+475, shape: "N+#", code: N, rate_text: true, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 12, col_start: 5, text: SOFR + 5.25%, shape: "SOFR + #%", code: SOFR, rate_text: true, fact_count: 1, positions: 1, is_published: true}
+        - {row_index: 13, col_start: 5, text: N/A, shape: N/A, code: null, rate_text: false, fact_count: 0, positions: 1, is_published: true}
+        - {row_index: 14, col_start: 5, text: Base Rate (Q), shape: Base Rate (Q), code: Base Rate, rate_text: false, fact_count: 0, positions: 1, is_published: false}
+        - {row_index: 15, col_start: 5, text: "1,250.5", shape: "#", code: null, rate_text: false, fact_count: 0, positions: 1, is_published: true}
+
+  - name: int_text_column_unit_rate_candidate
+    description: >
+      Text slice R phase 1. The rate-candidate rule. "spr": a spread fact on a position row, no rate text (rule a).
+      "interest/ref.rate": a two-line leaf whose sub-header "Ref. Rate" an existing read_printed_column rule names
+      (rule b; header_text is the leaf's own text, group_header_text the upper line). "t20": 1 of 5 texts is rate text,
+      20% (rule c, the boundary). "t16": 1 of 6, below 20%: not a candidate. "co": none (another fund's rule naming
+      "Company" does not count). Two filings of "spr" sum.
+    model: int_text_column_unit
+    given:
+      - input: ref('int_page_column_filing')
+        rows:
+          - {accession: A, table_signature: T, header_signature: spr, cik: "1", report_date: 2025-12-31, n_tables: 1, data_cells: 2, n_number: 0, n_percent: 2, n_date: 0, n_text: 0, n_empty_marker: 0, n_footnote_mark: 0}
+          - {accession: B, table_signature: T, header_signature: spr, cik: "1", report_date: 2026-03-31, n_tables: 2, data_cells: 1, n_number: 0, n_percent: 1, n_date: 0, n_text: 0, n_empty_marker: 0, n_footnote_mark: 0}
+          - {accession: B, table_signature: T, header_signature: interest/ref.rate, cik: "1", report_date: 2026-03-31, n_tables: 2, data_cells: 1, n_number: 0, n_percent: 0, n_date: 0, n_text: 1, n_empty_marker: 0, n_footnote_mark: 0}
+          - {accession: B, table_signature: T, header_signature: t20, cik: "1", report_date: 2026-03-31, n_tables: 2, data_cells: 5, n_number: 4, n_percent: 1, n_date: 0, n_text: 0, n_empty_marker: 0, n_footnote_mark: 0}
+          - {accession: B, table_signature: T, header_signature: t16, cik: "1", report_date: 2026-03-31, n_tables: 2, data_cells: 6, n_number: 5, n_percent: 1, n_date: 0, n_text: 0, n_empty_marker: 0, n_footnote_mark: 0}
+          - {accession: B, table_signature: T, header_signature: co, cik: "1", report_date: 2026-03-31, n_tables: 2, data_cells: 1, n_number: 0, n_percent: 0, n_date: 0, n_text: 1, n_empty_marker: 0, n_footnote_mark: 0}
+      - input: ref('int_page_column')
+        rows:
+          - {accession: B, table_index: 1, header_text: Spread, header_signature: spr}
+          - {accession: B, table_index: 1, header_text: Interest, sub_header_text: Ref. Rate, header_signature: interest/ref.rate}
+          - {accession: B, table_index: 1, header_text: T20, header_signature: t20}
+          - {accession: B, table_index: 1, header_text: T16, header_signature: t16}
+          - {accession: B, table_index: 1, header_text: Company, header_signature: co}
+      - input: ref('int_page_schedule')
+        rows:
+          - {accession: B, table_index: 1, cik: "1", table_signature: T}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, 1 as table_index, 0::hugeint as col_start, '1' as cik,
+                 date '2026-03-31' as report_date, true as is_published, 1::bigint as positions, 'T' as table_signature,
+                 hs as header_signature, 'k' as unit_key, txt as text, 1::bigint as n_cells, txt as shape,
+                 null::varchar as code, rt as rate_text, ff as fact_fields, len(ff)::bigint as fact_count
+          from (values
+            ('B', 1, 'spr', '5.00', false, ['spread']),
+            ('B', 2, 'interest/ref.rate', 'S', false, []::varchar[]),
+            ('B', 3, 't20', '1.0%', true, []::varchar[]), ('B', 4, 't20', '1', false, []::varchar[]),
+            ('B', 5, 't20', '2', false, []::varchar[]), ('B', 6, 't20', '3', false, []::varchar[]),
+            ('B', 7, 't20', '4', false, []::varchar[]),
+            ('B', 8, 't16', '1.0%', true, []::varchar[]), ('B', 9, 't16', '1', false, []::varchar[]),
+            ('B', 10, 't16', '2', false, []::varchar[]), ('B', 11, 't16', '3', false, []::varchar[]),
+            ('B', 12, 't16', '4', false, []::varchar[]), ('B', 13, 't16', '5', false, []::varchar[]),
+            ('B', 14, 'co', 'Acme', false, []::varchar[])
+          ) t(acc, ri, hs, txt, rt, ff)
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: r1, cik: "1", target: reference_rate, action: read_printed_column, parameter: Ref. Rate}
+          - {rule_id: r2, cik: "2", target: reference_rate, action: read_printed_column, parameter: Company}
+    expect:
+      rows:
+        - {header_signature: spr, header_text: Spread, group_header_text: null, n_filings: 2, n_tables: 3, position_cells: 1, n_tag_spread: 1, has_rate_tags: true, has_rate_text: false, read_rule_ids: null, is_rate_candidate: true}
+        - {header_signature: interest/ref.rate, header_text: Ref. Rate, group_header_text: Interest, n_filings: 1, n_tables: 2, position_cells: 1, n_tag_spread: 0, has_rate_tags: false, has_rate_text: false, read_rule_ids: r1, is_rate_candidate: true}
+        - {header_signature: t20, header_text: T20, group_header_text: null, n_filings: 1, n_tables: 2, position_cells: 5, n_tag_spread: 0, has_rate_tags: false, has_rate_text: true, read_rule_ids: null, is_rate_candidate: true}
+        - {header_signature: t16, header_text: T16, group_header_text: null, n_filings: 1, n_tables: 2, position_cells: 6, n_tag_spread: 0, has_rate_tags: false, has_rate_text: false, read_rule_ids: null, is_rate_candidate: false}
+        - {header_signature: co, header_text: Company, group_header_text: null, n_filings: 1, n_tables: 2, position_cells: 1, n_tag_spread: 0, has_rate_tags: false, has_rate_text: false, read_rule_ids: null, is_rate_candidate: false}
+
+  - name: int_text_check_legend_forms
+    description: >
+      Text slice R phase 1. Three legend forms seen in the filings: 'Secured Overnight Financing Rate ("SOFR" or "S")'
+      (two codes, both rows take abbreviation SOFR), 'subject to 3 months KORIBOR ("K")' (one code; the name is one
+      capitals word, so it is the abbreviation), and, with curly quotes, 'Canadian Overnight Repo Rate Average ("CORRA" or
+      "C")'. 'Federal Funds Rate ("F")': one short code and a name in words, no abbreviation. '("GAAP")' is not a rate's
+      name and is left out. Filing B holds no schedule table: its footnote is not read.
+    model: int_text_check_legend
+    given:
+      - input: ref('int_page_table')
+        rows:
+          - {accession: A, table_index: 1, cik: "1", report_date: 2026-03-31}
+      - input: ref('stg_filed_footnote')
+        rows:
+          - {accession: A, footnote_id: f1, text: 'Loans may be determined by reference to the Secured Overnight Financing Rate ("SOFR" or "S"), in accordance with accounting principles generally accepted in the United States of America ("GAAP").'}
+          - {accession: A, footnote_id: f2, text: 'The interest rate on these loans is subject to 3 months KORIBOR ("K").'}
+          - {accession: A, footnote_id: f3, text: 'Canadian Overnight Repo Rate Average (“CORRA” or “C”), or an alternate base rate (commonly based on the Federal Funds Rate (“F”).'}
+          - {accession: B, footnote_id: f9, text: 'Prime Rate ("P")'}
+    expect:
+      rows:
+        - {accession: A, code: SOFR, name: Secured Overnight Financing Rate, abbreviation: SOFR, code_key: SOFR, abbreviation_key: SOFR, n_footnotes: 1}
+        - {accession: A, code: S, name: Secured Overnight Financing Rate, abbreviation: SOFR, code_key: S, abbreviation_key: SOFR, n_footnotes: 1}
+        - {accession: A, code: K, name: KORIBOR, abbreviation: KORIBOR, code_key: K, abbreviation_key: KORIBOR, n_footnotes: 1}
+        - {accession: A, code: CORRA, name: Canadian Overnight Repo Rate Average, abbreviation: CORRA, code_key: CORRA, abbreviation_key: CORRA, n_footnotes: 1}
+        - {accession: A, code: C, name: Canadian Overnight Repo Rate Average, abbreviation: CORRA, code_key: C, abbreviation_key: CORRA, n_footnotes: 1}
+        - {accession: A, code: F, name: Federal Funds Rate, abbreviation: null, code_key: F, abbreviation_key: null, n_footnotes: 1}
+
+  - name: int_text_check_legend_rule_states
+    description: >
+      Text slice R phase 1. A=ALPHA agrees (the legend gives A the abbreviation ALPHA); B=BETA contradicts (GAMMA); C=CORRA
+      is mixed (one filing defines C as both CDOR and CORRA); F=FEDFUNDS is unclear (no abbreviation printed); Z=ZED has
+      no legend entry; D=DELTA ends 2024-03-31 and its only legend entry is dated 2026-03-31: not in the legend in its
+      dates.
+    model: int_text_check_legend_rule
+    given:
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: a, cik: "1", target: reference_rate, action: map_code, parameter: A=ALPHA}
+          - {rule_id: b, cik: "1", target: reference_rate, action: map_code, parameter: B=BETA}
+          - {rule_id: c, cik: "1", target: reference_rate, action: map_code, parameter: C=CORRA}
+          - {rule_id: f, cik: "1", target: reference_rate, action: map_code, parameter: F=FEDFUNDS}
+          - {rule_id: z, cik: "1", target: reference_rate, action: map_code, parameter: Z=ZED}
+          - {rule_id: d, cik: "1", target: reference_rate, action: map_code, parameter: D=DELTA, valid_to: 2024-03-31}
+      - input: ref('int_text_check_legend')
+        rows:
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: A, name: Alpha Rate, abbreviation: ALPHA, code_key: A, abbreviation_key: ALPHA}
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: B, name: Gamma Rate, abbreviation: GAMMA, code_key: B, abbreviation_key: GAMMA}
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: C, name: Canadian Dollar Offered Rate, abbreviation: CDOR, code_key: C, abbreviation_key: CDOR}
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: C, name: Canadian Overnight Repo Rate Average, abbreviation: CORRA, code_key: C, abbreviation_key: CORRA}
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: F, name: Federal Funds Rate, abbreviation: null, code_key: F, abbreviation_key: null}
+          - {cik: "1", accession: X, report_date: 2026-03-31, code: D, name: Other Rate, abbreviation: OTHER, code_key: D, abbreviation_key: OTHER}
+    expect:
+      rows:
+        - {rule_id: a, agree_filings: 1, contradict_filings: 0, both_filings: 0, unclear_filings: 0, state: agrees}
+        - {rule_id: b, agree_filings: 0, contradict_filings: 1, both_filings: 0, unclear_filings: 0, state: contradicts}
+        - {rule_id: c, agree_filings: 0, contradict_filings: 0, both_filings: 1, unclear_filings: 0, state: mixed}
+        - {rule_id: f, agree_filings: 0, contradict_filings: 0, both_filings: 0, unclear_filings: 1, state: unclear}
+        - {rule_id: z, agree_filings: 0, contradict_filings: 0, both_filings: 0, unclear_filings: 0, state: not_in_legend}
+        - {rule_id: d, agree_filings: 0, contradict_filings: 0, both_filings: 0, unclear_filings: 0, state: not_in_legend}
+
+  - name: int_text_reference_rate_read_statuses
+    description: >
+      Text slice R phase 1. The fund's read_printed_column rule names "Ref. Rate", the sub-header of a two-line leaf under
+      "Interest" (a footnote mark in the sub-header is ignored). p1 "SR + 5.50%" reads SOFR (map_code SR=SOFR). p2 "C+" at
+      2026-03-31 reads CORRA (C=CORRA from 2024-06-30); p9 "C+" at 2024-03-31 reads CDOR (C=CDOR to 2024-03-31). p3 "XX+":
+      a code no rule maps. p4 "N/A": no code. p5: the column is empty on its row. p8 "Base rate (Q)": label_is_unspecified
+      "Base Rate" (case ignored). p6 sits in a table without the column. p7 is another fund's, which has no rule. p10 is
+      not placed: no row.
+    model: int_text_reference_rate_read
+    given:
+      - input: ref('int_page_position')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 11}
+          - {accession: A, context_id: p2, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 12}
+          - {accession: A, context_id: p3, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 13}
+          - {accession: A, context_id: p4, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 14}
+          - {accession: A, context_id: p5, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 15}
+          - {accession: A, context_id: p8, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 18}
+          - {accession: A, context_id: p6, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 2, row_index: 31}
+          - {accession: E, context_id: p9, cik: "1", report_date: 2024-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 11}
+          - {accession: G, context_id: p7, cik: "2", report_date: 2026-03-31, is_published: true, placement_status: one_row, table_index: 1, row_index: 11}
+          - {accession: A, context_id: p10, cik: "1", report_date: 2026-03-31, is_published: true, placement_status: not_placed}
+      - input: ref('stg_reading_rule')
+        rows:
+          - {rule_id: rc, cik: "1", target: reference_rate, action: read_printed_column, parameter: Ref. Rate}
+          - {rule_id: m1, cik: "1", target: reference_rate, action: map_code, parameter: SR=SOFR}
+          - {rule_id: m2, cik: "1", target: reference_rate, action: map_code, parameter: C=CDOR, valid_to: 2024-03-31}
+          - {rule_id: m3, cik: "1", target: reference_rate, action: map_code, parameter: C=CORRA, valid_from: 2024-06-30}
+          - {rule_id: u1, cik: "1", target: reference_rate, action: label_is_unspecified, parameter: Base Rate}
+          - {rule_id: x1, cik: "1", target: spread, action: printed_margin_cash_plus_pik}
+      - input: ref('int_page_column')
+        rows:
+          - {accession: A, table_index: 1, col_start: 0, column_index: 0, header_text: Company, header_signature: company}
+          - {accession: A, table_index: 1, col_start: 5, column_index: 1, header_text: Interest, sub_header_text: Ref. Rate, header_signature: interest/ref.rate}
+          - {accession: A, table_index: 2, col_start: 0, column_index: 0, header_text: Company, header_signature: company}
+          - {accession: E, table_index: 1, col_start: 5, column_index: 0, header_text: Interest, sub_header_text: Ref. Rate (1), header_signature: interest/ref.rate}
+          - {accession: G, table_index: 1, col_start: 5, column_index: 0, header_text: Ref. Rate, header_signature: ref.rate}
+      - input: ref('int_text_cell')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, 1 as table_index, 5::hugeint as col_start, '1' as cik,
+                 date '2026-03-31' as report_date, true as is_published, 1::bigint as positions, 'T' as table_signature,
+                 'interest/ref.rate' as header_signature, 'u' as unit_key, txt as text, 1::bigint as n_cells, txt as shape,
+                 null::varchar as code, false as rate_text, []::varchar[] as fact_fields, 0::bigint as fact_count
+          from (values ('A', 11, 'SR + 5.50%'), ('A', 12, 'C+'), ('A', 13, 'XX+'), ('A', 14, 'N/A'),
+                       ('A', 18, 'Base rate (Q)'), ('E', 11, 'C+'), ('G', 11, 'S+')) t(acc, ri, txt)
+    expect:
+      rows:
+        - {context_id: p1, status: read, code: SR, reference_rate: SOFR, map_rule_id: m1, column_rule_id: rc, cell_text: SR + 5.50%}
+        - {context_id: p2, status: read, code: C, reference_rate: CORRA, map_rule_id: m3, column_rule_id: rc, cell_text: C+}
+        - {context_id: p3, status: code_not_mapped, code: XX, reference_rate: null, map_rule_id: null, column_rule_id: rc, cell_text: XX+}
+        - {context_id: p4, status: no_code, code: null, reference_rate: null, map_rule_id: null, column_rule_id: rc, cell_text: N/A}
+        - {context_id: p5, status: cell_empty, code: null, reference_rate: null, map_rule_id: null, column_rule_id: rc, cell_text: null}
+        - {context_id: p8, status: read, code: Base rate, reference_rate: unspecified, map_rule_id: u1, column_rule_id: rc, cell_text: Base rate (Q)}
+        - {context_id: p6, status: column_not_found, code: null, reference_rate: null, map_rule_id: null, column_rule_id: null, cell_text: null}
+        - {context_id: p9, status: read, code: C, reference_rate: CDOR, map_rule_id: m2, column_rule_id: rc, cell_text: C+}
+        - {context_id: p7, status: no_rule, code: null, reference_rate: null, map_rule_id: null, column_rule_id: null, cell_text: null}
+
+  - name: int_text_check_spread_base_arithmetic
+    description: >
+      Text slice R phase 1. SOFR 3.5 on 2026-03-31. p1 spread 5.00 + 3.5 = all-in 8.50: residual 0, pass. p2 all-in 9.00:
+      residual 0.5, fail. p3 "4.00% Floor" printed: base = greatest(3.5, 4.0) = 4.0, 5 + 4 = 9.00: pass. p7 all-in 8.75:
+      residual 0.25, the tolerance itself: pass. p4 PIK 2.0: not judged. p5 no all-in rate (a cash-kind rate does not
+      count): inputs missing. p6 at 2026-09-30: the latest SOFR is 183 days old: no SOFR value. p8's code is mapped to
+      SONIA: checked the same way, is_read_sofr false. p9 has no code: no row.
+    model: int_text_check_spread_base
+    given:
+      - input: ref('int_text_reference_rate_read')
+        rows:
+          - {accession: A, context_id: p1, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
+          - {accession: A, context_id: p2, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
+          - {accession: A, context_id: p3, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: "S+500, 4.00% Floor", status: read}
+          - {accession: A, context_id: p4, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
+          - {accession: A, context_id: p5, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
+          - {accession: A, context_id: p6, cik: "1", report_date: 2026-09-30, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
+          - {accession: A, context_id: p7, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: S, reference_rate: SOFR, cell_text: S+500, status: read}
+          - {accession: A, context_id: p8, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: SN, reference_rate: SONIA, cell_text: SN+500, status: read}
+          - {accession: A, context_id: p9, cik: "1", report_date: 2026-03-31, is_published: true, unit_key: u, code: null, cell_text: N/A, status: no_code}
+      - input: ref('int_field_corrected')
+        rows:
+          - {accession: A, context_id: p1, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p1, field: interest_rate, value: 8.5, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p2, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p2, field: interest_rate, value: 9.0, rate_kind: all_in, status: corrected}
+          - {accession: A, context_id: p3, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p3, field: interest_rate, value: 9.0, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p4, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p4, field: interest_rate, value: 10.5, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p4, field: pik_rate, value: 2.0, status: normalised}
+          - {accession: A, context_id: p5, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p5, field: interest_rate, value: 8.5, rate_kind: cash, status: normalised}
+          - {accession: A, context_id: p6, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p6, field: interest_rate, value: 8.5, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p7, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p7, field: interest_rate, value: 8.75, rate_kind: all_in, status: normalised}
+          - {accession: A, context_id: p8, field: spread, value: 5.0, status: normalised}
+          - {accession: A, context_id: p8, field: interest_rate, value: 8.5, rate_kind: all_in, status: normalised}
+      - input: ref('sofr_90day_avg')
+        rows:
+          - {date: 2026-03-01, sofr_90day_avg_pct: 9.9}
+          - {date: 2026-03-31, sofr_90day_avg_pct: 3.5}
+    expect:
+      rows:
+        - {context_id: p1, is_read_sofr: true, floor: null, sofr: 3.5, base: 3.5, residual: 0.0, check_state: pass}
+        - {context_id: p2, is_read_sofr: true, floor: null, sofr: 3.5, base: 3.5, residual: 0.5, check_state: fail}
+        - {context_id: p3, is_read_sofr: true, floor: 4.0, sofr: 3.5, base: 4.0, residual: 0.0, check_state: pass}
+        - {context_id: p4, is_read_sofr: true, floor: null, sofr: 3.5, base: 3.5, residual: 2.0, check_state: pik_present}
+        - {context_id: p5, is_read_sofr: true, floor: null, sofr: 3.5, base: 3.5, residual: null, check_state: inputs_missing}
+        - {context_id: p6, is_read_sofr: true, floor: null, sofr: null, base: null, residual: null, check_state: no_sofr_value}
+        - {context_id: p7, is_read_sofr: true, floor: null, sofr: 3.5, base: 3.5, residual: 0.25, check_state: pass}
+        - {context_id: p8, is_read_sofr: false, floor: null, sofr: 3.5, base: 3.5, residual: 0.0, check_state: pass}
