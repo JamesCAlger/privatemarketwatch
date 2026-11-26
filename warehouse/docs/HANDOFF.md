@@ -927,3 +927,5 @@ Branch `warehouse-text-spec`, pull request 23 into `dev`. Slice 5 (pull request 
   with options reversed, Sonnet by default.
 - Base rates: only a SOFR table exists; it covers about 85 to 90% of floating-rate rows. Other tables need a download
   and the owner's go.
+- Owner, 2026-11-26: the model for slice R is Sonnet, run twice with the options reversed, plus the check. The
+  base-rate check uses the SOFR table only for now. Evidence: `baseline_text_agent_stability_2026-11-26.md`.
