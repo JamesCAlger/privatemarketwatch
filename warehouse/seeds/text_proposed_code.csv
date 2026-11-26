@@ -7,9 +7,9 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,16de0745a690a6bc,P,PRIME,PRIME,PRIME,PRIME,PRIME,,legend,legend,true
 2026-11-26_rates_run3,16de0745a690a6bc,S,SONIA,SONIA,SONIA,SONIA,SONIA,,legend,legend,true
 2026-11-26_rates_run3,16de0745a690a6bc,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
-2026-11-26_rates_run3,25606633f0b6d5c8,B,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,legend,legend,true
-2026-11-26_rates_run3,25606633f0b6d5c8,BB,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,common_usage,common_usage,true
-2026-11-26_rates_run3,25606633f0b6d5c8,C,CORRA,CDOR,CORRA,CORRA,CORRA,CDOR checked against the CORRA proxy series,legend,legend,true
+2026-11-26_rates_run3,25606633f0b6d5c8,B,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,legend,legend,true
+2026-11-26_rates_run3,25606633f0b6d5c8,BB,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,common_usage,common_usage,true
+2026-11-26_rates_run3,25606633f0b6d5c8,C,CORRA,CDOR,CORRA,CDOR,,,legend,legend,false
 2026-11-26_rates_run3,25606633f0b6d5c8,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
 2026-11-26_rates_run3,25606633f0b6d5c8,L,LIBOR,LIBOR,LIBOR,LIBOR,LIBOR,,common_usage,common_usage,true
 2026-11-26_rates_run3,25606633f0b6d5c8,P,PRIME,PRIME,PRIME,PRIME,PRIME,,legend,legend,true
@@ -17,8 +17,8 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,25606633f0b6d5c8,SA,SONIA,SONIA,SONIA,SONIA,SONIA,,legend,legend,true
 2026-11-26_rates_run3,25606633f0b6d5c8,SR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,35d86fe064f18517,B,BKBM,BKBM,BKBM,BKBM,BKBM,,legend,legend,true
-2026-11-26_rates_run3,35d86fe064f18517,BB,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,legend,legend,true
-2026-11-26_rates_run3,35d86fe064f18517,C,CDOR,CDOR,CORRA,CORRA,CORRA,CDOR checked against the CORRA proxy series,legend,legend,true
+2026-11-26_rates_run3,35d86fe064f18517,BB,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,legend,legend,true
+2026-11-26_rates_run3,35d86fe064f18517,C,CDOR,CDOR,CDOR,CDOR,CDOR,the level check uses the CORRA proxy series,legend,legend,true
 2026-11-26_rates_run3,35d86fe064f18517,CA,CORRA,CORRA,CORRA,CORRA,CORRA,,legend,legend,true
 2026-11-26_rates_run3,35d86fe064f18517,CI,CIBOR,CIBOR,,,,,legend,legend,true
 2026-11-26_rates_run3,35d86fe064f18517,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
@@ -29,17 +29,17 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,35d86fe064f18517,SA,SARON,SARON,SARON,SARON,SARON,,legend,legend,true
 2026-11-26_rates_run3,35d86fe064f18517,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,35d86fe064f18517,ST,STIBOR,STIBOR,STIBOR,STIBOR,STIBOR,,legend,legend,true
-2026-11-26_rates_run3,4911badeb7733932,C,CDOR,CDOR,CORRA,CORRA,CORRA,CDOR checked against the CORRA proxy series,legend,legend,true
+2026-11-26_rates_run3,4911badeb7733932,C,CDOR,CDOR,CDOR,CDOR,CDOR,the level check uses the CORRA proxy series,legend,legend,true
 2026-11-26_rates_run3,4911badeb7733932,L,LIBOR,LIBOR,LIBOR,LIBOR,LIBOR,,legend,legend,true
 2026-11-26_rates_run3,4911badeb7733932,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,4911badeb7733932,SORF,SOFR,SOFR,SOFR,SOFR,SOFR,,common_usage,common_usage,true
-2026-11-26_rates_run3,501a2d64caadc662,B,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,legend,legend,true
+2026-11-26_rates_run3,501a2d64caadc662,B,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,legend,legend,true
 2026-11-26_rates_run3,501a2d64caadc662,C,CORRA,CORRA,CORRA,CORRA,CORRA,,legend,legend,true
 2026-11-26_rates_run3,501a2d64caadc662,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
 2026-11-26_rates_run3,501a2d64caadc662,P,PRIME,PRIME,PRIME,PRIME,PRIME,,legend,legend,true
 2026-11-26_rates_run3,501a2d64caadc662,S,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,501a2d64caadc662,SA,SONIA,SONIA,SONIA,SONIA,SONIA,,legend,legend,true
-2026-11-26_rates_run3,7bedc645c1a4b49a,C,CDOR,CDOR,CORRA,CORRA,CORRA,CDOR checked against the CORRA proxy series,legend,legend,true
+2026-11-26_rates_run3,7bedc645c1a4b49a,C,CDOR,CDOR,CDOR,CDOR,CDOR,the level check uses the CORRA proxy series,legend,legend,true
 2026-11-26_rates_run3,7bedc645c1a4b49a,CI,CIBOR,CIBOR,,,,,legend,legend,true
 2026-11-26_rates_run3,7bedc645c1a4b49a,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
 2026-11-26_rates_run3,7bedc645c1a4b49a,L,LIBOR,LIBOR,LIBOR,LIBOR,LIBOR,,legend,legend,true
@@ -49,7 +49,7 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,7bedc645c1a4b49a,SA,SARON,SARON,SARON,SARON,SARON,,legend,legend,true
 2026-11-26_rates_run3,7bedc645c1a4b49a,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,7bedc645c1a4b49a,ST,STIBOR,STIBOR,STIBOR,STIBOR,STIBOR,,legend,legend,true
-2026-11-26_rates_run3,83609702e29b9631,B,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,legend,legend,true
+2026-11-26_rates_run3,83609702e29b9631,B,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,legend,legend,true
 2026-11-26_rates_run3,83609702e29b9631,BB,BKBM,BKBM,BKBM,BKBM,BKBM,,legend,legend,true
 2026-11-26_rates_run3,83609702e29b9631,BS,Bloomberg Short Term Bank Yield Index,Bloomberg Short Term Bank Yield Index,,,,,legend,legend,true
 2026-11-26_rates_run3,83609702e29b9631,C,CORRA,CORRA,CORRA,CORRA,CORRA,,legend,legend,true
@@ -75,11 +75,11 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,8900b6883e84a32c,SONIA,SONIA,SONIA,SONIA,SONIA,SONIA,,common_usage,common_usage,true
 2026-11-26_rates_run3,8900b6883e84a32c,STIBOR,STIBOR,STIBOR,STIBOR,STIBOR,STIBOR,,legend,legend,true
 2026-11-26_rates_run3,8900b6883e84a32c,T,MUTKCALM,TONAR,,TONA,,,legend,legend,false
-2026-11-26_rates_run3,9ecddf9faf035680,BBSY,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,common_usage,common_usage,true
+2026-11-26_rates_run3,9ecddf9faf035680,BBSY,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,BKBM,BKBM,BKBM,BKBM,BKBM,BKBM,,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,Base Rate,Base Rate (prime/base rate),Base rate (prime-type),PRIME,PRIME,PRIME,,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,CAD Base Rate,Canadian base rate (CAD prime),CAD Base Rate (Canadian prime),,,,Canadian prime: no series,common_usage,common_usage,true
-2026-11-26_rates_run3,9ecddf9faf035680,CDOR,CDOR,CDOR,CORRA,CORRA,CORRA,CDOR checked against the CORRA proxy series,common_usage,common_usage,true
+2026-11-26_rates_run3,9ecddf9faf035680,CDOR,CDOR,CDOR,CDOR,CDOR,CDOR,the level check uses the CORRA proxy series,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,CORRA,CORRA,CORRA,CORRA,CORRA,CORRA,,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,Euribor,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,LIBOR,LIBOR,LIBOR,LIBOR,LIBOR,LIBOR,,common_usage,common_usage,true
@@ -87,7 +87,7 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,9ecddf9faf035680,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,SONIA,SONIA,SONIA,SONIA,SONIA,SONIA,,common_usage,common_usage,true
 2026-11-26_rates_run3,9ecddf9faf035680,TONA,TONA,TONA,TONA,TONA,TONA,,common_usage,common_usage,true
-2026-11-26_rates_run3,aceeb6ccc5200e42,B,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,legend,legend,true
+2026-11-26_rates_run3,aceeb6ccc5200e42,B,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,legend,legend,true
 2026-11-26_rates_run3,aceeb6ccc5200e42,C,CORRA,CORRA,CORRA,CORRA,CORRA,,legend,legend,true
 2026-11-26_rates_run3,aceeb6ccc5200e42,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
 2026-11-26_rates_run3,aceeb6ccc5200e42,P,PRIME,PRIME,PRIME,PRIME,PRIME,,legend,legend,true
@@ -113,7 +113,7 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,d242ee8bc684a0c1,S,SONIA,SONIA,SONIA,SONIA,SONIA,,legend,legend,true
 2026-11-26_rates_run3,d242ee8bc684a0c1,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,d30801edf470bdd3,B,BKBM,BKBM,BKBM,BKBM,BKBM,,legend,legend,true
-2026-11-26_rates_run3,d30801edf470bdd3,BB,BBSY,BBSY,BBSW,BBSW,BBSW,BBSY checked against the BBSW proxy series,legend,legend,true
+2026-11-26_rates_run3,d30801edf470bdd3,BB,BBSY,BBSY,BBSY,BBSY,BBSY,the level check uses the BBSW proxy series,legend,legend,true
 2026-11-26_rates_run3,d30801edf470bdd3,CA,CORRA,CORRA,CORRA,CORRA,CORRA,,legend,legend,true
 2026-11-26_rates_run3,d30801edf470bdd3,CI,CIBOR,CIBOR,,,,,legend,legend,true
 2026-11-26_rates_run3,d30801edf470bdd3,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
@@ -124,7 +124,7 @@ run_id,unit_key,code,reference_rate_fwd,reference_rate_rev,rate_name_fwd,rate_na
 2026-11-26_rates_run3,d30801edf470bdd3,SOFR,SOFR,SOFR,SOFR,SOFR,SOFR,,legend,legend,true
 2026-11-26_rates_run3,d30801edf470bdd3,ST,STIBOR,STIBOR,STIBOR,STIBOR,STIBOR,,legend,legend,true
 2026-11-26_rates_run3,fc9493acdb2c4a08,B,BKBM,BKBM,BKBM,BKBM,BKBM,,legend,legend,true
-2026-11-26_rates_run3,fc9493acdb2c4a08,C,CDOR,CDOR,CORRA,CORRA,CORRA,CDOR checked against the CORRA proxy series,legend,legend,true
+2026-11-26_rates_run3,fc9493acdb2c4a08,C,CDOR,CDOR,CDOR,CDOR,CDOR,the level check uses the CORRA proxy series,legend,legend,true
 2026-11-26_rates_run3,fc9493acdb2c4a08,CI,CIBOR,CIBOR,,,,,legend,legend,true
 2026-11-26_rates_run3,fc9493acdb2c4a08,E,EURIBOR,EURIBOR,EURIBOR,EURIBOR,EURIBOR,,legend,legend,true
 2026-11-26_rates_run3,fc9493acdb2c4a08,L,LIBOR,LIBOR,LIBOR,LIBOR,LIBOR,,legend,legend,true

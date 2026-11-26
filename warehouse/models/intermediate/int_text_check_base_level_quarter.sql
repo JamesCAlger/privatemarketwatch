@@ -14,10 +14,22 @@
 -- alt_admissible_rates: the alternatives above var text_base_alt_max_share, comma-joined.
 -- confirmed: tested >= var text_base_confirm_min_rows (10) and share_admissible >= var text_base_confirm_min_share
 -- (0.90). discriminating: confirmed and no alternative's share is above var text_base_alt_max_share (0.50).
+-- separates_currency_bloc (fix round 1): confirmed, and no alternative rate of ANOTHER currency (mapping rate_currency
+-- below; the LIBOR proxy, fed funds and prime count as USD) is admissible for more than var text_base_alt_max_share of
+-- the rows: best_other_currency_share, other_currency_admissible_rates. EUR against USD is credited although STIBOR or
+-- KORIBOR overlap EURIBOR. Reported, not an acceptance on its own. proposed_series: the series the proposed rate is
+-- judged against (int_text_check_base_level: CDOR -> CORRA, BBSY -> BBSW).
 -- contradicted: outside >= var text_verdict_contradict_min_rows (5) and the share outside (not admissible, not floor
 -- binding) is at least var text_verdict_contradict_min_share. Reported per quarter; int_text_proposal_verdict counts
 -- base_quarters_contradicted from it but judges a code on its rows summed over quarters.
-with level as (
+with rate_currency(series_rate, currency) as (
+    -- the currency of each series rate (fix round 1, separates_currency_bloc)
+    values ('SOFR', 'USD'), ('FEDFUNDS', 'USD'), ('PRIME', 'USD'), ('LIBOR', 'USD'), ('EURIBOR', 'EUR'),
+           ('SONIA', 'GBP'), ('CORRA', 'CAD'), ('BBSW', 'AUD'), ('BKBM', 'NZD'), ('STIBOR', 'SEK'),
+           ('SARON', 'CHF'), ('NIBOR', 'NOK'), ('TONA', 'JPY'), ('KORIBOR', 'KRW')
+)
+
+, level as (
     select *, upper(replace(code, ' ', '')) as code_key
     from {{ ref('int_text_check_base_level') }}
 )
@@ -26,6 +38,7 @@ with level as (
     select code_unit_key, code_key, report_date
         , min(cik) as cik
         , min(proposed_rate) as proposed_rate
+        , min(proposed_series) as proposed_series
         , count(*) as positions
         , count(*) filter (where verdict = 'not_tested') as not_tested
         , count(*) filter (where verdict = 'no_series') as no_series
@@ -46,11 +59,14 @@ with level as (
 
 , alternative as (
     select l.code_unit_key, l.code_key, l.report_date, l.candidate_rate
+        , cc.currency is distinct from pc.currency as other_currency
         , count(*) filter (where l.verdict in ('admissible', 'floor_binding')) / count(*) as share
     from level l
     join tested_position t on t.accession = l.accession and t.context_id = l.context_id
+    left join rate_currency cc on cc.series_rate = l.candidate_rate
+    left join rate_currency pc on pc.series_rate = l.proposed_series
     where not l.is_proposed and l.verdict in ('admissible', 'floor_binding', 'outside')
-    group by 1, 2, 3, 4
+    group by 1, 2, 3, 4, 5
 )
 
 , alternative_sum as (
@@ -61,6 +77,10 @@ with level as (
         , max(share) as best_alt_share
         , string_agg(candidate_rate, ',' order by candidate_rate)
             filter (where share > {{ var('text_base_alt_max_share') }}) as alt_admissible_rates
+        , max(share) filter (where other_currency) as best_other_currency_share
+        , string_agg(candidate_rate, ',' order by candidate_rate)
+            filter (where other_currency and share > {{ var('text_base_alt_max_share') }})
+            as other_currency_admissible_rates
     from (select *, dense_rank() over (partition by code_unit_key, code_key, report_date order by candidate_rate) * 1e-6
                      as rank_name
           from alternative)
@@ -73,6 +93,7 @@ select
     , p.report_date
     , p.cik
     , p.proposed_rate
+    , p.proposed_series
     , p.positions
     , p.not_tested
     , p.no_series
@@ -90,6 +111,11 @@ select
     , coalesce(p.tested >= {{ var('text_base_confirm_min_rows') }}
         and p.admissible / nullif(p.tested, 0) >= {{ var('text_base_confirm_min_share') }}
         and coalesce(a.best_alt_share, 0) <= {{ var('text_base_alt_max_share') }}, false) as discriminating
+    , a.best_other_currency_share
+    , a.other_currency_admissible_rates
+    , coalesce(p.tested >= {{ var('text_base_confirm_min_rows') }}
+        and p.admissible / nullif(p.tested, 0) >= {{ var('text_base_confirm_min_share') }}
+        and coalesce(a.best_other_currency_share, 0) <= {{ var('text_base_alt_max_share') }}, false) as separates_currency_bloc
     , coalesce(p.outside >= {{ var('text_verdict_contradict_min_rows') }}
         and p.outside / nullif(p.tested, 0) >= {{ var('text_verdict_contradict_min_share') }}, false) as contradicted
 from proposed p

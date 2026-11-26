@@ -25,11 +25,21 @@
 --                  the base the loan pays is its floor. Applied above and below the range: a floor above every value of
 --                  the window (2022, rates near zero) puts the implied base above the range.
 --   outside
--- is_proposed: the candidate is the proposed rate. code_unit_key, code: the proposal (the column unit and the code)
+-- proposed_series: the series rate the proposed rate is judged against. Mapping proxy_series (fix round 1), the only
+-- place it exists: CDOR -> CORRA, BBSY -> BBSW (each pair has one public series, the same OECD proxy); every other
+-- rate is its own series. Everywhere else CDOR, CORRA, BBSY and BBSW are four rates.
+-- is_proposed: the candidate is the proposed rate's series. code_unit_key, code: the proposal (the column unit and the code)
 -- int_text_check_base_level_quarter groups by.
-with pos as (
+with proxy_series(rate_name, series_rate) as (
+    -- the only place CDOR and BBSY meet CORRA and BBSW: their one public series is the same OECD proxy
+    values ('CDOR', 'CORRA'), ('BBSY', 'BBSW')
+)
+
+, pos as (
     select
-        accession, context_id, cik, report_date, is_published, rate_name as proposed_rate, code, code_unit_key
+        accession, context_id, cik, report_date, is_published, rate_name as proposed_rate
+        , coalesce((select series_rate from proxy_series ps where ps.rate_name = p.rate_name), rate_name) as proposed_series
+        , code, code_unit_key
         , code_shape_key, p_floor as floor
         , coalesce(p_spread, t_spread) as spread
         , case when p_spread is not null then 'printed' when t_spread is not null then 'tag' end as spread_source
@@ -41,7 +51,7 @@ with pos as (
             when coalesce(t_all_in, p_all_in_rate) is null then 'no_all_in'
             else 'usable'
           end as input_state
-    from {{ ref('int_text_rate_proposed_position') }}
+    from {{ ref('int_text_rate_proposed_position') }} p
     where rate_name is not null
 )
 
@@ -49,7 +59,7 @@ with pos as (
     select p.*, w.rate_name as candidate_rate
     from pos p
     join {{ ref('int_text_base_rate_window') }} w on w.report_date = p.report_date
-    where p.input_state = 'usable' or w.rate_name = p.proposed_rate
+    where p.input_state = 'usable' or w.rate_name = p.proposed_series
 )
 
 , measured as (
@@ -72,7 +82,8 @@ select
     , code
     , proposed_rate
     , candidate_rate
-    , candidate_rate = proposed_rate as is_proposed
+    , proposed_series
+    , candidate_rate = proposed_series as is_proposed
     , input_state
     , spread
     , spread_source

@@ -6,7 +6,7 @@
 --   spread -> spread    all_in_rate -> interest_rate (rate_kind all_in)    cash_rate -> interest_rate_cash
 --   pik_rate -> pik_rate    pik_spread -> pik_rate (a PIK spread is the only PIK number such a cell prints, and the
 --   filers tag it as the PIK rate; int_text_check_shape_legs, phase 1 section 14)
---   fixed_rate -> interest_rate (any rate_kind among the normalised: a fixed coupon is tagged as the interest rate)
+--   fixed_rate -> interest_rate (rate_kind all_in, as for all_in_rate: a fixed coupon is tagged as the interest rate)
 -- floor has no tag at any of the five funds: not compared here (it is tested by int_text_check_leg_arithmetic (d)).
 -- verdict: equal (abs(value - tag) <= var text_number_tolerance, 0.005 percentage points), differs, no_tag (no
 -- normalised tag of that field on the position). interest_rate_cash: for most filers the spine derives it (all-in less
@@ -28,7 +28,7 @@ with read_number as (
     select accession, context_id, field as tag_field, any_value(value) as tag_value
     from {{ ref('int_field_normalised') }}
     where field in ('spread', 'interest_rate', 'interest_rate_cash', 'pik_rate') and status = 'normalised'
-        and value is not null
+        and value is not null and (field <> 'interest_rate' or rate_kind = 'all_in')
     group by 1, 2, 3
 )
 

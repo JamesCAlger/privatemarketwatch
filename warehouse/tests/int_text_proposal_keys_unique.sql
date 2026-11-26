@@ -34,7 +34,8 @@ select 'int_text_check_code_legend', unit_key || '|' || code_key || '|' || acces
 from {{ ref('int_text_check_code_legend') }} group by 1, 2 having count(*) > 1
 union all
 select 'int_text_proposal_verdict'
-    , proposal_kind || '|' || unit_key || '|' || coalesce(shape, '~') || '|' || coalesce(code, '~'), count(*)
+    , proposal_kind || '|' || unit_key || '|' || coalesce(shape, '~') || '|' || coalesce(cast(number_index as varchar), '~')
+      || '|' || coalesce(code, '~'), count(*)
 from {{ ref('int_text_proposal_verdict') }} group by 1, 2 having count(*) > 1
 union all
 select 'int_text_proposal_verdict', 'column|' || p.unit_key, 0
@@ -45,6 +46,12 @@ select 'int_text_proposal_verdict', 'shape|' || p.unit_key || '|' || p.shape, 0
 from (select distinct unit_key, shape from {{ ref('text_proposed_shape_role') }}) p
 anti join {{ ref('int_text_proposal_verdict') }} v
     on v.proposal_kind = 'shape' and v.unit_key = p.unit_key and v.shape = p.shape
+union all
+select 'int_text_proposal_verdict', 'role|' || p.unit_key || '|' || p.shape || '|' || p.number_index, 0
+from {{ ref('text_proposed_shape_role') }} p
+anti join {{ ref('int_text_proposal_verdict') }} v
+    on v.proposal_kind = 'role' and v.unit_key = p.unit_key and v.shape = p.shape and v.number_index = p.number_index
+where p.number_index > 0
 union all
 select 'int_text_proposal_verdict', 'code|' || p.unit_key || '|' || p.code, 0
 from {{ ref('text_proposed_code') }} p

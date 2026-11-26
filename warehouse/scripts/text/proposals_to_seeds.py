@@ -15,9 +15,10 @@ text_proposed_shape_role  one row per (unit, shape, number_index): the role of t
                           of different length make every row of the shape "not same". roles_fit_shape: both lists hold
                           exactly as many roles as the shape has '#'. A shape answered in one order only is "not same".
 text_proposed_code        one row per (unit, code): the reference rate named in each order, rate_name_fwd/_rev (the name
-                          normalised to the rate_name vocabulary of seed base_rate_series, empty when it maps to none),
+                          normalised to the rate_name vocabulary of seed base_rate_series plus CDOR and BBSY, empty when
+                          it maps to none; CDOR, CORRA, BBSY and BBSW stay four names),
                           rate_name (the agreed name when both orders give the same normalised name, else empty),
-                          rate_name_note (a proxy: CDOR is checked against the CORRA series, BBSY against BBSW), basis in
+                          rate_name_note (CDOR and BBSY: the level check uses the CORRA and BBSW proxy series), basis in
                           each order, same_in_both_orders (normalised names compared; two unmapped names are compared as
                           upper-cased text, so "NIBOR" and "Norwegian Interbank Offered Rate" are the same).
 """
@@ -26,13 +27,15 @@ import json
 import sys
 from pathlib import Path
 
-# Normalisation, first match wins (upper-cased text searched for each needle). Order matters: CDOR and BBSY are tested
-# before the names they are proxied by; Canadian prime is tested before PRIME (not the US prime rate: no series).
+# Normalisation, first match wins (upper-cased text searched for each needle). CDOR, CORRA, BBSY and BBSW are four
+# rates (fix round 1): the shared proxy series is a matter for the level check only. Order matters: CDOR and BBSY are
+# tested before CORRA and BBSW ("Bank Bill Swap Bid" would otherwise match the BBSW needle "Bank Bill
+# Swap"); Canadian prime is tested before PRIME (not the US prime rate: no series).
 NAME_RULES = [
     (("CANADIAN PRIME", "CAD PRIME", "CAD BASE RATE", "CANADIAN BASE"), "", "Canadian prime: no series"),
-    (("CDOR", "CANADIAN DOLLAR OFFERED"), "CORRA", "CDOR checked against the CORRA proxy series"),
+    (("CDOR", "CANADIAN DOLLAR OFFERED"), "CDOR", "the level check uses the CORRA proxy series"),
     (("CORRA", "CANADIAN OVERNIGHT REPO"), "CORRA", ""),
-    (("BBSY", "BANK BILL SWAP BID"), "BBSW", "BBSY checked against the BBSW proxy series"),
+    (("BBSY", "BANK BILL SWAP BID"), "BBSY", "the level check uses the BBSW proxy series"),
     (("BBSW", "BANK BILL SWAP"), "BBSW", ""),
     (("BKBM", "BANK BILL BENCHMARK", "NEW ZEALAND BANK BILL"), "BKBM", ""),
     (("SOFR", "SECURED OVERNIGHT FINANCING"), "SOFR", ""),

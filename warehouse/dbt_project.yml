@@ -102,6 +102,10 @@ vars:
   text_verdict_confirm_min_share: 0.9
   text_verdict_contradict_min_rows: 5
   text_verdict_contradict_min_share: 0.1
+  # Fix round 1: a check contradicts SMALL (verdict contradicted_small, never accepted) on at least small_min_rows
+  # disagreeing rows AND at least small_min_share of its compared rows: a total failure on few rows.
+  text_verdict_small_min_rows: 2
+  text_verdict_small_min_share: 0.5
   # A PIK rate above the all-in rate tag by more than this (percentage points) contradicts rate_is_all_in: production's
   # own margin (pipeline/financial_conventions.py prepare: pik > reported_rate + 0.01).
   pik_above_rate_margin: 0.01
@@ -371,13 +375,14 @@ vars:
     int_text_legend_rule_disagrees: 4
     # (fund, code) pairs printed in rate-candidate columns with neither a rule nor a legend entry: 12.
     int_text_code_no_rule_no_legend: 12
-    # Text slice R phase 2, measured 2026-11-26 (docs/baseline_text_rates_phase2_2026-11-26.md). Proposed-read rows
-    # whose k-th number does not parse: 0.
-    int_text_rate_proposed_number_not_parsed: 0
-    # Agent proposals the checks contradict: 3 (two SOFR code mappings, failed by the base-level check in the 2022
-    # quarters when term SOFR ran above overnight SOFR; one "S+#, #% Floor" shape, failed by the floor test on 5 rows
-    # whose all-in tag holds the spread or the floor).
-    int_text_proposal_contradicted: 3
+    # Text slice R phase 2, measured 2026-11-26 (docs/baseline_text_rates_phase2_2026-11-26.md).
+    # Agent proposals the checks contradict, kinds column, role and code (fix round 1 redefined it per number role; it
+    # was 3 over shapes and codes): 6. Codes 4 (two SOFR mappings failed by the base level in 2022; two codes whose
+    # legend names change over time, exposed once CDOR/CORRA and BBSY/BBSW became four names); roles 2 (spread and
+    # floor of one floor shape, all-in tag holding the spread or floor).
+    int_text_proposal_contradicted: 6
+    # Fix round 1: proposals failing a check on 2+ rows and half of its rows (verdict contradicted_small): 9.
+    int_text_proposal_contradicted_small: 9
     # Leg identity rows that fail: 18 (a 4, b 1, c 3, d 8, f 2; section 3 of the note lists each).
     int_text_leg_identity_fail: 18
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause

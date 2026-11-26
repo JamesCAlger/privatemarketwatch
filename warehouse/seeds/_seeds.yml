@@ -401,9 +401,10 @@ seeds:
       reference rate an agent proposed each code printed in a rate-candidate column stands for, in forward and
       reversed option order (same run and script as text_proposed_column). rate_name_fwd/_rev: the answer normalised to
       the rate_name vocabulary of seed base_rate_series (SOFR, EURIBOR, SONIA, LIBOR, PRIME, CORRA, BBSW, BKBM, STIBOR,
-      SARON, NIBOR, TONA, KORIBOR, FEDFUNDS), empty where it maps to none (CIBOR, SORA, the Bloomberg short-term bank
-      yield index, Canadian prime, not_a_code). CDOR is normalised to CORRA and BBSY to BBSW (rate_name_note says so):
-      the only series for them is the same OECD proxy. rate_name: the agreed normalised name when both orders give the
+      SARON, NIBOR, TONA, KORIBOR, FEDFUNDS) plus CDOR and BBSY, empty where it maps to none (CIBOR, SORA, the Bloomberg
+      short-term bank yield index, Canadian prime, not_a_code). Fix round 1: CDOR, CORRA, BBSY and BBSW are four names
+      here and everywhere downstream; only int_text_check_base_level reads CDOR against the CORRA proxy series and BBSY
+      against the BBSW one (rate_name_note says so). rate_name: the agreed normalised name when both orders give the
       same, else empty. same_in_both_orders: normalised names equal (two answers that map to no name are compared as
       upper-cased text, or by the rule that matched them). basis: legend, common_usage, cannot_tell or not_a_code, per
       order. Key: (run_id, unit_key, code), tests/int_text_proposal_keys_unique.sql.
@@ -436,4 +437,4 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['SOFR', 'EURIBOR', 'SONIA', 'LIBOR', 'PRIME', 'CORRA', 'BBSW', 'BKBM', 'STIBOR', 'SARON',
-                         'NIBOR', 'TONA', 'KORIBOR', 'FEDFUNDS']
+                         'NIBOR', 'TONA', 'KORIBOR', 'FEDFUNDS', 'CDOR', 'BBSY']

@@ -27,7 +27,6 @@
 -- status, number rows, the first that applies:
 --   no_proposal        the shape has no proposal (the bundle's shape cap left it out)
 --   shape_unstable     the two orders differ on some number of the shape, or a role list does not fit the shape
---   number_not_parsed  the k-th number does not parse as a number
 --   role_cannot_tell   the proposed role is cannot_tell
 --   not_a_rate_role    the proposed role is pct_of_net_assets or other_number
 --   read
@@ -96,7 +95,6 @@ with proposed_unit as (
         , case
             when not has_proposal then 'no_proposal'
             when not shape_stable then 'shape_unstable'
-            when number_value is null then 'number_not_parsed'
             when role = 'cannot_tell' then 'role_cannot_tell'
             when role in ('pct_of_net_assets', 'other_number') then 'not_a_rate_role'
             when role is null then 'shape_unstable'

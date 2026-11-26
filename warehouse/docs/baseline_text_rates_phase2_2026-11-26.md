@@ -9,6 +9,9 @@ spine, staging or mart model reads; no rule was written to a wrapper. **No page 
 means the proposal is consistent with the filer's tags, its footnote legend and public rate series. It does not mean a
 value is correct.
 
+**Fix round 1 (review of 14c870e2) changed the verdict grain, the rate names, identity a, the contradiction rule and
+the level check: section 10 holds where it disagrees with sections 1 to 9.**
+
 Funds: Ares (0001287750), BCRED (0001803498), Blue Owl (0001812554), Apollo (0001837532), HPS (0001838126).
 
 ## 1. What was built
@@ -68,7 +71,8 @@ matches its unit upper-cased.
 
 Rows not read (`int_text_rate_proposed` status): shape_unstable 90 rows (BCRED 47, Blue Owl 33, Apollo 10); no_proposal
 4 (Apollo); not_a_rate_role 5,730 (Blue Owl's two share-of-net-assets columns); code_unstable 5, not_a_code 7 (Apollo);
-no_value 1,615 ("N/A" and the like); number_not_parsed 0; role_cannot_tell 0.
+no_value 1,615 ("N/A" and the like); role_cannot_tell 0. (number_not_parsed was removed in fix round 1: the number
+pattern is digits only, so the cast cannot fail.)
 
 ### 3.2 Printed number against the tag (`int_text_check_number_tag`; tolerance 0.005)
 
@@ -94,14 +98,16 @@ no_value 1,615 ("N/A" and the like); number_not_parsed 0; role_cannot_tell 0.
 
 The 47 differences (`q_s6_differs.sql`), by kind:
 
-- Ares "#% (#% PIK)" 13: the PIK part printed in brackets (e.g. "10.35% (3.00% PIK)") against a PIK tag of another value
-  (9.57 on the example row); Ares "#% PIK" 1 ("19.00% PIK" against 12.29). Ares spread "#%" 3 and all-in "#%" 2: one
+- Ares "#% (#% PIK)" 13 (corrected in fix round 1): on all 13 rows the PIK tag equals the printed all-in rate (e.g.
+  "10.35% (3.00% PIK)" with PIK tag 10.35) and there is no interest-rate tag: the filer tags the coupon under the PIK
+  concept; Ares "#% PIK" 1 ("19.00% PIK" against 12.29). Ares spread "#%" 3 and all-in "#%" 2: one
   value printed, another tagged (6.00 / 5.75).
 - BCRED all-in "#%" 9: printed coupon differs from the tag (e.g. 5.84 printed against 8.63 tagged; 2022-09-30).
 - Blue Owl "SR+#% (#% PIK)" 6: the PIK tag equals the spread (5.75), not the printed PIK part (2.50). Blue Owl "SR+#" 2:
   the cell prints "SR + 0.0725", a fraction; the tag is 7.25 (the proposal reads 0.0725 as a percent).
-- Apollo fixed "#%" 4: tag 0.07 against "10.36%" (a tag in a fraction-scale left unconverted). Apollo "S+#, #% Floor" 2:
-  "S+385" against a spread tag 0.38 (tag scale). Apollo "#% Cash plus #% PIK, #% Floor" 2 and "#% Cash plus #% PIK" 1:
+- Apollo fixed "#%" 4: tag 0.07 against "10.36%" (cause not traced). Apollo "S+#, #% Floor" 2:
+  "S+385" against a spread tag 0.38 and "S+450" against 0.50 (not a scale factor: neither tag is the printed
+  spread over 10 or 100; cause not traced). Apollo "#% Cash plus #% PIK, #% Floor" 2 and "#% Cash plus #% PIK" 1:
   the cash part against the spine's cash leg (all-in tag less PIK): the filer tags the cash part as its interest rate,
   so the spine's all-in reading leaves a cash leg of 6.25 against a printed 12.50 (and 0 against 5.38). Apollo
   "S+225 Cash plus 2.75% PIK, 0.50% PIK" 2: two PIK numbers in one cell.
@@ -266,7 +272,8 @@ Rates with fewer than 10 tested rows in every quarter (Ares NIBOR, BBSW, BKBM, T
 BBSW; HPS BBSW, CORRA, PRIME, NIBOR, STIBOR, TONA, BKBM): never confirmed, never contradicted.
 
 - **Confirmed and discriminating: only the prime rate** (Ares "Base Rate" all 17 quarters; BCRED P 3 quarters). Prime
-  sits 3 points above every other rate.
+  sits 3 points above every other rate. Ares "Base Rate" is probably the alternate base rate (at or near prime): the
+  check confirms a prime-like level, not which definition.
 - **Confirmed, not discriminating: every other mapping.** SOFR cannot be told from fed funds in any quarter (the two
   move together within about 0.1) nor from the LIBOR proxy; from SONIA in 13 of 17 (Ares) and 22 of 27 (BCRED)
   quarters (2023-2026 SONIA ran within 0.5 of SOFR). EURIBOR cannot be told from STIBOR and KORIBOR (near 2.0 to 3.5
@@ -348,8 +355,8 @@ no rate check applies) and Apollo "S+# Cash plus #% PIK, #% PIK" (2 positions, t
   and the PIK-spread margin; the base-rate window (190 days, monthly overlap, stale, no values, averages not used); the
   base-level verdicts incl. floor binding; the quarter's confirmed / discriminating / contradicted; the verdict rules.
 - Keys and coverage: `tests/int_text_proposal_keys_unique.sql`; seed hashes: `tests/seed_base_rate_hash_matches.sql`.
-- Baselines (measured): `int_text_rate_proposed_number_not_parsed` 0, `int_text_proposal_contradicted` 3,
-  `int_text_leg_identity_fail` 18.
+- Baselines (measured): `int_text_proposal_contradicted` 3 (redefined in fix round 1, section 10),
+  `int_text_leg_identity_fail` 18; `int_text_rate_proposed_number_not_parsed` 0 was removed in fix round 1.
 - Full build (`dbt.ps1 build --threads 2`, log `scratch/2026-11-26_text_slice_r2/full_build.log`): `PASS=1081 WARN=125
   ERROR=0 TOTAL=1206` (was 997 / 123 / 1120; the 2 new warnings are the contradicted and identity-fail baselines).
 - CI fixture (`ci/run_fixture_build.py`, local, new folder): step 4 `PASS=3`; build `PASS=673 WARN=5 ERROR=0
@@ -369,7 +376,9 @@ no rate check applies) and Apollo "S+# Cash plus #% PIK, #% PIK" (2 positions, t
 4. Shape stability is per shape (any number differing makes every number of the shape unread), not per number.
 5. A PIK spread is compared with the PIK rate tag; a fixed rate with the interest rate tag.
 6. Ares "Base Rate" normalises to PRIME from the agent's words "prime/base rate"; the level check then confirms and
-   discriminates it in every quarter.
+   discriminates it in every quarter. It is probably the alternate base rate of US credit agreements (the greater of
+   prime, fed funds + 0.50 and one-month term SOFR + 1.00), which sits at or near prime: the check confirms a prime-like
+   level, not the definition.
 7. The level check takes the all-in rate from the tag first, else the printed proposal (the brief says tagged). It adds
    11 usable rows (a printed all-in rate where no all-in tag exists).
 8. Floor binding applies above and below the range (the brief said below): below cannot be explained by a floor, above
@@ -394,3 +403,187 @@ no rate check applies) and Apollo "S+# Cash plus #% PIK, #% PIK" (2 positions, t
 - Blue Owl and Apollo code mappings: no all-in rate, so no level check; Blue Owl's SR and L have no legend in most
   filings.
 - Term SOFR: not available, so 2022 SOFR quarters cannot be judged.
+
+## 10. Fix round 1 (review of 14c870e2, 2026-11-26)
+
+Reviewer queries `scripts/text/review_r3_*.sql` (not committed); queries of this round `scripts/text/q_s8_*.sql`,
+`q_s9_*.sql`. Still proposals only, nothing published, no page read; passing is consistency, not correctness.
+
+### 10.1 What changed
+
+| # | Finding | Change |
+|---|---|---|
+| 1 | A multi-number shape was accepted when one number was checked | `int_text_proposal_verdict` gains kind `role` (unit, shape, number index, role) with its own evidence and verdict. A role with no check that can test it is `needs_owner`, reason `no_check_exists` (every floor; a number whose field is never tagged on its rows). A shape is `accepted_by_check` only when every role is; `partly_accepted` lists `roles_accepted` / `roles_not_accepted` |
+| 2 | CDOR/CORRA and BBSY/BBSW were merged outside the level check | Four names in the seeds (script re-run), the proposed read, the legend check (macro `base_rate_name`) and the verdict; same-in-both-orders compares those names; a filing whose legend gives two names is `mixed`. The proxy mapping exists only as `proxy_series` inside `int_text_check_base_level` |
+| 3 | Identity a restated the number-tag comparison | Every identity row carries `lhs_source`, `rhs_source`, `independence`, `counts_as_confirming`. a counts only with a printed cash leg and not all three parts printed; e always; b, c, d, f never (they can only contradict) |
+| 4 | BCRED 2022-09-30 row shift | Traced in the filed layer (10.4); no model changed |
+| 5 | Total failures on few rows passed | New verdict `contradicted_small`: a check failing on at least 2 rows AND at least half its compared rows (vars `text_verdict_small_min_rows`, `text_verdict_small_min_share`); never accepted |
+| 6 | Currency bloc | `int_text_check_base_level_quarter.separates_currency_bloc` (with `best_other_currency_share`, `other_currency_admissible_rates`); reported, not an acceptance |
+| 7 | Small items | `number_not_parsed` status and its baseline removed (unreachable); `int_text_check_number_tag` filters the interest-rate tag to rate kind all-in, as its header says; doc corrections in 3.2 and 8 |
+
+### 10.2 Verdicts before and after
+
+| Kind | Before (14c870e2) | After |
+|---|---|---|
+| Columns (31) | accepted 26, needs_owner 4, unstable 1 | accepted 26, needs_owner 4 (no_check_exists 3, below_bar 1), unstable 1 |
+| Shapes (284) | accepted 146, needs_owner 74, unstable 7, contradicted 1, nothing_to_read 56 | accepted 116 (98,069 positions), partly_accepted 29 (1,264), needs_owner 71 (5,866), unstable 7, contradicted 1 (3,875), contradicted_small 4 (2,345), nothing_to_read 56 |
+| Codes (134) | accepted 70, needs_owner 60, unstable 2, contradicted 2 | accepted 66 (32,993), needs_owner 59, unstable 3, contradicted 4 (663), contradicted_small 2 (6,372) |
+| Roles (new) | - | below |
+
+Roles by role type (count, positions of the role's shape in brackets):
+
+| Role | accepted | no_check_exists | too_few_rows | contradicted | contradicted_small | other |
+|---|---|---|---|---|---|---|
+| spread_bps | 15 (925) | 22 (189) | 9 (51) | 1 (3,875) | 1 (2,339) | - |
+| spread_pct | 71 (50,883) | 4 (150) | 30 (48) | - | 1 (2) | - |
+| floor_pct | 0 | 37 (1,105) | - | 1 (3,875) | 1 (2,339) | unstable 1 (2) |
+| all_in_rate_pct | 17 (43,512) | - | 8 (20) | - | - | unstable 1 (2) |
+| cash_rate_pct | 0 | - | 1 (1) | - | 1 (2) | unstable 1 (7) |
+| pik_rate_pct | 41 (5,487) | 4 (7) | 30 (63) | - | 3 (6) | unstable 2 (9) |
+| pik_spread_pct | 9 (306) | - | 3 (5) | - | - | unstable 1 (4) |
+| fixed_rate_pct | 7 (828) | - | - | - | - | unstable 3 (66) |
+| pct_of_net_assets, other_number | - | - | - | - | - | role_not_a_rate 2 (5,730); unstable 1 (19) |
+
+No floor is accepted anywhere: no filer tags a floor, and the floor identity (d) can only contradict. The 29
+partly-accepted shapes are Apollo floor shapes (25 shapes, 1,114 positions: spread accepted, floor no_check_exists) and
+Blue Owl "SR+#% (#% PIK)", "E+#% (#% PIK)" and two more (4 shapes, 150 positions: the PIK part accepted, the spread never
+compared because no spread tag exists on those rows).
+
+What moved from accepted:
+- Shapes: 29 -> partly_accepted (above); Apollo "S+#, #% Floor" [8900b6] (2,339 positions) -> contradicted_small (its
+  floor identity fails on all 3 rows that carry an all-in tag, the tag holding the floor; the spread equals its tag on
+  2,337 of 2,338 rows).
+- Codes: HPS B (now BBSY, 113 positions) and HPS C (CORRA, 35) -> contradicted. The legends define B as BBSW in seven
+  filings to 2024-09-30, both names in 2024-12-31, BBSY from 2025; C as CDOR in nine filings to 2025-03-31, both in
+  three, CORRA from 2026-03-31 (`q_s8_legend_bc.sql`). The agent gave the latest name; a dated rule is needed. Apollo
+  S=SOFR in two units (3,969 and 2,403 positions) -> contradicted_small: the fund's only 5 rows with an all-in tag (3 and
+  2 per unit) fall outside every window because that tag holds the spread (section 3.3); the legend agrees in 15
+  filings.
+- Codes, other moves: Blue Owl C [256066] (17 positions) needs_owner -> unstable (CORRA in one order, CDOR in the
+  other). BCRED C stays accepted, now as CDOR.
+
+### 10.3 Identity a and independence
+
+Of 2,742 a rows, 2,739 have a tagged cash leg (the spine's all-in less PIK) and are `not_independent`: they restate the
+number-tag equality and no longer confirm anything. The 3 independent rows (Apollo, printed "Cash plus PIK" pairs against
+an all-in tag) all fail, so identity a confirms no role. Sides: a cash + PIK (lhs) against all-in (rhs); b PIK against
+all-in; c cash against all-in; d all-in against margin + floor; e tagged spread against printed spread + PIK spread; f
+printed against printed. b, c, d and f rows can only contradict. Failures unchanged: 18 (`int_text_leg_identity_fail`).
+
+### 10.4 The BCRED 2022-09-30 row shift (finding, no fix)
+
+Filing 0001803498-22-000021, printed rows 826 to 835 (`q_s9_shift.sql`, `q_s9_shift_rows.sql`). The placement is right;
+the filer's tagging is shifted. Every fact is placed on the row it is printed on, and each position's fair value and
+spread facts are on the position's own row, but the interest-rate fact printed on row r belongs to the context of the
+position on row r-1. Three rows from the filed layer:
+
+| Printed row | Row's cells (company, code, spread, rate) | Interest-rate fact placed on this row (value, context) | That context's position row |
+|---|---|---|---|
+| 826 | Cloudera, Inc.: L +, 3.75%, 6.87% | 6.87, ...4478a68a41766914abe2 | none (a context with no position) |
+| 827 | Community Brands ParentCo, LLC: SOFR +, 5.75%, 8.88% | 8.88, ...40069ca3602a385a1f23 | 826 (Cloudera's position) |
+| 828 | next company: 8.74% printed | 8.74, ...4d66aa5e1f5b8ee3ab16 | 827 (Community Brands) |
+
+Context ...40069ca...'s fair value (53,696) and spread (3.75) facts are on row 826; only its interest rate sits on row 827.
+Rows up to 825 and from 836 on are in step. Positions affected: 10 (rows 826 to 835). For 9 of them (826 to 834) the
+spine's tagged interest rate is the next row's printed rate, a neighbour's rate; the position on row 835 has no
+interest-rate tag; the rate printed on row 826 is tagged to a context with no position. The proposals read each printed
+rate on its own row, hence the 9 number-tag differences and 3 identity-c failures.
+
+### 10.5 Small contradictions and fraction-printed spreads
+
+`contradicted_small` (ceiling `int_text_proposal_contradicted_small` 9, roles and codes; lists in 10.7):
+- Blue Owl "SR+#" [256066]: "SR + 0.0725" read as a spread of 0.0725 percent; the tag is 7.25. The right reading is a
+  spread printed as a fraction (times 100), a role the option list does not have. It is the only shape where a read
+  number below 1 has a tag 100 times larger (`q_s9_fraction.sql`: 2 rows). The other read numbers below 1 (PIK parts of
+  0.25 to 0.75, a 0.75 spread, two 0.95 coupons; `q_s9_fraction_all.sql`) have no such tag.
+- Apollo "S+#, #% Floor" [8900b6] spread and floor (3 of 3 floor-identity rows fail); "#% Cash plus #% PIK, #% Floor"
+  [b4ee19] cash and PIK (the all-in tag holds the cash part); "S+# Cash plus #% PIK, #% PIK" [8900b6] both PIK numbers
+  (one cell prints two PIK rates); Apollo S=SOFR in two units (above).
+Large populations with a few outliers stay out: Ares SOFR (54 outside of 10,076 tested) is needs_owner (weak_only).
+
+Contradicted (ceiling `int_text_proposal_contradicted`, redefined over roles and codes: 6): the two BCRED SOFR codes
+of the 2022 tables (base level, 2022 term SOFR), HPS B and C (dated legends, above), and the spread and floor roles of
+Apollo "S+#, #% Floor" [b4ee19] (5 of 5 floor-identity rows fail: all-in tag holds the spread or floor). The ceiling
+was 3 over shapes and codes; it is redefined, not loosened: under the old scope it would now read 5, the two new
+codes being exposed by the four rate names.
+
+### 10.6 Base level: what the check establishes
+
+`separates_currency_bloc` (no rate of another currency admissible for more than 50% of the rows) is true only for the
+prime rate (Ares "Base Rate" 17 of 17 quarters, BCRED P 3 of 3). For every other mapping some rate of another currency
+passes: the monthly OECD proxies of NZD, AUD, NOK, KRW, SEK and CAD sit at the same levels as USD, GBP or EUR in many
+quarters (`q_s9_bloc.sql`: Ares SOFR rows pass as BKBM in 14 of 17 quarters and as SONIA in 13; EURIBOR rows pass as
+KORIBOR and STIBOR in every quarter). On the definition: STIBOR and KORIBOR are other currencies than EUR, so the
+definition as briefed lets them block EUR; the EUR-against-USD separation shows only pairwise:
+
+Pairwise (`review_r3_swap.sql`, run here): EURIBOR rows read as SOFR are 0 to 3% admissible from 2023-06-30 on (54% at
+2023-03-31, 90 to 100% in 2022); SOFR rows read as EURIBOR 0 to 6% in every quarter (0 to 3% from 2022-12-31); PRIME
+rows read as SOFR 0 to 4.5%; SOFR rows read as prime 0 to 0.5% from 2023-03-31 (28 to 37% in 2022). But SOFR rows pass
+as fed funds (73 to 100%) and as the LIBOR proxy (98 to 100%) in every quarter, and as SONIA in 2024 to 2026 (59 to
+100%); SONIA rows pass as SOFR in every quarter.
+
+**What the check establishes:** the level of the currency bloc since mid-2023 (a USD loan is not read as EUR, nor the
+reverse), and prime against everything else. **What it does not:** which dollar rate (SOFR, fed funds and the LIBOR proxy
+cannot be told apart in any quarter), SOFR against SONIA from 2024, or any currency in 2022, when every series moved
+together.
+
+### 10.6b Tests and build (fix round 1)
+
+Unit tests changed or added: the verdict rules (a two-number shape with the spread checked and the floor not:
+partly_accepted; contradicted_small; leg evidence that does and does not count), the leg identities (sides,
+independence, an all-printed row that cannot count), the base level (a CDOR proposal judged on the CORRA series), the
+quarter (separates_currency_bloc). Baselines: `int_text_proposal_contradicted` 6 (redefined), new
+`int_text_proposal_contradicted_small` 9, `int_text_leg_identity_fail` 18. Full build (`--threads 2`, log
+`scratch/2026-11-26_text_slice_r2/full_build_fix1.log`): `PASS=1084 WARN=126 ERROR=0 TOTAL=1210`. pytests 180 passed. CI
+fixture: step 4 `PASS=3`; build `PASS=677 WARN=5 ERROR=0 TOTAL=682`; empty run `PASS=2`; unit tests `PASS=70`.
+
+### 10.7 Open proposals, full lists grouped by reason
+
+Positions in brackets (for roles and shapes, the positions of the shape). `q_s9_open_lists.sql`.
+
+- **code contradicted_small, Apollo** (2, 6372 positions): S=SOFR (3969); S=SOFR (2403)
+- **code needs_owner / no_check_exists, Ares** (1, 2 positions): CAD Base Rate=Canadian base rate (CAD prime) (2)
+- **code needs_owner / no_check_exists, BCRED** (4, 15 positions): CI=CIBOR (8); CI=CIBOR (5); CI=CIBOR (1); CI=CIBOR (1)
+- **code needs_owner / no_check_exists, Blue Owl** (6, 5032 positions): SR=SOFR (3407); SR=SOFR (1343); L=LIBOR (208); L=LIBOR (70); P=PRIME (3); BB=BBSY (1)
+- **code needs_owner / no_check_exists, Apollo** (3, 364 positions): SONIA=SONIA (208); SONIA=SONIA (153); N=NIBOR (3)
+- **code needs_owner / no_check_exists, HPS** (2, 21 positions): SORA=SORA (13); BS=Bloomberg Short Term Bank Yield Index (8)
+- **code needs_owner / role_not_a_rate, Apollo** (3, 7 positions): Equity plus=(not a code) (3); Variable=(not a code) (2); Equity plus=(not a code) (2)
+- **code needs_owner / too_few_rows, Ares** (4, 56 positions): NIBOR=NIBOR (18); BBSY=BBSY (17); BKBM=BKBM (14); TONA=TONA (7)
+- **code needs_owner / too_few_rows, BCRED** (17, 28 positions): B=BKBM (4); ST=STIBOR (2); ST=STIBOR (2); CA=CORRA (2); S=SONIA (2); P=PRIME (2); SA=SARON (2); P=PRIME (2); BB=BBSY (2); C=CDOR (1); E=EURIBOR (1); N=NIBOR (1); CA=CORRA (1); N=NIBOR (1); SORF=SOFR (1); B=BKBM (1); P=PRIME (1)
+- **code needs_owner / too_few_rows, Blue Owl** (5, 59 positions): P=PRIME (26); SA=SONIA (25); B=BBSY (4); B=BBSY (3); B=BBSY (1)
+- **code needs_owner / too_few_rows, Apollo** (6, 29 positions): SARON=SARON (12); K=KORIBOR (6); K=KORIBOR (4); T=TONA (3); SARON=SARON (3); NIBOR=NIBOR (1)
+- **code needs_owner / too_few_rows, HPS** (1, 2 positions): BB=BKBM (2)
+- **code needs_owner / weak_only, Ares** (6, 13202 positions): SOFR=SOFR (11359); LIBOR=LIBOR (1308); Euribor=EURIBOR (172); CORRA=CORRA (144); SONIA=SONIA (131); CDOR=CDOR (88)
+- **code needs_owner / weak_only, BCRED** (1, 22 positions): S=SOFR (22)
+- **code unstable, Blue Owl** (1, 17 positions): C=CORRA|CDOR (17)
+- **code unstable, Apollo** (2, 5 positions): T=MUTKCALM|TONAR (4); N=(not a code)|NIBOR (1)
+- **column needs_owner / below_bar, Ares** (1, 15233 positions): 1de53b4d55ea4050 all_in_rate (15233)
+- **column needs_owner / no_check_exists, Ares** (1, 13657 positions): 9ecddf9faf035680 reference_rate_code (13657)
+- **column needs_owner / no_check_exists, Blue Owl** (2, 3643 positions): 501a2d64caadc662 reference_rate_code (2109); aceeb6ccc5200e42 reference_rate_code (1534)
+- **column unstable, Blue Owl** (1, 1416 positions): 0dd66cba8d2b8641 rate_terms (1416)
+- **role contradicted_small, Blue Owl** (1, 2 positions): "SR+#" #1 spread_pct (2)
+- **role contradicted_small, Apollo** (6, 4686 positions): "S+#, #% Floor" #1 spread_bps (2339); "S+#, #% Floor" #2 floor_pct (2339); "S+# Cash plus #% PIK, #% PIK" #2 pik_rate_pct (2); "S+# Cash plus #% PIK, #% PIK" #3 pik_rate_pct (2); "#% Cash plus #% PIK, #% Floor" #1 cash_rate_pct (2); "#% Cash plus #% PIK, #% Floor" #2 pik_rate_pct (2)
+- **role needs_owner / no_check_exists, BCRED** (2, 2 positions): "#%.(incl. #% PIK)" #2 pik_rate_pct (1); "#%.(incl. #% PIK)" #2 pik_rate_pct (1)
+- **role needs_owner / no_check_exists, Blue Owl** (4, 150 positions): "SR+#% (#% PIK)" #1 spread_pct (117); "S+#% (#% PIK)" #1 spread_pct (15); "E+#% (#% PIK)" #1 spread_pct (13); "L+#% (#% PIK)" #1 spread_pct (5)
+- **role needs_owner / no_check_exists, Apollo** (61, 1299 positions): "E+#, #% Floor" #2 floor_pct (218); "SONIA+#, #% Floor" #2 floor_pct (201); "E+#, #% Floor" #2 floor_pct (169); "SONIA+#, #% Floor" #2 floor_pct (135); "L+#, #% Floor" #2 floor_pct (65); "S+# Cash plus #% PIK, #% Floor" #3 floor_pct (62); "S+# Cash plus #% PIK, #% Floor" #1 spread_bps (62); "S+# Cash plus #% PIK, #% Floor" #1 spread_bps (35); "S+# Cash plus #% PIK, #% Floor" #3 floor_pct (35); "C+#, #% Floor" #2 floor_pct (25); "P+#, #% Floor" #2 floor_pct (25); "P+#, #% Floor" #2 floor_pct (22); "SONIA+# Cash plus #% PIK, #% Floor" #3 floor_pct (18); "SONIA+# Cash plus #% PIK, #% Floor" #1 spread_bps (18); "BBSW+#, #% Floor" #2 floor_pct (17); "STIBOR+#, #% Floor" #2 floor_pct (10); "S+# (Includes #% PIK), #% Floor" #3 floor_pct (10); "BBSW+#, #% Floor" #2 floor_pct (10); "E+# Cash plus #% PIK, #% Floor" #3 floor_pct (10); "E+# Cash plus #% PIK, #% Floor" #1 spread_bps (10); "S+# (Includes #% PIK), #% Floor" #1 spread_bps (10); "STIBOR+#, #% Floor" #2 floor_pct (10); "S+# Cash (includes #% PIK)" #1 spread_bps (8); "S+# Cash plus #% PIK" #1 spread_bps (7); "K+#, #% Floor" #2 floor_pct (6); "C+#, #% Floor" #2 floor_pct (6); "SARON+#, #% Floor" #2 floor_pct (6); "SONIA+# Cash plus #% PIK, #% Floor" #1 spread_bps (5); "SONIA+# Cash plus #% PIK, #% Floor" #3 floor_pct (5); "T+#, #% Floor" #2 floor_pct (4); "E+# Cash plus #% PIK, #% Floor" #3 floor_pct (4); "BBSW+# Cash plus #% PIK, #% Floor" #1 spread_bps (4); "E+# Cash plus #% PIK, #% Floor" #1 spread_bps (4); "BBSW+# Cash plus #% PIK, #% Floor" #3 floor_pct (4); "K+#, #% Floor" #2 floor_pct (4); "E+# (Includes #% PIK)" #1 spread_bps (4); "Equity plus #% PIK, #% Floor" #1 pik_rate_pct (3); "SARON+# Cash plus #% PIK, #% Floor" #1 spread_bps (3); "L+# Cash plus #% PIK" #1 spread_bps (3); "SARON+# Cash plus #% PIK, #% Floor" #3 floor_pct (3); "SARON+# (Includes #% PIK)" #1 spread_bps (3); "T+#, #% Floor" #2 floor_pct (3); "SARON+#, #% Floor" #2 floor_pct (3); "N+#, #% Floor" #2 floor_pct (3); "Equity plus #% PIK, #% Floor" #2 floor_pct (3); "E+# Cash plus #% PIK" #1 spread_bps (2); "SONIA+# (Includes #% PIK)" #1 spread_bps (2); "Equity plus #% PIK" #1 pik_rate_pct (2); "STIBOR+# Cash plus #% PIK, #% Floor" #1 spread_bps (2); "#% Cash plus #% PIK, #% Floor" #3 floor_pct (2); "STIBOR+# Cash plus #% PIK, #% Floor" #3 floor_pct (2); "S+# Cash plus #% PIK, #% PIK" #1 spread_bps (2); "STIBOR+# (Inlcudes #% PIK)" #1 spread_bps (2); "BBSW+# Cash plus #% PIK, #% Floor" #1 spread_bps (1); "N+#, #% Floor" #2 floor_pct (1); "S+# Cash plus #% PIK, # Floor" #3 floor_pct (1); "NIBOR+#, #% Floor" #2 floor_pct (1); "BBSW+# Cash plus #% PIK, #% Floor" #3 floor_pct (1); "#% (includes #% PIK), #% Floor" #3 floor_pct (1); "L+# Cash (includes #% PIK)" #1 spread_bps (1); "S+# Cash plus #% PIK, # Floor" #1 spread_bps (1)
+- **role needs_owner / role_not_a_rate, Blue Owl** (2, 5730 positions): "#%" #1 pct_of_net_assets (4333); "#%" #1 pct_of_net_assets (1397)
+- **role needs_owner / too_few_rows, Ares** (3, 4 positions): "#%PIK" #1 pik_rate_pct (2); "#% (#%PIK)" #1 all_in_rate_pct (1); "#% (#%PIK)" #2 pik_rate_pct (1)
+- **role needs_owner / too_few_rows, BCRED** (35, 57 positions): "#% (incl. #% PIK)" #2 pik_rate_pct (4); "#% (incl. #% PIK)" #1 all_in_rate_pct (4); "B+#%" #1 spread_pct (4); "BB+#%" #1 spread_pct (2); "#% PIK" #1 pik_rate_pct (2); "S+#%" #1 spread_pct (2); "#%" #1 pik_rate_pct (2); "ST+#%" #1 spread_pct (2); "# (incl. #% PIK)" #2 pik_rate_pct (2); "P+#%" #1 spread_pct (2); "ST+#%" #1 spread_pct (2); "# (incl. #% PIK)" #1 all_in_rate_pct (2); "SA+#%" #1 spread_pct (2); "P+#%" #1 spread_pct (2); "L+#% PIK" #1 pik_spread_pct (2); "CA+#%" #1 spread_pct (2); "L+#% (incl. #% PIK)" #1 spread_pct (1); "L+#% (incl. #% PIK)" #1 spread_pct (1); "B+#%" #1 spread_pct (1); "CI+#%" #1 spread_pct (1); "L+#% PIK" #1 pik_spread_pct (1); "E+#%" #1 spread_pct (1); "N+#%" #1 spread_pct (1); "CI+#%" #1 spread_pct (1); "SORF+#%" #1 spread_pct (1); "CA+#%" #1 spread_pct (1); "#%.(incl. #% PIK)" #1 all_in_rate_pct (1); "L+#% (incl. #% PIK)" #2 pik_rate_pct (1); "N+#%" #1 spread_pct (1); "P+#%" #1 spread_pct (1); "#%.(incl. #% PIK)" #1 all_in_rate_pct (1); "L+#% (incl. #% PIK)" #2 pik_rate_pct (1); "C+#%" #1 spread_pct (1); "#% PIK" #1 pik_rate_pct (1); "#% PIK" #1 pik_rate_pct (1)
+- **role needs_owner / too_few_rows, Blue Owl** (4, 6 positions): "P+#%" #1 spread_pct (3); "BB+#%" #1 spread_pct (1); "B+#%" #1 spread_pct (1); "#" #1 spread_pct (1)
+- **role needs_owner / too_few_rows, Apollo** (27, 93 positions): "S+# (includes #% PIK)" #1 spread_bps (28); "#% (includes #% PIK)" #1 all_in_rate_pct (6); "P+#" #1 spread_bps (4); "T+#, #% Floor" #1 spread_bps (4); "E+# Cash plus #% PIK, #% Floor" #2 pik_rate_pct (4); "E+# (Includes #% PIK)" #2 pik_rate_pct (4); "K+#, #% Floor" #1 spread_bps (4); "BBSW+# Cash plus #% PIK, #% Floor" #2 pik_rate_pct (4); "SARON+#, #% Floor" #1 spread_bps (3); "T+#, #% Floor" #1 spread_bps (3); "N+#, #% Floor" #1 spread_bps (3); "L+# Cash plus #% PIK" #2 pik_rate_pct (3); "SARON+# (Includes #% PIK)" #2 pik_rate_pct (3); "SARON+# Cash plus #% PIK, #% Floor" #2 pik_rate_pct (3); "STIBOR+# (Inlcudes #% PIK)" #2 pik_rate_pct (2); "STIBOR+# Cash plus #% PIK, #% Floor" #2 pik_rate_pct (2); "E+# Cash plus #% PIK" #2 pik_rate_pct (2); "SONIA+# (Includes #% PIK)" #2 pik_rate_pct (2); "BBSW+# Cash plus #% PIK, #% Floor" #2 pik_rate_pct (1); "L+# Cash (includes #% PIK)" #2 pik_rate_pct (1); "N+#, #% Floor" #1 spread_bps (1); "NIBOR+#, #% Floor" #1 spread_bps (1); "#% Cash plus #% PIK" #2 pik_rate_pct (1); "#% Cash plus #% PIK" #1 cash_rate_pct (1); "S+# Cash plus #% PIK, # Floor" #2 pik_rate_pct (1); "#% (includes #% PIK), #% Floor" #1 all_in_rate_pct (1); "#% (includes #% PIK), #% Floor" #2 pik_rate_pct (1)
+- **role needs_owner / too_few_rows, HPS** (12, 28 positions): "#% (incl #% PIK)" #1 all_in_rate_pct (4); "#% (incl #% PIK)" #2 pik_rate_pct (4); "B+#% (incl #% PIK)" #1 spread_pct (2); "SF+#% (incl. #% PIK)" #1 spread_pct (2); "BB+#%" #1 spread_pct (2); "L+#% PIK" #1 pik_spread_pct (2); "SF+#% (incl #%PIK)" #1 spread_pct (2); "P+#% (incl #% PIK)" #1 spread_pct (2); "B+#% (incl #% PIK)" #2 pik_rate_pct (2); "SF+#% (incl. #% PIK)" #2 pik_rate_pct (2); "SF+#% (incl #%PIK)" #2 pik_rate_pct (2); "P+#% (incl #% PIK)" #2 pik_rate_pct (2)
+- **role unstable, BCRED** (2, 47 positions): "#%" #1 fixed_rate_pct (34); "#%" #1 fixed_rate_pct (13)
+- **role unstable, Blue Owl** (4, 52 positions): "#%" #1 fixed_rate_pct (19); "(em dash)%" #1 other_number (19); "#% (#% PIK)" #1 cash_rate_pct (7); "#% (#% PIK)" #2 pik_rate_pct (7)
+- **role unstable, Apollo** (4, 10 positions): "S+# PIK" #1 pik_spread_pct (4); "#% Cash plus #% PIK, #% Floor" #2 pik_rate_pct (2); "#% Cash plus #% PIK, #% Floor" #3 floor_pct (2); "#% Cash plus #% PIK, #% Floor" #1 all_in_rate_pct (2)
+- **shape contradicted_small, Blue Owl** (1, 2 positions): "SR+#" (2)
+- **shape contradicted_small, Apollo** (3, 2343 positions): "S+#, #% Floor" (2339); "S+# Cash plus #% PIK, #% PIK" (2); "#% Cash plus #% PIK, #% Floor" (2)
+- **shape needs_owner, Ares** (2, 3 positions): "#%PIK" (2); "#% (#%PIK)" (1)
+- **shape needs_owner, BCRED** (31, 49 positions): "#% (incl. #% PIK)" (4); "B+#%" (4); "#% PIK" (2); "ST+#%" (2); "#%" (2); "CA+#%" (2); "SA+#%" (2); "P+#%" (2); "# (incl. #% PIK)" (2); "ST+#%" (2); "P+#%" (2); "L+#% PIK" (2); "S+#%" (2); "BB+#%" (2); "C+#%" (1); "#% PIK" (1); "CI+#%" (1); "L+#% (incl. #% PIK)" (1); "E+#%" (1); "#% PIK" (1); "#%.(incl. #% PIK)" (1); "CA+#%" (1); "CI+#%" (1); "L+#% PIK" (1); "N+#%" (1); "L+#% (incl. #% PIK)" (1); "P+#%" (1); "N+#%" (1); "SORF+#%" (1); "B+#%" (1); "#%.(incl. #% PIK)" (1)
+- **shape needs_owner, Blue Owl** (6, 5736 positions): "#%" (4333); "#%" (1397); "P+#%" (3); "B+#%" (1); "#" (1); "BB+#%" (1)
+- **shape needs_owner, Apollo** (25, 62 positions): "P+#" (4); "E+# (Includes #% PIK)" (4); "BBSW+# Cash plus #% PIK, #% Floor" (4); "K+#, #% Floor" (4); "T+#, #% Floor" (4); "E+# Cash plus #% PIK, #% Floor" (4); "Equity plus #% PIK, #% Floor" (3); "SARON+# Cash plus #% PIK, #% Floor" (3); "SARON+# (Includes #% PIK)" (3); "SARON+#, #% Floor" (3); "T+#, #% Floor" (3); "N+#, #% Floor" (3); "L+# Cash plus #% PIK" (3); "Equity plus #% PIK" (2); "E+# Cash plus #% PIK" (2); "STIBOR+# Cash plus #% PIK, #% Floor" (2); "SONIA+# (Includes #% PIK)" (2); "STIBOR+# (Inlcudes #% PIK)" (2); "#% Cash plus #% PIK" (1); "NIBOR+#, #% Floor" (1); "L+# Cash (includes #% PIK)" (1); "BBSW+# Cash plus #% PIK, #% Floor" (1); "S+# Cash plus #% PIK, # Floor" (1); "#% (includes #% PIK), #% Floor" (1); "N+#, #% Floor" (1)
+- **shape needs_owner, HPS** (7, 16 positions): "#% (incl #% PIK)" (4); "B+#% (incl #% PIK)" (2); "SF+#% (incl. #% PIK)" (2); "L+#% PIK" (2); "P+#% (incl #% PIK)" (2); "BB+#%" (2); "SF+#% (incl #%PIK)" (2)
+- **shape partly_accepted, Blue Owl** (4, 150 positions): "SR+#% (#% PIK)" (117); "S+#% (#% PIK)" (15); "E+#% (#% PIK)" (13); "L+#% (#% PIK)" (5)
+- **shape partly_accepted, Apollo** (25, 1114 positions): "E+#, #% Floor" (218); "SONIA+#, #% Floor" (201); "E+#, #% Floor" (169); "SONIA+#, #% Floor" (135); "L+#, #% Floor" (65); "S+# Cash plus #% PIK, #% Floor" (62); "S+# Cash plus #% PIK, #% Floor" (35); "S+# (includes #% PIK)" (28); "C+#, #% Floor" (25); "P+#, #% Floor" (25); "P+#, #% Floor" (22); "SONIA+# Cash plus #% PIK, #% Floor" (18); "BBSW+#, #% Floor" (17); "E+# Cash plus #% PIK, #% Floor" (10); "STIBOR+#, #% Floor" (10); "STIBOR+#, #% Floor" (10); "BBSW+#, #% Floor" (10); "S+# (Includes #% PIK), #% Floor" (10); "S+# Cash (includes #% PIK)" (8); "S+# Cash plus #% PIK" (7); "SARON+#, #% Floor" (6); "K+#, #% Floor" (6); "#% (includes #% PIK)" (6); "C+#, #% Floor" (6); "SONIA+# Cash plus #% PIK, #% Floor" (5)
+- **shape unstable, BCRED** (2, 47 positions): "#%" (34); "#%" (13)
+- **shape unstable, Blue Owl** (3, 45 positions): "(em dash)%" (19); "#%" (19); "#% (#% PIK)" (7)
+- **shape unstable, Apollo** (2, 6 positions): "S+# PIK" (4); "#% Cash plus #% PIK, #% Floor" (2)
