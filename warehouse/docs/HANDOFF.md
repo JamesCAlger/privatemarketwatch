@@ -1,6 +1,6 @@
 # Handoff: data-model redesign in `warehouse/`
 
-**Current state: read "State after slice 3 (amounts), 2026-11-22" further down (with its final fix wave). The sections before it are history.**
+**Current state: read "RESUME HERE" and "State after slice 5 (corrections), 2026-11-25" near the end. The sections before them are history.**
 
 Written 2026-11-18 at the end of the session that built steps 1 and 2. Read this first, then the documents it points to.
 
@@ -674,9 +674,175 @@ Waiting on it: 716 amount field rows and 520 published rate field rows marked `n
 ### Plan after this slice (owner, 2026-11-23; a plan, not done)
 
 One catch-up merge of the trunk into `main`, which needs the owner's explicit go. Then short branches
-off `main`, one per slice; slice 5 would be the first.
+off `main`, one per slice; slice 5 would be the first. (Superseded 2026-11-24 by AGENTS.md: the trunk is
+`dev`, `main` is the published site; slice branches come off `dev`. Slice 5 was cut from `dev`.)
 
-## RESUME HERE (updated 2026-11-23, after slice 4)
+## State after slice 5 (corrections), 2026-11-25
+
+A passing build and agreement with production show the layer is consistent and agrees with the old
+pipeline where stated. They do not show the data is correct. The corrections applied here are
+production's own: applying them makes the two pipelines agree, and no check here compares a correction
+with the filing. A value both pipelines hold wrongly in the same way counts as equal.
+
+### Where the work lives
+
+Branch `warehouse-slice5`, worktree `.claude/worktrees/warehouse-dbt`, cut from `dev` at 7eac03c0. Commits 5b200726
+(plan) to the Task 6 commit, local, NOT pushed. The plan line "short branches off `main`" (Plan after this slice,
+above) is superseded by AGENTS.md: the trunk is `dev`, `main` is the published site; slice branches come off `dev`
+and are merged by pull request.
+
+### What is built
+
+| Task | What | Commits |
+|---|---|---|
+| Plan | `docs/2026-11-24-slice5-corrections-plan.md` (owner answers: all seven decisions as recommended, D20 to D26) | 5b200726, 744d28b8 |
+| 1 | `int_field_normalised` split into `int_amount_normalised` and `int_rate_normalised` (a view unites them); macro `rate_reading`; seed `unit_kind`; slice 4 minors | 8dc29093 |
+| 2 | Inventory of correction stores; the loader reads the two agent stores (loader version 6); seed `correction_field`; `stg_correction_rule` | df2de147, b8b052b4 |
+| 3 | Corrections applied to amounts and to the row set: `int_correction_target`, `int_correction_screen`, `int_correction_fair_value_cell`, `int_row_corrected`, `int_field_reread`, `int_correction_application`, `int_field_corrected` | 253ff75d, d2378a8f, 2b476c24 |
+| 4 | Corrections on rates (the rate reading runs again on corrected inputs); `int_rate_adjacent` (Ares rule, D24); `int_rate_corrected_input`, `int_rate_corrected` | 33ae2adb, da17b7e9 |
+| 5 | `cmp_row_set`, `cmp_amount`, `cmp_rate` read the corrected values; BCRED trace | 615f863e, 282283ad (review fixes) |
+| 6 | Consolidation measurements (baseline section 5), CI fixture corrections, these records | the Task 6 commit |
+
+Plain-language guide: `README.md`, "Corrections: what is applied and what is recorded". Counts and causes:
+`docs/baseline_corrections_2026-11-24.md`. Ledger and task reports: `.superpowers/sdd/2026-11-24-slice5-corrections-plan/`
+(git-ignored).
+
+### How to run, and the last results
+
+| Command | Last result (2026-11-25) |
+|---|---|
+| `.\warehouse\dbt.ps1 build` | `PASS=830 WARN=115 ERROR=0 TOTAL=945` (slice 4 ended at 690 / 106 / 0 / 796) |
+| `.\warehouse\.venv\Scripts\python.exe -m pytest -c warehouse\pytest.ini warehouse\pytests -q` | 175 passed (146 before the slice) |
+| `.\warehouse\.venv\Scripts\python.exe warehouse\ci\run_fixture_build.py --work <empty folder>` | step 4 `PASS=3`; build `PASS=428 WARN=5 ERROR=0 TOTAL=433`; empty run `PASS=2`; unit-test and drift step `PASS=45` |
+
+### Counts
+
+Outcomes of the 4,411 loaded corrections (4,414 targets: one identifier text can name several rows):
+
+| Outcome | Targets | Main reasons |
+|---|---:|---|
+| applied | 1,508 | (amounts, rates, companions; 60 contexts become positions) |
+| no_op | 154 | `equal_to_normalised` 126, `evidence_only` 16, `already_absent` 9, `procedure_not_built` 3 |
+| rejected | 1 | `bridge_ambiguous` (one Blue Owl identifier names two contexts in production) |
+| failed | 8 | `rate_reading_unresolved` 7 (Blue Owl), `conversion_unresolved` 1 (the Apollo cost, owner item c) |
+| deferred | 2,743 | `field_not_held` 2,541 (names, classes, industry, reference-rate text, relabels), `no_companion_column` 202 |
+
+Rows corrections make positions: 60 (`correction_supplies_fair_value` 44 Apollo zero lines, `correction_supplies_term`
+8, `correction_adds_row` 8 Ares). The production bridge: 67 corrections (D21, a debt).
+
+Comparison with production on the corrected values (Task 5, with the Part A labels of Task 6):
+
+- `needs_correction` was 716 amount rows, 598 rate rows (454 published) and 52 position rows; now 0 everywhere except
+  the one Apollo cost (own ceiling 1).
+- `not_yet_explained` and `new_wrong`: 0 on every field and basis, except the 2 `cmp_row_set` rows unchanged since
+  slice 2.
+- No published fair value, cost or principal that was equal before the slice differs now.
+
+Consolidation measures (baseline section 5): all 4,411 corrections are pinned to one row; 8 agent rules are
+reusable (all row removals, not applied here). 1,732 of 3,978 value corrections make the same fix to the same
+position (production's position id) in two or more quarters; 1,122 of them are on fields this layer does not hold
+yet.
+
+### Owner decisions open (slice 5)
+
+| # | Question | State now |
+|---|---|---|
+| a | Two Apollo spreads (0000950170-24-031479 C_1de7bac0, 0000950170-24-058684 C_a98dfaae): a PIK correction makes the row's spread rule need the printed total margin. Keep the spread as before (4.5, production's value), or leave it unread like its filed peers? | Left unread. `cmp_rate` `owner_review` `pik_correction_leaves_spread_unread`, own ceiling 2 |
+| b | The 14 BCRED structured-credit "Units" lines: is the amount a par or a unit count? (next to D17) | Production empties the principal (traced, baseline 4.4); here `owner_review` `principal_emptied_before_section_reclass`, 14 + 14 |
+| c | One Apollo cost differs from production (0000950170-24-094137 C_f9b16d68; production 41,554,000). This layer cannot sign the untagged value without its print, so the correction fails (`conversion_unresolved`). An exception to D1 "cost to the dollar": acknowledge it, or fix it (read the print) | Recorded exception, own ceiling 1 |
+| d | The production bridge (D21): 67 corrections find their row through production's holdings file. A named debt: they must be re-keyed by context before this layer can replace production | Built, ceiling 67 |
+| e | 7 Blue Owl rate corrections no rule can read (`failed`): the rows keep their rate fields as before. Production has no rate on them either | Left failed, both sides empty |
+| f | Push branch `warehouse-slice5` and open the pull request into `dev` | Not pushed |
+
+### Owner answers on items a to f (2026-11-25, after the slice)
+
+Detail and evidence: `docs/baseline_corrections_2026-11-24.md` section 6. Branch `warehouse-slice5-owner-items`,
+cut from `warehouse-slice5`. This block supersedes the "State now" column of the table above.
+
+| # | Owner answer | State now |
+|---|---|---|
+| a | Asked how production got 4.5: it is the filed spread tag times 100 (the PIK rate 4.5 is a correction). No change asked | Left unread, ceiling 2, until the printed text is read |
+| b | "check" | Checked on all 14: principal equals cost to the dollar, USD, a maturity date. A dollar amount. Now `old_wrong` `principal_emptied_before_section_reclass`, 14 + 14. The header reads "Par Amount/Units" and does not settle it; footnote (1) not read |
+| c | Asked why this value and not the others; fix agreed | Fixed: a value a correction supplies is not put to the printed-sign test. The cost applies and equals production. Ceilings now 0. applied 1,509, failed 7 |
+| d | "understood" | Unchanged: 67 corrections, a named debt |
+| e | Asked for an example (Aptive Environmental, Blue Owl, 12.00% (6.00% PIK)) | Left failed. Candidate for the consolidation exercise: a Blue Owl reading for a fixed coupon tagged as a spread |
+| f | "yes" | Pushed; pull request 22 into `dev`. CI: `warehouse`, `python-tests`, `frontend-build` passed; the Vercel preview deployment failed (not examined) |
+
+Results on that branch (2026-11-25): `.warehousedbt.ps1 build` `PASS=833 WARN=113 ERROR=0 TOTAL=946`; `warehouse/pytests` 175 passed. The CI fixture was not run locally (it names nothing changed here); the pull request run covers it. Ceiling raised: published costs changed by a correction 21 to 22 (the Apollo cost, named in `dbt_project.yml`).
+
+Also open, not owner questions yet:
+
+- HPS whole-coupon PIK is not built (D24): a named difference, 44 cash legs and 44 PIK rates.
+- The printed rows of the 7 Ares adjacent pairs were not opened (values equal production's on every tagged field).
+- The review minors parked in the ledger (Deferred, below).
+
+### Rulings made without the owner (slice 5), with the cost if wrong
+
+From the ledger (`progress.md`, every `Ruling:` line). Each was made by the controller.
+
+| Task | Ruling | Cost if wrong |
+|---|---|---|
+| Plan | The root `.gitattributes` may be edited only to add a `-text` line for a new hash-bound file; nothing else outside `warehouse/` except the Task 6 changelog entry | One extra line in a root file |
+| Plan | Owner answer (b) (apply a zero fair value only where the print shows a dash or zero) binds Task 3 over its "all 44" text | None |
+| 1 | `seeds/manager_brand.csv` stays exempt from "no fund name in a seed": it is a generated reference list of all funds, not a rule | One seed carries fund names until it moves to a source |
+| 1 | The implementer's foreign-currency pattern (any three capitals except USD) replaces the brief's faulty one | None measured |
+| 1 | Seed rows `iso4217:USD/shares` and `utr:Q` (kind other) accepted | None: no value reads them |
+| 2 | Four stores outside the plan's table (`agent_anchor`, a `.proposed` section bridge, `fund_highlights_wrappers`, `position_id_registry/retirements.csv`) are not holdings corrections | A value-changing store not applied; Task 5's comparison would show it |
+| 2 | Production's B2 "interest_rate 0.0 kind cash" is loaded as `interest_rate_cash`, never as the all-in rate | One Ares row's rate legs |
+| 2 | The loader's silent skip of `.review.` files becomes a load error (done in Task 3) | A build stops on a file production would load |
+| 3 | The 8 Ares `add_row` contexts may be promoted although their role rule is 1 (owner decision 1 approved loading them; all 8 match production to the dollar) | 8 rows and their ceiling come out |
+| 3 | The move of six model bodies into macros stands (tables identical row for row) | A future macro edit affects both runs |
+| 3 | Extra models `int_correction_screen`, `int_correction_fair_value_cell`, `int_field_reread`, the FX-rate columns and four new outcome reasons accepted, each under a ceiling | Surface area only |
+| 4 | Three `text_not_read` ceilings +1 (Ares c-1268, a taker that takes only a PIK rate) and `cash_equals_all_in` +3 (c-1446, c-1475, c-165), each row named | 4 rows hidden under a ceiling |
+| 4 | The printed rows of the 7 adjacent pairs were not opened (the brief asked for 3); values equal production's on every tagged field | A pair both pipelines take wrongly |
+| 4 | Review minor 3 (two Apollo spreads lose a value production keeps) is a named difference and owner item (a); reading not changed | 2 spreads empty that production holds |
+| 5 | The 14 BCRED principals become `owner_review`, `principal_emptied_before_section_reclass` (done in Task 6 Part A) | A label |
+| 5 | Currency detail `filled_principal_currency_blank_in_production` (2) becomes `old_wrong`; `untagged_principal_currency_blank_in_production` (3) stays `convention`, listed as unverified | A label |
+| 5 | The Apollo cost that differs from production is a recorded exception to D1, owner item (c) | One cost differs |
+| 6 | The wider repeat definitions (the quarter taken from the production row; every repeating fix counted) are the main measure, 1,732; the plan appendix's narrower ones, 1,707, are stated beside them and reconcile exactly | The owner reads 1,732 where 1,707 was meant |
+
+### Deferred (minor, from the slice 5 ledger)
+
+- Task 1: the fund-name guard does not scan `dbt_project.yml` or `pytests/`; 12 copies of the unit_kind input in
+  unit tests; a hard-coded target list in `reading_rule_amount_action_has_field.sql`; `rate_rule_wide` takes cik and
+  report date from the interest_rate row only; one line over 120 columns.
+- Task 2: no automated test that a drift failure fails; floats stored with `repr` in `agent_stores._text`.
+- Task 4 review: no unit test of `int_rate_corrected_input`; the branches `pik_above_rate`, `kind_not_decidable`,
+  `rate_reading_unresolved` are untested; no unit test of a taker reading its giver's facts;
+  `int_field_corrected_rate_legs` cannot fail today; a kind correction equal to the kind before is not an override
+  (0 rows); context ids that are UUIDs have no number for the adjacent rule (check before funds 0001766037 and
+  0001859919 come into scope); the brief's "6 published rows" was 5.
+- Task 5 review: `correction_applied_value_differs` is checked after the mechanism rules and tests only the field's
+  own correction id (0 rows affected today); the reviewer's snapshot comparison used the implementer's files.
+- Final review: `owner_review|principal_emptied_before_section_reclass` keeps the old signature as its condition
+  (nothing checks the section re-class happened; ceiling 14 stops growth, not a swap); `needs_store_not_loaded` is
+  also used for production steps not built here (for example the dedupe fill), a pattern older than this slice; the
+  README Corrections section says "removing it from the store and reloading" of stores that are production's and
+  read-only; the Blue Owl exclusion that selects one identifier is classed reusable by hand; the CI fixture has no
+  failed correction; the over- and under-counts of the repeat measure (baseline 5.4).
+
+### Left for slice 6
+
+Owner clarification of D5 (2026-11-25, spec D28): every unresolved row or field is either corrected (it leaves the
+list) or deliberately marked as ignored with a reason. The review list is a work queue that goes to zero, not a
+report. Slice 6 needs a place to record the "ignored" decision.
+
+- `int_observation`: one row per position, date and field, the published value with its rule and correction
+  (spec section 6, the model after the corrections).
+- Findings: a correction that did not apply (rejected, failed), an unresolved field and an unresolved row become
+  findings (spec section 7, D5).
+- The first-run review list for the owner (D5): every unresolved row and field listed once; later runs list only
+  new ones.
+
+## RESUME HERE (updated 2026-11-25, after slice 5)
+
+Slice 5 (corrections) is built and committed on branch `warehouse-slice5` (worktree
+`.claude/worktrees/warehouse-dbt`), pushed, pull request 22 into `dev`. The owner answered items a to f on 2026-11-25
+("Owner answers on items a to f" above; the changes are on branch `warehouse-slice5-owner-items`). Earlier text: next were the owner's answers on
+the six open items there (a to f; f is the push and the pull request into `dev`), then slice 6
+(`int_observation`, findings, the first-run review list). Branches come off `dev`, not `main` (AGENTS.md).
+
+The text below is the earlier RESUME HERE (after slice 4), kept for its history.
 
 Slice 4 (rates) is built and committed on branch `warehouse-dbt` (worktree
 `.claude/worktrees/warehouse-dbt`), NOT pushed. Read "State after slice 4" above. Next: the owner's

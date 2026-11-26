@@ -21,15 +21,25 @@
 -- cause is set by rules on row features, first match wins, never by a list of ids. Closed list: old_wrong, new_wrong,
 -- convention, needs_correction, needs_store_not_loaded, production_stale, owner_review, not_yet_explained. Null on
 -- equal and both_empty rows. The evidence behind each rule is in docs/baseline_amounts_2026-11-22.md.
---   needs_correction|correction_loaded_applied  a loaded value correction (stg_correction, keyed by context id, or by
---        accession and production's identifier) names a field that sets this one (correction_cover), and production's
---        corrected_fields names the field.
---   needs_correction|correction_loaded  the same, production does not name the field, but a covering correction
---        carries production's value (loaded_correction says how a value is matched; final fix wave F2).
---   not_yet_explained|correction_loaded_value_not_matched  a covering correction is loaded, production does not name
---        the field and no covering correction carries production's value: the correction is not shown to explain the
---        difference, so a real error of this layer on a corrected row stays visible. Counted under its own ceiling,
---        apart from the other not_yet_explained rows (var cmp_amount_detail_max; slice 4 Task 1, item d).
+--   Since slice 5 Task 5 this layer's side is the corrected value (int_field_corrected; value_normalised beside it, the
+--   value before corrections, and correction_id, the correction that set it), production's row is joined on
+--   cmp_row_set's production_context_id, and a correction both sides apply is equal. A covering correction is a loaded
+--   value correction of a field that sets this one (correction_cover) with a target row on this position in
+--   int_correction_application; it is used when its outcome is applied or no_op.
+--   convention|untagged_principal_currency_blank_in_production  the currency: a principal set at step filed by a
+--        correction with no unit (a wrapper untagged value), production's currency empty. Production fills the value
+--        at parse time with no unit, so its currency stays blank; this layer's conversion reads a value with no unit as
+--        dollars and writes USD. Unverified: both pipelines assume USD for a principal with no unit (Task 5 review).
+--   old_wrong|filled_principal_currency_blank_in_production  the currency, production's currency empty, and its
+--        src_filled_fields names principal_amount: production's dedupe copied the principal value from a sibling context
+--        of the same identifier (pipeline/bdc_filings.py _deduplicate_bdc_holdings) without its unit, so its currency
+--        stays blank (and it converts the value as dollars); this layer reads the principal on its own context with its
+--        unit. Seen on the two adopted pairs whose production row keeps the giver's context id. Old wrong since the
+--        Task 5 review (controller ruling 2026-11-25; was convention): the copy drops the unit.
+--   needs_correction|correction_<outcome>_<reason>  covering corrections are loaded on the row and none is used here
+--        (rejected, failed or deferred, the outcome and reason of the first). Ceiling 0 on every field.
+--   not_yet_explained|correction_applied_value_differs  a correction applied on this field and production holds
+--        another value, with no rule below to say why. Checked last, before none.
 --   needs_store_not_loaded|production_corrected_no_loaded_store  production's corrected_fields names the field, no
 --        loaded correction covers it.
 --   new_wrong|filer_concept_not_read  this layer read no fact; the context carries a numeric fact whose local name
@@ -52,8 +62,15 @@
 --        those, where a loaded correction sets the row's index class or asset category: production emptied the
 --        principal under its first class (the class step comes before row corrections in unified_holdings.py) and the
 --        correction re-classed the row as debt without restoring the filed par (fix round 1, item 1).
---   not_yet_explained|principal_empty_class_not_equity  the same signature, a class that is not equity or fund, and no
---        loaded class correction: the step that empties the principal was not traced (fix round 1, item 1).
+--   old_wrong|principal_emptied_before_section_reclass  the same signature, a class that is not equity or fund, and
+--        no loaded class correction (fix round 1, item 1; was not_yet_explained|principal_empty_class_not_equity until
+--        the Task 5 review, then owner_review until the owner's decision of 2026-11-25, item b). Traced in slice 5
+--        Task 5 (baseline_corrections section 4.4): the 14 rows (one fund's "Units" lines) are emptied under their
+--        first class (COMMON_EQUITY, from the label word "Units") and then re-classed STRUCTURED_CREDIT by the printed
+--        section (pipeline/printed_sections.py apply_structured_sections, after the class step): production empties
+--        the principal under a class it then rejects. Checked on all 14 (baseline section 6): the tagged principal
+--        equals the tagged cost to the dollar, is in USD and the row has a maturity date. The printed column header is
+--        "Par Amount/Units", which does not say which of the two a row holds.
 --   convention|count_principal_currency_blank_in_production  a principal taken from a share count: production leaves
 --        its currency blank (and converts it as dollars), this layer writes USD.
 --   old_wrong|pct_size_bound_keeps_fraction  share of net assets: production stores the filed fraction unscaled (its
@@ -62,7 +79,8 @@
 -- Agreement between the two sides shows they agree. It does not show either is right: a value both pipelines read
 -- wrongly in the same way is equal here.
 with both_rows as (
-    select c.basis, c.accession, c.context_id, c.cik, c.report_date
+    select c.basis, c.accession, c.context_id, coalesce(c.production_context_id, c.context_id) as production_context_id,
+        c.cik, c.report_date
     from {{ ref('cmp_row_set') }} c
     where c.side = 'both'
       and not exists (
@@ -83,6 +101,7 @@ with both_rows as (
         , shares_held
         , pct_of_net_assets
         , corrected_fields
+        , coalesce(src_filled_fields, '') as src_filled_fields
         , bdc_investment_identifier
         , index_classification
     from {{ ref('stg_holdings') }}
@@ -126,12 +145,31 @@ with both_rows as (
 )
 
 , norm as (
-    select accession, context_id, field, value, currency, value_filed, action, rule_id, status, reason
-    from {{ ref('int_field_normalised') }}
+    select accession, context_id, field, value, value_normalised, currency, currency_normalised, value_filed, action,
+        rule_id, status, reason, correction_id
+    from {{ ref('int_field_corrected') }}
 )
 
 , principal_norm as (
-    select accession, context_id, value, currency, action from norm where field = 'principal_amount'
+    select accession, context_id, value, currency, currency_normalised, action, correction_id
+    from norm where field = 'principal_amount'
+)
+
+, application as (
+    -- correction targets on positions, with whether the correction was used here (applied or no_op)
+    select a.correction_id, a.accession, a.context_id, a.field as correction_field, a.outcome, a.reason,
+        a.applied_at_step, a.outcome in ('applied', 'no_op') as is_used
+    from {{ ref('int_correction_application') }} a
+    where a.kind = 'value' and a.context_id is not null
+)
+
+, untagged_principal as (
+    -- a principal set at step filed by a correction with no unit
+    select distinct a.accession, a.context_id
+    from application a
+    join {{ ref('stg_correction') }} c on c.correction_id = a.correction_id
+    where a.correction_field = 'principal_amount' and a.outcome = 'applied' and a.applied_at_step = 'filed'
+      and nullif(trim(c.value_unit), '') is null
 )
 
 , shares_norm as (
@@ -149,6 +187,10 @@ with both_rows as (
         , b.cik
         , b.report_date
         , case when fl.field = 'principal_amount_currency' then null else n.value end as value_new
+        , case when fl.field = 'principal_amount_currency' then null else n.value_normalised end as value_normalised
+        , case when fl.field = 'principal_amount_currency' then pn.currency_normalised end as currency_normalised
+        , case when fl.field = 'principal_amount_currency' then pn.correction_id else n.correction_id end
+            as correction_id
         , case fl.field
             when 'fair_value' then p.fair_value
             when 'cost' then p.cost_reported
@@ -174,12 +216,13 @@ with both_rows as (
         , p.principal_amount_currency as production_currency
         , p.shares_held as production_shares
         , p.corrected_fields
+        , p.src_filled_fields
         , p.bdc_investment_identifier
         , p.index_classification as production_class
         , pc.index_classification is not null as production_class_empties_principal
     from both_rows b
     cross join field_list fl
-    join prod p on p.accession = b.accession and p.context_id = b.context_id
+    join prod p on p.accession = b.accession and p.context_id = b.production_context_id
     left join norm n
         on n.accession = b.accession and n.context_id = b.context_id
         and n.field = case when fl.field = 'principal_amount_currency' then 'principal_amount' else fl.field end
@@ -217,41 +260,19 @@ with both_rows as (
 )
 
 , loaded_correction as (
-    -- every loaded correction that covers the field, and whether one of them carries production's value (final fix
-    -- wave F2): the same field with the field's tolerance (an empty correction matches an empty production value); a
-    -- principal correction's currency unit against production's currency; a principal correction in dollars (unit
-    -- USD or blank) against production's dollar principal. A foreign principal correction is not converted here.
+    -- covering corrections with a target on the row: whether any is used here, and the outcome and reason of the first
+    -- unused one (by outcome, then reason)
     select
         o.accession
         , o.context_id
         , o.field
         , true as has_loaded_correction
-        , coalesce(bool_or(
-            case
-                when cc.correction_field = o.production_field and o.tolerance_class = 'text' then
-                    coalesce(nullif(trim(c.value), '') = o.currency_production,
-                             nullif(trim(c.value), '') is null and o.currency_production is null)
-                when cc.correction_field = o.production_field then
-                    case
-                        when nullif(trim(c.value), '') is null then o.value_production is null
-                        when o.tolerance_class = 'dollar' then
-                            abs(try_cast(c.value as double) - o.value_production)
-                                < {{ var('cmp_amount_tolerance')['dollar'] }}
-                        else abs(try_cast(c.value as double) - o.value_production)
-                                <= {{ var('cmp_amount_tolerance')['measured'] }}
-                    end
-                when o.field = 'principal_amount_currency' and cc.correction_field = 'principal_amount' then
-                    nullif(trim(c.value_unit), '') = o.currency_production
-                when o.field = 'principal_amount_usd' and cc.correction_field = 'principal_amount'
-                     and coalesce(nullif(trim(c.value_unit), ''), 'USD') = 'USD' then
-                    abs(try_cast(c.value as double) - o.value_production) < {{ var('cmp_amount_tolerance')['dollar'] }}
-            end), false) as correction_value_matches
+        , bool_or(a.is_used) as any_used
+        , min(case when not a.is_used then a.outcome || '_' || coalesce(a.reason, '') end) as unused_outcome
     from open_pairs o
     join correction_cover cc on cc.field = o.field
-    join {{ ref('stg_correction') }} c
-        on c.kind = 'value' and c.field = cc.correction_field and c.accession = o.accession
-        and (c.context_id = o.context_id
-             or (c.context_id is null and c.identifier = o.bdc_investment_identifier))
+    join application a
+        on a.accession = o.accession and a.context_id = o.context_id and a.correction_field = cc.correction_field
     group by 1, 2, 3
 )
 
@@ -310,7 +331,9 @@ with both_rows as (
     select
         o.*
         , coalesce(lc.has_loaded_correction, false) as has_loaded_correction
-        , coalesce(lc.correction_value_matches, false) as correction_value_matches
+        , coalesce(lc.any_used, false) as loaded_correction_used
+        , lc.unused_outcome
+        , up.accession is not null as has_untagged_principal
         , coalesce(regexp_matches(coalesce(o.corrected_fields, ''), '(^|;)' || o.production_field || '([;:=]|$)'), false)
             as production_corrected
         , fc.accession is not null as has_filer_concept
@@ -323,6 +346,7 @@ with both_rows as (
     left join split_bracket sb on sb.accession = o.accession and sb.context_id = o.context_id and sb.field = o.field
     left join units_rule_filing ur on ur.cik = o.cik and ur.accession = o.accession
     left join class_correction cc on cc.accession = o.accession and cc.context_id = o.context_id
+    left join untagged_principal up on up.accession = o.accession and up.context_id = o.context_id
 )
 
 , caused as (
@@ -331,10 +355,15 @@ with both_rows as (
         , context_id
         , field
         , case
-            when has_loaded_correction and production_corrected then 'needs_correction|correction_loaded_applied'
-            when has_loaded_correction and correction_value_matches then 'needs_correction|correction_loaded'
-            when has_loaded_correction then 'not_yet_explained|correction_loaded_value_not_matched'
-            when production_corrected then 'needs_store_not_loaded|production_corrected_no_loaded_store'
+            when field = 'principal_amount_currency' and outcome = 'production_empty' and has_untagged_principal
+                then 'convention|untagged_principal_currency_blank_in_production'
+            when field = 'principal_amount_currency' and outcome = 'production_empty'
+                 and regexp_matches(src_filled_fields, '(^|[,;])principal_amount([,;]|$)')
+                then 'old_wrong|filled_principal_currency_blank_in_production'
+            when has_loaded_correction and not loaded_correction_used
+                then 'needs_correction|correction_' || unused_outcome
+            when production_corrected and not has_loaded_correction
+                then 'needs_store_not_loaded|production_corrected_no_loaded_store'
             when has_filer_concept then 'new_wrong|filer_concept_not_read'
             when has_split_bracket and value_new is not null and value_production is not null
                  and abs(value_new + value_production) < {{ var('cmp_amount_tolerance')['dollar'] }}
@@ -363,13 +392,14 @@ with both_rows as (
             when field in ('principal_amount', 'principal_amount_usd') and outcome = 'production_empty'
                  and production_principal is null and production_currency is not null
                  and new_principal_action = 'as_filed'
-                then 'not_yet_explained|principal_empty_class_not_equity'
+                then 'old_wrong|principal_emptied_before_section_reclass'
             when field = 'principal_amount_currency' and outcome = 'production_empty'
                  and new_principal_action = 'par_tagged_as_units' and currency_new = 'USD'
                 then 'convention|count_principal_currency_blank_in_production'
             when field = 'pct_of_net_assets' and new_action = 'fraction_to_percent' and new_value_filed > 0.5
                  and abs(value_production - new_value_filed) <= {{ var('cmp_amount_tolerance')['measured'] }}
                 then 'old_wrong|pct_size_bound_keeps_fraction'
+            when correction_id is not null then 'not_yet_explained|correction_applied_value_differs'
             else 'not_yet_explained|none'
           end as cause_key
     from featured
@@ -384,10 +414,13 @@ select
     , o.report_date
     , o.basis = 'published' as is_published
     , o.value_new
+    , o.value_normalised
     , o.value_production
     , o.value_new - o.value_production as difference
     , o.currency_new
+    , o.currency_normalised
     , o.currency_production
+    , o.correction_id
     , o.value_production_cost
     , o.outcome
     , split_part(c.cause_key, '|', 1) as cause

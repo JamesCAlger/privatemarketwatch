@@ -1,0 +1,27 @@
+{
+ "cik": "1",
+ "rule_id": "recover_fixture_position",
+ "rule_type": "row_add",
+ "action": "add",
+ "scope": {"quarters": ["2026-03-31"]},
+ "positions": [
+  {
+   "source": "bdc",
+   "cik": "0000000001",
+   "issuer_name": "Gamma Inc",
+   "report_date": "2026-03-31",
+   "accession_number": "0000000001-26-000011",
+   "bdc_investment_identifier": "Gamma Inc | First lien term loan",
+   "bdc_dimensions_raw": "investmentidentifieraxis=Gamma Inc | First lien term loan",
+   "source_row_id": "xbrl:0000000001-26-000011:c-90 + c-91",
+   "src_context_id": "c-91",
+   "fair_value": 100.0,
+   "cost": 100.0,
+   "principal_amount": 100.0,
+   "principal_amount_currency": "USD",
+   "principal_amount_usd": 100.0
+  }
+ ],
+ "evidence": [{"source": "filing", "quote": "Invented CI fixture position"}],
+ "rationale": "Invented CI fixture rule (slice 5 Task 2): one added position, loaded as add_row corrections."
+}

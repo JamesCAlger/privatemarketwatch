@@ -1,0 +1,10 @@
+{
+ "cik": "1",
+ "rule_id": "exclude_fixture_subtotal",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {"quarters": ["all"]},
+ "predicate_sql": "TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL",
+ "evidence": [{"source": "filing", "quote": "Invented CI fixture rule"}],
+ "rationale": "Invented CI fixture rule (slice 5 Task 2): a row-removing rule, recorded only."
+}

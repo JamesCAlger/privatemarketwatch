@@ -4,7 +4,10 @@
 --
 -- Rows: cmp_row_set side = 'both', both bases, quarters in cmp_excluded_quarter left out. Joined on accession and
 -- context id, as cmp_amount is. Production is the comparison side only: nothing here changes a value of this layer.
--- Field pairs (this layer, int_field_normalised -> production, stg_holdings):
+-- Since slice 5 Task 5 this layer's side is the corrected value (int_field_corrected; value_normalised beside it, the
+-- value before corrections, and correction_id, the correction that set it), and production's row is joined on
+-- cmp_row_set's production_context_id (an adopted rate-only pair whose merged production row keeps the giver's id).
+-- Field pairs (this layer, int_field_corrected -> production, stg_holdings):
 --   interest_rate      -> interest_rate        (the all-in rate, percent)
 --   interest_rate_cash -> interest_rate_cash   (the cash leg, percent)
 --   pik_rate           -> pik_rate             (percent)
@@ -20,14 +23,29 @@
 --
 -- cause is set by rules on row features, first match wins, never by a list of ids. Closed list as cmp_amount. Null on
 -- equal and both_empty rows. The evidence behind each rule is in docs/baseline_rates_2026-11-23.md.
---   needs_correction|correction_loaded_applied  a loaded value correction (stg_correction, keyed by context id, or by
---        accession and production's identifier) names a field that sets this one (correction_cover), and production's
---        corrected_fields names such a field.
---   not_yet_explained|correction_loaded_not_named  the same correction is loaded, production does not name it.
+--   Corrections (slice 5 Task 5; the corrected value is compared, so a correction both sides apply is equal). A
+--   covering correction is a loaded value correction of a field that sets this one (correction_cover) with a target
+--   row on this position in int_correction_application; it is used when its outcome is applied or no_op.
+--   needs_correction|correction_<outcome>_<reason>  covering corrections are loaded on the row and none is used here
+--        (rejected, failed or deferred, the outcome and reason of the first): production may apply what this layer
+--        does not. Ceiling 0 on every field: such a row fails the build until it is looked at.
+--   owner_review|pik_correction_leaves_spread_unread  the spread: a PIK-rate correction applied on the row makes it a
+--        row whose spread rule needs the printed total margin (text_not_read), while the value before correction
+--        equals production's (Task 4 review, minor 3; owner item: keep the spread as before when only the PIK rate is
+--        corrected, or leave it unread like its filed peers). The reading is not changed here.
+--   not_yet_explained|correction_applied_value_differs  a correction applied on this field and production holds
+--        another value, with no rule below to say why. Checked last, before none; its own ceiling.
 --   needs_store_not_loaded|production_corrected_no_loaded_store  production names a covering field, none is loaded.
---   needs_store_not_loaded|rate_only_context_not_adopted  production's src_filled_fields names a covering field:
---        production moved the rate facts of a neighbouring rate-only context onto this row (wrapper procedure
---        rate_only_contexts adopt_adjacent, pipeline/source_encodings.py adopt_rate_only_contexts; not built here).
+--   needs_store_not_loaded|same_identifier_context_fill_not_built  production's src_filled_fields names a covering
+--        field, the row is not a taker of an adopted pair here, and another context of the filing with the same
+--        identifier label carries a rate fact and no fair value: production's dedupe filled the missing rate from
+--        that sibling context (pipeline/bdc_filings.py _deduplicate_bdc_holdings, the fill of lines 1338-1392). Not
+--        built here.
+--   needs_store_not_loaded|rate_only_context_not_adopted  production's src_filled_fields names a covering field and
+--        neither rule above applies: production moved the rate facts of a neighbouring rate-only context onto this
+--        row (pipeline/source_encodings.py adopt_rate_only_contexts) and this layer's structural rule
+--        (int_rate_adjacent, slice 5 Task 4) did not pair it. A taker this layer did pair falls through to the rules
+--        below (its difference is not the adoption).
 --   needs_store_not_loaded|whole_coupon_pik_not_read  production's src_transforms has pik_rate:whole_coupon_printed:
 --        it stored the printed coupon as the PIK rate (wrapper procedure pik_margin_reading whole_coupon,
 --        pipeline/whole_coupon_pik.py; printed text, not built here). Rate, cash leg, PIK rate and kind only.
@@ -68,7 +86,8 @@
 -- Agreement between the two sides shows they agree. It does not show either is right: a rate both pipelines read
 -- wrongly in the same way is equal here, and a rate missing on both sides is both_empty.
 with both_rows as (
-    select c.basis, c.accession, c.context_id, c.cik, c.report_date
+    select c.basis, c.accession, c.context_id, coalesce(c.production_context_id, c.context_id) as production_context_id,
+        c.cik, c.report_date
     from {{ ref('cmp_row_set') }} c
     where c.side = 'both'
       and not exists (
@@ -127,9 +146,18 @@ with both_rows as (
 )
 
 , norm as (
-    select accession, context_id, field, value, value_date, rate_kind, action, rule_id, status, reason
-    from {{ ref('int_field_normalised') }}
+    select accession, context_id, field, value, value_normalised, value_date, value_date_normalised, rate_kind,
+        rate_kind_normalised, action, rule_id, status, reason, correction_id
+    from {{ ref('int_field_corrected') }}
     where field in ('interest_rate', 'interest_rate_cash', 'pik_rate', 'spread', 'maturity_date')
+)
+
+, application as (
+    -- correction targets on positions, with whether the correction was used here (applied or no_op)
+    select accession, context_id, field as correction_field, outcome, reason,
+        outcome in ('applied', 'no_op') as is_used
+    from {{ ref('int_correction_application') }}
+    where kind = 'value' and context_id is not null
 )
 
 , pairs as (
@@ -143,6 +171,10 @@ with both_rows as (
         , b.cik
         , b.report_date
         , case when fl.value_class = 'number' then n.value end as value_new
+        , case when fl.value_class = 'number' then n.value_normalised end as value_normalised
+        , case when fl.value_class = 'date' then n.value_date_normalised end as date_normalised
+        , case when fl.value_class = 'text' then n.rate_kind_normalised end as text_normalised
+        , n.correction_id
         , case fl.field
             when 'interest_rate' then p.interest_rate
             when 'interest_rate_cash' then p.interest_rate_cash
@@ -171,7 +203,7 @@ with both_rows as (
         , p.bdc_investment_identifier
     from both_rows b
     cross join field_list fl
-    join prod p on p.accession = b.accession and p.context_id = b.context_id
+    join prod p on p.accession = b.accession and p.context_id = b.production_context_id
     left join norm n
         on n.accession = b.accession and n.context_id = b.context_id and n.field = fl.normalised_field
 )
@@ -210,14 +242,50 @@ with both_rows as (
 )
 
 , loaded_correction as (
-    -- a loaded value correction that sets a covering field of the row
-    select distinct o.accession, o.context_id, o.field
+    -- covering corrections with a target on the row: whether any is used here, and the outcome and reason of the first
+    -- unused one (by outcome, then reason)
+    select
+        o.accession
+        , o.context_id
+        , o.field
+        , bool_or(a.is_used) as any_used
+        , min(case when not a.is_used then a.outcome || '_' || coalesce(a.reason, '') end) as unused_outcome
     from open_pairs o
     join correction_cover cc on cc.field = o.field
-    join {{ ref('stg_correction') }} c
-        on c.kind = 'value' and c.field = cc.correction_field and c.accession = o.accession
-        and (c.context_id = o.context_id
-             or (c.context_id is null and c.identifier = o.bdc_investment_identifier))
+    join application a
+        on a.accession = o.accession and a.context_id = o.context_id and a.correction_field = cc.correction_field
+    group by 1, 2, 3
+)
+
+, pik_applied as (
+    -- a PIK-rate correction applied on the row
+    select distinct accession, context_id
+    from application
+    where correction_field = 'pik_rate' and outcome = 'applied'
+)
+
+, adopted_taker as (
+    select distinct accession, taker_context_id as context_id
+    from {{ ref('int_rate_adjacent') }}
+)
+
+, same_label_rate_sibling as (
+    -- open rows with another context of the filing under the same identifier label that carries a rate fact (rate,
+    -- cash-pay rate, spread or PIK rate concept) and no fair value fact
+    select distinct o.accession, o.context_id
+    from open_pairs o
+    join {{ ref('int_context_feature') }} me on me.accession = o.accession and me.context_id = o.context_id
+    join {{ ref('int_context_feature') }} sib
+        on sib.accession = o.accession and sib.identifier_label = me.identifier_label and sib.context_id <> o.context_id
+    where sib.fair_value_fact_count = 0
+      and exists (
+          select 1
+          from {{ ref('stg_filed_fact') }} f
+          join {{ ref('concept_map') }} m
+              on m.field in ('rate', 'spread', 'pik_rate') and m.concept_local = f.concept_local
+              and f.concept_namespace glob m.namespace_pattern
+          where f.accession = sib.accession and f.context_id = sib.context_id
+      )
 )
 
 , production_named as (
@@ -248,6 +316,11 @@ with both_rows as (
     select
         o.*
         , lc.accession is not null as has_loaded_correction
+        , coalesce(lc.any_used, false) as loaded_correction_used
+        , lc.unused_outcome
+        , pa.accession is not null as has_pik_applied
+        , tk.accession is not null as is_adopted_taker
+        , sl.accession is not null as has_same_label_rate_sibling
         , coalesce(pn.production_corrected, false) as production_corrected
         , coalesce(pn.production_filled, false) as production_filled
         , regexp_matches(o.src_transforms, '(^|;)pik_rate:whole_coupon_printed(;|$)') as whole_coupon
@@ -258,6 +331,9 @@ with both_rows as (
     left join loaded_correction lc on lc.accession = o.accession and lc.context_id = o.context_id and lc.field = o.field
     left join production_named pn on pn.accession = o.accession and pn.context_id = o.context_id and pn.field = o.field
     left join spread_read sr on sr.accession = o.accession and sr.context_id = o.context_id
+    left join pik_applied pa on pa.accession = o.accession and pa.context_id = o.context_id
+    left join adopted_taker tk on tk.accession = o.accession and tk.context_id = o.context_id
+    left join same_label_rate_sibling sl on sl.accession = o.accession and sl.context_id = o.context_id
 )
 
 , caused as (
@@ -277,10 +353,19 @@ with both_rows as (
             -- empty is the unread printed PIK, whatever route production took
             when field = 'interest_rate_cash' and new_reason = 'pik_printed_not_tagged'
                 then 'needs_store_not_loaded|printed_pik_not_read'
-            when has_loaded_correction and production_corrected then 'needs_correction|correction_loaded_applied'
-            when has_loaded_correction then 'not_yet_explained|correction_loaded_not_named'
-            when production_corrected then 'needs_store_not_loaded|production_corrected_no_loaded_store'
-            when production_filled then 'needs_store_not_loaded|rate_only_context_not_adopted'
+            -- slice 5 Task 5: covering corrections loaded on the row, none used here
+            when has_loaded_correction and not loaded_correction_used
+                then 'needs_correction|correction_' || unused_outcome
+            -- slice 5 Task 5 (Task 4 review, minor 3): a PIK correction leaves the spread unread; before it the spread
+            -- equalled production's
+            when field = 'spread' and new_reason = 'text_not_read' and has_pik_applied and value_production is not null
+                 and abs(value_normalised - value_production) <= {{ var('cmp_rate_tolerance') }}
+                then 'owner_review|pik_correction_leaves_spread_unread'
+            when production_corrected and not has_loaded_correction
+                then 'needs_store_not_loaded|production_corrected_no_loaded_store'
+            when production_filled and not is_adopted_taker and has_same_label_rate_sibling
+                then 'needs_store_not_loaded|same_identifier_context_fill_not_built'
+            when production_filled and not is_adopted_taker then 'needs_store_not_loaded|rate_only_context_not_adopted'
             when whole_coupon and field in ('interest_rate', 'interest_rate_cash', 'pik_rate', 'rate_kind')
                 then 'needs_store_not_loaded|whole_coupon_pik_not_read'
             when production_source = 'identifier_text' then 'needs_store_not_loaded|identifier_text_not_read'
@@ -297,6 +382,7 @@ with both_rows as (
                 then 'needs_store_not_loaded|printed_rate_type_and_loan_class_not_read'
             when new_reason = 'scale_not_decided' then 'owner_review|scale_decided_by_size_in_production'
             when new_reason = 'values_differ' then 'owner_review|two_values_filed_production_keeps_first'
+            when correction_id is not null then 'not_yet_explained|correction_applied_value_differs'
             else 'not_yet_explained|none'
           end as cause_key
     from featured
@@ -311,13 +397,17 @@ select
     , o.report_date
     , o.basis = 'published' as is_published
     , o.value_new
+    , o.value_normalised
     , o.value_production
     , o.value_new - o.value_production as difference
     , o.value_production_reported
     , o.date_new
+    , o.date_normalised
     , o.date_production
     , o.text_new
+    , o.text_normalised
     , o.text_production
+    , o.correction_id
     , o.outcome
     , split_part(c.cause_key, '|', 1) as cause
     , nullif(split_part(c.cause_key, '|', 2), '') as cause_detail

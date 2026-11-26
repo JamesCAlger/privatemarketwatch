@@ -57,7 +57,12 @@ How each filer is read, and the fixes made to single rows, as two tables. A load
 (`warehouse/readings_loader/`) copies them from the new pipeline's wrappers (`warehouse/wrappers/<cik>.json`) and
 the two row-correction files into `warehouse/data/readings/`. dbt reads them as source `readings` (staging views
 `stg_reading_rule`, `stg_correction`, `stg_reading_not_loaded`, `stg_wrapper_drift`, `stg_row_store_drift`). Spec:
-`docs/intermediate_spine.md`.
+`docs/intermediate_spine.md`. Since loader version 6 (slice 5 Task 2) it also reads production's two agent stores,
+`data/overrides/agent_b2_corrections` and `agent_investigate_rules` (`readings_loader/agent_stores.py`): their value
+entries become corrections (`stg_correction` kinds `value` keyed by a production `row_id`, and `add_row`), their
+row-removing rules become rows of `stg_correction_rule`, which no model applies. Seed `correction_field` maps each
+correction field, by store, to this layer's field and the step it acts at. Inventory:
+`docs/baseline_corrections_2026-11-24.md` section 1.
 
 **Where fund rules are edited.** Owner decision 2026-11-19: the new pipeline keeps its own copy of each v0.5
 fund's wrapper in `warehouse/wrappers/`, taken byte for byte from production's `data/overrides/bdc_xbrl_wrappers/`
@@ -73,7 +78,9 @@ the hash is of the text with CRLF line endings read as LF, so line endings alone
 `_source.json` updated, and `baseline_wrapper_copy_changed_since_load` (ceiling 0) fails it when a copy was
 edited after the last load (run `load_readings.ps1` again). The two row-correction stores are checked the same
 way (`stg_row_store_drift`, var `row_store_files`): `baseline_row_store_changed_since_load` (ceiling 0) fails the
-build when a store changed after the last load.
+build when a store changed after the last load. The agent stores likewise (`stg_agent_store_drift`, var
+`agent_store_dirs`): every file of a scope fund, loaded or skipped, is text-hashed; `baseline_agent_store_changed_since_load`
+(ceiling 0) fails the build on a file edited, added, removed or retired after the last load.
 
 **Standard concepts.** The XBRL concepts every filer uses (fair value, cost, principal, shares, share of net
 assets, rate, spread, PIK rate, maturity, ownership percent) are defined once, in `seeds/concept_map.csv`: local
@@ -264,6 +271,82 @@ A passing build means the counts did not grow and the checks hold. It is not a s
 is correct.
 
 CI runs a build on an invented fund, without the repository's data: `ci/README.md`.
+
+## Corrections: applying them to amounts and to the row set (slice 5 Task 3)
+
+The readings loader loads production's corrections (`stg_correction`). Slice 5 applies them on top of the
+normalised values, never in place: each corrected value sits beside the filed and the normalised value,
+and names the correction that set it. Spec: `docs/intermediate_spine.md` section 6.5. Counts:
+`docs/baseline_corrections_2026-11-24.md` section 2.
+
+| Model | What it decides | One row per |
+|---|---|---|
+| `int_correction_target` | Which row each correction acts on (a context id, a production row id, identifier text, or the production bridge) | correction and target |
+| `int_correction_fair_value_cell` | What the printed fair-value cell shows, for a fair value a correction supplies on a row with no fair-value fact | such row |
+| `int_correction_screen` | The outcomes that need no value (deferred field, refused key, wrong type, conflict, printed cell) | correction and target |
+| `int_row_corrected` | The position set after corrections: every position, plus rows a correction makes positions | position row |
+| `int_field_reread` | The conversion chain run again on those rows, before and after the corrections at step `filed` | run, row and field |
+| `int_correction_application` | The outcome of each correction: applied, no_op, rejected, failed, deferred, with a reason | correction and target |
+| `int_field_corrected` | The corrected value of every field, beside the filed and normalised values | position row and field (eleven) |
+| `int_rate_adjacent` | Which position takes the rate facts of its neighbouring rate-only context (Ares rule, owner decision 5) | taker row |
+| `int_rate_corrected_input` | The rate reading's inputs on each position a rate correction acts on, before and after the corrections | run and position row |
+| `int_rate_corrected` | The rate reading on those inputs, what each correction changes, and why a corrected row fails | run, row and rate field |
+
+**The macros behind the chain.** The bodies of `int_field_read`, `int_field_rule`, `int_amount_normalised`,
+`int_rate_scale`, `int_rate_tag_cell` and `int_rate_normalised` live in macros of the same names (a macro is
+a reusable piece of SQL with inputs). Each model calls its macro on its usual inputs; `int_field_reread`
+calls the same macros on the few rows corrections touch, so both runs follow one set of rules.
+
+**Rates are corrected by running the rate reading again (slice 5 Task 4).** A corrected rate, cash leg, PIK
+rate or rate kind replaces an input of the rate reading, and `int_rate_corrected` runs the reading again on the
+corrected inputs, so the cash leg and the kind follow from them (as in production, where the corrections come
+before the step that derives the legs). A corrected kind decides the reading on its row and becomes the row's
+rule. A spread or maturity correction replaces the published value. A corrected row whose legs do not add, or
+whose corrected value no rule can read, is `failed` and nothing is stored. `int_rate_adjacent` builds the Ares
+rule that gives a position the rate facts filed on its neighbouring rate-only context.
+
+**The production bridge is a debt.** 67 corrections keyed by identifier text find no position here by
+that text; they find their row through production's holdings file. They must be re-keyed by context
+before this layer can replace production.
+
+Agreement with production is not correctness: applying production's corrections makes the two
+pipelines agree; no check here sees a wrong correction.
+
+## Corrections: what is applied and what is recorded (slice 5)
+
+**Where corrections come from.** Production fixes some values by hand. The fixes sit in "correction
+stores": two CSV files of row corrections, entries in the fund wrappers (untagged values, relabels), and
+two agent stores (positions an agent adds, one rate fix). The readings loader copies them into one table,
+read by the staging view `stg_correction` (a view is a saved query; dbt rebuilds it on every build). Each
+row says: in this filing, on this row (a context id, an identifier text or a production row id), set this
+field to this value. The list of stores is in `docs/baseline_corrections_2026-11-24.md` section 1.
+
+**Five outcomes.** Every correction gets exactly one outcome on each row it acts on, in the model
+`int_correction_application`, with a reason:
+
+| Outcome | Meaning | Example reason |
+|---|---|---|
+| `applied` | The value was used | (none) |
+| `no_op` | Nothing to change: the row already holds the value, or the correction is a note | `equal_to_normalised` |
+| `rejected` | It cannot be applied as written | `target_not_found`: no such row |
+| `failed` | It was tried and could not be executed | `no_fx_rate`: a foreign amount with no exchange rate |
+| `deferred` | It sets a field this layer does not hold yet (names, classes, industry) | `field_not_held` |
+
+Nothing is dropped. A test fails the build if a loaded correction has no outcome, and each outcome and
+reason has a ceiling (the build fails if its count grows).
+
+**A correction never erases a filed value.** The corrected value is a new column beside the old ones.
+`int_field_corrected` holds, for each field, the filed value, the converted value before corrections
+(`value_normalised`) and the corrected value, and names the `correction_id` that set it. So you can always
+see what the filing said, what the rules made of it, and what the correction changed. If a correction is
+later found wrong, removing it from the store and reloading (`load_readings.ps1`) brings the earlier
+value back on the next build.
+
+**Agreement, not proof.** These are production's own corrections. Applying them makes this layer agree
+with production, and the comparison models (`cmp_amount`, `cmp_rate`, `cmp_row_set`) then show far fewer
+differences. That is agreement between two pipelines. It does not check any correction against the
+filing: a wrong correction is applied the same way on both sides and shows as equal. A passing build is
+not a statement that the data is correct.
 
 ## Where this work lives (since 2026-11-23)
 

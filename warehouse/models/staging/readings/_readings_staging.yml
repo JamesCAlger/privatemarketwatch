@@ -34,21 +34,77 @@ models:
                 values: [10, 20, 30]
                 quote: false
   - name: stg_correction
-    description: One row per row-level fix, from the wrappers' row-level entries and the two row-correction files. Loaded as it stands; nothing is applied yet.
+    description: >
+      One row per row-level fix, from the wrappers' row-level entries, the two row-correction files and (loader
+      version 6, slice 5 Task 2) the two agent stores: kind add_row, one row per field of a position an agent rule
+      adds, keyed by accession and context id and grouped by add_group_id; and value corrections keyed by a production
+      holdings row_id instead of an accession (resolved in Task 3). Loaded as it stands; nothing is applied yet.
+      Every field must have a row in seed correction_field (tests/readings_correction_field_mapped.sql).
     columns:
       - name: correction_id
         data_tests: [unique, not_null]
       - name: cik
         data_tests: [not_null]
       - name: accession
-        data_tests: [not_null]
+        description: Null only on a correction keyed by row_id.
+        data_tests:
+          - not_null:
+              config:
+                where: "row_id is null"
+      - name: row_id
+        description: A production holdings row id (an agent B2 leaf's row_selector); null on every other correction.
+        data_tests:
+          - not_null:
+              config:
+                where: "accession is null"
       - name: field
         data_tests: [not_null]
       - name: kind
         data_tests:
           - accepted_values:
               arguments:
-                values: [value, relabel, exception, evidence]
+                values: [value, relabel, exception, evidence, add_row]
+      - name: add_group_id
+        description: The added position an add_row correction belongs to (rule id, accession, context id); null otherwise.
+        data_tests:
+          - not_null:
+              config:
+                where: "kind = 'add_row'"
+      - name: source_file
+        data_tests: [not_null]
+  - name: stg_correction_rule
+    description: >
+      One row per row-selecting rule of the two agent stores (an investigator row_exclusion, a B2
+      comparative_period_filter), loaded for the record (slice 5 decision 1). No model applies it.
+    columns:
+      - name: rule_row_id
+        data_tests: [unique, not_null]
+      - name: source_file
+        data_tests: [unique, not_null]
+      - name: cik
+        data_tests: [not_null]
+      - name: predicate
+        data_tests: [not_null]
+      - name: rule_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [row_exclusion, comparative_period_filter]
+      - name: predicate_form
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [sql, template]
+  - name: stg_agent_store_drift
+    description: >
+      One row per file of a scope fund in the two agent stores (var agent_store_dirs), hashed when the view is read,
+      against the text hash the readings loader recorded (manifest agent_store_sha256). changed: the loaded agent
+      corrections and rules are stale, run load_readings.ps1 again (tests/baseline_agent_store_changed_since_load.sql).
+    columns:
+      - name: source_file
+        data_tests: [unique, not_null]
+      - name: changed
+        data_tests: [not_null]
   - name: stg_reading_not_loaded
     description: Wrapper declarations that need a procedure and are not loaded as rules.
   - name: stg_readings_manifest

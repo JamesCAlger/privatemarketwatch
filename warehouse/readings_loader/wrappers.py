@@ -25,12 +25,15 @@ _SIMPLE = {
     "reporting_entity_suffixes": ("scope", "scope", "set_scope_by_label_suffix", "sel_label", True),
     "reporting_entity_identifier_suffixes": ("scope", "scope", "set_scope_by_identifier_suffix", "sel_label", True),
     "cash_identifiers": ("scope", "is_cash", "set_is_cash", "sel_label", False),
+    # slice 5 Task 4 (owner decision 5): 'adopt_adjacent' becomes the structural rule adopt_adjacent_rate_context,
+    # built in int_rate_adjacent; any other entry names an action seeds/reading_action.csv does not list (build fails)
+    "rate_only_contexts": ("convention", "interest_rate", "{}_rate_context", "", False),
 }
 _FILING_LISTS = {
     "units_tagged_as_par": ("shares", "units_tagged_as_par"),
     "bracketed_unsigned_values": ("amount", "bracketed_unsigned"),
 }
-_PROCEDURES = {"rate_only_contexts", "gics_industry_carry_back"}
+_PROCEDURES = {"gics_industry_carry_back"}
 
 # New-style fund rules (slice 2, Task 5): the top-level `reading_rules` list of the new pipeline's wrapper copy
 # (warehouse/wrappers/<cik>.json). Each entry is an object; entry key -> rule column.
@@ -64,7 +67,7 @@ def _rule(cik, key, rule_class, target, action, parameter="", priority=FILER, **
 def _correction(cik, key, accession, context_id, field, value, kind, **cols):
     row = {c: "" for c in CORRECTION_COLUMNS}
     row.update(cik=cik, accession=accession, context_id=context_id, field=field, value=value,
-               kind=kind, store=f"wrapper:{key}")
+               kind=kind, store=f"wrapper:{key}", source_file=f"wrappers/{cik}.json")
     row.update(cols)
     row["correction_id"] = content_id(row, CORRECTION_COLUMNS, "correction_id")
     return row

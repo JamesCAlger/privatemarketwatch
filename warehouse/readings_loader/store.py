@@ -8,12 +8,13 @@ from pathlib import Path
 
 import duckdb
 
-from . import (CORRECTION_COLUMNS, LABEL_EXAMPLE_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS, RULE_COLUMNS,
-               WRAPPER_DRIFT_COLUMNS, LoadError)
+from . import (CORRECTION_COLUMNS, CORRECTION_RULE_COLUMNS, LABEL_EXAMPLE_COLUMNS, LOADER_VERSION, NOT_LOADED_COLUMNS,
+               RULE_COLUMNS, WRAPPER_DRIFT_COLUMNS, LoadError)
 
 TABLES = {
     "reading_rule": (RULE_COLUMNS, ["rule_id"]),
     "correction": (CORRECTION_COLUMNS, ["correction_id"]),
+    "correction_rule": (CORRECTION_RULE_COLUMNS, ["source_file"]),
     "not_loaded": (NOT_LOADED_COLUMNS, ["cik", "wrapper_key", "entry"]),
     "wrapper_drift": (WRAPPER_DRIFT_COLUMNS, ["cik"]),
     "rule_label_example": (LABEL_EXAMPLE_COLUMNS, ["rule_id", "label"]),
@@ -93,6 +94,11 @@ def write(out_dir, tables, inputs):
         "production_wrappers_changed": sorted(r["cik"] for r in tables.get("wrapper_drift", []) if r["changed"]),
         # SHA-256 of each wrapper copy the loader parsed, by fund (final fix wave F1).
         "wrapper_copy_sha256": dict(sorted((tables.get("wrapper_copy_sha256") or {}).items())),
+        # Loader version 6: text hash (CRLF read as LF) of every file of a scope fund in the two agent stores, loaded or
+        # skipped, keyed <store>/<dir>/<file>; dbt hashes the same files at build time (stg_agent_store_drift).
+        "agent_store_sha256": dict(sorted((tables.get("agent_store_sha256") or {}).items())),
+        # The files of agent_store_sha256 that were not loaded, with the reason.
+        "agent_store_skipped": dict(sorted((tables.get("agent_store_skipped") or {}).items())),
     }
     tmp = Path(tempfile.mkdtemp(prefix=".readings_tmp_", dir=str(out_dir.parent)))
     try:

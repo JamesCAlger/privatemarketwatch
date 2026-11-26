@@ -1,0 +1,36 @@
+-- Decides the canonical value of each amount field of each position row, by applying the rule int_field_rule chose
+-- (spec intermediate_spine.md 6.4). One row per (accession, context_id, field): fair_value, cost, principal_amount,
+-- principal_amount_usd, shares, pct_of_net_assets. value_filed stays beside the value. The amount half of
+-- int_field_normalised (slice 5 Task 1 split it out unchanged; the rate half is int_rate_normalised, and
+-- int_field_normalised is the union of the two). Columns are int_field_normalised's: the rate columns (value_date,
+-- rate_kind, scale_rule_ids) are null here.
+--
+-- What each action does (where its meaning was read is in the slice 3 Task 3 report):
+--   as_filed              value = value_filed. For principal_amount_usd: value = the principal, already in dollars.
+--   reported_in_usd       value = value_filed: an amount in a foreign unit taken as dollars.
+--   to_usd                principal_amount_usd = principal times usd_per_unit (stg_fx_rate) of the principal's
+--                         currency, on the report date or the latest earlier quote no more than var fx_max_age_days
+--                         (7) days before it. No such quote: unresolved, reason no_fx_rate (production leaves the
+--                         principal unconverted: missing_reference_fx). Same rule as scripts/programme_closeout/fx.py.
+--   cost_foreign_is_par   cost = the US dollar cost fact; principal = the foreign cost fact, in its currency.
+--   par_tagged_as_units   principal = the share count times value_scale, currency USD (production reads the empty
+--                         principal unit as USD); shares left empty (status normalised, reason moved_to_principal).
+--   units_tagged_as_par   shares = the principal fact's number. The principal is kept as filed (as production).
+--   bracketed_unsigned    value = minus value_filed (the printed sign).
+--   fraction_to_percent   value = value_filed times 100. Built here for pct_of_net_assets only (production stores a
+--                         percent: docs/reference/schemas.md line 25, pipeline/staging_bdc.py lines 2945-2949); for
+--                         rates see int_rate_normalised (seeds/reading_action.csv built_early_for_field).
+-- An action counts as built for a field when reading_action.built_in_slice is 3 or built_early_for_field names the
+-- field, or its slice is 4 and the field is a rate field (macro action_is_built); otherwise the field is unresolved,
+-- action_not_built.
+-- Status:
+--   normalised  a rule applied (reason applied, or moved_to_principal on shares)
+--   absent      no fact (reason no_fact), only nil facts (nil), or for principal_amount_usd a principal that is absent
+--   unresolved  reason: values_differ / units_differ / fact_without_number (as read, no rule settled it), no_rule,
+--               rule_conflict, feature_missing (a top-ranked rule needs a row feature that is null), text_not_read (a
+--               top-ranked rule needs printed text no model reads yet, action_field.unread_input),
+--               action_not_built (the action is not built for this field yet), no_fx_rate,
+--               principal_unresolved (principal_amount_usd of an unresolved principal)
+-- The body is macro amount_normalised (macros/amount_normalised.sql, slice 5 Task 3), run here on its usual inputs; int_field_reread
+-- runs the same macro on the rows corrections make positions.
+{{ amount_normalised(ref('int_field_rule'), ref('int_field_read')) }}

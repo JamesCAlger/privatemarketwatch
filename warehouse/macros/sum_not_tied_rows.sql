@@ -7,18 +7,29 @@
     that basis (difference_on_basis) is above var reconcile_tolerance. A published fair value that is not normalised
     counts as missing. Fund-quarters with no filed total are listed too (filed null). Controller ruling, slice 3 Task 3
     fix round 1. Read by tests/baseline_int_field_normalised_sum_not_tied.sql (the count) and
-    tests/int_field_normalised_sum_not_tied_set.sql (the pinned set, final fix wave F5). -#}
-{% macro sum_not_tied_rows() %}
+    tests/int_field_normalised_sum_not_tied_set.sql (the pinned set, final fix wave F5).
+    corrected=true (slice 5 Task 3): the same check on the corrected published basis, the position set after corrections
+    (int_row_corrected) and the corrected fair value (int_field_corrected); a fair value counts as missing unless its
+    status is normalised or corrected (a withdrawn one is missing). Read by tests/baseline_int_field_corrected_sum_not_
+    tied.sql and tests/int_field_corrected_sum_not_tied_set.sql. -#}
+{% macro sum_not_tied_rows(corrected=false) %}
 with published as (
     select
         s.cik
         , s.report_date
         , sum(n.value) as published_fair_value
         , coalesce(sum(n.value) filter (where s.is_cash), 0) as cash_fair_value
+        {%- if corrected %}
+        , count(*) filter (where n.status not in ('normalised', 'corrected')) as fair_value_not_normalised
+    from {{ ref('int_row_corrected') }} s
+    join {{ ref('int_field_corrected') }} n
+        on n.accession = s.accession and n.context_id = s.context_id and n.field = 'fair_value'
+        {%- else %}
         , count(*) filter (where n.status <> 'normalised') as fair_value_not_normalised
     from {{ ref('int_source_row') }} s
     join {{ ref('int_field_normalised') }} n
         on n.accession = s.accession and n.context_id = s.context_id and n.field = 'fair_value'
+        {%- endif %}
     where s.is_published
     group by 1, 2
 )

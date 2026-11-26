@@ -5,7 +5,7 @@
 --   1  no investment identifier member -> not_schedule. Exception: a cash context goes on, so that rule 8 can reach it
 --      (the spec lists rule 8 after rule 1; read literally, rule 8 could never fire). A cash context has a member on
 --      the cash and cash equivalents axis, no investment identifier member, and every other member on an axis listed
---      for rule 8 in seeds/role_pattern.csv (the issuer affiliation axis; fix round 2: Apollo files its money-market
+--      for rule 8 in seeds/role_pattern.csv (the issuer affiliation axis; fix round 2: one fund files its money-market
 --      funds on the cash axis plus the affiliation axis).
 --   2  the instant is not the filing's period end (an earlier instant, or a duration context) -> comparative
 --   3  no fair value -> not_schedule. Fair-value facts that carry two different numbers -> unresolved.

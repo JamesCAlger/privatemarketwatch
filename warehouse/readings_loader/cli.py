@@ -15,7 +15,7 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from . import LoadError, row_stores, store, wrappers
+from . import LoadError, agent_stores, row_stores, store, wrappers
 
 SCOPE_FILE = Path("data/reference/quarter_acceptance_thresholds.json")
 WRAPPERS_DIR = Path("warehouse/wrappers")
@@ -24,6 +24,12 @@ SOURCE_FILE = "_source.json"
 ROW_STORES = [
     ("row_corrections", Path("data/overrides/row_corrections.csv")),
     ("row_corrections_by_context", Path("data/overrides/row_corrections_by_context.csv")),
+]
+# Loader version 6 (slice 5 Task 2): the two agent stores production applies (readings_loader/agent_stores.py).
+# Same folders as dbt var agent_store_dirs.
+AGENT_STORES = [
+    (agent_stores.B2_STORE, Path("data/overrides/agent_b2_corrections")),
+    (agent_stores.RULES_STORE, Path("data/overrides/agent_investigate_rules")),
 ]
 
 
@@ -52,14 +58,18 @@ def wrapper_drift(ciks, wrappers_dir, production_dir):
     return rows, inputs
 
 
-def load(ciks, wrappers_dir, row_store_paths, production_dir=None):
+def load(ciks, wrappers_dir, row_store_paths, production_dir=None, agent_store_paths=()):
     """(tables, inputs) for the given funds. Raises LoadError if a wrapper is missing or unreadable.
 
     With production_dir, also the wrapper_drift table (production wrapper changed since the copy was taken).
     tables["wrapper_copy_sha256"] maps each fund to the SHA-256 of the copy bytes that were parsed; it goes into the
-    manifest only (store.write), where dbt compares it with the copy at build time (stg_wrapper_drift)."""
-    tables = {"reading_rule": [], "correction": [], "not_loaded": [], "wrapper_drift": [], "rule_label_example": [],
-              "wrapper_copy_sha256": {}}
+    manifest only (store.write), where dbt compares it with the copy at build time (stg_wrapper_drift).
+    agent_store_paths: (store name, folder) pairs of the agent stores (readings_loader/agent_stores.py); their value
+    entries go into correction, their row-selecting rules into correction_rule, and the text hash of every file of a
+    scope fund into the manifest (agent_store_sha256, agent_store_skipped), checked by dbt (stg_agent_store_drift)."""
+    tables = {"reading_rule": [], "correction": [], "correction_rule": [], "not_loaded": [], "wrapper_drift": [],
+              "rule_label_example": [], "wrapper_copy_sha256": {}, "agent_store_sha256": {},
+              "agent_store_skipped": {}}
     inputs = {}
     for cik in sorted(ciks):
         path = Path(wrappers_dir) / f"{cik}.json"
@@ -83,6 +93,12 @@ def load(ciks, wrappers_dir, row_store_paths, production_dir=None):
     for name, path in row_store_paths:
         tables["correction"] += row_stores.read_row_corrections(path, name, ciks)
         inputs[Path(path).as_posix()] = store.file_sha256(path)
+    for name, folder in agent_store_paths:
+        corrections, rules, hashes, skipped = agent_stores.read_agent_store(name, folder, ciks)
+        tables["correction"] += corrections
+        tables["correction_rule"] += rules
+        tables["agent_store_sha256"].update(hashes)
+        tables["agent_store_skipped"].update(skipped)
     return tables, inputs
 
 
@@ -96,10 +112,15 @@ def main(argv=None):
     # (warehouse/ci/run_fixture_build.py).
     for name, path in ROW_STORES:
         p.add_argument("--" + name.replace("_", "-"), dest=name, default=str(path))
+    # The two agent store folders (loader version 6); the CI fixture build passes its own.
+    for name, path in AGENT_STORES:
+        p.add_argument("--" + name.replace("_", "-"), dest=name, default=str(path))
     args = p.parse_args(argv)
     row_store_paths = [(name, Path(getattr(args, name))) for name, _ in ROW_STORES]
+    agent_store_paths = [(name, Path(getattr(args, name))) for name, _ in AGENT_STORES]
     try:
-        tables, inputs = load(load_scope(args.scope_file), args.wrappers, row_store_paths, args.production_wrappers)
+        tables, inputs = load(load_scope(args.scope_file), args.wrappers, row_store_paths, args.production_wrappers,
+                              agent_store_paths)
         manifest = store.write(args.out, tables, inputs)
     except LoadError as exc:
         print(f"ERROR: {exc}")
@@ -109,9 +130,17 @@ def main(argv=None):
     for title, table, column in (("rules by class", "reading_rule", "rule_class"),
                                  ("rules by origin", "reading_rule", "origin"),
                                  ("corrections by store", "correction", "store"),
-                                 ("corrections by kind", "correction", "kind")):
+                                 ("corrections by kind", "correction", "kind"),
+                                 ("correction rules by store", "correction_rule", "store"),
+                                 ("correction rules by type", "correction_rule", "rule_type")):
         counts = Counter(r[column] for r in tables[table])
         print(f"{title}: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
+    print("corrections by store and kind: " + ", ".join(
+        f"{s}/{k}={v}" for (s, k), v in sorted(Counter((r["store"], r["kind"]) for r in tables["correction"]).items())))
+    print(f"agent store files of scope funds: {len(tables['agent_store_sha256'])}, "
+          f"skipped {len(tables['agent_store_skipped'])}")
+    for f, why in sorted(tables["agent_store_skipped"].items()):
+        print(f"skipped: {f} ({why})")
     for n in tables["not_loaded"]:
         print(f"not loaded: {n['cik']} {n['wrapper_key']} {n['entry']} ({n['reason']})")
     changed = manifest.get("production_wrappers_changed", [])

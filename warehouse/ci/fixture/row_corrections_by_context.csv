@@ -1,2 +1,6 @@
 cik,report_date,accession_number,bdc_investment_identifier,src_context_id,field,value,reason,source_evidence,author,date_added
 1,2026-03-31,0000000001-26-000011,"Beta LLC | Second lien loan",c-4,issuer_name,Beta LLC,Invented CI fixture row,fixture,ci,2026-11-19
+1,2026-03-31,0000000001-26-000011,"Term loan",c-7,cost,200,Invented CI fixture row: equal to the filed cost (no_op),fixture,ci,2026-11-25
+1,2026-03-31,0000000001-26-000011,"Missing Co | Term loan",c-99,cost,5,Invented CI fixture row: no such context (rejected target_not_found),fixture,ci,2026-11-25
+1,2026-03-31,0000000001-26-000011,"Acme Corp | First lien term loan",c-3,pik_rate,3.0,Invented CI fixture row: a PIK rate the rate reading runs again on (cash leg derived),fixture,ci,2026-11-25
+1,2026-03-31,0000000001-26-000011,"Tranche A",c-24,cost,240,Invented CI fixture row: a cost that differs from the filed one (applied),fixture,ci,2026-11-25

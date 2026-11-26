@@ -1,5 +1,6 @@
 """The two row-correction CSV stores as correction rows, for the scope funds only."""
 import csv
+from pathlib import Path
 
 from . import CORRECTION_COLUMNS, LoadError, content_id
 
@@ -31,7 +32,8 @@ def read_row_corrections(path, store, ciks):
                 identifier=(raw["bdc_investment_identifier"] or "").strip(), field=field,
                 value=(raw["value"] or "").strip(), kind="value", store=store,
                 reason=raw["reason"] or "", evidence=raw["source_evidence"] or "",
-                author=(raw["author"] or "").strip(), date_added=(raw["date_added"] or "").strip())
+                author=(raw["author"] or "").strip(), date_added=(raw["date_added"] or "").strip(),
+                source_file=Path(path).name)
             row["correction_id"] = content_id(row, CORRECTION_COLUMNS, "correction_id")
             out.append(row)
     return out

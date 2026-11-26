@@ -22,3 +22,6 @@ sources:
       - name: rule_label_example
         meta:
           external_location: "read_parquet('{{ var('readings_dir') }}/rule_label_example.parquet')"
+      - name: correction_rule
+        meta:
+          external_location: "read_parquet('{{ var('readings_dir') }}/correction_rule.parquet')"

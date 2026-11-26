@@ -19,12 +19,12 @@ In CI: `python ci/run_fixture_build.py --work "$RUNNER_TEMP/warehouse_ci"` (from
 | Step | Command | Writes to the work folder |
 |---|---|---|
 | 1 | the filed parser on `fixture/raw/` (`--raw`, `--out`, `--scope-file`) | `filed/` |
-| 2 | the readings loader on `fixture/wrappers/`, `fixture/production_wrappers/` and the two fixture row stores | `readings/` |
+| 2 | the readings loader on `fixture/wrappers/`, `fixture/production_wrappers/`, the two fixture row stores and (slice 5 Task 2) the two fixture agent store folders | `readings/` |
 | 3 | an empty Parquet file with the column names and types in `fixture/output/private_markets_holdings.columns.csv`, and a header-only `fund_financials.csv` | `output/` |
 | 4 | `dbt run --select stg_v05_scope stg_holdings stg_fund_financials` | `ci.duckdb` |
 | 5 | `dbt build`, selection below, `--indirect-selection cautious` | `ci.duckdb`, `target/`, `logs/` |
 | 6 | `dbt run --empty --select cmp_row_set cmp_excluded_quarter` | same |
-| 7 | `dbt test --select test_type:unit path:tests/baseline_production_wrapper_changed.sql path:tests/baseline_wrapper_copy_changed_since_load.sql path:tests/baseline_row_store_changed_since_load.sql` | same |
+| 7 | `dbt test --select test_type:unit path:tests/baseline_production_wrapper_changed.sql path:tests/baseline_wrapper_copy_changed_since_load.sql path:tests/baseline_row_store_changed_since_load.sql path:tests/baseline_agent_store_changed_since_load.sql` | same |
 
 Step 6 (slice 3): `--empty` makes dbt build the two comparison models with no rows. They read the
 pipeline's `data/output/`, which CI does not have, so their data cannot be built here. The unit test
@@ -37,7 +37,8 @@ script (`WAREHOUSE_CI_DUCKDB`); it never touches `target/warehouse.duckdb`. Ever
 `--vars` (`filed_dir`, `readings_dir`, `thresholds_file`, `output_dir`, `wrappers_dir`,
 `production_wrappers_dir`, `row_store_files`, `fx_rate_file`); no model is edited. The script
 also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_roles.sql`,
-`tests/ci_fixture_expected_amounts.sql` and `tests/ci_fixture_expected_rates.sql`, and sets
+`tests/ci_fixture_expected_amounts.sql`, `tests/ci_fixture_expected_rates.sql` and (slice 5 Task 6)
+`tests/ci_fixture_expected_corrections.sql`, and sets
 `DBT_SEND_ANONYMOUS_USAGE_STATS=false` and `--no-version-check`. The selection is written once, in
 `run_fixture_build.py`.
 
@@ -49,14 +50,23 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   `path:models/intermediate/int_*.sql`, and four hand-written tests that read no model
   (`int_source_row_text_patterns`, `concept_release_unmatched_fixture`,
   `concept_rule_namespace_gaps_fixture`, `filed_one_filing_row_per_folder`). It excludes
-  `path:tests/baseline_*.sql`. With cautious indirect selection a data test runs only when every model
+  `path:tests/baseline_*.sql` and (slice 5 Task 3) `tag:baseline_ceiling`, the generic baseline tests on the
+  correction models, whose ceilings are measured on real data. With cautious indirect selection a data test runs only when every model
   it reads is selected. Since slice 3 this includes the amounts: the seeds `concept_map`,
   `field_rule_default` and `action_field`, the view `stg_fx_rate` (over the fixture's rate file), and
   the tables `int_field_read`, `int_field_rule` and `int_field_normalised`. `cmp_amount` is left out,
   as `cmp_row_set` is: it reads production's holdings; `cmp_rate` likewise (slice 4). Last local run
-  (rate rulings fix round 1, 2026-11-23): `PASS=334 WARN=5 ERROR=0 TOTAL=339`; the new models `int_rate_scale` and
+  (slice 5 Task 1, 2026-11-24): `PASS=348 WARN=5 ERROR=0 TOTAL=353` (rate rulings fix round 1: 339; slice 5 Task 1 adds
+  the seed `unit_kind` and its tests, the two `unit_kind_*` tests, `int_amount_normalised` and `int_rate_normalised` with
+  their field tests; `int_field_normalised` is now a view over them); the models `int_rate_scale` and
   `int_rate_tag_cell` and their tests are selected as `int_*` (slice 4 Task 5: 318). The 5 warnings are the generic unresolved baselines on the fixture's
-  deliberate unresolved rate rows (see below). Slice 3 ended at 281.
+  deliberate unresolved rate rows (see below). Slice 3 ended at 281. Slice 5 Task 2 (2026-11-24): `PASS=375 WARN=5
+  ERROR=0 TOTAL=380` (the seed `correction_field` and its tests, `stg_correction_rule`, `stg_agent_store_drift`, the new
+  `stg_correction` column tests and four hand-written readings tests). Slice 5 Task 3 (2026-11-24): `PASS=411 WARN=5
+  ERROR=0 TOTAL=416` (the seven correction models, their column tests and unit tests, and the hand-written correction
+  tests that read no production file). Step 7 since then: `PASS=43` (six correction unit tests added). Slice 5 Task 6
+  (2026-11-25, run in a new empty folder): step 4 `PASS=3`; build `PASS=428 WARN=5 ERROR=0 TOTAL=433` (adds
+  `tests/ci_fixture_expected_corrections.sql`; Tasks 4 and 5 brought it to 432); empty run `PASS=2`; step 7 `PASS=45`.
 - Step 6: `PASS=2` (the two empty comparison models).
 - Step 7: all 32 unit tests (dbt build runs a unit test only when its model is built, so the five on
   `cmp_row_set`, `cmp_excluded_quarter`, `cmp_amount` and `cmp_rate` need this step; the int_* ones run twice) and
@@ -67,7 +77,11 @@ also passes `ci_fixture: true`, which switches on `tests/ci_fixture_expected_rol
   against the hash the loader recorded in step 2. `baseline_row_store_changed_since_load` (slice 3): the
   fixture's two row stores against the hashes the loader recorded in step 2 (`stg_row_store_drift`).
   Since slice 4 the two wrapper checks hash the text with CRLF read as LF. Last local run (rate rulings
-  fix round 1, 2026-11-23): `PASS=35 TOTAL=35` (32 unit tests, 3 drift baselines; slice 4 Task 5: 33).
+  fix round 1, 2026-11-23): `PASS=35 TOTAL=35` (32 unit tests, 3 drift baselines; slice 4 Task 5: 33). Slice 5 Task 1
+  (2026-11-24): `PASS=36` (33 unit tests: `int_field_rule_tie_break_unread_mix` added). Slice 5 Task 2: `PASS=37`
+  (`baseline_agent_store_changed_since_load` added: the fixture's two agent store folders against the hashes the loader
+  recorded in step 2, `stg_agent_store_drift`; rebuilt over an edited copy it fails, 2 rows for one edited and one
+  added file).
 
 ### The drift views and `dbt test --vars`
 
@@ -78,7 +92,7 @@ check other files, rebuild the view with the same vars first (`dbt build --selec
 --vars ...`, or `stg_row_store_drift`). This script builds the views in step 5 with its vars before
 step 7 tests them, and a full `dbt.ps1 build` rebuilds them with the project's vars.
 
-### The three expected-values tests
+### The four expected-values tests
 
 - `tests/ci_fixture_expected_roles.sql`: the role, rule number, cash flag, published flag and scope each
   fixture context must get, the fund rule that must decide six of them, and the filing each quarter must
@@ -93,22 +107,41 @@ step 7 tests them, and a full `dbt.ps1 build` rebuilds them with the project's v
   expected dollar value changed from 194.4 to 194.5, step 5 ends `FAIL 1 ci_fixture_expected_amounts`.
 - `tests/ci_fixture_expected_rates.sql` (slice 4): for each fixture position, every rate field
   (`interest_rate`, `interest_rate_cash`, `pik_rate`, `spread`, `maturity_date`) that is not absent with
-  reason `no_fact` (17 of 90: 18 positions), with its status, reason, value or date, `rate_kind`, action and the rule
-  that converted it. Every position must have its five rate rows. The fund reads its rate tag as all-in
-  and declares a PIK-only coupon reading. The rows are there on purpose:
+  reason `no_fact` (19 of 85: 17 positions, 16 in the first fund and 1 in the second, measured slice 5 Task 1; it read 17 of 90 before), with its status, reason, value or date, `rate_kind`, action and the rule
+  that converted it. Every position must have its five rate rows. The first fund reads its rate tag as all-in
+  and declares a PIK-only coupon reading; the second declares no rate reading. The rows are there on purpose:
 
   | Position | What it shows | Expected |
   |---|---|---|
   | c-3 | a rate tag and a PIK tag | all-in 9.0 (`all_in`), cash leg 7.0, PIK 2.0; the legs check (`int_field_normalised_rate_legs`) runs on this row |
-  | c-7 | a rate tag and a spread | all-in 8.0; spread 5.0 (default `fraction_to_percent`); cash leg empty, `no_pik_read` |
-  | c-24 | a rate tag only | all-in 7.0; cash leg empty, `no_pik_read` |
+  | c-7 | a rate tag and a spread | all-in 8.0; spread 5.0 (default `fraction_to_percent`); cash leg 8.0, `cash_equals_all_in` (owner ruling A) |
+  | c-24 | a rate tag only | all-in 7.0; cash leg 7.0, `cash_equals_all_in` (owner ruling A) |
   | c-17 | only a PIK tag (12.50 printed) | all-in rate, cash leg and spread unresolved `text_not_read`, kind `unresolved`; PIK rate 12.5 still read |
   | c-25 | a rate tag filed as 7.00 (a percent) in a ratio unit | all-in rate and cash leg unresolved `scale_not_decided`, no value |
-  | c-8 | a rate tag in the unit written `xbrli:pure` | unresolved `unit_not_pure`: unit kinds are read from the unit text, which knows `pure` and `utr:Rate` only. Pins today's behaviour; none of the five funds writes the prefix |
+  | c-8 | a rate tag in the unit written `xbrli:pure` | all-in 8.0, cash leg 8.0 (`cash_equals_all_in`): unit kinds come from `seeds/unit_kind.csv`, which lists `xbrli:pure` as a ratio (slice 5 Task 1; before, unresolved `unit_not_pure`). None of the five funds writes the prefix |
+  | fund 2, c-2 | a rate tag, from a second fund whose wrapper copy declares no rate reading (slice 5 Task 1) | all-in rate and cash leg unresolved `no_rule`, kind `unresolved`, no value |
   | c-4 | a maturity date | 2030-01-01, `as_filed` (`gd_maturity_date`) |
 
   Shown to bite: with c-3's expected cash leg changed from 7.0 to 7.1, step 5 ends
   `FAIL 1 ci_fixture_expected_rates`.
+- `tests/ci_fixture_expected_corrections.sql` (slice 5 Task 6): the outcome of every fixture correction
+  (`int_correction_application`: outcome, reason, step, value after), the two contexts corrections make
+  positions (`int_row_corrected`) and the corrected values that show each mechanism (`int_field_corrected`).
+  A correction outcome with no expectation fails it too. One correction of each kind is there on purpose:
+
+  | Correction | Store | Expected |
+  |---|---|---|
+  | c-24 cost 240 (filed 250) | row store by context | `applied`, step `converted` |
+  | c-7 cost 200, c-3 cost 990, c-91 cost 100 (each equal to the filed cost) | row stores, add_row | `no_op`, `equal_to_normalised` |
+  | c-99 cost (no such context); the B2 leaf (its production row id is in no production row here); the second fund's row (no such filing) | row stores, B2 | `rejected`, `target_not_found` |
+  | c-4 issuer name; the c-19 relabel; the add_row metadata fields | row store, wrapper, add_row | `deferred`, `field_not_held` |
+  | c-27 fair value 0: a principal, no fair-value fact (rule 3), a dash printed in the fair-value cell | wrapper `untagged_values` | `applied` at step `filed`; c-27 becomes a position (`correction_supplies_fair_value`) |
+  | c-4 principal 500 | wrapper `untagged_values` | `applied` at step `filed`; the dollar principal 500 is derived from it |
+  | c-3 PIK rate 3.0 (filed 2.0) | row store by context | `applied` at step `reading_input`; the rate reading runs again: cash leg 6.0 (was 7.0), all-in 9.0 unchanged |
+  | the agent rule's position on c-91: an issuer-axis context with a cost only (rule 1) | `agent_investigate_rules` `row_add` | fair value 100, principal 100 USD `applied`; c-91 becomes a position (`correction_adds_row`) |
+
+  Shown to bite: with c-3's expected corrected cash leg changed from 6.0 to 6.1, step 5 ends
+  `FAIL 1 ci_fixture_expected_corrections` (2026-11-25).
 
 The generic baselines on unresolved fields (`baseline_int_field_normalised_unresolved_*`, declared in
 `_intermediate.yml`, not files under `tests/baseline_*`) are selected in step 5. Their ceilings are
@@ -117,18 +150,21 @@ c-25) five of them warn.
 
 ## The fixture
 
-All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`. 14 files, about 41 KB.
+All invented. Fund cik `0000000001`, namespace `http://fixturefund.example.com/`, and since slice 5 Task 1 a second fund, cik `0000000002`, with one position. 18 files, about 45 KB.
 
 | File | What |
 |---|---|
-| `fixture/raw/bdc_xbrl/1/000000000126000011.xml` and `fixture/raw/bdc_html/1/000000000126000011.html` | A 10-Q at 2026-03-31, 26 contexts, one per row-role rule (the expected role is in a comment above each). The inline document places every numeric fact. Since slice 3 it also has a principal in euros (c-7) and a share of net assets written in the unit `pure` without a prefix, as the five funds write it (c-3). Since slice 4: PIK rates on c-3 and c-17, a spread on c-7, c-25's rate filed as a percent; the rate facts are in the unprefixed `pure` unit except c-8's (see the rates test). |
+| `fixture/raw/bdc_xbrl/1/000000000126000011.xml` and `fixture/raw/bdc_html/1/000000000126000011.html` | A 10-Q at 2026-03-31, 26 contexts, one per row-role rule (the expected role is in a comment above each). The inline document places every numeric fact. Since slice 3 it also has a principal in euros (c-7) and a share of net assets written in the unit `pure` without a prefix, as the five funds write it (c-3). Since slice 4: PIK rates on c-3 and c-17, a spread on c-7, c-25's rate filed as a percent; the rate facts are in the unprefixed `pure` unit except c-8's (see the rates test). Since slice 5 Task 6, 28 contexts: c-27 (a principal, no fair-value fact, a dash printed in its fair-value cell) and c-91 (an issuer-axis context with a cost only), both `not_schedule`, made positions by corrections (see the corrections test). |
 | `fixture/fx_rates.csv` | Three US-dollar-per-unit quotes in the columns of the rate file production uses: two from 2018-10-01 and EUR on 2026-03-27 for c-7. |
 | `fixture/raw/bdc_xbrl/1/000000000126000012.xml` | A cover-only 10-Q/A for the same quarter: skipped by filing selection, its context superseded. |
 | `fixture/raw/bdc_xbrl/1/000000000126000001.xml`, `...0002.xml` | Two 10-K originals for 2025-12-31: the quarter is refused (`two_originals_same_quarter`). |
 | `fixture/wrappers/0000000001.json` | The wrapper copy: old-style declarations (rate reading, dollar principal by `fred_h10` (slice 3), a legal-entity member, a label suffix, a cash identifier, a procedure the loader lists as not loaded, an untagged value, a relabel) and five `reading_rules` (fair value and term fact from the fund's own concepts, `subtotal_on_fair_value`, two `position_without_term_fact` with label examples, one dated with `fair_value_zero`). Since slice 4 also `pik_only_tag_reading: coupon`, in the copy only (not in the production stand-in). |
-| `fixture/wrappers/_source.json`, `fixture/production_wrappers/0000000001.json` | The copy record and the production wrapper it stands beside. |
-| `fixture/row_corrections.csv`, `fixture/row_corrections_by_context.csv` | One row each for the fund, and one for another fund that the loader drops. |
-| `fixture/scope.json` | `findings_scope.ciks`: the one fund. |
+| `fixture/wrappers/_source.json`, `fixture/production_wrappers/0000000001.json` | The copy record and the production wrapper the copy stands beside (the record also holds the second fund's). |
+| `fixture/row_corrections.csv`, `fixture/row_corrections_by_context.csv` | One row each for the fund, and one for the second fund naming a filing that does not exist (rejected, `target_not_found`). Slice 5 Task 6 adds four rows by context: c-7 cost (no_op), c-99 cost (rejected), c-3 PIK rate (the rate reading runs again), c-24 cost (applied). |
+| `fixture/agent_b2_corrections/0000000001/` | Slice 5 Task 2: one B2 leaf of each kind the loader reads, `all_pik_normalization` (keyed by an invented production row id) and `comparative_period_filter`. |
+| `fixture/agent_investigate_rules/1/` | Slice 5 Task 2: one `row_add` rule (one position, context c-91), one `row_exclusion` rule, and two files the loader skips and hashes (`_retired_*`, `*.proposed.json`). Since slice 5 Task 6 c-91 is in the fixture filing (an issuer-axis context with a cost only), so the rule adds the position. |
+| `fixture/scope.json` | `findings_scope.ciks`: the two funds. |
+| `fixture/raw/bdc_xbrl/2/000000000226000011.xml`, `fixture/wrappers/0000000002.json`, `fixture/production_wrappers/0000000002.json` | Slice 5 Task 1: a second invented fund (cik `0000000002`), one 10-Q at 2026-03-31 with one position (c-2) that carries a rate tag. Its wrapper copy and production stand-in declare nothing, so no rate reading: the rates test expects the rate unresolved `no_rule`. Its hash is in `fixture/wrappers/_source.json`. Its inline document is `fixture/raw/bdc_html/2/000000000226000011.html`. |
 | `fixture/output/` | Column names and types of the holdings file (the columns `stg_holdings` reads) and the header of `fund_financials.csv`. No rows. |
 
 The fixture's bytes are hashed (the drift check, the parser's input hashes), so `.gitattributes` here
@@ -153,8 +189,8 @@ every run instead of leaving stale committed output to be regenerated by hand.
   by unit tests only, which run in step 7.
 - Every baseline test except the three drift ones (two wrapper, one row store): their ceilings are
   measured on real data. The generic unresolved-field baselines run in step 5 but only warn here.
-- Real filings. A fixture of 29 contexts (26 in the 10-Q, one in each of the other three filings, as
-  in the table below) shows the rules run and give the stated roles on invented
+- Real filings. A fixture of 31 contexts in the first fund (28 in the 10-Q since slice 5 Task 6, one
+  in each of the other three filings, as in the table below) shows the rules run and give the stated roles on invented
   rows, and that the amounts come out as stated; it says nothing about whether they are right on any
   fund's filings. A passing fixture build is not a statement that the data is correct.
 - The `.ps1` wrappers (`dbt.ps1`, `parse.ps1`, `load_readings.ps1`): the script calls Python and dbt
@@ -163,7 +199,8 @@ every run instead of leaving stale committed output to be regenerated by hand.
 ## When it fails
 
 - A model or rule change moved a fixture row, amount or rate: read the failing rows of
-  `ci_fixture_expected_roles`, `ci_fixture_expected_amounts` or `ci_fixture_expected_rates` (stored in the work folder's
+  `ci_fixture_expected_roles`, `ci_fixture_expected_amounts`, `ci_fixture_expected_rates` or
+  `ci_fixture_expected_corrections` (stored in the work folder's
   `ci.duckdb`, schema `main_dbt_test__audit`). If the move is intended, change the expectation in the
   test and say why in the commit.
 - A new `int_*` model is selected automatically. A new data test on it runs when every model it reads

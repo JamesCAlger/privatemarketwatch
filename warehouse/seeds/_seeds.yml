@@ -18,7 +18,10 @@ seeds:
       field for which the action is already built before its slice (fraction_to_percent is built in slice 3 for
       pct_of_net_assets only, controller ruling slice 3 Task 3 fix round 1; for rates it stays slice 4). An action is
       built for a field when built_in_slice is 3, or built_early_for_field names that field, or (slice 4 Task 3)
-      built_in_slice is 4 and the field is a rate field (macro rate_output_fields).
+      built_in_slice is 4 and the field is a rate field (macro rate_output_fields). printed_margin_cash_plus_pik is
+      'text' since slice 5 Task 1 (it was 4): it is not built, it decides from the printed total margin, which the text
+      spec reads (spec 6.4, action_field.unread_input). Its rows were and are text_not_read, decided in int_field_rule
+      before any action is checked as built, so the label moved no row.
     config:
       column_types:
         built_in_slice: varchar
@@ -149,7 +152,9 @@ seeds:
     description: >
       For each slice 3 and slice 4 action a fund rule may name, the amount or rate fields it governs and the rows it can act on
       (applies_to; the tests are in int_field_rule). A fund rule whose action is listed here takes part in the amount
-      conversion. The action must be in seeds/reading_action.csv. No fund appears here.
+      conversion. The action must be in seeds/reading_action.csv. No fund appears here. Slice 5 Task 4:
+      adopt_adjacent_rate_context (applies_to rate_only_pair, built_in_slice 5) is the exception: it is decided in
+      int_rate_adjacent, and int_field_rule never applies it (no branch of its applicable test reads rate_only_pair).
     columns:
       - name: action
         data_tests:
@@ -172,7 +177,7 @@ seeds:
               arguments:
                 values: ['unit_foreign', 'unit_pure', 'two_unit_cost', 'two_unit_cost_principal_absent', 'shares_as_par',
                          'principal_as_units', 'sign_differs_from_print', 'principal_foreign', 'rate_tag',
-                         'pik_tag_only', 'spread_with_pik']
+                         'pik_tag_only', 'spread_with_pik', 'rate_only_pair']
       - name: unread_input
         description: >
           Empty, or the name of an input the action needs that no model reads yet (printed text, for example the printed
@@ -187,3 +192,58 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['printed_total_margin', 'printed_rate_type_and_loan_class']
+  - name: unit_kind
+    description: >
+      Written unit text to unit kind (slice 5 Task 1; owner decision 10 of 2026-11-23 and slice 5 decision 6: the
+      mapping is data, keyed by the unit as written, since the filed layer keeps the written unit and not the namespace
+      behind a prefix). unit_pattern is an RE2 pattern matched against the whole unit text (numerator, or
+      numerator/denominator); macro unit_kind returns the kind of the one row that matches, or other when none does.
+      Kinds: usd, foreign, shares, pure, and other for a unit listed on purpose that no amount or rate field reads. A
+      text matching two rows fails tests/unit_kind_one_row_per_unit.sql; a unit int_field_read reads for an amount or
+      rate field that no row lists fails tests/unit_kind_read_units_listed.sql. A filer's own unit (a prefix of its
+      own) is not listed here: no fund appears in a seed.
+    columns:
+      - name: unit_pattern
+        data_tests:
+          - unique
+          - not_null
+      - name: unit_kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['usd', 'foreign', 'shares', 'pure', 'other']
+  - name: correction_field
+    description: >
+      Slice 5 Task 2: each field a loaded correction sets (stg_correction.field), by store, mapped to this layer's
+      field and to the step at which the correction acts (spec intermediate_spine.md section 11; slice 5 plan, terms).
+      store_pattern is an RE2 pattern matched against the whole store name; one correction matches exactly one row
+      (tests/readings_correction_field_mapped.sql), so a new field or store fails the build until a row is added. The
+      store is part of the key because the step differs by store: a wrapper untagged value is filed (production fills
+      it at parse time, conversion runs on it); the same field in a row store is converted (production replaces the
+      published value). Steps: filed, converted, reading_input (an input of the rate reading, which re-runs),
+      companion (travels with the field in companion_of; layer_field is then a column of that field's row: currency,
+      fx_rate), deferred (this layer does not hold the field; the correction waits for the text spec, slice 5
+      decision 3). layer_field: the int_field_normalised field, or the column for a companion and for rate_kind; empty
+      when the layer holds nothing. note: where production applies it.
+    columns:
+      - name: correction_field
+        data_tests: [not_null]
+      - name: store_pattern
+        data_tests: [not_null]
+      - name: step
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['filed', 'converted', 'reading_input', 'companion', 'deferred']
+      - name: companion_of
+        data_tests:
+          - not_null:
+              config:
+                where: "step = 'companion'"
+      - name: layer_field
+        data_tests:
+          - not_null:
+              config:
+                where: "step in ('filed', 'converted', 'reading_input')"

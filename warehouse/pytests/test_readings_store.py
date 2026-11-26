@@ -50,7 +50,7 @@ def _inputs(tmp_path):
     wrappers.mkdir()
     (wrappers / "0000000001.json").write_text(json.dumps({"source_encodings": {
         "filed_rate_reading": ["all_in"],
-        "rate_only_contexts": ["adopt_adjacent"],
+        "gics_industry_carry_back": ["through 2025-09-30"],  # a procedure key (not_loaded)
         "untagged_values": ["0000000001-26-000001 c-9 cost 7"],
     }}), encoding="utf-8")
     rows = _csv(tmp_path, "c.csv", ["1,2026-03-31,0000000001-26-000001,Acme,cost,100,why,where,me,2026-11-01,c-1"])
@@ -62,7 +62,8 @@ def test_load_and_write_round_trip(tmp_path):
     tables, inputs = cli.load(["0000000001"], wrappers, stores)
     manifest = store.write(tmp_path / "out", tables, inputs)
     assert {k: v["rows"] for k, v in manifest["tables"].items()} == {"reading_rule": 1, "correction": 2, "not_loaded": 1,
-                                                                    "wrapper_drift": 0, "rule_label_example": 0}
+                                                                    "wrapper_drift": 0, "rule_label_example": 0,
+                                                                    "correction_rule": 0}
     con = duckdb.connect()
     got = con.execute(f"select action, priority from read_parquet('{(tmp_path / 'out' / 'reading_rule.parquet').as_posix()}')").fetchall()
     assert got == [("rate_is_all_in", 20)]
@@ -124,7 +125,8 @@ def test_two_runs_give_the_same_manifest_and_replace_the_output(tmp_path):
     second = store.write(tmp_path / "out", *cli.load(["0000000001"], wrappers, stores))
     assert first == second
     assert sorted(p.name for p in (tmp_path / "out").iterdir()) == [
-        "_manifest.json", "correction.parquet", "not_loaded.parquet", "reading_rule.parquet", "rule_label_example.parquet",
+        "_manifest.json", "correction.parquet", "correction_rule.parquet", "not_loaded.parquet", "reading_rule.parquet",
+        "rule_label_example.parquet",
         "wrapper_drift.parquet"]
     assert [p.name for p in tmp_path.iterdir() if p.name.startswith(".readings_tmp_")] == []
 
@@ -224,7 +226,10 @@ def test_command_line_reads_the_stores_and_folders_it_is_given(tmp_path, capsys)
     out = tmp_path / "out"
     code = cli.main(["--out", str(out), "--scope-file", str(scope), "--wrappers", str(wrappers),
                      "--production-wrappers", str(production), "--row-corrections", str(stores[0][1]),
-                     "--row-corrections-by-context", str(by_context)])
+                     "--row-corrections-by-context", str(by_context),
+                     # loader version 6: the two agent store folders, empty here
+                     "--agent-b2-corrections", str(_empty(tmp_path, "b2")),
+                     "--agent-investigate-rules", str(_empty(tmp_path, "rules"))])
     assert code == 0
     manifest = json.loads((out / "_manifest.json").read_text(encoding="utf-8"))
     assert manifest["production_wrappers_changed"] == []
@@ -277,3 +282,9 @@ def test_one_label_listed_as_match_and_no_match_stops_the_write(tmp_path):
     tables, inputs = cli.load(["0000000001"], wrappers, stores)
     with pytest.raises(LoadError, match="duplicate key"):
         store.write(tmp_path / "out", tables, inputs)
+
+
+def _empty(tmp_path, name):
+    folder = tmp_path / name
+    folder.mkdir()
+    return folder

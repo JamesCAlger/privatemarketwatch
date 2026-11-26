@@ -5,7 +5,7 @@
 --                        that carry an investment-identifier member.
 -- numeric_fact_count   : facts with a unit, outside the dei namespace, on contexts whose instant or end date is report_date.
 -- is_amendment         : the filing's own dei DocumentType ends in /A. dei AmendmentFlag is carried as evidence and never
---                        read by the selection: it is false on Ares's four 10-K/As.
+--                        read by the selection: it is false on four 10-K/As of one fund of the five.
 -- schedule_max_date    : latest instant date of any identifier-axis fair-value fact in the filing; selection refuses a
 --                        filing whose schedule is dated after its period end.
 with fact_counts as (
