@@ -1186,6 +1186,186 @@ models:
               arguments:
                 values: [normalised, corrected, withdrawn, absent, unresolved]
 
+  # Text slice P (page structure), 2026-11-26. Keys of all eight models: tests/int_page_keys_unique.sql. Counts:
+  # docs/baseline_page_structure_2026-11-26.md. Nothing here says a printed value is right.
+  - name: int_page_position
+    description: >
+      One row per position of int_source_row (published or not): the printed row of the fair-value fact int_field_read
+      reads (visible placements only), with placement_status one_row, several_rows or not_placed. Only one_row carries
+      a row. Published positions not placed or placed in several rows have baseline ceilings
+      (tests/baseline_int_page_position_not_placed.sql, tests/baseline_int_page_position_several_rows.sql).
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: is_published
+        data_tests:
+          - not_null
+      - name: placement_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [one_row, several_rows, not_placed]
+
+  - name: int_page_table
+    description: >
+      One row per schedule table (a printed table holding at least one position's printed row): its rows, modal width,
+      position rows, and its header lines (header_status one_line, two_lines, none, ambiguous; header_form says which
+      two-line layout). The exact header rules are in the model's header. Tables with no header taken have a baseline
+      ceiling (tests/baseline_int_page_table_no_header.sql).
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: table_index
+        data_tests:
+          - not_null
+      - name: width
+        data_tests:
+          - not_null
+      - name: header_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [one_line, two_lines, none, ambiguous]
+      - name: header_form
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [one_line, two_candidates, line_below, group_line_above, none, ambiguous]
+
+  - name: int_page_cell
+    description: >
+      One row per non-empty cell of every row of the schedule tables, with its true columns (colspans summed, row
+      spans from the row above resolved; deeper spans flagged, not resolved), its text and whether its row's width
+      equals the table's. Rows whose width differs have a baseline ceiling (tests/baseline_int_page_cell_row_width.sql);
+      rows that would need a deeper span another (tests/baseline_int_page_cell_deeper_span.sql).
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: row_index
+        data_tests:
+          - not_null
+      - name: cell_index
+        data_tests:
+          - not_null
+      - name: col_start
+        data_tests:
+          - not_null
+      - name: col_end
+        data_tests:
+          - not_null
+      - name: span_rule
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [none, span_from_row_above, deeper_span]
+      - name: row_width_ok
+        data_tests:
+          - not_null
+
+  - name: int_page_column
+    description: >
+      One row per leaf column of each schedule table with a header: its printed columns, the zone of columns whose
+      data cells belong to it, header_text, sub_header_text and header_signature (lower case, footnote marks and white
+      space removed). Each tagged field's placed facts should fall under one signature per table; the tables where they
+      do not have a baseline ceiling (tests/baseline_int_page_field_split_columns.sql).
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: col_start
+        data_tests:
+          - not_null
+      - name: zone_end
+        data_tests:
+          - not_null
+      - name: header_text
+        data_tests:
+          - not_null
+      - name: header_signature
+        data_tests:
+          - not_null
+
+  - name: int_page_cell_column
+    description: >
+      One row per non-empty cell below the header of a schedule table with a header: the leaf column whose zone holds
+      the cell's first column (null when none does) and the cell's simple shape. Published positions whose printed row
+      has no cell under any column have a baseline ceiling (tests/baseline_int_page_position_no_column.sql).
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: shape
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [empty_marker, footnote_mark, date, percent, number, text]
+
+  - name: int_page_column_filing
+    description: >
+      The column unit of a filing, one row per (accession, header_signature): tables, data cells by shape, and the
+      filed facts placed under it counted by concept. Counts only; the next slice bundles it.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: header_signature
+        data_tests:
+          - not_null
+      - name: data_cells
+        data_tests:
+          - not_null
+
+  - name: int_page_heading
+    description: >
+      One row per heading row (no facts, exactly one non-empty cell, below the header of a schedule table with a
+      header), with plain features (is_continued, next_row_kind, seen_in_prior_filing). No meaning is assigned.
+    columns:
+      - name: accession
+        data_tests:
+          - not_null
+      - name: row_index
+        data_tests:
+          - not_null
+      - name: text
+        data_tests:
+          - not_null
+      - name: next_row_kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [heading, position, other, end_of_table]
+
+  - name: int_position_heading
+    description: >
+      For each position with a printed row, the nearest 4 heading rows above it in the same filing, carried across the
+      page tables in document row order, with rank, distance in rows and whether the heading is in the same table.
+    columns:
+      - name: context_id
+        data_tests:
+          - not_null
+      - name: heading_rank
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4]
+                quote: false
+      - name: distance_rows
+        data_tests:
+          - not_null
+
 unit_tests:
   - name: cmp_row_set_catch_all_causes
     description: >
@@ -4929,3 +5109,273 @@ unit_tests:
     expect:
       rows:
         - {accession: F9, taker_context_id: c-12, giver_context_id: c-11, rule_id: r-adj, moved_fields: interest_rate_tag, giver_fact_ids: f-1, taker_is_position: true}
+
+  # Text slice P (page structure), 2026-11-26.
+  - name: int_page_cell_columns_and_rowspan
+    description: >
+      Text slice P2. Table A/1, width 6. Row 10: cumulative starts ("Co" colspan 2 at 0, "Int" colspan 3 at 2; the
+      empty cell takes column 5 but is not kept). Row 11: "Co" spans two rows, so the row's cells are laid into the
+      free columns 2 to 5 (Cash 2, PIK 3, X 4-5), not at 0, 1, 2 (the two-line header case). Row 12: "$" and the number
+      after it at their own columns. Row 13: "T" spans three rows: row 14 is covered from the row above (v at 2-5),
+      row 15 from two rows above (deeper_span: naive start 0 kept and flagged). Row 16: text white space and a
+      no-break space collapse ("z z"); the no-break-space-only cell is dropped; width 4 is not the table's. Table 2 is
+      not a schedule table: no rows.
+    model: int_page_cell
+    given:
+      - input: ref('int_page_table')
+        rows:
+          - {accession: A, table_index: 1, width: 6}
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select acc as accession, ti as table_index, ri as row_index, rit as row_in_table, fc as fact_count,
+                 len(cells) as cell_count, cells, cs as cell_colspans, rs as cell_rowspans
+          from (values
+            ('A', 1, 10, 0, 0, ['Co', 'Int', ''], [2, 3, 1], [2, 1, 1]),
+            ('A', 1, 11, 1, 0, ['Cash', 'PIK', 'X'], [1, 1, 2], [1, 1, 1]),
+            ('A', 1, 12, 2, 2, ['a', '$', '5', '7'], [2, 1, 1, 2], [1, 1, 1, 1]),
+            ('A', 1, 13, 3, 0, ['T', 'u'], [2, 4], [3, 1]),
+            ('A', 1, 14, 4, 0, ['v'], [4], [1]),
+            ('A', 1, 15, 5, 0, ['w'], [4], [1]),
+            ('A', 1, 16, 6, 0, [' z  z ', chr(160)], [3, 1], [1, 1]),
+            ('A', 2, 20, 0, 0, ['other'], [1], [1])
+          ) t(acc, ti, ri, rit, fc, cells, cs, rs)
+    expect:
+      rows:
+        - {row_index: 10, cell_index: 0, col_start: 0, col_end: 1, text: Co, span_rule: none, row_width_ok: true}
+        - {row_index: 10, cell_index: 1, col_start: 2, col_end: 4, text: Int, span_rule: none, row_width_ok: true}
+        - {row_index: 11, cell_index: 0, col_start: 2, col_end: 2, text: Cash, span_rule: span_from_row_above, row_width_ok: true}
+        - {row_index: 11, cell_index: 1, col_start: 3, col_end: 3, text: PIK, span_rule: span_from_row_above, row_width_ok: true}
+        - {row_index: 11, cell_index: 2, col_start: 4, col_end: 5, text: X, span_rule: span_from_row_above, row_width_ok: true}
+        - {row_index: 12, cell_index: 0, col_start: 0, col_end: 1, text: a, span_rule: none, row_width_ok: true}
+        - {row_index: 12, cell_index: 1, col_start: 2, col_end: 2, text: $, span_rule: none, row_width_ok: true}
+        - {row_index: 12, cell_index: 2, col_start: 3, col_end: 3, text: "5", span_rule: none, row_width_ok: true}
+        - {row_index: 12, cell_index: 3, col_start: 4, col_end: 5, text: "7", span_rule: none, row_width_ok: true}
+        - {row_index: 13, cell_index: 0, col_start: 0, col_end: 1, text: T, span_rule: none, row_width_ok: true}
+        - {row_index: 13, cell_index: 1, col_start: 2, col_end: 5, text: u, span_rule: none, row_width_ok: true}
+        - {row_index: 14, cell_index: 0, col_start: 2, col_end: 5, text: v, span_rule: span_from_row_above, row_width_ok: true}
+        - {row_index: 15, cell_index: 0, col_start: 0, col_end: 3, text: w, span_rule: deeper_span, row_width_ok: true}
+        - {row_index: 16, cell_index: 0, col_start: 0, col_end: 2, text: z z, span_rule: none, row_width_ok: false}
+
+  - name: int_page_table_header_forms
+    description: >
+      Text slice P3. One schedule table per header form. T1 one candidate, a heading row below (one cell) and an empty
+      row above: one_line. T2 two candidates on consecutive rows: two_candidates. T3 one candidate and a line below with
+      2 cells: line_below. T4 a group line above ("Interest" covering 3 of the 5 header cells): group_line_above. T5 a
+      title above covering every header cell: not a group line, one_line. T6 no candidate: none. T7 two candidates not
+      on consecutive rows: ambiguous. T8 holds no position: no row. Width is modal (T1 3, T4 7).
+    model: int_page_table
+    given:
+      - input: ref('int_page_position')
+        format: sql
+        rows: |
+          select 'A' as accession, '1' as cik, date '2026-03-31' as report_date, st as placement_status, ti as table_index,
+                 ri as row_index, rit as row_in_table
+          from (values
+            ('one_row', 1, 13, 3), ('one_row', 2, 22, 2), ('one_row', 3, 32, 2), ('one_row', 4, 42, 2),
+            ('one_row', 5, 52, 2), ('one_row', 6, 60, 0), ('one_row', 7, 73, 3),
+            ('not_placed', null::integer, null::integer, null::integer)
+          ) t(st, ti, ri, rit)
+      - input: ref('stg_filed_document_row')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, ri as row_index, rit as row_in_table, fc as fact_count,
+                 len(cells) as cell_count, cells, cs as cell_colspans, rs as cell_rowspans
+          from (values
+            (1, 10, 0, 0, ['', '', ''], [1, 1, 1], [1, 1, 1]),
+            (1, 11, 1, 0, ['Co', 'Rate', 'FV'], [1, 1, 1], [1, 1, 1]),
+            (1, 12, 2, 0, ['Energy', '', ''], [1, 1, 1], [1, 1, 1]),
+            (1, 13, 3, 3, ['x', '1', '2'], [1, 1, 1], [1, 1, 1]),
+            (2, 20, 0, 0, ['Co', 'Int', 'FV'], [1, 1, 1], [2, 1, 2]),
+            (2, 21, 1, 0, ['Cash', 'PIK', 'Units'], [1, 1, 1], [1, 1, 1]),
+            (2, 22, 2, 3, ['x', '1', '2'], [1, 1, 1], [1, 1, 1]),
+            (3, 30, 0, 0, ['Portfolio', 'Type', 'Unfunded'], [1, 1, 1], [1, 1, 1]),
+            (3, 31, 1, 0, ['', 'Commitment', 'Fair Value'], [1, 1, 1], [1, 1, 1]),
+            (3, 32, 2, 3, ['x', '1', '2'], [1, 1, 1], [1, 1, 1]),
+            (4, 40, 0, 0, ['', 'Interest', ''], [2, 3, 2], [1, 1, 1]),
+            (4, 41, 1, 0, ['Co', '', 'Ref', 'Cash', 'PIK', 'FV'], [1, 1, 1, 1, 1, 2], [1, 1, 1, 1, 1, 1]),
+            (4, 42, 2, 4, ['x', '', '1', '2', '3', '4'], [1, 1, 1, 1, 1, 2], [1, 1, 1, 1, 1, 1]),
+            (5, 50, 0, 0, ['Schedule of investments'], [7], [1]),
+            (5, 51, 1, 0, ['Co', 'Ref', 'FV'], [3, 2, 2], [1, 1, 1]),
+            (5, 52, 2, 3, ['x', '1', '2'], [3, 2, 2], [1, 1, 1]),
+            (6, 60, 0, 3, ['x', '1', '2'], [1, 1, 1], [1, 1, 1]),
+            (7, 70, 0, 0, ['a', 'b', 'c'], [1, 1, 1], [1, 1, 1]),
+            (7, 71, 1, 0, ['', '', ''], [1, 1, 1], [1, 1, 1]),
+            (7, 72, 2, 0, ['d', 'e', 'f'], [1, 1, 1], [1, 1, 1]),
+            (7, 73, 3, 3, ['x', '1', '2'], [1, 1, 1], [1, 1, 1]),
+            (8, 80, 0, 0, ['q', 'r', 's'], [1, 1, 1], [1, 1, 1])
+          ) t(ti, ri, rit, fc, cells, cs, rs)
+    expect:
+      rows:
+        - {table_index: 1, width: 3, position_rows: 1, header_status: one_line, header_form: one_line, header_row_index: 11, sub_header_row_index: null, header_last_row_in_table: 1}
+        - {table_index: 2, width: 3, position_rows: 1, header_status: two_lines, header_form: two_candidates, header_row_index: 20, sub_header_row_index: 21, header_last_row_in_table: 1}
+        - {table_index: 3, width: 3, position_rows: 1, header_status: two_lines, header_form: line_below, header_row_index: 30, sub_header_row_index: 31, header_last_row_in_table: 1}
+        - {table_index: 4, width: 7, position_rows: 1, header_status: two_lines, header_form: group_line_above, header_row_index: 40, sub_header_row_index: 41, header_last_row_in_table: 1}
+        - {table_index: 5, width: 7, position_rows: 1, header_status: one_line, header_form: one_line, header_row_index: 51, sub_header_row_index: null, header_last_row_in_table: 1}
+        - {table_index: 6, width: 3, position_rows: 1, header_status: none, header_form: none, header_row_index: null, sub_header_row_index: null, header_last_row_in_table: null}
+        - {table_index: 7, width: 3, position_rows: 1, header_status: ambiguous, header_form: ambiguous, header_row_index: null, sub_header_row_index: null, header_last_row_in_table: null}
+
+  - name: int_page_column_leaves
+    description: >
+      Text slice P3. Table 1, a two-line header, width 24: "Company (1)" holds no sub-header (one leaf, footnote mark
+      dropped from the signature); "Interest" holds three ("interest/ref.rate", "interest/cash", "interest/pik");
+      "Units" sits under a spacer cell printing "." (spacers are ignored), so it is a leaf of its own; the rightmost
+      leaf's zone runs to the table's last column (23). Table 2, one line, width 12: "Par Amount/Units (1)" gives
+      "paramount/units". Table 3 has no header: no rows; a cell of table 2 below its header is not a header cell.
+    model: int_page_column
+    given:
+      - input: ref('int_page_table')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, '1' as cik, date '2026-03-31' as report_date, w as width,
+                 st as header_status, h as header_row_index, s as sub_header_row_index
+          from (values
+            (1, 24, 'two_lines', 10, 11), (2, 12, 'one_line', 20, null::integer), (3, 6, 'none', null, null)
+          ) t(ti, w, st, h, s)
+      - input: ref('int_page_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, ri as row_index, cs as col_start, ce as col_end, txt as text
+          from (values
+            (1, 10, 0, 2, 'Company (1)'), (1, 10, 3, 11, 'Interest'), (1, 10, 12, 14, 'Par'), (1, 10, 15, 17, '.'),
+            (1, 10, 18, 20, 'Fair Value (2)(19)'),
+            (1, 11, 3, 5, 'Ref. Rate'), (1, 11, 6, 8, 'Cash'), (1, 11, 9, 11, 'PIK'), (1, 11, 15, 17, 'Units'),
+            (2, 20, 0, 5, 'Investments (1)(19)'), (2, 20, 6, 11, 'Par Amount/Units (1)'), (2, 21, 0, 5, 'Acme'),
+            (3, 30, 0, 5, 'Company')
+          ) t(ti, ri, cs, ce, txt)
+    expect:
+      rows:
+        - {table_index: 1, column_index: 0, col_start: 0, zone_end: 2, header_text: Company (1), sub_header_text: null, header_signature: company}
+        - {table_index: 1, column_index: 1, col_start: 3, zone_end: 5, header_text: Interest, sub_header_text: Ref. Rate, header_signature: interest/ref.rate}
+        - {table_index: 1, column_index: 2, col_start: 6, zone_end: 8, header_text: Interest, sub_header_text: Cash, header_signature: interest/cash}
+        - {table_index: 1, column_index: 3, col_start: 9, zone_end: 11, header_text: Interest, sub_header_text: PIK, header_signature: interest/pik}
+        - {table_index: 1, column_index: 4, col_start: 12, zone_end: 14, header_text: Par, sub_header_text: null, header_signature: par}
+        - {table_index: 1, column_index: 5, col_start: 15, zone_end: 17, header_text: Units, sub_header_text: null, header_signature: units}
+        - {table_index: 1, column_index: 6, col_start: 18, zone_end: 23, header_text: Fair Value (2)(19), sub_header_text: null, header_signature: fairvalue}
+        - {table_index: 2, column_index: 0, col_start: 0, zone_end: 5, header_text: Investments (1)(19), sub_header_text: null, header_signature: investments}
+        - {table_index: 2, column_index: 1, col_start: 6, zone_end: 11, header_text: Par Amount/Units (1), sub_header_text: null, header_signature: paramount/units}
+
+  - name: int_page_cell_column_dollar_then_number
+    description: >
+      Text slice P3. Leaves "reference" (zone 2-5) and "paramount/units" (zone 6-11). A "$" at column 6 and the number
+      after it at column 7 both get "paramount/units"; a footnote mark at 9 too. A cell at column 0, left of the first
+      leaf, gets no column. The header row (row_in_table 0) and a table without a header give no rows. Each cell's
+      shape: percent, empty_marker, number, date, footnote_mark, text.
+    model: int_page_cell_column
+    given:
+      - input: ref('int_page_table')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, st as header_status, l as header_last_row_in_table
+          from (values (1, 'one_line', 0), (2, 'none', null::integer)) t(ti, st, l)
+      - input: ref('int_page_cell')
+        format: sql
+        rows: |
+          select 'A' as accession, ti as table_index, ri as row_index, rit as row_in_table, ci as cell_index,
+                 cs as col_start, txt as text, 0 as row_fact_count
+          from (values
+            (1, 10, 0, 0, 6, 'Par'),
+            (1, 11, 1, 0, 0, 'Acme'), (1, 11, 1, 1, 2, '4.75%'), (1, 11, 1, 2, 6, '$'), (1, 11, 1, 3, 7, '60,260'),
+            (1, 12, 2, 0, 3, '5/8/2030'), (1, 12, 2, 1, 9, '(2)(11)'), (1, 12, 2, 2, 4, 'SOFR +'),
+            (2, 20, 1, 0, 0, 'x')
+          ) t(ti, ri, rit, ci, cs, txt)
+      - input: ref('int_page_column')
+        format: sql
+        rows: |
+          select 'A' as accession, 1 as table_index, cs as col_start, z as zone_end, ix as column_index,
+                 sig as header_signature
+          from (values (2, 5, 0, 'reference'), (6, 11, 1, 'paramount/units')) t(cs, z, ix, sig)
+    expect:
+      rows:
+        - {row_index: 11, cell_index: 0, column_col_start: null, header_signature: null, shape: text}
+        - {row_index: 11, cell_index: 1, column_col_start: 2, header_signature: reference, shape: percent}
+        - {row_index: 11, cell_index: 2, column_col_start: 6, header_signature: paramount/units, shape: empty_marker}
+        - {row_index: 11, cell_index: 3, column_col_start: 6, header_signature: paramount/units, shape: number}
+        - {row_index: 12, cell_index: 0, column_col_start: 2, header_signature: reference, shape: date}
+        - {row_index: 12, cell_index: 1, column_col_start: 6, header_signature: paramount/units, shape: footnote_mark}
+        - {row_index: 12, cell_index: 2, column_col_start: 2, header_signature: reference, shape: text}
+
+  - name: int_page_heading_detection
+    description: >
+      Text slice P4. Filing A: "Biotechnology" and "First Lien Debt (continued)" (no facts, one non-empty cell) are
+      headings; the next row of the first is a heading, of the second a position. A row with one cell but a fact (a
+      subtotal) and a row with two cells and no facts are not headings. "Energy" is last in its table (end_of_table).
+      The header row is not a heading. Filing B (the same fund, the next quarter): "Energy" was a heading in A (seen),
+      "Media" was not. A's headings have no prior filing (null). Filing C's table has no header: no rows.
+    model: int_page_heading
+    given:
+      - input: ref('int_page_table')
+        format: sql
+        rows: |
+          select acc as accession, 1 as table_index, cik, rd::date as report_date, st as header_status,
+                 l as header_last_row_in_table
+          from (values
+            ('A', '1', '2026-03-31', 'one_line', 0), ('B', '1', '2026-06-30', 'one_line', 0),
+            ('C', '2', '2026-03-31', 'none', null::integer)
+          ) t(acc, cik, rd, st, l)
+      - input: ref('int_page_cell')
+        format: sql
+        rows: |
+          select acc as accession, 1 as table_index, ri as row_index, rit as row_in_table, ci as cell_index,
+                 cs as col_start, txt as text, fc as row_fact_count
+          from (values
+            ('A', 10, 0, 0, 0, 'Co', 0), ('A', 10, 0, 1, 5, 'FV', 0),
+            ('A', 11, 1, 0, 0, 'Biotechnology', 0),
+            ('A', 12, 2, 0, 0, 'First Lien Debt (continued)', 0),
+            ('A', 13, 3, 0, 0, 'Acme', 2), ('A', 13, 3, 1, 5, '100', 2),
+            ('A', 14, 4, 0, 5, '1,234', 1),
+            ('A', 15, 5, 0, 0, 'Note', 0), ('A', 15, 5, 1, 3, 'x', 0),
+            ('A', 16, 6, 0, 0, 'Energy', 0),
+            ('B', 10, 0, 0, 0, 'Co', 0), ('B', 10, 0, 1, 5, 'FV', 0),
+            ('B', 11, 1, 0, 0, 'Energy', 0), ('B', 12, 2, 0, 0, 'Media', 0),
+            ('C', 11, 1, 0, 0, 'Lonely', 0)
+          ) t(acc, ri, rit, ci, cs, txt, fc)
+      - input: ref('int_page_position')
+        rows:
+          - {accession: A, row_index: 13, placement_status: one_row}
+    expect:
+      rows:
+        - {accession: A, row_index: 11, text: Biotechnology, is_continued: false, next_row_kind: heading, seen_in_prior_filing: null}
+        - {accession: A, row_index: 12, text: First Lien Debt (continued), is_continued: true, next_row_kind: position, seen_in_prior_filing: null}
+        - {accession: A, row_index: 16, text: Energy, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: null}
+        - {accession: B, row_index: 11, text: Energy, is_continued: false, next_row_kind: heading, seen_in_prior_filing: true}
+        - {accession: B, row_index: 12, text: Media, is_continued: false, next_row_kind: end_of_table, seen_in_prior_filing: false}
+
+  - name: int_position_heading_carry
+    description: >
+      Text slice P4. Filing A headings at rows 5 and 8 (table 1), 20 (table 2), 30 to 33 (table 3). p1 (row 9, table 1)
+      gets 8 then 5. p2 (row 25, table 2) gets 20, then 8 and 5 carried from table 1. p3 (row 40, table 4, no heading of
+      its own) gets the nearest four, 33 to 30, none in its table. p4 (row 3) has no heading above: no rows. p5 is not
+      placed: no rows. p6 in filing B gets only B's heading.
+    model: int_position_heading
+    given:
+      - input: ref('int_page_position')
+        format: sql
+        rows: |
+          select acc as accession, ctx as context_id, true as is_published, ri as row_index, ti as table_index,
+                 st as placement_status
+          from (values
+            ('A', 'p1', 9, 1, 'one_row'), ('A', 'p2', 25, 2, 'one_row'), ('A', 'p3', 40, 4, 'one_row'),
+            ('A', 'p4', 3, 1, 'one_row'), ('A', 'p5', null::integer, null::integer, 'not_placed'),
+            ('B', 'p6', 9, 1, 'one_row')
+          ) t(acc, ctx, ri, ti, st)
+      - input: ref('int_page_heading')
+        format: sql
+        rows: |
+          select acc as accession, ri as row_index, ti as table_index, 0 as col_start, 'H' || ri as text,
+                 false as is_continued
+          from (values
+            ('A', 5, 1), ('A', 8, 1), ('A', 20, 2), ('A', 30, 3), ('A', 31, 3), ('A', 32, 3), ('A', 33, 3), ('B', 7, 1)
+          ) t(acc, ri, ti)
+    expect:
+      rows:
+        - {context_id: p1, heading_rank: 1, heading_row_index: 8, distance_rows: 1, same_table: true}
+        - {context_id: p1, heading_rank: 2, heading_row_index: 5, distance_rows: 4, same_table: true}
+        - {context_id: p2, heading_rank: 1, heading_row_index: 20, distance_rows: 5, same_table: true}
+        - {context_id: p2, heading_rank: 2, heading_row_index: 8, distance_rows: 17, same_table: false}
+        - {context_id: p2, heading_rank: 3, heading_row_index: 5, distance_rows: 20, same_table: false}
+        - {context_id: p3, heading_rank: 1, heading_row_index: 33, distance_rows: 7, same_table: false}
+        - {context_id: p3, heading_rank: 2, heading_row_index: 32, distance_rows: 8, same_table: false}
+        - {context_id: p3, heading_rank: 3, heading_row_index: 31, distance_rows: 9, same_table: false}
+        - {context_id: p3, heading_rank: 4, heading_row_index: 30, distance_rows: 10, same_table: false}
+        - {context_id: p6, heading_rank: 1, heading_row_index: 7, distance_rows: 2, same_table: true}

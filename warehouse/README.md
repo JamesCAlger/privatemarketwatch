@@ -348,6 +348,28 @@ differences. That is agreement between two pipelines. It does not check any corr
 filing: a wrong correction is applied the same way on both sides and shows as equal. A passing build is
 not a statement that the data is correct.
 
+## Page structure (text slice P)
+
+The filed layer stores each printed table row and its cells. These models say where things sit on the
+schedule page, so later slices can read printed text by column and heading. They read the filed layer only
+and decide no field value. Counts and judgement calls: `docs/baseline_page_structure_2026-11-26.md`.
+
+| Model | Decides |
+|---|---|
+| `int_page_position` | The printed row of each position's fair-value fact (`one_row`, `several_rows`, `not_placed`) |
+| `int_page_table` | Which printed tables are schedule tables (they hold a position row), their width, their header line(s) |
+| `int_page_cell` | The true column of every non-empty cell: colspans summed, a rowspan from the row above resolved |
+| `int_page_column` | The column units under each header (two-line headers give "interest/cash"), with a signature |
+| `int_page_cell_column` | Which column each data cell is in, and the cell's shape (number, percent, date, text, ...) |
+| `int_page_column_filing` | Per filing and signature: tables, cells by shape, tagged facts by concept (the unit later bundled) |
+| `int_page_heading` | Heading rows: no facts, one non-empty cell, below the header. No meaning assigned |
+| `int_position_heading` | The nearest 4 heading rows above each position, carried across page tables |
+
+A schedule printed over many pages is many tables, each with its own header. Baseline tests count
+positions with no printed row, rows whose width is not the table's, tables with no header, and tables
+where one tagged field's facts sit under two columns. Nothing here says a value is correct, and no page
+was read by a person.
+
 ## Where this work lives (since 2026-11-23)
 
 The warehouse work moved from branch `ensemble-fp-experiment` in the main checkout to branch

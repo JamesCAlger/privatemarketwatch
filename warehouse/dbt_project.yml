@@ -274,6 +274,23 @@ vars:
     # The 8 fund-quarters that miss the filed total on the normalised basis (Ares 3, Apollo 5) all tie once the rows
     # corrections add are in (see sum_not_tied_corrected_pinned below).
     int_field_corrected_sum_not_tied: 3
+    # Text slice P (page structure), measured 2026-11-26 on the five funds (docs/baseline_page_structure_2026-11-26.md).
+    # Published positions whose fair-value fact has no visible printed row, or several: 0 and 0.
+    int_page_position_not_placed: 0
+    int_page_position_several_rows: 0
+    # Rows of schedule tables whose width after the rowspan rule is not the table's: 31, all Blue Owl (18 header rows
+    # of its width-54 tables, 13 total and heading rows of its two-line-header tables).
+    int_page_cell_row_width: 31
+    # Rows a rowspan reaches from further than the row above (left naive, flagged): 0. A rule, not a measurement.
+    int_page_cell_deeper_span: 0
+    # Schedule tables with no header taken: 1 (Ares 0001287750-23-000021 table 91, 28 rows, no row with 3 or more
+    # non-empty cells above its first position row).
+    int_page_table_no_header: 1
+    # Published positions whose printed row has no cell under a column: the positions of that table.
+    int_page_position_no_column: 1
+    # (accession, table, field) where one tagged field's placed facts fall under two or more header signatures: 27
+    # (HPS 23, BCRED 2, Ares 2); the filer prints the odd value in the neighbouring rate column.
+    int_page_field_split_columns: 27
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).
