@@ -1,6 +1,6 @@
 # Handoff: data-model redesign in `warehouse/`
 
-**Current state: read "RESUME HERE" and "State after slice 5 (corrections), 2026-11-25" near the end. The sections before them are history.**
+**Current state: for the text work read "State after text slices A and P (2026-11-26)" at the end; for the spine read "RESUME HERE" and "State after slice 5 (corrections), 2026-11-25". The sections before them are history.**
 
 Written 2026-11-18 at the end of the session that built steps 1 and 2. Read this first, then the documents it points to.
 
@@ -895,3 +895,25 @@ minors in the section above. Then slice 5 (corrections; 716 rows wait on it), th
 
 Agreement with production is not correctness. Unverified: 671 principal currencies taken as USD;
 2,303 published principals on rows with no debt term fact.
+
+## State after text slices A and P (2026-11-26) - READ THIS FOR THE TEXT WORK
+
+Branch `warehouse-text-spec`, pull request 23 into `dev`. Slice 5 (pull request 22) is merged into `dev`.
+
+- Specs: `text_fields_spec_2026-11-19.md` governs the method (owner decisions 19-T1 to 19-T13); `text_fields.md` holds
+  measurements and section 0 reconciles the two. Plan: `2026-11-26-text-plan.md`. Order decided by the owner: A, P, R,
+  then L beside them, C, I, F.
+- Slice A done (`baseline_text_agent_a_2026-11-26.md`): Agent A's Apollo label grammar agrees with the tags on 98.5%;
+  the differences are stale labels. Owner's view: good enough to keep. Recorded: the tag first, then the printed cell,
+  the label grammar as second source and check.
+- Slice P done (`baseline_page_structure_2026-11-26.md`): nine models `int_page_*` and `int_position_heading`; two fix
+  rounds, three reviews. Full build `PASS=904 WARN=119 ERROR=0 TOTAL=1023` plus one test added after (run alone, passes).
+  Columns are settled. Heading LEVELS are a default only: owner agreed 2026-11-26 that what a heading means, and which
+  heading is the parent, is decided by a per-fund heading rule in slices C and I, not by more general code.
+- The full build needs `--threads 2` on this machine: with 4 threads `int_page_cell` ran out of memory at about 8 GB
+  free. Not yet made cheaper.
+- Not built in P: the check that printed subtotals equal the rows beneath (plan P4), and applying the wrappers' existing
+  rules through the page models (plan P5). Both move to slice R.
+- Owner questions waiting: 2,271 Blue Owl published positions (from 2024-12-31) have their fair value printed only in
+  the unfunded-commitment table, with no cost (a slice 2 scope question); the three questions in the plan.
+- Next: slice R (column headers and rate cells), the first slice with agent runs. Starts on the owner's go.
