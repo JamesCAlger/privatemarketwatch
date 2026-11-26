@@ -15843,3 +15843,10 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Relabelled: the 14 + 14 BCRED structured-credit "Units" principals from `owner_review` to `old_wrong` (`principal_emptied_before_section_reclass`): on all 14 the tagged principal equals cost to the dollar, in USD, with a maturity date. The printed header "Par Amount/Units" does not settle it; the filer's footnote was not read.
 - Counts: corrections applied 1,509, failed 7, no_op 154, rejected 1, deferred 2,743. No published fair value or cost differs from production. Full build `PASS=833 WARN=113 ERROR=0 TOTAL=946`; `warehouse/pytests` 175 passed; CI fixture not run locally.
 - Agreement with production is not correctness: the applied cost is production's own correction, not checked against the page here.
+
+## 2026-11-26 - warehouse/: text fields, specs reconciled and Agent A's Apollo grammar tested (measurement only)
+
+- Where: branch `warehouse-text-spec` (pull request 23 into `dev`). Pull request 22 (slice 5) merged into `dev` the same day (608cee7e).
+- Docs: `warehouse/docs/text_fields_spec_2026-11-19.md` (the owner's 13 decisions, previously uncommitted in the main checkout) now governs the method; `text_fields.md` section 0 reconciles the 2026-11-25 draft with it; plan `2026-11-26-text-plan.md` in the owner's order (Agent A test, page structure, rate cells, label, class, industry, footnotes).
+- Slice A result (`warehouse/docs/baseline_text_agent_a_2026-11-26.md`): the grammar applied to 7,290 published Apollo labels agrees with the tag on 6,902 of 7,000 maturities and 6,359 of 6,455 spreads. On the 194 disagreements the printed row shows the tag's value 192 times: the label is stale. Recommendation, not yet decided by the owner: do not use the label grammar as a source of values; read the printed cell; keep the method, the industry name list and the reference-code map.
+- No model, test, wrapper, store or pipeline code changed. The printed row was matched by text, not read by a person; agreement with a tag or with production is not correctness.
