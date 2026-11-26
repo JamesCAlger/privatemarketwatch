@@ -368,6 +368,1721 @@
       "accession": "0001803498-24-000007",
       "parameter": "pik_rate percent",
       "evidence": "Owner ruling B, 2026-11-23: in this filing a PIK rate filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 1 row filed above 1 (4.00, pure); its printed number equals the tag read as a percent and its cell prints c-3847 '11.45% (incl. 4.00% PIK)'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 1346 tagged rows, dominant tag interest_rate_tag share 1.000 (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)(15)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 560 tagged rows, dominant tag interest_rate_tag share 0.991 (unit 6c8407a91bd24a79)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)(15)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 9276 tagged rows, dominant tag interest_rate_tag share 0.980 (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)(15)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 3931 tagged rows, dominant tag interest_rate_tag share 0.989 (unit cb2ad95e4f097b26)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)(15)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 6230 tagged rows, dominant tag interest_rate_tag share 0.993 (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)(15)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 1235 tagged rows, dominant tag interest_rate_tag share 0.999 (unit 6d09d2036523d9fe)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (2)(6)",
+        "column_holds": "all_in_rate",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 973 tagged rows, dominant tag interest_rate_tag share 1.000 (unit b95433509b569b33)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread (2)",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 555 tagged rows, dominant tag spread share 1.000 (unit d242ee8bc684a0c1)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread (2)",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 8955 tagged rows, dominant tag spread share 1.000 (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread (2)",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 3901 tagged rows, dominant tag spread share 1.000 (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread (2)",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 6200 tagged rows, dominant tag spread share 1.000 (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 1229 tagged rows, dominant tag spread share 1.000 (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 1342 tagged rows, dominant tag spread share 0.997 (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "header_text": "Reference Rate and Spread",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 971 tagged rows, dominant tag spread share 0.999 (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "# (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 7 of 7 compared rows equal (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 12 of 12 compared rows equal (unit 6c8407a91bd24a79)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 560 of 560 compared rows equal (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 73 of 73 compared rows equal (unit cb2ad95e4f097b26)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 140 of 140 compared rows equal (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 22 of 22 compared rows equal (unit 6d09d2036523d9fe)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 9 of 9 compared rows equal (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit b95433509b569b33)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 543 of 543 compared rows equal (unit 6c8407a91bd24a79)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 8523 of 8523 compared rows equal (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 3813 of 3813 compared rows equal (unit cb2ad95e4f097b26)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 6047 of 6047 compared rows equal (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 1212 of 1212 compared rows equal (unit 6d09d2036523d9fe)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 1317 of 1326 compared rows equal (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 969 of 969 compared rows equal (unit b95433509b569b33)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%.(incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%.(incl. #% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5 of 5 compared rows equal (unit 6c8407a91bd24a79)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 185 of 185 compared rows equal (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 45 of 45 compared rows equal (unit cb2ad95e4f097b26)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 41 of 41 compared rows equal (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 6d09d2036523d9fe)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "# (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 12 of 12 compared rows equal (unit 6c8407a91bd24a79)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 560 of 560 compared rows equal (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 73 of 73 compared rows equal (unit cb2ad95e4f097b26)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 140 of 140 compared rows equal (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 22 of 22 compared rows equal (unit 6d09d2036523d9fe)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 9 of 9 compared rows equal (unit 6e96d821a8768ebf)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit b95433509b569b33)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%.(incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); no tagged row to compare (unit a52abb5593896bfc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "interestrate",
+        "shape": "#%.(incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); no tagged row to compare (unit 173adfdabda43f76)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 217 of 217 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 6 of 6 compared rows equal; label fixed_rate set by check fixed_rate_no_code, owner 2026-11-26 item 11 (docs/owner_review_text_rates_2026-11-26.md) (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 20 of 20 compared rows equal; label fixed_rate set by check fixed_rate_no_code, owner 2026-11-26 item 11 (docs/owner_review_text_rates_2026-11-26.md) (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 16 of 16 compared rows equal (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 141 of 141 compared rows equal (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#% PIK",
+        "number_index": 1,
+        "role": "pik_spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#% PIK",
+        "number_index": 1,
+        "role": "pik_spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5 of 5 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "B+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 13 of 13 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "B+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "B+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "BB+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "BB+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "C+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 36 of 36 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "C+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 11 of 11 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "C+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 14 of 14 compared rows equal (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "C+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "CA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 59 of 59 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "shape": "CA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 6 of 6 compared rows equal (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "referencerateandspread",
+        "shape": "CA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit d242ee8bc684a0c1)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "CA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "CI+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 8 of 8 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "CI+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5 of 5 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "CI+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "CI+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "E+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 458 of 458 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "shape": "E+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 11 of 11 compared rows equal (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "E+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 119 of 119 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "E+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 16 of 16 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "E+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 27 of 27 compared rows equal (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "referencerateandspread",
+        "shape": "E+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit d242ee8bc684a0c1)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#% (incl. #% PIK)",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 334 of 334 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 682 of 682 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 921 of 921 compared rows equal (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 642 of 642 compared rows equal (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "N+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 8 of 8 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "N+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5 of 5 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "N+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "N+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "P+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 69 of 69 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "P+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 38 of 38 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "P+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5 of 5 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "referencerateandspread",
+        "shape": "P+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit d242ee8bc684a0c1)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "shape": "P+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "P+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "S+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 251 of 251 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "shape": "S+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 7 of 7 compared rows equal (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "S+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 77 of 77 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "S+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 13 of 13 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "S+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 22 of 22 compared rows equal (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "referencerateandspread",
+        "shape": "S+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit d242ee8bc684a0c1)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 24 of 24 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 13 of 13 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SA+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofmembers\u2019equity",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 547 of 547 compared rows equal (unit d242ee8bc684a0c1)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 7747 of 7747 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofpartners\u2019capital",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 3862 of 3862 compared rows equal (unit 16de0745a690a6bc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5521 of 5521 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 491 of 491 compared rows equal (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 331 of 331 compared rows equal (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SOFR+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 184 of 184 compared rows equal (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "SORF+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|acquisitiondate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "ST+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 34 of 34 compared rows equal (unit d30801edf470bdd3)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "ST+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit 35d86fe064f18517)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|footnotes|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "ST+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 7bedc645c1a4b49a)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "ST+#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount/units|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit fc9493acdb2c4a08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "investments|referencerateandspread|interestrate|maturitydate|paramount|cost|fairvalue|%ofnetassets",
+        "header_signature": "referencerateandspread",
+        "shape": "L+#% (incl. #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 4911badeb7733932)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "B",
+        "rate": "BKBM",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "BB",
+        "rate": "BBSY",
+        "first_filing_date": "2024-03-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 10 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "C",
+        "rate": "CDOR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2024-12-31",
+        "evidence_accession": "0001803498-25-000021",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 9 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "CA",
+        "rate": "CORRA",
+        "first_filing_date": "2024-06-30",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 9 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "CI",
+        "rate": "CIBOR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 2 (docs/owner_review_text_rates_2026-11-26.md): 15 filings' own legends give this code this rate alone"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "E",
+        "rate": "EURIBOR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "L",
+        "rate": "LIBOR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2023-12-31",
+        "evidence_accession": "0001803498-24-000007",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 5 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "N",
+        "rate": "NIBOR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "P",
+        "rate": "PRIME",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "S",
+        "rate": "SONIA",
+        "first_filing_date": "2023-03-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 14 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "SA",
+        "rate": "SARON",
+        "first_filing_date": "2023-03-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 14 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "SOFR",
+        "rate": "SOFR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "ST",
+        "rate": "STIBOR",
+        "first_filing_date": "2022-12-31",
+        "last_filing_date": "2026-06-30",
+        "evidence_accession": "0001803498-26-000048",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_printed_wins",
+      "accession": "0001803498-22-000021",
+      "parameter": {
+        "field": "all_in_rate",
+        "table_index": 25,
+        "first_row": 826,
+        "last_row": 835,
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 (BCRED 2022-09-30, as recommended): on printed rows 826 to 835 of this table each interest-rate tag sits on its printed row but belongs to the investment of the row above (filed layer: docs/baseline_text_rates_phase2_2026-11-26.md section 10.4); the ten rows are the evidence. The printed all-in rate wins over the tag on these rows only. No page read by a person."
     }
   ]
 }

@@ -11,8 +11,11 @@
 --                        525 and 0.50). number_value: that number as printed.
 --   number_index 0       the cell's leading code (int_text_cell.code, macro rate_code), field reference_rate_code; or,
 --                        when the cell has neither a code nor a number ("N/A"), one row with field null, status no_value.
--- Shape: the cell's shape_key_text matched to the proposed shape upper-cased (proposals carry the bundle's display
--- shape). shape_key: as int_text_shape_unit (md5 of unit_key | shape_key_text, 16 hex).
+-- Shape: the cell's shape (case kept, macro text_shape) matched to the proposed shape exactly (proposals carry the
+-- bundle's display shape, the most frequent spelling of the shape unit). Phase 3 check fix 1b (2026-11-26): before, the
+-- match was upper case, so a spelling the agent never saw ("S+# (Includes #% PIK)" beside the proposed "S+# (includes
+-- #% PIK)") was read with the proposal and its rows pooled into the proposal's evidence. A spelling with no proposal of
+-- its own is now status no_proposal. shape_key: as int_text_shape_unit (md5 of unit_key | shape_key_text, 16 hex).
 -- The shape's proposal is usable only when every number of it has the same role in both option orders and both role
 -- lists hold as many roles as the shape has '#' (text_proposed_shape_role same_in_both_orders and roles_fit_shape on
 -- every row of the shape); role = the forward role then.
@@ -39,7 +42,7 @@ with proposed_unit as (
 )
 
 , shape_proposal as (
-    select unit_key, upper(shape) as shape_key_text
+    select unit_key, shape
         , bool_and(same_in_both_orders and roles_fit_shape) as stable
         , map_from_entries(list(struct_pack(k := number_index, v := role_fwd)) filter (where number_index > 0)) as roles
     from {{ ref('text_proposed_shape_role') }}
@@ -77,10 +80,10 @@ with proposed_unit as (
 )
 
 , number_read as (
-    select n.*, sp.stable as shape_stable, sp.shape_key_text is not null as has_proposal
+    select n.*, sp.stable as shape_stable, sp.shape is not null as has_proposal
         , case when sp.stable then sp.roles[n.number_index] end as role
     from number_row n
-    left join shape_proposal sp on sp.unit_key = n.unit_key and sp.shape_key_text = n.shape_key_text
+    left join shape_proposal sp on sp.unit_key = n.unit_key and sp.shape = n.shape
 )
 
 , number_out as (

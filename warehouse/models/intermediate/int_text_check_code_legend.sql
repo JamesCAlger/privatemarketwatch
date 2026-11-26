@@ -6,8 +6,9 @@
 -- code_key: the printed code upper case, spaces removed. proposed_rate: the proposal's normalised rate name.
 -- positions: the positions of that filing carrying the code in that column unit.
 -- Legend entries: int_text_check_legend rows of the same filing and fund with the same code_key. Each entry's rate:
--- macro base_rate_name of its abbreviation, else of its name (the same normalisation the proposals went through, so
--- "BBSY" and "BBSW" are one rate, as are "CDOR" and "CORRA").
+-- macro base_rate_name of its abbreviation, else of its name (the same normalisation the proposals went through; since
+-- fix round 1 "BBSY", "BBSW", "CDOR" and "CORRA" are four rates, so a filing whose legend names both of a pair for one
+-- code is mixed).
 -- verdict:
 --   agrees               some entry's rate equals proposed_rate and none differs.
 --   contradicts          some entry's rate differs and none equals.

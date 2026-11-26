@@ -530,6 +530,166 @@
       "accession": "0001628280-26-050307",
       "parameter": "pik_rate percent",
       "evidence": "Owner ruling B, 2026-11-23: in this filing a PIK rate filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 2 rows filed above 1 (1.25 and 2.88, utr:Rate); on both the printed number equals the tag read as a percent and the cell prints it followed by a percent sign, e.g. c-36 '9.48% (2.88% PIK)', c-1394 '9.91% (1.25% PIK)'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "header_text": "Coupon (3)",
+        "column_holds": "all_in_rate",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 9 (docs/owner_review_text_rates_2026-11-26.md): column holds all_in_rate (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "reference",
+        "header_text": "Reference (7)",
+        "column_holds": "reference_rate_code",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 8 (docs/owner_review_text_rates_2026-11-26.md): column holds reference_rate_code (unit 9ecddf9faf035680)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "spread",
+        "header_text": "Spread (3)",
+        "column_holds": "spread",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 13655 tagged rows, dominant tag spread share 1.000 (unit 4f40f4afb00d1cdc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#% (#% PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 1233 of 1233 compared rows equal (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#% (#%PIK)",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 12407 of 12409 compared rows equal (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 1495 of 1496 compared rows equal (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#%PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#% (#% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 1239 of 1252 compared rows equal (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "coupon",
+        "shape": "#% (#%PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 1de53b4d55ea4050)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "company|businessdescription|investment|coupon|reference|spread|acquisitiondate|maturitydate|shares/units|principal|amortizedcost|fairvalue|%ofnetassets",
+        "header_signature": "spread",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "spread_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 13643 of 13646 compared rows equal (unit 4f40f4afb00d1cdc)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "Base Rate",
+        "rate": "Base Rate",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 13 (docs/owner_review_text_rates_2026-11-26.md): stored as printed; it names no single benchmark"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "CAD Base Rate",
+        "rate": "CAD Base Rate",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 13 (docs/owner_review_text_rates_2026-11-26.md): stored as printed; it names no single benchmark"
     }
   ]
 }

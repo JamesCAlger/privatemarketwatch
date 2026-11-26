@@ -195,6 +195,17 @@ def test_reading_rules_sit_beside_source_encodings():
     assert sorted(r["origin"] for r in rules) == ["wrapper:filed_rate_reading", "wrapper:reading_rules"]
 
 
+def test_reading_rule_object_parameter_is_canonical_json():
+    # loader version 8 (text slice R phase 3): an object parameter is stored as JSON with sorted keys, no spaces, so
+    # the same rule written with its keys in another order has the same id
+    a = {"target": "rate_text", "action": "rate_code", "evidence": "owner item 2",
+         "parameter": {"rate": "SOFR", "code": "S", "source_grade": "owner"}}
+    b = dict(a, parameter={"source_grade": "owner", "code": "S", "rate": "SOFR"})
+    ra, rb = _one(flatten(CIK, {"reading_rules": [a]})[0]), _one(flatten(CIK, {"reading_rules": [b]})[0])
+    assert ra["parameter"] == '{"code":"S","rate":"SOFR","source_grade":"owner"}'
+    assert ra["rule_id"] == rb["rule_id"]
+
+
 def test_two_reading_rules_on_one_concept_have_distinct_ids():
     term = dict(_CONCEPT_RULE, target="term_fact", action="concept_is_term_fact")
     rules, _, _ = flatten(CIK, {"reading_rules": [_CONCEPT_RULE, term]})

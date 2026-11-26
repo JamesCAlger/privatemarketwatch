@@ -21,6 +21,12 @@
 --                       the PIK spread. A fixed PIK rate leg is not added to the margin (the all-in rate holds it, so
 --                       leaving it out only weakens the test, never fails a right row); a PIK spread next to a cash
 --                       spread is not added either, because whether a tagged spread already holds it differs by filer.
+--                       not_testable (phase 3 check fix 1a, 2026-11-26): the all-in rate is a TAG that equals the
+--                       margin or the printed floor alone (within the tolerance). A floating loan's all-in rate is a
+--                       base rate above zero plus its margin, so such a tag holds another leg, not an all-in rate, and
+--                       the identity has nothing to test. The row is kept (verdict not_testable, detail
+--                       all_in_tag_equals_margin / all_in_tag_equals_floor) and counts neither way. A mechanism on the
+--                       row's own numbers, not a fund exception.
 --   e_spread_split      lhs the tagged spread, rhs printed spread + printed PIK spread: pass when the tag equals the sum
 --                       (detail equals_total) or the spread alone (equals_cash_spread), fail when neither.
 --   f_printed_agree     a field read from two columns (or twice from one cell): fail when the values differ by more than
@@ -98,8 +104,15 @@ with pos as (
 , d as (
     select accession, context_id, cik, report_date, is_published, 'd_floor_spread', all_in
         , coalesce(spread, p_pik_spread) + p_floor
-        , all_in >= coalesce(spread, p_pik_spread) + p_floor - {{ var('text_legs_tolerance') }}
-        , case when spread is null then 'margin_is_pik_spread' end
+        , case when src_all_in = 'tag'
+                    and (abs(all_in - coalesce(spread, p_pik_spread)) <= {{ var('text_legs_tolerance') }}
+                         or abs(all_in - p_floor) <= {{ var('text_legs_tolerance') }}) then null
+               else all_in >= coalesce(spread, p_pik_spread) + p_floor - {{ var('text_legs_tolerance') }} end
+        , case when src_all_in = 'tag' and abs(all_in - coalesce(spread, p_pik_spread)) <= {{ var('text_legs_tolerance') }}
+                    then 'all_in_tag_equals_margin'
+               when src_all_in = 'tag' and abs(all_in - p_floor) <= {{ var('text_legs_tolerance') }}
+                    then 'all_in_tag_equals_floor'
+               when spread is null then 'margin_is_pik_spread' end
         , 'all_in=' || src_all_in
         , 'margin=' || case when p_spread is not null then 'printed' when spread is not null then 'tag'
                             else 'printed_pik_spread' end || ',floor=printed'
@@ -159,7 +172,7 @@ select
     , report_date
     , is_published
     , identity
-    , case when passed then 'pass' else 'fail' end as verdict
+    , case when passed is null then 'not_testable' when passed then 'pass' else 'fail' end as verdict
     , lhs
     , rhs
     , lhs - rhs as difference

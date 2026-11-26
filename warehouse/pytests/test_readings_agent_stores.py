@@ -186,7 +186,7 @@ def test_cli_load_writes_rules_corrections_and_manifest_hashes(tmp_path):
     tables, inputs = cli.load([FUND], wrappers, [], None, [("agent_b2_corrections", b2),
                                                            ("agent_investigate_rules", rules)])
     manifest = store.write(tmp_path / "out", tables, inputs)
-    assert manifest["loader_version"] == "7"
+    assert manifest["loader_version"] == "8"
     assert manifest["tables"]["correction"]["rows"] == 3 + 5
     assert manifest["tables"]["correction_rule"]["rows"] == 0
     assert sorted(manifest["agent_store_sha256"]) == [

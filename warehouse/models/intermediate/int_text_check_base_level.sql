@@ -9,6 +9,9 @@
 --                  implied.
 --   no_spread      neither a printed spread (proposal) nor a tagged spread.
 --   no_all_in      neither a tagged all-in rate nor a printed all-in rate (proposal).
+--   all_in_tag_is_leg  (phase 3 check fix 1a) the all-in TAG equals the spread or the printed floor alone (within
+--                  var text_legs_tolerance): the tag holds another leg, so it implies a base of zero (or base =
+--                  spread - floor) that tests nothing. The same mechanism as identity d of int_text_check_leg_arithmetic.
 --   usable
 -- spread = printed (proposal) else tag; all_in = tag else printed (the tagged all-in is the filer's number; a printed
 -- one is used where the filer tags none). spread_source, all_in_source say which. implied_base = all_in - spread.
@@ -49,6 +52,9 @@ with proxy_series(rate_name, series_rate) as (
             when coalesce(t_pik, 0) > 0 or coalesce(p_pik_rate, 0) > 0 or p_pik_spread is not null then 'pik'
             when coalesce(p_spread, t_spread) is null then 'no_spread'
             when coalesce(t_all_in, p_all_in_rate) is null then 'no_all_in'
+            when t_all_in is not null
+                 and (abs(t_all_in - coalesce(p_spread, t_spread)) <= {{ var('text_legs_tolerance') }}
+                      or abs(t_all_in - p_floor) <= {{ var('text_legs_tolerance') }}) then 'all_in_tag_is_leg'
             else 'usable'
           end as input_state
     from {{ ref('int_text_rate_proposed_position') }} p
@@ -101,11 +107,6 @@ select
              when implied_base > range_max then implied_base - range_max
              else 0 end
       end as distance
-    , case
-        when input_state <> 'usable' then 'not_tested'
-        when window_state <> 'ok' then 'no_series'
-        when implied_base between admissible_low and admissible_high then 'admissible'
-        when floor is not null and abs(implied_base - floor) <= {{ var('text_floor_match') }} then 'floor_binding'
-        else 'outside'
-      end as verdict
+    , {{ base_level_verdict("input_state = 'usable'", 'window_state', 'implied_base', 'admissible_low',
+                            'admissible_high', 'floor') }} as verdict
 from measured

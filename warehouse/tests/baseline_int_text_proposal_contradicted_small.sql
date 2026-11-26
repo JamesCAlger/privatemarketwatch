@@ -5,7 +5,8 @@
 -- 7: a spread printed as a fraction ("SR + 0.0725", read as 0.0725 percent; the tag is 7.25); the spread and floor of an
 -- "S+#, #% Floor" shape whose 3 floor-identity rows have the all-in tag holding the floor; the cash and PIK parts of
 -- "#% Cash plus #% PIK, #% Floor" (the all-in tag holds the cash part); the two PIK numbers of "S+# Cash plus #% PIK,
--- #% PIK". Listed in docs/baseline_text_rates_phase2_2026-11-26.md section 10.
+-- #% PIK". Listed in docs/baseline_text_rates_phase2_2026-11-26.md section 10. Phase 3 (2026-11-26): 5; the two
+-- codes and the "S+#, #% Floor" spread and floor left with check fix 1a (docs/baseline_text_rates_phase3_2026-11-26.md).
 {{ config(severity='error', warn_if='>0', error_if='>' ~ var('baseline_max')['int_text_proposal_contradicted_small']) }}
 select proposal_kind, unit_key, shape, number_index, code, proposal, checks_contradicting_small
 from {{ ref('int_text_proposal_verdict') }}

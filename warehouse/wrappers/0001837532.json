@@ -351,6 +351,1582 @@
       "accession": "0001193125-26-215667",
       "parameter": "spread basis_points",
       "evidence": "Owner ruling B, 2026-11-23: in this filing a spread filed above 1 in a ratio unit (pure or utr:Rate) is already a percent; it is kept as filed, not multiplied by 100. Values at or below 1 in the same filing stay fractions. Reading: the page prints the spread in basis points after the reference rate, so the printed 400 is the tag 4.00 read as a percent (400 basis points = 4.00 percent); the inline scale is -2. Measured 2026-11-23 on the warehouse build of a39354a8 with ruling A (warehouse/scripts/rate_rulings/q_b_scale_evidence.sql and q_b_scale_forms.sql): 31 rows filed above 1 (2.25 to 7.50, pure); on all 31 the printed number equals the tag times 100 and the cell prints a reference rate, '+' and that number, e.g. 'S+400, 0.00% Floor'. 0 printed missing, 0 disagree. Applied per row: a row whose own print does not agree stays scale_not_decided (int_rate_scale; re-checked on every build by tests/rate_scale_rule_evidence.sql). Not written for filing 0000950170-24-094137: there the 6 interest-rate tags above 1 print as margins ('S+610, 1.00% Floor'), so the scale fits but the tag holds a spread, not an all-in rate. Author: Claude (implementer agent), on the owner's ruling."
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (12)",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 4765 tagged rows, dominant tag spread share 0.956 (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_column",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "header_text": "Interest Rate (13)",
+        "column_holds": "rate_terms",
+        "source_grade": "checked"
+      },
+      "evidence": "check column_tags: 3004 tagged rows, dominant tag spread share 0.942 (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% (includes #% PIK), #% Floor",
+        "number_index": 1,
+        "role": "all_in_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 143 of 146 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#%",
+        "number_index": 1,
+        "role": "fixed_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check fixed_rate_no_code: 150 of 151 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 25 of 25 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 33 of 33 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "Equity plus #% PIK",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "Equity plus #% PIK, #% Floor",
+        "number_index": 1,
+        "role": "pik_rate_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); no tagged row to compare (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); no tagged row to compare (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 17 of 17 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "C+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 25 of 25 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "C+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 6 of 6 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# (Includes #% PIK)",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 169 of 169 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 218 of 218 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "K+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 6 of 6 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "K+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "L+# Cash (includes #% PIK)",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "L+# Cash plus #% PIK",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "L+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 65 of 65 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "N+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); 3 of 3 tagged rows match, under the 5-row bar (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "N+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "NIBOR+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "P+#",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "P+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 22 of 22 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "P+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 25 of 25 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, # Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 2337 of 2338 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 3858 of 3859 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+# (Includes #% PIK)",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+# Cash plus #% PIK, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 6 of 6 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); 3 of 3 tagged rows match, under the 5-row bar (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+# (Includes #% PIK)",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 135 of 135 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 201 of 201 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+# (Inlcudes #% PIK)",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+# Cash plus #% PIK, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); no tagged row to compare (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "T+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "T+#, #% Floor",
+        "number_index": 1,
+        "role": "spread_bps",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); 3 of 3 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "C+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "C+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "Equity plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "K+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "K+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "L+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "N+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "N+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "NIBOR+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "P+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "P+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "T+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "T+#, #% Floor",
+        "number_index": 2,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% (includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 6 of 6 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% (includes #% PIK), #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# (Includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); 3 of 3 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (4 positions); 4 of 4 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "L+# Cash (includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "L+# Cash plus #% PIK",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); 3 of 3 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# (Includes #% PIK), #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 10 of 10 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# (includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 15 of 15 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash (includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 8 of 8 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 7 of 7 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, # Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (1 positions); 1 of 1 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 62 of 62 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 35 of 35 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+# (Includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (3 positions); 3 of 3 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+# (Includes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 18 of 18 compared rows equal (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "checked"
+      },
+      "evidence": "check number_tag: 5 of 5 compared rows equal (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+# (Inlcudes #% PIK)",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+# Cash plus #% PIK, #% Floor",
+        "number_index": 2,
+        "role": "pik_rate_pct",
+        "source_grade": "matches_few_rows"
+      },
+      "evidence": "owner 2026-11-26 item 7 (docs/owner_review_text_rates_2026-11-26.md): rare shape (2 positions); 2 of 2 tagged rows match, under the 5-row bar (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% (includes #% PIK), #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "#% Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "BBSW+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "E+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# (Includes #% PIK), #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, # Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "S+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SARON+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares/units|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit 8900b6883e84a32c)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "SONIA+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_role",
+      "parameter": {
+        "table_signature": "industry/company|investmenttype|interestrate|maturitydate|par/shares|cost|fairvalue",
+        "header_signature": "interestrate",
+        "shape": "STIBOR+# Cash plus #% PIK, #% Floor",
+        "number_index": 3,
+        "role": "floor_pct",
+        "source_grade": "untested"
+      },
+      "evidence": "owner 2026-11-26 item 5 (docs/owner_review_text_rates_2026-11-26.md): the number before the word Floor is the floor; no filer tags a floor, so no check exists (unit b4ee1994c58b2d08)"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "BBSW",
+        "rate": "BBSW",
+        "first_filing_date": "2025-03-31",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 7 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "C",
+        "rate": "CORRA",
+        "first_filing_date": "2025-06-30",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 6 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "E",
+        "rate": "EURIBOR",
+        "first_filing_date": "2025-06-30",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 6 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "K",
+        "rate": "KORIBOR",
+        "first_filing_date": "2025-06-30",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 2 (docs/owner_review_text_rates_2026-11-26.md): 6 filings' own legends give this code this rate alone"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "L",
+        "rate": "LIBOR",
+        "first_filing_date": "2023-03-31",
+        "last_filing_date": "2023-12-31",
+        "evidence_accession": "0000950170-24-031479",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 4 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "P",
+        "rate": "PRIME",
+        "first_filing_date": "2025-06-30",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 6 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "S",
+        "rate": "SOFR",
+        "first_filing_date": "2023-03-31",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 15 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "SARON",
+        "rate": "SARON",
+        "first_filing_date": "2025-03-31",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 2 (docs/owner_review_text_rates_2026-11-26.md): 7 filings' own legends give this code this rate alone"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "STIBOR",
+        "rate": "STIBOR",
+        "first_filing_date": "2025-03-31",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "checked"
+      },
+      "evidence": "check legend: the proposal for this code and rate is accepted; 7 filings' own legends"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_code",
+      "parameter": {
+        "code": "T",
+        "rate": "TONA",
+        "first_filing_date": "2025-06-30",
+        "last_filing_date": "2026-09-30",
+        "evidence_accession": "0001193125-26-449955",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 2 (docs/owner_review_text_rates_2026-11-26.md): 6 filings' own legends give this code this rate alone"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_text_not_a_code",
+      "parameter": {
+        "code": "Equity plus",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 13 (docs/owner_review_text_rates_2026-11-26.md): not a rate code"
+    },
+    {
+      "target": "rate_text",
+      "action": "rate_text_not_a_code",
+      "parameter": {
+        "code": "Variable",
+        "source_grade": "owner"
+      },
+      "evidence": "owner 2026-11-26 item 13 (docs/owner_review_text_rates_2026-11-26.md): not a rate code"
     }
   ]
 }

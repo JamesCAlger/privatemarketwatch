@@ -87,7 +87,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: [pass, fail]
+                values: [pass, fail, not_testable]
       - name: independence
         data_tests:
           - not_null
@@ -194,7 +194,9 @@ unit_tests:
       PIK, 0.00% Floor": cash 5.38, PIK 5.38, floor 0 (no code). p3 "SOFR + 5.25%": spread 5.25 in percent, code SOFR.
       p4 "S+1250" and p5 "S+1,250" (with and without a thousands separator): spread 12.50. p6 "N/A": no_value. p7
       "E+500": the two orders gave different roles (shape_unstable) and different rates (code_unstable). p8 "X+100": no
-      proposal for the shape or the code. p9 "7.00%": the role is cannot_tell.
+      proposal for the shape or the code. p9 "7.00%": the role is cannot_tell. p10 "S+525, 0.50% FLOOR" (phase 3 check
+      fix 1b): the same shape upper-cased as p1 but another spelling, which no proposal names: its numbers are
+      no_proposal (not pooled into p1's proposal); its code is still read.
     model: int_text_rate_proposed
     given:
       - input: ref('text_proposed_column')
@@ -222,13 +224,14 @@ unit_tests:
         rows: |
           select 'A' as accession, ri as row_index, 1 as table_index, 5::hugeint as col_start, '1' as cik,
                  date '2026-03-31' as report_date, true as is_published, 1::bigint as positions, 'T' as table_signature,
-                 'h' as header_signature, 'u' as unit_key, txt as text, 1::bigint as n_cells, txt as shape,
-                 skt as shape_key_text, cd as code, true as rate_text, []::varchar[] as fact_fields, 0::bigint as fact_count
-          from (values (1, 'S+525, 0.50% Floor', 'S+#, #% FLOOR', 'S'),
-                       (2, '5.38% Cash plus 5.38% PIK, 0.00% Floor', '#% CASH PLUS #% PIK, #% FLOOR', null),
+                 'h' as header_signature, 'u' as unit_key, txt as text, 1::bigint as n_cells, shp as shape,
+                 upper(shp) as shape_key_text, cd as code, true as rate_text, []::varchar[] as fact_fields,
+                 0::bigint as fact_count
+          from (values (1, 'S+525, 0.50% Floor', 'S+#, #% Floor', 'S'),
+                       (2, '5.38% Cash plus 5.38% PIK, 0.00% Floor', '#% Cash plus #% PIK, #% Floor', null),
                        (3, 'SOFR + 5.25%', 'SOFR+#%', 'SOFR'), (4, 'S+1250', 'S+#', 'S'), (5, 'S+1,250', 'S+#', 'S'),
                        (6, 'N/A', 'N/A', null), (7, 'E+500', 'E+#', 'E'), (8, 'X+100', 'X+#', 'X'),
-                       (9, '7.00%', '#%', null)) t(ri, txt, skt, cd)
+                       (9, '7.00%', '#%', null), (10, 'S+525, 0.50% FLOOR', 'S+#, #% FLOOR', 'S')) t(ri, txt, shp, cd)
       - input: ref('int_page_position')
         rows:
           - {accession: A, context_id: p1, placement_status: one_row, row_index: 1}
@@ -240,8 +243,12 @@ unit_tests:
           - {accession: A, context_id: p7, placement_status: one_row, row_index: 7}
           - {accession: A, context_id: p8, placement_status: one_row, row_index: 8}
           - {accession: A, context_id: p9, placement_status: one_row, row_index: 9}
+          - {accession: A, context_id: p10, placement_status: one_row, row_index: 10}
     expect:
       rows:
+        - {context_id: p10, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
+        - {context_id: p10, number_index: 1, field: null, status: no_proposal, value: null, rate_name: null}
+        - {context_id: p10, number_index: 2, field: null, status: no_proposal, value: null, rate_name: null}
         - {context_id: p1, number_index: 0, field: reference_rate_code, status: read, value: null, rate_name: SOFR}
         - {context_id: p1, number_index: 1, field: spread, status: read, value: 5.25, rate_name: null}
         - {context_id: p1, number_index: 2, field: floor, status: read, value: 0.5, rate_name: null}
@@ -301,7 +308,10 @@ unit_tests:
       PIK spread 4.00, floor 0.50, all-in 8.00: d passes on the PIK spread as margin. p6 spread 3.00 and PIK spread 2.00
       printed, spread tag 5.00: e passes (equals_total) and confirms; p7 spread tag 3.00: e passes (equals_cash_spread);
       p12 spread tag 4.00: e fails. p8 tags only: no row. p9 two PIK rates that differ: f fails; p10 a spread read twice
-      that agrees: f passes. p11 printed PIK 9.50 above the all-in tag 9.00: b fails.
+      that agrees: f passes. p11 printed PIK 9.50 above the all-in tag 9.00: b fails. Phase 3 check fix 1a: p14 spread
+      4.00 and floor 0.50 printed, all-in TAG 4.00 (the tag holds the spread): d not_testable; p15 all-in tag 0.50 (the
+      floor): not_testable; p16 the same 4.00 PRINTED as the all-in rate: d still fails (the mechanism reads tags only,
+      a real error on the page is not hidden).
     model: int_text_check_leg_arithmetic
     given:
       - input: ref('int_text_rate_proposed_position')
@@ -319,8 +329,14 @@ unit_tests:
           - {accession: A, context_id: p9, conflict_pik_rate: true, n_pik_rate: 2, shapes_pik_rate: [s9]}
           - {accession: A, context_id: p10, p_spread: 4.0, n_spread: 2, shapes_spread: [s10, s11]}
           - {accession: A, context_id: p11, p_pik_rate: 9.5, t_all_in: 9.0, shapes_pik_rate: [s12], n_pik_rate: 1}
+          - {accession: A, context_id: p14, p_spread: 4.0, p_floor: 0.5, t_all_in: 4.0, shapes_spread: [s3], shapes_floor: [s3], n_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p15, p_spread: 4.0, p_floor: 0.5, t_all_in: 0.5, shapes_spread: [s3], shapes_floor: [s3], n_spread: 1, n_floor: 1}
+          - {accession: A, context_id: p16, p_spread: 4.0, p_floor: 0.5, p_all_in_rate: 4.0, shapes_spread: [s3], shapes_floor: [s3], shapes_all_in_rate: [s3], n_spread: 1, n_floor: 1, n_all_in_rate: 1}
     expect:
       rows:
+        - {context_id: p14, identity: d_floor_spread, verdict: not_testable, detail: all_in_tag_equals_margin, independence: independent, counts_as_confirming: false}
+        - {context_id: p15, identity: d_floor_spread, verdict: not_testable, detail: all_in_tag_equals_floor, independence: independent, counts_as_confirming: false}
+        - {context_id: p16, identity: d_floor_spread, verdict: fail, detail: null, independence: not_independent, counts_as_confirming: false}
         - {context_id: p1, identity: a_cash_plus_pik, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
         - {context_id: p1, identity: b_pik_le_all_in, verdict: pass, detail: null, independence: not_independent, counts_as_confirming: false}
         - {context_id: p1, identity: c_cash_le_all_in, verdict: pass, detail: null, independence: independent, counts_as_confirming: false}
@@ -471,7 +487,9 @@ unit_tests:
       pass: they never count, no_check_exists. "N/A": nothing_to_read (no role row). "L+#" orders differ: unstable.
       Codes: S agrees with the legend on 10 positions: accepted_by_check; P base level discriminating:
       accepted_by_check; L only a non-discriminating base level: needs_owner (weak_only); C 6 of 20 tested rows outside:
-      contradicted; K 2 of 3 legend positions contradict: contradicted_small; T orders differ: unstable.
+      contradicted; K 2 of 3 legend positions contradict: contradicted_small; T orders differ: unstable. Phase 3 check
+      1d: "#" whose orders split fixed_rate_pct / spread_pct, and the fixed-rate check finds its number equals the
+      all-in tag on 8 of 8 code-free rows: the role is fixed_rate_pct, accepted_by_check (the check settles the split).
     model: int_text_proposal_verdict
     given:
       - input: ref('text_proposed_column')
@@ -504,11 +522,15 @@ unit_tests:
           - {run_id: r, unit_key: c1, shape: "#% Cash", number_index: 1, role_fwd: cash_rate_pct, role_rev: cash_rate_pct, same_in_both_orders: true, roles_fit_shape: true}
           - {run_id: r, unit_key: c1, shape: "N/A", number_index: 0, role_fwd: null, role_rev: null, same_in_both_orders: true, roles_fit_shape: true}
           - {run_id: r, unit_key: c1, shape: "L+#", number_index: 1, role_fwd: spread_bps, role_rev: spread_pct, same_in_both_orders: false, roles_fit_shape: true}
+          - {run_id: r, unit_key: c1, shape: "#", number_index: 1, role_fwd: fixed_rate_pct, role_rev: spread_pct, same_in_both_orders: false, roles_fit_shape: true}
+      - input: ref('int_text_check_fixed_rate')
+        rows:
+          - {unit_key: c1, shape: "#", compared: 8, equal: 8, verdict: fixed_rate, label_changes: true}
       - input: ref('int_text_rate_proposed')
         format: sql
         rows: |
           select 'A' as accession, 'x' as context_id, 'c1' as unit_key, left(md5('c1|S+#'), 16) as shape_key,
-                 1 as number_index, 'read' as status, 'spread' as field, 'S' as reference_rate_code
+                 'S+#' as shape, 1 as number_index, 'read' as status, 'spread' as field, 'S' as reference_rate_code
           where false
       - input: ref('int_text_check_number_tag')
         format: sql
@@ -560,6 +582,8 @@ unit_tests:
         - {proposal_kind: role, unit_key: c1, shape: "#% PIK", number_index: 1, code: null, verdict: accepted_by_check, reason: null}
         - {proposal_kind: role, unit_key: c1, shape: "#% Cash", number_index: 1, code: null, verdict: needs_owner, reason: no_check_exists}
         - {proposal_kind: role, unit_key: c1, shape: "L+#", number_index: 1, code: null, verdict: unstable, reason: null}
+        - {proposal_kind: role, unit_key: c1, shape: "#", number_index: 1, code: null, verdict: accepted_by_check, reason: null}
+        - {proposal_kind: shape, unit_key: c1, shape: "#", number_index: null, code: null, verdict: accepted_by_check, reason: null}
         - {proposal_kind: shape, unit_key: c1, shape: "S+#", number_index: null, code: null, verdict: accepted_by_check, reason: null}
         - {proposal_kind: shape, unit_key: c1, shape: "S+#, #% Floor", number_index: null, code: null, verdict: partly_accepted, reason: null}
         - {proposal_kind: shape, unit_key: c1, shape: "#%", number_index: null, code: null, verdict: needs_owner, reason: null}

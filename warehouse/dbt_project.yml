@@ -380,11 +380,25 @@ vars:
     # was 3 over shapes and codes): 6. Codes 4 (two SOFR mappings failed by the base level in 2022; two codes whose
     # legend names change over time, exposed once CDOR/CORRA and BBSY/BBSW became four names); roles 2 (spread and
     # floor of one floor shape, all-in tag holding the spread or floor).
-    int_text_proposal_contradicted: 6
-    # Fix round 1: proposals failing a check on 2+ rows and half of its rows (verdict contradicted_small): 9.
-    int_text_proposal_contradicted_small: 9
-    # Leg identity rows that fail: 18 (a 4, b 1, c 3, d 8, f 2; section 3 of the note lists each).
-    int_text_leg_identity_fail: 18
+    # Phase 3 check fix 1a (2026-11-26, lowered, no row hidden): 4. The two roles of Apollo "S+#, #% Floor" [b4ee19] left:
+    # identity d no longer runs where the all-in tag equals the spread or the floor (the tag holds another leg); the
+    # spread role is now accepted by its number-tag check (3,858 of 3,859), the floor needs_owner (no check exists).
+    int_text_proposal_contradicted: 4
+    # Fix round 1: proposals failing a check on 2+ rows and half of its rows (verdict contradicted_small): 9. Phase 3
+    # (lowered): 5. Out: Apollo S=SOFR in two units (the base level no longer reads its 5 all-in tags that hold the spread
+    # or floor; the legend accepts them) and the spread and floor of Apollo "S+#, #% Floor" [8900b6].
+    int_text_proposal_contradicted_small: 5
+    # Leg identity rows that fail: 18 (a 4, b 1, c 3, d 8, f 2; section 3 of the note lists each). Phase 3 (lowered): 10;
+    # the 8 d rows are not_testable (all-in tag equal to the spread or the floor).
+    int_text_leg_identity_fail: 10
+    # Text slice R phase 3, measured 2026-11-26 (docs/baseline_text_rates_phase3_2026-11-26.md).
+    # Groups (fund, column unit, shape, status) of printed rate cells the accepted rules leave unread: 41 (section 4).
+    int_text_rate_unread_groups: 41
+    # Positions failing constraint 4 (legs) or 5 (base level) on the rule-read fields: 306, all c5 (section 6 lists them
+    # by fund and rate). Rows are returned by the test, not hidden.
+    int_text_rate_constraint_fail: 306
+    # Readings not applied because they break constraints 1 to 3: 102 position-fields (section 5).
+    int_text_rate_constraint_dropped: 102
   # Comparison of amounts with production (cmp_amount, slice 3 Task 4), one ceiling per basis, field and cause
   # (tests/generic/baseline_cmp_amount_cause.sql), measured 2026-11-22 (docs/baseline_amounts_2026-11-22.md). The two
   # bases are never summed. Every field carries every cause (shares and share of net assets since final fix wave F1).

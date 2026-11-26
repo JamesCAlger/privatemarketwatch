@@ -1,0 +1,24 @@
+rate_name,currency,kind,successor,series_id,note
+BBSW,AUD,term,,IR3TIB01AUM156N,Bank Bill Swap Rate; series is the OECD Australia 3-month proxy
+BBSY,AUD,term,,IR3TIB01AUM156N,Bank Bill Swap Bid Rate; a separate rate from BBSW (no successor link); series is the same OECD proxy
+BKBM,NZD,term,,IR3TIB01NZM156N,New Zealand Bank Bill Benchmark Rate; OECD proxy
+BSBY,USD,term,,,Bloomberg Short-Term Bank Yield Index; no series here
+Base Rate,,base,,,"A loan's base rate as printed by one filer; names no single benchmark (alternate base rate: prime, fed funds or SOFR based)"
+CAD Base Rate,CAD,base,,,Canadian base rate as printed; names no single benchmark; no series here
+CDOR,CAD,term,CORRA,IR3TIB01CAM156N,Canadian Dollar Offered Rate (ceased 2024-06); series is the OECD Canada proxy shared with CORRA
+CIBOR,DKK,interbank,,,Copenhagen Interbank Offered Rate; no series here
+CORRA,CAD,overnight,,IR3TIB01CAM156N,Canadian Overnight Repo Rate Average; OECD proxy
+ESTR,EUR,overnight,,,Euro short-term rate; no series here
+EURIBOR,EUR,interbank,,IR3TIB01EZM156N,Euro Interbank Offered Rate; OECD proxy
+FEDFUNDS,USD,overnight,,DFF,Effective federal funds rate
+KORIBOR,KRW,interbank,,IR3TIB01KRM156N,Korea Interbank Offered Rate; OECD proxy
+LIBOR,USD,interbank,SOFR,IR3TIB01USM156N,USD London Interbank Offered Rate (ceased 2023-06); OECD US proxy
+NIBOR,NOK,interbank,,IR3TIB01NOM156N,Norwegian Interbank Offered Rate; OECD proxy
+NOWA,NOK,overnight,,,Norwegian Overnight Weighted Average; no series here
+PRIME,USD,prime,,DPRIME,US bank prime loan rate
+SARON,CHF,overnight,,IR3TIB01CHM156N,Swiss Average Rate Overnight; OECD proxy
+SOFR,USD,overnight,,SOFR,Secured Overnight Financing Rate (term SOFR has no series here)
+SONIA,GBP,overnight,,IUDSOIA,Sterling Overnight Index Average
+SORA,SGD,overnight,,,Singapore Overnight Rate Average; no series here
+STIBOR,SEK,interbank,,IR3TIB01SEM156N,Stockholm Interbank Offered Rate; OECD proxy
+TONA,JPY,overnight,,IR3TIB01JPM156N,Tokyo Overnight Average Rate; OECD proxy

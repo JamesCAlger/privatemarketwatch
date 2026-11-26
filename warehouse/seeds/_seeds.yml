@@ -326,6 +326,66 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['published', 'average', 'proxy']
+  - name: reference_rate
+    description: >
+      Text slice R phase 3 (2026-11-26, owner addition B): one row per benchmark a rate code can mean. rate_name: the
+      canonical name every rate-text rule (wrapper action rate_code) must resolve to (tests/reference_rate_rule_resolves.sql).
+      currency; kind: overnight, term, interbank, prime or base ("Base Rate" and "CAD Base Rate": a loan's base rate as
+      printed, no single benchmark, no series). successor: the rate that replaced it (LIBOR -> SOFR, CDOR -> CORRA); BBSW
+      and BBSY stay two rates with no link. series_id: the FRED series of seed base_rate_series the base-level checks
+      read for it, blank where none (CDOR and BBSY read the OECD proxy their pair shares). Owner item 1: a printed code
+      equal to a rate_name here (case and spaces ignored) is that rate. Rate names are looked up here and in seed
+      reference_rate_name, never matched by substring.
+    config:
+      column_types:
+        rate_name: varchar
+        currency: varchar
+        kind: varchar
+        successor: varchar
+        series_id: varchar
+        note: varchar
+    columns:
+      - name: rate_name
+        data_tests: [unique, not_null]
+      - name: kind
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['overnight', 'term', 'interbank', 'prime', 'base']
+      - name: successor
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('reference_rate')
+                field: rate_name
+      - name: series_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('base_rate_series')
+                field: series_id
+  - name: reference_rate_name
+    description: >
+      Text slice R phase 3 (2026-11-26): the printed names and abbreviations of rates in the five funds' legends that
+      are not themselves a rate_name of seed reference_rate, and the rate each stands for (upper case, as printed:
+      'SECURED OVERNIGHT FINANCING RATE' -> SOFR, 'TONAR' -> TONA). Exact lookup, no substring. Built from
+      scripts/text/q_t3_legend_names.sql; a legend name not listed resolves to no rate.
+    config:
+      column_types:
+        printed_name: varchar
+        rate_name: varchar
+        note: varchar
+    columns:
+      - name: printed_name
+        data_tests: [unique, not_null]
+      - name: rate_name
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('reference_rate')
+                field: rate_name
   - name: text_proposed_column
     description: >
       Text slice R phase 2 (2026-11-26). PROPOSALS, NOT RULES: nothing downstream may publish from this seed, and no

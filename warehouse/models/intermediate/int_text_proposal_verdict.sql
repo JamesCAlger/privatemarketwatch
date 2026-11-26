@@ -100,7 +100,7 @@ with column_tag_map as (
 )
 
 -- roles and shapes ---------------------------------------------------------------------------------------------------
-, shape_role as (
+, shape_role_raw as (
     select run_id, unit_key, shape, left(md5(unit_key || '|' || upper(shape)), 16) as shape_key, number_index
         , role_fwd, role_rev
         , bool_and(same_in_both_orders and roles_fit_shape) over (partition by run_id, unit_key, shape) as stable
@@ -108,10 +108,29 @@ with column_tag_map as (
     from {{ ref('text_proposed_shape_role') }}
 )
 
+-- Phase 3 check 1d (owner item 11): where int_text_check_fixed_rate finds the shape's one number is the all-in rate on
+-- code-free positions (verdict fixed_rate), the role is fixed_rate_pct whatever either order said among spread and fixed
+-- rate; the check settles the label the orders split on (fixed_rate_pct / spread_pct), so such a shape is stable. Its
+-- evidence is the check's (compared, equal), not the number-tag rows of the old label.
+, shape_role as (
+    select sr.run_id, sr.unit_key, sr.shape, sr.shape_key, sr.number_index
+        , case when fc.unit_key is not null then 'fixed_rate_pct' else sr.role_fwd end as role_fwd
+        , case when fc.unit_key is not null then 'fixed_rate_pct' else sr.role_rev end as role_rev
+        , sr.stable or fc.unit_key is not null as stable
+        , sr.n_numbers
+        , case when fc.label_changes then 'fixed_rate_no_code' end as label_changed_by
+        , sr.role_fwd as proposed_role_fwd, sr.role_rev as proposed_role_rev
+        , fc.compared as fixed_compared, fc.equal as fixed_equal
+    from shape_role_raw sr
+    left join {{ ref('int_text_check_fixed_rate') }} fc
+        on fc.unit_key = sr.unit_key and fc.shape = sr.shape and sr.number_index = 1 and fc.verdict = 'fixed_rate'
+)
+
 , shape_positions as (
-    select shape_key, count(distinct accession || '|' || context_id) as positions
+    -- per spelling (phase 3 check fix 1b): a case variant of the proposed shape is not the proposal's
+    select shape_key, shape, count(distinct accession || '|' || context_id) as positions
     from {{ ref('int_text_rate_proposed') }}
-    group by 1
+    group by 1, 2
 )
 
 , number_check as (
@@ -130,7 +149,7 @@ with column_tag_map as (
 
 , leg_sum as (
     select field, shape_key
-        , count(*) as leg_rows
+        , count(*) filter (where verdict in ('pass', 'fail')) as leg_rows  -- not_testable rows count neither way
         , count(*) filter (where verdict = 'fail') as leg_fail
         , count(*) filter (where counts_as_confirming) as leg_confirm_rows
         , count(*) filter (where counts_as_confirming and verdict = 'pass') as leg_confirm_pass
@@ -140,8 +159,9 @@ with column_tag_map as (
 
 , role_evidence as (
     select sr.*, rf.field, coalesce(rf.has_tag, false) as has_tag
-        , coalesce(nc.compared, 0) as nt_compared, coalesce(nc.equal, 0) as nt_equal
-        , coalesce(nc.differs, 0) as nt_differs
+        , coalesce(sr.fixed_compared, nc.compared, 0) as nt_compared
+        , coalesce(sr.fixed_equal, nc.equal, 0) as nt_equal
+        , coalesce(sr.fixed_compared - sr.fixed_equal, nc.differs, 0) as nt_differs
         , coalesce(ls.leg_rows, 0) as leg_rows, coalesce(ls.leg_fail, 0) as leg_fail
         , coalesce(ls.leg_confirm_rows, 0) as leg_confirm_rows, coalesce(ls.leg_confirm_pass, 0) as leg_confirm_pass
     from shape_role sr
@@ -154,7 +174,8 @@ with column_tag_map as (
 , role_judged as (
     select *
         , nullif(concat_ws(',',
-            case when nt_compared >= {{ c_rows }} and nt_equal / nt_compared >= {{ c_share }} then 'number_tag' end,
+            case when nt_compared >= {{ c_rows }} and nt_equal / nt_compared >= {{ c_share }}
+                 then case when fixed_compared is not null then 'fixed_rate_no_code' else 'number_tag' end end,
             case when leg_confirm_rows >= {{ c_rows }} and leg_confirm_pass / leg_confirm_rows >= {{ c_share }}
                  then 'leg_arithmetic' end), '') as confirming
         , nullif(concat_ws(',',
@@ -182,10 +203,10 @@ with column_tag_map as (
             else 'below_bar'
           end as reason_if_open
         , rj.role_fwd as role, rj.field, rj.nt_compared, rj.nt_equal, rj.nt_differs, rj.leg_rows, rj.leg_fail
-        , rj.leg_confirm_rows, rj.leg_confirm_pass, rj.shape_key
+        , rj.leg_confirm_rows, rj.leg_confirm_pass, rj.shape_key, rj.label_changed_by
     from role_judged rj
     left join {{ ref('int_text_column_unit') }} u on u.unit_key = rj.unit_key
-    left join shape_positions sp on sp.shape_key = rj.shape_key
+    left join shape_positions sp on sp.shape_key = rj.shape_key and sp.shape = rj.shape
 )
 
 , role_verdict as (
@@ -219,6 +240,7 @@ with column_tag_map as (
         , nullif(string_agg(distinct rv.contradicting_small, ','), '') as contradicting_small
         , sum(rv.nt_compared) as nt_compared, sum(rv.nt_equal) as nt_equal, sum(rv.nt_differs) as nt_differs
         , sum(rv.leg_rows) as leg_rows, sum(rv.leg_fail) as leg_fail
+        , string_agg(distinct rv.label_changed_by, ',') as label_changed_by
     from shape_role sr
     left join role_verdict rv
         on rv.unit_key = sr.unit_key and rv.shape = sr.shape and rv.number_index = sr.number_index
@@ -239,10 +261,10 @@ with column_tag_map as (
             else 'needs_owner'
           end as verdict
         , ss.roles_accepted, ss.roles_not_accepted
-        , ss.nt_compared, ss.nt_equal, ss.nt_differs, ss.leg_rows, ss.leg_fail
+        , ss.nt_compared, ss.nt_equal, ss.nt_differs, ss.leg_rows, ss.leg_fail, ss.label_changed_by
     from shape_sum ss
     left join {{ ref('int_text_column_unit') }} u on u.unit_key = ss.unit_key
-    left join shape_positions sp on sp.shape_key = ss.shape_key
+    left join shape_positions sp on sp.shape_key = ss.shape_key and sp.shape = ss.shape
 )
 
 -- codes ----------------------------------------------------------------------------------------------------------------
@@ -351,7 +373,7 @@ with column_tag_map as (
         , null::bigint as legend_filings_mixed, null::bigint as legend_filings_none
         , null::bigint as base_quarters_tested, null::bigint as base_quarters_confirmed
         , null::bigint as base_quarters_discriminating, null::bigint as base_quarters_currency_bloc
-        , null::bigint as base_tested, null::bigint as base_outside
+        , null::bigint as base_tested, null::bigint as base_outside, null::varchar as label_changed_by
     from column_out
     union all
     select run_id, proposal_kind, unit_key, cik, shape, number_index, code, proposal, stable, positions
@@ -359,7 +381,7 @@ with column_tag_map as (
         , role, null, null
         , null, null, null
         , nt_compared, nt_equal, nt_differs, leg_rows, leg_fail
-        , null, null, null, null, null, null, null, null, null, null
+        , null, null, null, null, null, null, null, null, null, null, label_changed_by
     from role_verdict
     union all
     select run_id, proposal_kind, unit_key, cik, shape, number_index, code, proposal, stable, positions
@@ -367,7 +389,7 @@ with column_tag_map as (
         , null, roles_accepted, roles_not_accepted
         , null, null, null
         , nt_compared, nt_equal, nt_differs, leg_rows, leg_fail
-        , null, null, null, null, null, null, null, null, null, null
+        , null, null, null, null, null, null, null, null, null, null, label_changed_by
     from shape_out
     union all
     select run_id, proposal_kind, unit_key, cik, shape, number_index, code, proposal, stable, positions
@@ -380,7 +402,7 @@ with column_tag_map as (
         , null, null, null, null, null
         , legend_filings_agree, legend_filings_contradict, legend_filings_mixed, legend_filings_none
         , base_quarters_tested, base_quarters_confirmed, base_quarters_discriminating, base_quarters_currency_bloc
-        , base_tested, base_outside
+        , base_tested, base_outside, null
     from code_out
 )
 
@@ -422,4 +444,5 @@ select
     , base_quarters_currency_bloc
     , base_tested
     , base_outside
+    , label_changed_by
 from unioned
